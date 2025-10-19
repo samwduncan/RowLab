@@ -22,6 +22,23 @@ app.use((req, res, next) => {
 });
 
 /**
+ * CSV Data endpoint
+ * Serves the athlete CSV file
+ */
+app.get('/api/data/athletes.csv', async (req, res) => {
+  const csvPath = '/home/swd/Rowing/LN_Country.csv';
+
+  try {
+    await fs.access(csvPath);
+    res.setHeader('Content-Type', 'text/csv');
+    res.sendFile(csvPath);
+  } catch (err) {
+    console.error('CSV file not found:', err);
+    res.status(404).json({ error: 'Athletes CSV not found' });
+  }
+});
+
+/**
  * Headshots API endpoint
  * Serves athlete headshots from /home/swd/Rowing/Roster_Headshots_cropped/
  * Tries multiple file extensions (.jpg, .jpeg, .png)

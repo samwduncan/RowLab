@@ -33,8 +33,8 @@ function App() {
       try {
         setLoading(true);
 
-        // Load athletes from existing LN_Country.csv
-        const athletesData = await loadAthletes('/home/swd/Rowing/LN_Country.csv');
+        // Load athletes from existing LN_Country.csv (via API endpoint)
+        const athletesData = await loadAthletes('/api/data/athletes.csv');
         console.log('Loaded athletes:', athletesData.length);
         setAthletes(athletesData);
 

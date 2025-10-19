@@ -71,45 +71,54 @@ const BoatDisplay = ({ boat }) => {
         </button>
       </div>
 
-      {/* Boat visualization */}
-      <div className="relative">
-        {/* Bow to Stroke direction indicator */}
-        <div className="flex justify-between text-xs text-gray-500 mb-2 px-2">
-          <span className="font-semibold">← BOW</span>
-          <span className="font-semibold">STROKE →</span>
+      {/* Boat visualization - Vertical layout */}
+      <div className="relative flex justify-center">
+        {/* Direction indicators on left */}
+        <div className="flex flex-col justify-between text-xs text-gray-500 mr-4 py-2">
+          <span className="font-semibold writing-mode-vertical">STERN</span>
+          <span className="font-semibold writing-mode-vertical mt-auto">BOW</span>
         </div>
 
-        {/* Seats container */}
-        <div className="flex items-center gap-3 flex-wrap justify-center">
-          {/* Bow seats first */}
-          {boat.seats.map((seat) => (
-            <Seat
-              key={seat.seatNumber}
-              boatId={boat.id}
-              seat={seat}
-              onSeatClick={(seatNum) => handleSeatClick(seatNum, false)}
-            />
-          ))}
-
-          {/* Coxswain (stern for 8+, bow for smaller boats) */}
+        {/* Seats container - Vertical arrangement */}
+        <div className="flex flex-col items-center gap-3">
+          {/* Coxswain at top (stern) */}
           {boat.hasCoxswain && (
-            <CoxswainSeat
-              boatId={boat.id}
-              coxswain={boat.coxswain}
-              onCoxswainClick={() => handleSeatClick(null, true)}
-            />
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500 font-semibold w-16 text-right">COX</span>
+              <CoxswainSeat
+                boatId={boat.id}
+                coxswain={boat.coxswain}
+                onCoxswainClick={() => handleSeatClick(null, true)}
+              />
+            </div>
           )}
+
+          {/* Seats from Stroke (highest number) to Bow (1) */}
+          {[...boat.seats].reverse().map((seat) => (
+            <div key={seat.seatNumber} className="flex items-center gap-2">
+              <span className="text-xs text-gray-500 font-semibold w-16 text-right">
+                Seat {seat.seatNumber}
+                {seat.seatNumber === boat.numSeats && " (Stroke)"}
+                {seat.seatNumber === 1 && " (Bow)"}
+              </span>
+              <Seat
+                boatId={boat.id}
+                seat={seat}
+                onSeatClick={(seatNum) => handleSeatClick(seatNum, false)}
+              />
+            </div>
+          ))}
         </div>
 
-        {/* Legend */}
-        <div className="mt-4 flex gap-4 text-xs text-gray-600 justify-center">
+        {/* Legend on right */}
+        <div className="ml-4 flex flex-col gap-3 text-xs text-gray-600 justify-center">
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 bg-port rounded-full"></div>
-            <span>Port (even seats)</span>
+            <span>Port</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 bg-starboard rounded-full"></div>
-            <span>Starboard (odd seats)</span>
+            <span>Starboard</span>
           </div>
         </div>
       </div>

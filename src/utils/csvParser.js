@@ -34,7 +34,7 @@ export const parseCSV = (filePath) => {
  * @param {string} filePath - Path to CSV file
  * @returns {Promise<Array>} Array of athlete objects
  */
-export const loadAthletes = async (filePath = '/home/swd/Rowing/LN_Country.csv') => {
+export const loadAthletes = async (filePath = '/api/data/athletes.csv') => {
   try {
     const data = await parseCSV(filePath);
 
