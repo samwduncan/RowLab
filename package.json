@@ -9,7 +9,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "server": "node server/index.js",
-    "start": "NODE_ENV=production node server/index.js"
+    "start": "NODE_ENV=production node server/index.js",
+    "dev:full": "concurrently \"npm run server\" \"npm run dev\" --names \"backend,frontend\" --prefix-colors \"blue,green\""
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -28,6 +29,7 @@
     "vite": "^5.0.11",
     "tailwindcss": "^3.4.1",
     "postcss": "^8.4.33",
-    "autoprefixer": "^10.4.17"
+    "autoprefixer": "^10.4.17",
+    "concurrently": "^8.2.0"
   }
 }

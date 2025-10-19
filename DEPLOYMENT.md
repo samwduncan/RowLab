@@ -183,12 +183,17 @@ Or use the deploy script:
 
 ### Development
 
-Use the development helper script (requires tmux):
+**Option 1: Single command (recommended)**
+```bash
+npm run dev:full
+```
+
+**Option 2: tmux helper script**
 ```bash
 ./scripts/dev.sh
 ```
 
-Or manually in separate terminals:
+**Option 3: Separate terminals**
 ```bash
 # Terminal 1
 npm run dev
