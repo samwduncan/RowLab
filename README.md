@@ -2,6 +2,27 @@
 
 > Web application for rowing coaches to create and manage boat lineups
 
+---
+
+## Project Summary
+
+<!-- LINKEDIN COPY-PASTE START -->
+
+A web-based lineup management tool designed for rowing coaches to optimize boat assignments and visualize team configurations. The application enables coaches to drag-and-drop athletes into various boat types, manage roster data from CSV imports, and experiment with different lineup combinations in real-time.
+
+**Key Technical Achievements:**
+- Designed an intuitive drag-and-drop interface for seat assignments across multiple boat configurations (1x through 8+)
+- Implemented a modern "Liquid Glass" design system with glassmorphism effects and responsive layouts
+- Built a Node.js/Express backend API for athlete data management and lineup persistence
+- Created both compact and expanded visualization modes for lineup comparison
+- Integrated athlete headshot display and country flag indicators for international rosters
+
+**Technologies:** Node.js, Express, React, Vite, TailwindCSS, Zustand, dnd-kit
+
+<!-- LINKEDIN COPY-PASTE END -->
+
+---
+
 ## Quick Start
 
 ### Prerequisites
