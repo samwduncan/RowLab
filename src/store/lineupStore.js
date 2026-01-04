@@ -1,11 +1,21 @@
 import { create } from 'zustand';
 import { createBoatInstance, getAssignedAthletes, findAthletePosition } from '../utils/boatConfig';
+import { undoMiddleware } from './undoMiddleware';
 
 /**
  * Zustand store for managing lineup state
- * Chosen for simplicity and performance over Context API
+ *
+ * Features:
+ * - Undo/Redo support for activeBoats changes (Cmd/Ctrl+Z, Cmd/Ctrl+Shift+Z)
+ * - Athlete assignment and swapping
+ * - Multiple boat management
+ * - Export/import functionality
  */
-const useLineupStore = create((set, get) => ({
+const useLineupStore = create(
+  undoMiddleware({
+    trackedKeys: ['activeBoats'], // Only track activeBoats for undo/redo
+    historyLimit: 50, // Keep last 50 states
+  })((set, get) => ({
   // Data
   athletes: [],
   boatConfigs: [],
@@ -236,34 +246,64 @@ const useLineupStore = create((set, get) => ({
       ? boat2.coxswain
       : boat2.seats.find(s => s.seatNumber === seat2.seatNumber)?.athlete;
 
-    // Swap
+    // Swap - handle same boat case separately
     set(state => {
+      const sameBoat = seat1.boatId === seat2.boatId;
+
       const activeBoats = state.activeBoats.map(boat => {
-        if (boat.id === seat1.boatId) {
+        // Handle same boat swap
+        if (sameBoat && boat.id === seat1.boatId) {
+          let updatedBoat = { ...boat };
+
+          // Update first position
           if (seat1.isCoxswain) {
-            return { ...boat, coxswain: athlete2 };
+            updatedBoat.coxswain = athlete2;
           } else {
-            const seats = boat.seats.map(s => {
-              if (s.seatNumber === seat1.seatNumber) {
-                return { ...s, athlete: athlete2 };
-              }
-              return s;
-            });
-            return { ...boat, seats };
+            updatedBoat.seats = updatedBoat.seats.map(s =>
+              s.seatNumber === seat1.seatNumber ? { ...s, athlete: athlete2 } : s
+            );
           }
+
+          // Update second position
+          if (seat2.isCoxswain) {
+            updatedBoat.coxswain = athlete1;
+          } else {
+            updatedBoat.seats = updatedBoat.seats.map(s =>
+              s.seatNumber === seat2.seatNumber ? { ...s, athlete: athlete1 } : s
+            );
+          }
+
+          return updatedBoat;
         }
 
-        if (boat.id === seat2.boatId) {
-          if (seat2.isCoxswain) {
-            return { ...boat, coxswain: athlete1 };
-          } else {
-            const seats = boat.seats.map(s => {
-              if (s.seatNumber === seat2.seatNumber) {
-                return { ...s, athlete: athlete1 };
-              }
-              return s;
-            });
-            return { ...boat, seats };
+        // Handle different boat swaps
+        if (!sameBoat) {
+          if (boat.id === seat1.boatId) {
+            if (seat1.isCoxswain) {
+              return { ...boat, coxswain: athlete2 };
+            } else {
+              const seats = boat.seats.map(s => {
+                if (s.seatNumber === seat1.seatNumber) {
+                  return { ...s, athlete: athlete2 };
+                }
+                return s;
+              });
+              return { ...boat, seats };
+            }
+          }
+
+          if (boat.id === seat2.boatId) {
+            if (seat2.isCoxswain) {
+              return { ...boat, coxswain: athlete1 };
+            } else {
+              const seats = boat.seats.map(s => {
+                if (s.seatNumber === seat2.seatNumber) {
+                  return { ...s, athlete: athlete1 };
+                }
+                return s;
+              });
+              return { ...boat, seats };
+            }
           }
         }
 
@@ -459,7 +499,10 @@ const useLineupStore = create((set, get) => ({
       selectedSeats: [],
       selectedAthlete: null
     });
-  }
-}));
+  },
+
+  // Note: undo(), redo(), _history, checkpoint(), clearHistory()
+  // are automatically provided by undoMiddleware
+})));
 
 export default useLineupStore;

@@ -1,0 +1,16 @@
+[Unit]
+Description=Ollama Control API for Home Assistant
+Documentation=https://github.com/swdrow/RowLab
+After=network.target
+
+[Service]
+Type=simple
+User=swd
+Group=swd
+WorkingDirectory=/home/swd/RowLab/scripts
+ExecStart=/home/swd/anaconda3/bin/python3 /home/swd/RowLab/scripts/ollama-control.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,176 +1,203 @@
 /**
- * Liquid Glass Color System
- * Inspired by Apple iOS 26 design language
- *
- * Philosophy:
- * - Luminous, translucent colors with subtle iridescence
- * - Light/Dark mode adaptive palettes
- * - Glassmorphic layering with depth hierarchy
+ * NOIR SPECTRUM Design System - Color Tokens
+ * Deep blacks + Rainbow shimmer accents
+ * Inspired by: Apple, Netflix, Stripe, Gemini, Tailwind
  */
 
-export const liquidGlassColors = {
-  // Primary Glass Tints (Light Mode)
-  glass: {
-    subtle: 'rgba(255, 255, 255, 0.4)',
-    base: 'rgba(255, 255, 255, 0.6)',
-    elevated: 'rgba(255, 255, 255, 0.8)',
-    strong: 'rgba(255, 255, 255, 0.95)',
+export const noirSpectrumColors = {
+  // ========================================
+  // SURFACE PALETTE - Deep blacks/charcoals
+  // ========================================
+  surface: {
+    950: '#000000',      // True black - modal backdrop
+    900: '#0a0a0a',      // Primary background
+    850: '#0f0f0f',      // Elevated background
+    800: '#141414',      // Card background
+    750: '#1a1a1a',      // Raised cards
+    700: '#212121',      // Interactive hover
+    650: '#2a2a2a',      // Active states
+    600: '#333333',      // Borders strong
+    500: '#404040',      // Borders default
+    400: '#525252',      // Borders subtle
   },
 
-  // Primary Glass Tints (Dark Mode)
-  glassDark: {
-    subtle: 'rgba(20, 20, 30, 0.4)',
-    base: 'rgba(28, 28, 40, 0.6)',
-    elevated: 'rgba(35, 35, 50, 0.8)',
-    strong: 'rgba(45, 45, 60, 0.95)',
+  // ========================================
+  // SPECTRUM PALETTE - Rainbow shimmer colors
+  // ========================================
+  spectrum: {
+    blue: '#4285F4',       // Google blue - primary actions
+    indigo: '#6366F1',     // Indigo - main accent
+    violet: '#8B5CF6',     // Violet - secondary accent
+    purple: '#9B72CB',     // Gemini purple
+    fuchsia: '#D946EF',    // Fuchsia - highlights
+    pink: '#EC4899',       // Pink - special
+    rose: '#D96570',       // Gemini rose/coral - port side
+    red: '#EF4444',        // Red - errors/danger
+    orange: '#F97316',     // Orange - warnings
+    amber: '#F59E0B',      // Amber - performance
+    yellow: '#EAB308',     // Yellow - attention
+    lime: '#84CC16',       // Lime
+    green: '#22C55E',      // Green - success
+    emerald: '#10B981',    // Emerald - starboard side
+    teal: '#14B8A6',       // Teal
+    cyan: '#06B6D4',       // Cyan - data/speed
   },
 
-  // Accent Colors - Luminous iOS-inspired gradients
+  // ========================================
+  // PRIMARY ACCENT SCALE (Indigo)
+  // ========================================
   accent: {
-    // Primary Blue (iOS Control Center style)
-    blue: {
-      light: '#64B5F6',
-      base: '#0A84FF',
-      dark: '#0066CC',
-      glow: 'rgba(10, 132, 255, 0.3)',
-    },
-
-    // Purple (Liquid effect)
-    purple: {
-      light: '#CE93D8',
-      base: '#BF5AF2',
-      dark: '#9D4EDD',
-      glow: 'rgba(191, 90, 242, 0.3)',
-    },
-
-    // Teal (Vibrant accent)
-    teal: {
-      light: '#4DD0E1',
-      base: '#00C7BE',
-      dark: '#00A39C',
-      glow: 'rgba(0, 199, 190, 0.3)',
-    },
-
-    // Pink (Highlight color)
-    pink: {
-      light: '#F48FB1',
-      base: '#FF2D55',
-      dark: '#CC0044',
-      glow: 'rgba(255, 45, 85, 0.3)',
-    },
-
-    // Amber (Warm accent)
-    amber: {
-      light: '#FFD54F',
-      base: '#FFAB00',
-      dark: '#FF8F00',
-      glow: 'rgba(255, 171, 0, 0.3)',
-    },
+    50: '#EEF2FF',
+    100: '#E0E7FF',
+    200: '#C7D2FE',
+    300: '#A5B4FC',
+    400: '#818CF8',
+    500: '#6366F1',    // DEFAULT
+    600: '#4F46E5',
+    700: '#4338CA',
+    800: '#3730A3',
+    900: '#312E81',
+    950: '#1E1B4B',
   },
 
-  // Rowing-specific Colors (enhanced with glass effect)
-  rowing: {
-    port: {
-      light: '#EF5350',
-      base: '#EF4444',
-      dark: '#C62828',
-      glass: 'rgba(239, 68, 68, 0.15)',
-    },
-    starboard: {
-      light: '#66BB6A',
-      base: '#22C55E',
-      dark: '#2E7D32',
-      glass: 'rgba(34, 197, 94, 0.15)',
-    },
-    gold: {
-      light: '#FFD740',
-      base: '#FFC107',
-      dark: '#FFA000',
-      glass: 'rgba(255, 193, 7, 0.15)',
-    },
-  },
-
-  // Semantic Colors
+  // ========================================
+  // SEMANTIC COLORS
+  // ========================================
   semantic: {
     success: {
-      light: '#81C784',
-      base: '#4CAF50',
-      dark: '#388E3C',
-      glass: 'rgba(76, 175, 80, 0.15)',
+      light: '#86EFAC',
+      base: '#22C55E',
+      dark: '#16A34A',
+      muted: 'rgba(34, 197, 94, 0.15)',
     },
     warning: {
-      light: '#FFB74D',
-      base: '#FF9800',
-      dark: '#F57C00',
-      glass: 'rgba(255, 152, 0, 0.15)',
+      light: '#FCD34D',
+      base: '#F59E0B',
+      dark: '#D97706',
+      muted: 'rgba(245, 158, 11, 0.15)',
     },
     error: {
-      light: '#E57373',
-      base: '#F44336',
-      dark: '#D32F2F',
-      glass: 'rgba(244, 67, 54, 0.15)',
+      light: '#FCA5A5',
+      base: '#EF4444',
+      dark: '#DC2626',
+      muted: 'rgba(239, 68, 68, 0.15)',
     },
     info: {
-      light: '#64B5F6',
-      base: '#2196F3',
-      dark: '#1976D2',
-      glass: 'rgba(33, 150, 243, 0.15)',
+      light: '#67E8F9',
+      base: '#06B6D4',
+      dark: '#0891B2',
+      muted: 'rgba(6, 182, 212, 0.15)',
     },
   },
 
-  // Border Colors (glass edges)
-  border: {
-    light: {
-      subtle: 'rgba(255, 255, 255, 0.1)',
-      base: 'rgba(255, 255, 255, 0.2)',
-      strong: 'rgba(255, 255, 255, 0.4)',
-    },
+  // ========================================
+  // TEXT COLORS
+  // ========================================
+  text: {
+    // Dark mode (default)
     dark: {
-      subtle: 'rgba(255, 255, 255, 0.05)',
-      base: 'rgba(255, 255, 255, 0.1)',
-      strong: 'rgba(255, 255, 255, 0.2)',
+      primary: 'rgba(255, 255, 255, 0.95)',
+      secondary: 'rgba(255, 255, 255, 0.70)',
+      tertiary: 'rgba(255, 255, 255, 0.50)',
+      muted: 'rgba(255, 255, 255, 0.35)',
+      disabled: 'rgba(255, 255, 255, 0.25)',
+    },
+    // Light mode
+    light: {
+      primary: 'rgba(0, 0, 0, 0.90)',
+      secondary: 'rgba(0, 0, 0, 0.65)',
+      tertiary: 'rgba(0, 0, 0, 0.45)',
+      muted: 'rgba(0, 0, 0, 0.30)',
+      disabled: 'rgba(0, 0, 0, 0.20)',
     },
   },
 
-  // Gradient Presets (iOS-inspired)
-  gradients: {
-    // Control Center style gradients
-    blueViolet: 'linear-gradient(135deg, #0A84FF 0%, #BF5AF2 100%)',
-    tealBlue: 'linear-gradient(135deg, #00C7BE 0%, #0A84FF 100%)',
-    pinkOrange: 'linear-gradient(135deg, #FF2D55 0%, #FF9500 100%)',
-    purplePink: 'linear-gradient(135deg, #BF5AF2 0%, #FF2D55 100%)',
-
-    // Glass surface gradients (light mode)
-    glassLight: 'linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%)',
-    glassLightSubtle: 'linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.2) 100%)',
-
-    // Glass surface gradients (dark mode)
-    glassDark: 'linear-gradient(135deg, rgba(40, 40, 60, 0.9) 0%, rgba(20, 20, 35, 0.6) 100%)',
-    glassDarkSubtle: 'linear-gradient(135deg, rgba(35, 35, 50, 0.7) 0%, rgba(20, 20, 30, 0.4) 100%)',
-
-    // Ambient mesh backgrounds
-    meshLight: `
-      radial-gradient(at 0% 0%, rgba(10, 132, 255, 0.08) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(191, 90, 242, 0.08) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(0, 199, 190, 0.08) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, rgba(255, 45, 85, 0.08) 0px, transparent 50%)
-    `,
-    meshDark: `
-      radial-gradient(at 0% 0%, rgba(10, 132, 255, 0.12) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(191, 90, 242, 0.12) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(0, 199, 190, 0.12) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, rgba(255, 45, 85, 0.12) 0px, transparent 50%)
-    `,
+  // ========================================
+  // BORDER COLORS
+  // ========================================
+  border: {
+    // Dark mode (default)
+    dark: {
+      subtle: 'rgba(255, 255, 255, 0.06)',
+      default: 'rgba(255, 255, 255, 0.10)',
+      strong: 'rgba(255, 255, 255, 0.15)',
+      accent: 'rgba(99, 102, 241, 0.40)',
+    },
+    // Light mode
+    light: {
+      subtle: 'rgba(0, 0, 0, 0.06)',
+      default: 'rgba(0, 0, 0, 0.10)',
+      strong: 'rgba(0, 0, 0, 0.15)',
+      accent: 'rgba(99, 102, 241, 0.30)',
+    },
   },
 
-  // Glow/Bloom effects
-  glow: {
-    blue: '0 0 20px rgba(10, 132, 255, 0.3), 0 0 40px rgba(10, 132, 255, 0.15)',
-    purple: '0 0 20px rgba(191, 90, 242, 0.3), 0 0 40px rgba(191, 90, 242, 0.15)',
-    teal: '0 0 20px rgba(0, 199, 190, 0.3), 0 0 40px rgba(0, 199, 190, 0.15)',
-    pink: '0 0 20px rgba(255, 45, 85, 0.3), 0 0 40px rgba(255, 45, 85, 0.15)',
-    white: '0 0 20px rgba(255, 255, 255, 0.2), 0 0 40px rgba(255, 255, 255, 0.1)',
+  // ========================================
+  // ROWING-SPECIFIC COLORS
+  // ========================================
+  rowing: {
+    port: {
+      base: '#D96570',
+      light: '#F5A3AD',
+      dark: '#B74D57',
+      muted: 'rgba(217, 101, 112, 0.15)',
+      border: 'rgba(217, 101, 112, 0.30)',
+    },
+    starboard: {
+      base: '#10B981',
+      light: '#6EE7B7',
+      dark: '#059669',
+      muted: 'rgba(16, 185, 129, 0.15)',
+      border: 'rgba(16, 185, 129, 0.30)',
+    },
+  },
+
+  // ========================================
+  // GRADIENT DEFINITIONS
+  // ========================================
+  gradients: {
+    // Gemini-style shimmer (animated)
+    shimmer: 'linear-gradient(74deg, #4285F4 0%, #9B72CB 15%, #D96570 30%, #4285F4 45%, #9B72CB 60%, #D96570 75%, #4285F4 90%, #9B72CB 100%)',
+    shimmerSubtle: 'linear-gradient(74deg, rgba(66, 133, 244, 0.15) 0%, rgba(155, 114, 203, 0.15) 25%, rgba(217, 101, 112, 0.15) 50%, rgba(66, 133, 244, 0.15) 75%, rgba(155, 114, 203, 0.15) 100%)',
+
+    // Primary gradient
+    primary: 'linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #9B72CB 100%)',
+    primarySubtle: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.10) 100%)',
+
+    // Accent gradients
+    accent: 'linear-gradient(135deg, #4285F4 0%, #6366F1 50%, #8B5CF6 100%)',
+    warm: 'linear-gradient(135deg, #D96570 0%, #EC4899 50%, #9B72CB 100%)',
+    cool: 'linear-gradient(135deg, #06B6D4 0%, #4285F4 50%, #6366F1 100%)',
+
+    // Full rainbow
+    rainbow: 'linear-gradient(90deg, #4285F4, #6366F1, #8B5CF6, #9B72CB, #D946EF, #EC4899, #D96570, #F97316, #F59E0B, #22C55E, #14B8A6, #06B6D4, #4285F4)',
+
+    // Background mesh
+    mesh: `
+      radial-gradient(ellipse 80% 50% at 20% 30%, rgba(99, 102, 241, 0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 20%, rgba(139, 92, 246, 0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 60% 80%, rgba(217, 101, 112, 0.03) 0%, transparent 60%)
+    `,
+
+    // Hero glow
+    heroGlow: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99, 102, 241, 0.12) 0%, transparent 70%)',
+  },
+
+  // ========================================
+  // GLOW EFFECTS
+  // ========================================
+  glows: {
+    accent: '0 0 20px rgba(99, 102, 241, 0.35), 0 0 40px rgba(99, 102, 241, 0.15)',
+    blue: '0 0 20px rgba(66, 133, 244, 0.35), 0 0 40px rgba(66, 133, 244, 0.15)',
+    purple: '0 0 20px rgba(155, 114, 203, 0.35), 0 0 40px rgba(155, 114, 203, 0.15)',
+    rose: '0 0 20px rgba(217, 101, 112, 0.35), 0 0 40px rgba(217, 101, 112, 0.15)',
+    cyan: '0 0 20px rgba(6, 182, 212, 0.35), 0 0 40px rgba(6, 182, 212, 0.15)',
+    emerald: '0 0 20px rgba(16, 185, 129, 0.35), 0 0 40px rgba(16, 185, 129, 0.15)',
+    shimmer: '0 0 30px rgba(66, 133, 244, 0.25), 0 0 60px rgba(155, 114, 203, 0.15), 0 0 90px rgba(217, 101, 112, 0.10)',
   },
 };
 
-export default liquidGlassColors;
+// Export for backward compatibility
+export const liquidGlassColors = noirSpectrumColors;
+
+export default noirSpectrumColors;

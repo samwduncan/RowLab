@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs/promises';
@@ -8,8 +7,20 @@ import fs from 'fs/promises';
 import authRoutes from './routes/auth.js';
 import lineupRoutes from './routes/lineups.js';
 import ergDataRoutes from './routes/ergData.js';
+import aiRoutes from './routes/ai.js';
 import { getStorageInfo } from './utils/storageMonitor.js';
 import { verifyToken } from './middleware/auth.js';
+
+// Security & Logging
+import {
+  securityHeaders,
+  corsOptions,
+  globalLimiter,
+  authLimiter,
+  aiLimiter,
+  apiLimiter,
+} from './middleware/security.js';
+import logger, { requestLogger, errorLogger } from './utils/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,20 +29,27 @@ const app = express();
 const PORT = process.env.PORT || 3002;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+// Trust proxy for rate limiting behind reverse proxy (nginx, cloudflare, etc.)
+// Setting to 1 trusts the first proxy
+app.set('trust proxy', 1);
 
-// Logging middleware
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
-  next();
-});
+// Security middleware
+app.use(securityHeaders);
+app.use(corsOptions);
+app.use(globalLimiter);
 
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/lineups', lineupRoutes);
-app.use('/api/erg-tests', ergDataRoutes);
+// Body parsing
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Request logging
+app.use(requestLogger);
+
+// API Routes with rate limiting
+app.use('/api/auth', authLimiter, authRoutes);
+app.use('/api/lineups', apiLimiter, lineupRoutes);
+app.use('/api/erg-tests', apiLimiter, ergDataRoutes);
+app.use('/api/ai', aiLimiter, aiRoutes);
 
 /**
  * CSV Data endpoint
@@ -173,17 +191,28 @@ if (NODE_ENV === 'production') {
   });
 }
 
+// Error logging middleware
+app.use(errorLogger);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error('Server error:', err);
-  res.status(500).json({
-    error: 'Internal server error',
-    message: NODE_ENV === 'development' ? err.message : undefined
+  const statusCode = err.statusCode || 500;
+  res.status(statusCode).json({
+    error: statusCode === 500 ? 'Internal server error' : err.message,
+    message: NODE_ENV === 'development' ? err.message : undefined,
+    ...(NODE_ENV === 'development' && { stack: err.stack }),
   });
 });
 
 // Start server
 app.listen(PORT, () => {
+  logger.info('RowLab Server Started', {
+    environment: NODE_ENV,
+    port: PORT,
+    url: `http://localhost:${PORT}`,
+  });
+
+  // ASCII banner for visibility
   console.log(`
 ╔══════════════════════════════════════════════╗
 ║           RowLab Server Started              ║
@@ -191,13 +220,9 @@ app.listen(PORT, () => {
 ║  Environment: ${NODE_ENV.padEnd(30)}║
 ║  Port:        ${PORT.toString().padEnd(30)}║
 ║  URL:         http://localhost:${PORT.toString().padEnd(21)}║
+║  Security:    Helmet + Rate Limiting         ║
 ╚══════════════════════════════════════════════╝
   `);
-
-  if (NODE_ENV === 'development') {
-    console.log('\nNote: In development, run "npm run dev" separately for Vite dev server');
-    console.log('This server only provides the /api/headshots endpoint');
-  }
 });
 
 export default app;

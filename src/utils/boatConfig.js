@@ -27,7 +27,8 @@ export const generateBoatConfig = (numSeats) => {
 export const createBoatInstance = (boatConfig, instanceId, shellName = null) => {
   return {
     id: instanceId,
-    boatClass: boatConfig.name, // e.g., "Varsity 8+"
+    name: boatConfig.name, // e.g., "Varsity 8+" - for display and export
+    boatClass: boatConfig.name, // e.g., "Varsity 8+" - legacy alias
     shellName: shellName, // e.g., "Seaweed"
     numSeats: boatConfig.numSeats,
     hasCoxswain: boatConfig.hasCoxswain,

@@ -8,14 +8,15 @@
 
 <!-- LINKEDIN COPY-PASTE START -->
 
-A web-based lineup management tool designed for rowing coaches to optimize boat assignments and visualize team configurations. The application enables coaches to drag-and-drop athletes into various boat types, manage roster data from CSV imports, and experiment with different lineup combinations in real-time. Includes a machine learning roadmap for predictive analytics and performance optimization.
+A web-based lineup management tool designed for rowing coaches to optimize boat assignments and visualize team configurations. The application enables coaches to drag-and-drop athletes into various boat types, manage roster data from CSV imports, and experiment with different lineup combinations in real-time. Features a modern glassmorphism UI with animated aurora backgrounds, AI-powered lineup assistance, and a comprehensive analytics dashboard. Includes a machine learning roadmap for predictive analytics and performance optimization.
 
 **Key Technical Achievements:**
 - Designed an intuitive drag-and-drop interface for seat assignments across multiple boat configurations (1x through 8+)
-- Implemented a modern "Liquid Glass" design system with glassmorphism effects and responsive layouts
-- Built a Node.js/Express backend API for athlete data management and lineup persistence
-- Created both compact and expanded visualization modes for lineup comparison
-- Integrated athlete headshot display and country flag indicators for international rosters
+- Implemented a modern "Liquid Glass" design system with glassmorphism effects, aurora backgrounds, and responsive layouts
+- Built a Node.js/Express backend API with JWT authentication, rate limiting, and security middleware
+- Created AI-powered lineup assistant using Ollama for intelligent lineup recommendations
+- Integrated real-time erg data tracking with performance trend visualization using Recharts
+- Implemented comprehensive account settings and user management system
 
 **Machine Learning Roadmap:**
 - Athlete ranking algorithm using aggregated performance data and erg score analysis
@@ -24,9 +25,32 @@ A web-based lineup management tool designed for rowing coaches to optimize boat 
 - AI-driven training suggestions based on individual athlete metrics and team goals
 - PostgreSQL database integration for longitudinal athlete data storage and analysis
 
-**Technologies:** Node.js, Express, React, Vite, TailwindCSS, Zustand, dnd-kit | *Planned: Python, Scikit-learn, PostgreSQL*
+**Technologies:** Node.js, Express, React, Vite, TailwindCSS, Zustand, dnd-kit, Framer Motion, Ollama AI | *Planned: Python, Scikit-learn, PostgreSQL*
 
 <!-- LINKEDIN COPY-PASTE END -->
+
+---
+
+## Recent Updates (v2.0)
+
+### UI/UX Redesign
+- **Aurora Background**: Subtle animated northern lights gradient effect across all pages
+- **Glass Morphism**: Enhanced glass panel effects with improved opacity for better text readability
+- **Dark Mode Optimized**: All text now properly styled for dark backgrounds across every page
+- **Gradient Navigation**: Sidebar and navigation elements feature smooth gradient hover effects
+- **Responsive Design**: Mobile-first approach with collapsible sidebar and touch-friendly interactions
+
+### New Features
+- **Account Settings Page**: Complete user profile management with avatar upload, notifications, and preferences
+- **AI Lineup Assistant**: Integrated Ollama-powered assistant for intelligent lineup recommendations
+- **Performance Analytics Dashboard**: Visual charts for erg scores, side distribution, and team trends
+- **Admin Panel**: User management and feature toggles for administrators
+
+### Security & Performance
+- **JWT Authentication**: Secure token-based auth with refresh tokens
+- **Rate Limiting**: Endpoint-specific rate limits to prevent abuse
+- **Helmet Security Headers**: CSP, CORS, and other security middleware
+- **Code Splitting**: Lazy-loaded pages for faster initial load times
 
 ---
 
@@ -89,20 +113,36 @@ Server runs on port 3002
 
 ## Features
 
-### ✅ Fully Functional
-- **Visual Boat Builder**: Add multiple boats to workspace (8+, 4+, 4-, etc.)
-- **Athlete Management**: View all athletes with headshots and country flags
-- **Click-to-Assign**: Click athlete → click seat → assignment
-- **Drag-and-Drop**: Drag athletes directly onto seats
-- **Athlete Swapping**: Click two seats to swap athletes (within or across boats)
-- **Search & Filter**: Find athletes quickly by name
-- **Save & Export**: Save lineups to localStorage or export as JSON
-- **Real Data**: Loads 53 athletes from existing CSV
+### ✅ Core Features
+- **Visual Boat Builder**: Kanban-style drag-and-drop lineup builder for 8+, 4+, 4-, 2x, 1x configurations
+- **Athlete Management**: Full roster management with headshots, country flags, and side preferences
+- **Drag-and-Drop**: Intuitive @dnd-kit powered interface for seat assignments
+- **Athlete Swapping**: Click two seats to swap athletes within or across boats
+- **Search & Filter**: Real-time athlete search with multiple filter options
+- **Save & Export**: Persist lineups to localStorage or export as JSON
 
-### ⚠️ Coming Soon (Awaiting Data)
-- **Performance Metrics**: View erg test results and trends (needs erg_data.csv)
-- **Side Validation**: Warnings for port/starboard mismatches (needs capability data)
-- **Ranking System**: Display athlete rankings (needs methodology definition)
+### ✅ Analytics & Data
+- **Performance Dashboard**: Team statistics and trends visualization
+- **Erg Data Tracking**: Record and analyze 2k, 6k, and other erg test results
+- **Side Distribution Charts**: Visual breakdown of port/starboard assignments
+- **Boat Utilization**: Track active boats and seat fill rates
+
+### ✅ User Experience
+- **Account Settings**: Profile management, avatar upload, and preference controls
+- **AI Lineup Assistant**: Ollama-powered chatbot for lineup recommendations
+- **Dark Mode**: Fully optimized dark theme with aurora background effects
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
+
+### ✅ Security & Admin
+- **JWT Authentication**: Secure login with token refresh
+- **Admin Panel**: User management and feature toggles
+- **Rate Limiting**: Protection against API abuse
+- **Role-Based Access**: Admin and user role separation
+
+### ⚠️ In Development
+- **Performance Predictions**: ML-based race placement predictions
+- **Team Comparisons**: Side-by-side lineup analysis
+- **Training Recommendations**: AI-driven workout suggestions
 
 ## Usage
 
@@ -159,12 +199,28 @@ Server runs on port 3002
 
 ## Technical Stack
 
-- **Frontend**: React 18 + Vite + Tailwind CSS
-- **Drag-and-Drop**: @dnd-kit
-- **State**: Zustand
-- **CSV Parsing**: PapaParse
-- **Backend**: Express.js (Node.js)
-- **Charts**: Recharts (for future erg data)
+### Frontend
+- **Framework**: React 18 + Vite (ES modules, fast HMR)
+- **Styling**: Tailwind CSS + Custom glassmorphism design system
+- **Animations**: Framer Motion (page transitions, micro-interactions)
+- **State Management**: Zustand (lightweight, no boilerplate)
+- **Drag-and-Drop**: @dnd-kit (accessible, customizable)
+- **Charts**: Recharts (responsive data visualization)
+- **Icons**: Lucide React
+
+### Backend
+- **Runtime**: Node.js 18+
+- **Framework**: Express.js
+- **Authentication**: JWT with bcrypt password hashing
+- **Security**: Helmet, CORS, express-rate-limit
+- **AI Integration**: Ollama API for local LLM inference
+- **Data Parsing**: PapaParse for CSV imports
+
+### Development
+- **Build Tool**: Vite with Rollup
+- **TypeScript**: Gradual migration (components)
+- **Linting**: ESLint with React config
+- **Process Management**: Concurrently, PM2
 
 ## Scripts
 
@@ -251,23 +307,31 @@ lsof -i :3001
 kill -9 <PID>
 ```
 
-## Future Enhancements
+## Feature Roadmap
 
-### Immediate (Once Data Available)
-- Integrate full athlete data (FirstName, Port/Starboard capabilities)
-- Activate performance view (needs erg_data.csv)
-- Implement side validation warnings
+### Phase 1: Data Integration (Current)
+- [ ] Full erg data CSV import and validation
+- [ ] Side preference enforcement and warnings
+- [ ] Athlete capability matrix (port/starboard/both)
+- [ ] Historical performance tracking
 
-### Short-Term
-- Define and implement ranking system
-- Add printable lineup view
-- Undo/Redo functionality
+### Phase 2: Analytics (Q1 2026)
+- [ ] Power ranking algorithm implementation
+- [ ] Erg score trend analysis and predictions
+- [ ] Team comparison dashboards
+- [ ] Printable lineup sheets
 
-### Long-Term
-- Database persistence (PostgreSQL)
-- Real-time collaboration (WebSocket)
-- Mobile responsive design
-- Auto-lineup suggestions (AI)
+### Phase 3: Collaboration (Q2 2026)
+- [ ] PostgreSQL database migration
+- [ ] Multi-user real-time editing (WebSocket)
+- [ ] Team sharing and permissions
+- [ ] Lineup version history
+
+### Phase 4: AI/ML Features (Q3 2026)
+- [ ] Predictive race placement model
+- [ ] Optimal lineup suggestions
+- [ ] Training load recommendations
+- [ ] Weather condition adjustments
 
 ---
 
@@ -312,4 +376,6 @@ Private - (Specify license if open-sourcing)
 
 ---
 
-**RowLab v1.0** - Built with React, Vite, and ❤️ for rowing coaches
+**RowLab v2.0** - Built with React, Vite, and a passion for rowing
+
+*Last updated: January 2026*

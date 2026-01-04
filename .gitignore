@@ -31,3 +31,4 @@ Thumbs.db
 .cache/
 
 /src/generated/prisma
+logs/*.log

@@ -1,0 +1,22 @@
+[Unit]
+Description=Ollama AI Model Server
+Documentation=https://ollama.ai
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=swd
+Group=swd
+ExecStart=/usr/local/bin/ollama serve
+Restart=on-failure
+RestartSec=3
+Environment="OLLAMA_HOST=0.0.0.0"
+Environment="OLLAMA_ORIGINS=*"
+
+# Resource limits (uncomment and adjust as needed)
+# MemoryMax=8G
+# CPUQuota=200%
+
+[Install]
+WantedBy=multi-user.target
