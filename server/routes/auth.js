@@ -1,366 +1,272 @@
 import express from 'express';
-import bcrypt from 'bcryptjs';
-import prisma from '../db/connection.js';
-import { generateToken, verifyToken } from '../middleware/auth.js';
+import { body, validationResult } from 'express-validator';
+import rateLimit from 'express-rate-limit';
+import {
+  registerUser,
+  loginUser,
+  switchTeam,
+  getCurrentUser,
+  logoutUser,
+} from '../services/authService.js';
+import {
+  rotateRefreshToken,
+  generateAccessToken,
+} from '../services/tokenService.js';
+import { authenticateToken } from '../middleware/auth.js';
+import { prisma } from '../db/connection.js';
 
 const router = express.Router();
 
-/**
- * POST /api/auth/register
- * Submit account application (requires admin approval)
- */
-router.post('/register', async (req, res) => {
-  try {
-    const { username, password, name, email, requestMessage } = req.body;
+// Rate limiting for auth endpoints
+const authLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 5,
+  message: {
+    success: false,
+    error: { code: 'RATE_LIMITED', message: 'Too many attempts, try again later' },
+  },
+});
 
-    if (!username || !password || !name) {
-      return res.status(400).json({ error: 'Username, password, and name are required' });
-    }
-
-    if (password.length < 6) {
-      return res.status(400).json({ error: 'Password must be at least 6 characters' });
-    }
-
-    // Check if username already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { username },
+// Validation helpers
+const validateRequest = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      error: {
+        code: 'VALIDATION_ERROR',
+        message: 'Invalid input',
+        details: errors.array(),
+      },
     });
+  }
+  next();
+};
 
-    if (existingUser) {
-      return res.status(400).json({ error: 'Username already taken' });
-    }
+/**
+ * POST /api/v1/auth/register
+ * Create new user account
+ */
+router.post(
+  '/register',
+  authLimiter,
+  [
+    body('email').isEmail().normalizeEmail(),
+    body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
+    body('name').trim().notEmpty().withMessage('Name is required'),
+  ],
+  validateRequest,
+  async (req, res) => {
+    try {
+      const { email, password, name } = req.body;
+      const user = await registerUser({ email, password, name });
 
-    // Check if email already exists (if provided)
-    if (email) {
-      const existingEmail = await prisma.user.findUnique({
-        where: { email },
+      res.status(201).json({
+        success: true,
+        data: { user },
       });
-      if (existingEmail) {
-        return res.status(400).json({ error: 'Email already registered' });
+    } catch (error) {
+      if (error.message === 'Email already registered') {
+        return res.status(409).json({
+          success: false,
+          error: { code: 'EMAIL_EXISTS', message: error.message },
+        });
       }
+      console.error('Register error:', error);
+      res.status(500).json({
+        success: false,
+        error: { code: 'SERVER_ERROR', message: 'Registration failed' },
+      });
     }
-
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create user with pending status
-    const user = await prisma.user.create({
-      data: {
-        username,
-        password: hashedPassword,
-        name,
-        email: email || null,
-        requestMessage: requestMessage || null,
-        role: 'coach',
-        status: 'pending',
-      },
-    });
-
-    res.status(201).json({
-      message: 'Registration submitted! Your application is pending approval.',
-      user: {
-        id: user.id,
-        username: user.username,
-        name: user.name,
-        status: user.status,
-      },
-    });
-  } catch (err) {
-    console.error('Registration error:', err);
-    res.status(500).json({ error: 'Registration failed' });
   }
-});
+);
 
 /**
- * POST /api/auth/login
- * Authenticate user and return JWT token
+ * POST /api/v1/auth/login
+ * Login and get tokens
  */
-router.post('/login', async (req, res) => {
-  try {
-    const { username, password } = req.body;
+router.post(
+  '/login',
+  authLimiter,
+  [
+    body('email').isEmail().normalizeEmail(),
+    body('password').notEmpty(),
+  ],
+  validateRequest,
+  async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const result = await loginUser({ email, password });
 
-    if (!username || !password) {
-      return res.status(400).json({ error: 'Username and password required' });
+      // Set refresh token as HTTP-only cookie
+      res.cookie('refreshToken', result.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+
+      res.json({
+        success: true,
+        data: {
+          user: result.user,
+          teams: result.teams,
+          activeTeamId: result.activeTeamId,
+          accessToken: result.accessToken,
+        },
+      });
+    } catch (error) {
+      if (error.message === 'Invalid credentials') {
+        return res.status(401).json({
+          success: false,
+          error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' },
+        });
+      }
+      if (error.message === 'Account is suspended') {
+        return res.status(403).json({
+          success: false,
+          error: { code: 'ACCOUNT_SUSPENDED', message: error.message },
+        });
+      }
+      console.error('Login error:', error);
+      res.status(500).json({
+        success: false,
+        error: { code: 'SERVER_ERROR', message: 'Login failed' },
+      });
     }
-
-    // Find user
-    const user = await prisma.user.findUnique({
-      where: { username },
-    });
-
-    if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    // Check if account is approved
-    if (user.status === 'pending') {
-      return res.status(403).json({ error: 'Your account is pending approval' });
-    }
-
-    if (user.status === 'rejected') {
-      return res.status(403).json({ error: 'Your account application was not approved' });
-    }
-
-    // Verify password
-    const isValid = await bcrypt.compare(password, user.password);
-
-    if (!isValid) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    // Generate token
-    const token = generateToken(user);
-
-    res.json({
-      token,
-      user: {
-        id: user.id,
-        username: user.username,
-        name: user.name,
-        role: user.role,
-      },
-    });
-  } catch (err) {
-    console.error('Login error:', err);
-    res.status(500).json({ error: 'Login failed' });
   }
-});
+);
 
 /**
- * POST /api/auth/logout
- * Client-side logout (token invalidation handled client-side)
+ * POST /api/v1/auth/refresh
+ * Refresh access token using refresh token
  */
-router.post('/logout', (req, res) => {
-  res.json({ message: 'Logged out successfully' });
-});
-
-/**
- * GET /api/auth/verify
- * Verify token and return user info
- */
-router.get('/verify', verifyToken, async (req, res) => {
+router.post('/refresh', async (req, res) => {
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: req.user.id },
-      select: {
-        id: true,
-        username: true,
-        name: true,
-        role: true,
-      },
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      return res.status(401).json({
+        success: false,
+        error: { code: 'NO_REFRESH_TOKEN', message: 'Refresh token required' },
+      });
+    }
+
+    const result = await rotateRefreshToken(refreshToken);
+    if (!result.valid) {
+      res.clearCookie('refreshToken');
+      return res.status(401).json({
+        success: false,
+        error: { code: 'INVALID_REFRESH_TOKEN', message: result.error },
+      });
+    }
+
+    // Get user's first team for new access token
+    const user = result.user;
+    const membership = await prisma.teamMember.findFirst({
+      where: { userId: user.id },
     });
 
-    if (!user) {
-      return res.status(401).json({ error: 'User not found' });
-    }
-
-    res.json({ user });
-  } catch (err) {
-    console.error('Verify error:', err);
-    res.status(500).json({ error: 'Verification failed' });
-  }
-});
-
-/**
- * POST /api/auth/change-password
- * Change user password (requires auth)
- */
-router.post('/change-password', verifyToken, async (req, res) => {
-  try {
-    const { currentPassword, newPassword } = req.body;
-
-    if (!currentPassword || !newPassword) {
-      return res.status(400).json({ error: 'Current and new password required' });
-    }
-
-    if (newPassword.length < 6) {
-      return res.status(400).json({ error: 'Password must be at least 6 characters' });
-    }
-
-    // Get user with password
-    const user = await prisma.user.findUnique({
-      where: { id: req.user.id },
-    });
-
-    // Verify current password
-    const isValid = await bcrypt.compare(currentPassword, user.password);
-
-    if (!isValid) {
-      return res.status(401).json({ error: 'Current password is incorrect' });
-    }
-
-    // Hash new password and update
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    await prisma.user.update({
-      where: { id: req.user.id },
-      data: { password: hashedPassword },
-    });
-
-    res.json({ message: 'Password changed successfully' });
-  } catch (err) {
-    console.error('Change password error:', err);
-    res.status(500).json({ error: 'Password change failed' });
-  }
-});
-
-/**
- * GET /api/auth/applications
- * Get pending user applications (admin only)
- */
-router.get('/applications', verifyToken, async (req, res) => {
-  try {
-    // Check if user is admin
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Admin access required' });
-    }
-
-    const applications = await prisma.user.findMany({
-      where: { status: 'pending' },
-      select: {
-        id: true,
-        username: true,
-        name: true,
-        email: true,
-        requestMessage: true,
-        createdAt: true,
-      },
-      orderBy: { createdAt: 'desc' },
-    });
-
-    res.json({ applications });
-  } catch (err) {
-    console.error('Get applications error:', err);
-    res.status(500).json({ error: 'Failed to get applications' });
-  }
-});
-
-/**
- * GET /api/auth/users
- * Get all users (admin only)
- */
-router.get('/users', verifyToken, async (req, res) => {
-  try {
-    // Check if user is admin
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Admin access required' });
-    }
-
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        username: true,
-        name: true,
-        email: true,
-        role: true,
-        status: true,
-        createdAt: true,
-      },
-      orderBy: { createdAt: 'desc' },
-    });
-
-    res.json({ users });
-  } catch (err) {
-    console.error('Get users error:', err);
-    res.status(500).json({ error: 'Failed to get users' });
-  }
-});
-
-/**
- * POST /api/auth/applications/:id/approve
- * Approve a user application (admin only)
- */
-router.post('/applications/:id/approve', verifyToken, async (req, res) => {
-  try {
-    // Check if user is admin
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Admin access required' });
-    }
-
-    const { id } = req.params;
-
-    const user = await prisma.user.update({
-      where: { id: parseInt(id) },
-      data: { status: 'approved' },
-      select: {
-        id: true,
-        username: true,
-        name: true,
-        status: true,
-      },
-    });
-
-    res.json({
-      message: `User ${user.username} has been approved`,
+    const accessToken = generateAccessToken(
       user,
-    });
-  } catch (err) {
-    console.error('Approve application error:', err);
-    res.status(500).json({ error: 'Failed to approve application' });
-  }
-});
+      membership?.teamId || null,
+      membership?.role || null
+    );
 
-/**
- * POST /api/auth/applications/:id/reject
- * Reject a user application (admin only)
- */
-router.post('/applications/:id/reject', verifyToken, async (req, res) => {
-  try {
-    // Check if user is admin
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Admin access required' });
-    }
-
-    const { id } = req.params;
-
-    const user = await prisma.user.update({
-      where: { id: parseInt(id) },
-      data: { status: 'rejected' },
-      select: {
-        id: true,
-        username: true,
-        name: true,
-        status: true,
-      },
+    // Set new refresh token cookie
+    res.cookie('refreshToken', result.newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.json({
-      message: `User ${user.username} has been rejected`,
-      user,
+      success: true,
+      data: { accessToken },
     });
-  } catch (err) {
-    console.error('Reject application error:', err);
-    res.status(500).json({ error: 'Failed to reject application' });
+  } catch (error) {
+    console.error('Refresh error:', error);
+    res.status(500).json({
+      success: false,
+      error: { code: 'SERVER_ERROR', message: 'Token refresh failed' },
+    });
   }
 });
 
 /**
- * DELETE /api/auth/users/:id
- * Delete a user (admin only, cannot delete self)
+ * POST /api/v1/auth/logout
+ * Logout and revoke tokens
  */
-router.delete('/users/:id', verifyToken, async (req, res) => {
+router.post('/logout', authenticateToken, async (req, res) => {
   try {
-    // Check if user is admin
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Admin access required' });
-    }
+    await logoutUser(req.user.id);
+    res.clearCookie('refreshToken');
 
-    const { id } = req.params;
-    const userId = parseInt(id);
-
-    // Cannot delete self
-    if (userId === req.user.id) {
-      return res.status(400).json({ error: 'Cannot delete your own account' });
-    }
-
-    await prisma.user.delete({
-      where: { id: userId },
+    res.json({
+      success: true,
+      data: { message: 'Logged out successfully' },
     });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(500).json({
+      success: false,
+      error: { code: 'SERVER_ERROR', message: 'Logout failed' },
+    });
+  }
+});
 
-    res.json({ message: 'User deleted successfully' });
-  } catch (err) {
-    console.error('Delete user error:', err);
-    res.status(500).json({ error: 'Failed to delete user' });
+/**
+ * POST /api/v1/auth/switch-team
+ * Switch active team context
+ */
+router.post(
+  '/switch-team',
+  authenticateToken,
+  [body('teamId').isUUID()],
+  validateRequest,
+  async (req, res) => {
+    try {
+      const { teamId } = req.body;
+      const result = await switchTeam(req.user.id, teamId);
+
+      res.json({
+        success: true,
+        data: result,
+      });
+    } catch (error) {
+      if (error.message === 'Not a member of this team') {
+        return res.status(403).json({
+          success: false,
+          error: { code: 'NOT_MEMBER', message: error.message },
+        });
+      }
+      console.error('Switch team error:', error);
+      res.status(500).json({
+        success: false,
+        error: { code: 'SERVER_ERROR', message: 'Failed to switch team' },
+      });
+    }
+  }
+);
+
+/**
+ * GET /api/v1/auth/me
+ * Get current user and their teams
+ */
+router.get('/me', authenticateToken, async (req, res) => {
+  try {
+    const user = await getCurrentUser(req.user.id);
+
+    res.json({
+      success: true,
+      data: { user },
+    });
+  } catch (error) {
+    console.error('Get user error:', error);
+    res.status(500).json({
+      success: false,
+      error: { code: 'SERVER_ERROR', message: 'Failed to get user' },
+    });
   }
 });
 
