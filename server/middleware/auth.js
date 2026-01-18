@@ -1,63 +1,110 @@
-import jwt from 'jsonwebtoken';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'rowlab-default-secret';
+import { verifyAccessToken } from '../services/tokenService.js';
 
 /**
- * Middleware to verify JWT token
- * Sets req.user if token is valid
+ * Verify JWT and attach user to request
  */
-export const verifyToken = (req, res, next) => {
+export async function authenticateToken(req, res, next) {
   const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'No token provided' });
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      error: { code: 'NO_TOKEN', message: 'Authentication required' },
+    });
   }
 
-  const token = authHeader.split(' ')[1];
-
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    return res.status(401).json({ error: 'Invalid or expired token' });
+  const payload = verifyAccessToken(token);
+  if (!payload) {
+    return res.status(401).json({
+      success: false,
+      error: { code: 'INVALID_TOKEN', message: 'Invalid or expired token' },
+    });
   }
-};
+
+  req.user = {
+    id: payload.sub,
+    email: payload.email,
+    activeTeamId: payload.activeTeamId,
+    activeTeamRole: payload.activeTeamRole,
+  };
+
+  next();
+}
 
 /**
- * Middleware to optionally check for auth
- * Sets req.user if token exists and is valid, but doesn't require it
+ * Optional authentication - sets req.user if token valid, continues otherwise
  */
-export const optionalAuth = (req, res, next) => {
+export async function optionalAuth(req, res, next) {
   const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
 
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    const token = authHeader.split(' ')[1];
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET);
-      req.user = decoded;
-    } catch (err) {
-      // Token invalid, but we don't require auth
-      req.user = null;
+  if (token) {
+    const payload = verifyAccessToken(token);
+    if (payload) {
+      req.user = {
+        id: payload.sub,
+        email: payload.email,
+        activeTeamId: payload.activeTeamId,
+        activeTeamRole: payload.activeTeamRole,
+      };
     }
-  } else {
-    req.user = null;
   }
 
   next();
-};
+}
 
 /**
- * Generate JWT token for user
+ * Require specific roles
  */
-export const generateToken = (user) => {
-  return jwt.sign(
-    {
-      id: user.id,
-      username: user.username,
-      role: user.role,
-    },
-    JWT_SECRET,
-    { expiresIn: '7d' }
-  );
-};
+export function requireRole(...roles) {
+  return (req, res, next) => {
+    if (!req.user.activeTeamRole) {
+      return res.status(403).json({
+        success: false,
+        error: { code: 'NO_TEAM', message: 'No active team selected' },
+      });
+    }
+
+    if (!roles.includes(req.user.activeTeamRole)) {
+      return res.status(403).json({
+        success: false,
+        error: { code: 'FORBIDDEN', message: 'Insufficient permissions' },
+      });
+    }
+
+    next();
+  };
+}
+
+/**
+ * Require active team context
+ */
+export function requireTeam(req, res, next) {
+  if (!req.user.activeTeamId) {
+    return res.status(400).json({
+      success: false,
+      error: { code: 'NO_TEAM', message: 'No active team selected' },
+    });
+  }
+  next();
+}
+
+/**
+ * Team isolation middleware - ensures queries are scoped to active team
+ */
+export function teamIsolation(req, res, next) {
+  if (!req.user?.activeTeamId) {
+    return res.status(400).json({
+      success: false,
+      error: { code: 'NO_TEAM', message: 'Team context required' },
+    });
+  }
+
+  // Attach team filter helper
+  req.teamFilter = { teamId: req.user.activeTeamId };
+  next();
+}
+
+// Legacy exports for backward compatibility
+export const verifyToken = authenticateToken;
