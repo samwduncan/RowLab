@@ -6,3 +6,4 @@ export * from './inviteService.js';
 export * from './ergTestService.js';
 export * from './workoutService.js';
 export * from './csvImportService.js';
+export * from './concept2Service.js';
