@@ -1,84 +1,80 @@
 import { forwardRef } from 'react';
 import { clsx } from 'clsx';
 
-const variants = {
-  default: [
-    'bg-surface-800',
-    'border border-border-subtle',
-    'shadow-card',
-  ].join(' '),
-  elevated: [
-    'bg-surface-750',
-    'border border-border-default',
-    'shadow-lg',
-  ].join(' '),
-  ghost: [
-    'bg-transparent',
-    'border border-transparent',
-  ].join(' '),
-  gradient: [
-    'bg-gradient-to-br from-surface-800 to-surface-850',
-    'border border-border-subtle',
-    'shadow-card',
-  ].join(' '),
-  glow: [
-    'bg-surface-800',
-    'border border-accent/20',
-    'shadow-glow-indigo',
-  ].join(' '),
-  interactive: [
-    'bg-surface-800',
-    'border border-border-subtle',
-    'shadow-card',
-    'hover:shadow-card-hover hover:border-border-default',
-    'transition-all duration-200',
-    'cursor-pointer',
-  ].join(' '),
-};
-
-const paddings = {
-  none: '',
-  sm: 'p-3',
-  md: 'p-4',
-  lg: 'p-6',
-  xl: 'p-8',
-};
-
-const radii = {
-  sm: 'rounded-md',
-  md: 'rounded-lg',
-  lg: 'rounded-xl',
-  xl: 'rounded-2xl',
-};
-
-/**
- * Card component for containing content
- *
- * @param {Object} props
- * @param {'default' | 'elevated' | 'ghost' | 'gradient' | 'glow' | 'interactive'} props.variant
- * @param {'none' | 'sm' | 'md' | 'lg' | 'xl'} props.padding
- * @param {'sm' | 'md' | 'lg' | 'xl'} props.radius
- * @param {string} props.className
- * @param {React.ReactNode} props.children
- */
 const Card = forwardRef(function Card(
   {
-    variant = 'default',
+    variant = 'glass',
     padding = 'md',
-    radius = 'lg',
     className,
     children,
     ...props
   },
   ref
 ) {
+  const paddingStyles = {
+    none: '',
+    sm: 'p-4',
+    md: 'p-6',
+    lg: 'p-8',
+  };
+
+  const variantStyles = {
+    glass: `
+      bg-void-elevated
+      border border-transparent rounded-2xl
+      backdrop-blur-[20px] saturate-[180%]
+      shadow-inner-highlight
+      [background-image:linear-gradient(#121214,#121214),linear-gradient(to_bottom,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.04)_50%,rgba(255,255,255,0)_100%)]
+      [background-origin:padding-box,border-box]
+      [background-clip:padding-box,border-box]
+      transition-all duration-200
+      hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_0_30px_-10px_rgba(0,229,153,0.3)]
+      hover:-translate-y-0.5
+    `,
+    solid: `
+      bg-void-elevated
+      border border-white/[0.08] rounded-xl
+      shadow-inner-highlight
+    `,
+    inset: `
+      bg-void-surface
+      border border-white/[0.04] rounded-lg
+      shadow-inset-depth
+    `,
+    interactive: `
+      bg-void-elevated
+      border border-transparent rounded-2xl
+      backdrop-blur-[20px]
+      [background-image:linear-gradient(#121214,#121214),linear-gradient(to_bottom,rgba(255,255,255,0.12),rgba(255,255,255,0))]
+      [background-origin:padding-box,border-box]
+      [background-clip:padding-box,border-box]
+      cursor-pointer
+      transition-all duration-200
+      hover:shadow-[0_0_40px_-10px_rgba(0,229,153,0.4)]
+      hover:-translate-y-1
+    `,
+    // Legacy compatibility
+    default: `
+      bg-void-elevated
+      border border-white/[0.08] rounded-xl
+      shadow-inner-highlight
+    `,
+    elevated: `
+      bg-void-elevated
+      border border-white/[0.08] rounded-xl
+      shadow-lg
+    `,
+    ghost: `
+      bg-transparent border border-transparent
+    `,
+  };
+
   return (
     <div
       ref={ref}
       className={clsx(
-        variants[variant],
-        paddings[padding],
-        radii[radius],
+        paddingStyles[padding],
+        variantStyles[variant],
         className
       )}
       {...props}
@@ -88,115 +84,52 @@ const Card = forwardRef(function Card(
   );
 });
 
-/**
- * Card Header component
- */
-const CardHeader = forwardRef(function CardHeader(
-  { className, children, ...props },
-  ref
-) {
+const CardHeader = forwardRef(function CardHeader({ className, ...props }, ref) {
   return (
     <div
       ref={ref}
-      className={clsx(
-        'flex items-center justify-between',
-        'pb-4 mb-4',
-        'border-b border-border-subtle',
-        className
-      )}
+      className={clsx('flex flex-col space-y-1.5 pb-4', className)}
       {...props}
-    >
-      {children}
-    </div>
+    />
   );
 });
 
-/**
- * Card Title component
- */
-const CardTitle = forwardRef(function CardTitle(
-  { as: Component = 'h3', className, children, ...props },
-  ref
-) {
+const CardTitle = forwardRef(function CardTitle({ className, ...props }, ref) {
   return (
-    <Component
+    <h3
       ref={ref}
       className={clsx(
-        'text-lg font-semibold text-text-primary',
+        'font-display text-xl font-semibold text-text-primary tracking-tight',
         className
       )}
       {...props}
-    >
-      {children}
-    </Component>
+    />
   );
 });
 
-/**
- * Card Description component
- */
-const CardDescription = forwardRef(function CardDescription(
-  { className, children, ...props },
-  ref
-) {
+const CardDescription = forwardRef(function CardDescription({ className, ...props }, ref) {
   return (
     <p
       ref={ref}
-      className={clsx(
-        'text-sm text-text-secondary',
-        'mt-1',
-        className
-      )}
+      className={clsx('text-sm text-text-secondary', className)}
       {...props}
-    >
-      {children}
-    </p>
+    />
   );
 });
 
-/**
- * Card Content component
- */
-const CardContent = forwardRef(function CardContent(
-  { className, children, ...props },
-  ref
-) {
-  return (
-    <div ref={ref} className={clsx(className)} {...props}>
-      {children}
-    </div>
-  );
+const CardContent = forwardRef(function CardContent({ className, ...props }, ref) {
+  return <div ref={ref} className={clsx('', className)} {...props} />;
 });
 
-/**
- * Card Footer component
- */
-const CardFooter = forwardRef(function CardFooter(
-  { className, children, ...props },
-  ref
-) {
+const CardFooter = forwardRef(function CardFooter({ className, ...props }, ref) {
   return (
     <div
       ref={ref}
-      className={clsx(
-        'flex items-center justify-end gap-3',
-        'pt-4 mt-4',
-        'border-t border-border-subtle',
-        className
-      )}
+      className={clsx('flex items-center pt-4', className)}
       {...props}
-    >
-      {children}
-    </div>
+    />
   );
 });
 
-export {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-};
+export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter };
 export default Card;
