@@ -12,7 +12,8 @@ import RegisterModal from '../components/Auth/RegisterModal';
 import AdminPanel from '../components/Auth/AdminPanel';
 import LineupAssistant, { AIAssistantButton } from '../components/AI/LineupAssistant';
 import { Sidebar } from '../components/compound/Sidebar';
-import { TopNav, MobileDock, Breadcrumbs, WorkspaceSwitcher, CommandPalette } from '../components/Layout';
+import { TopNav, MobileDock, Breadcrumbs, WorkspaceSwitcher, CommandPalette, CollaborationPresence } from '../components/Layout';
+import { useCollaboration } from '../hooks/useCollaboration';
 
 function AppLayout() {
   const navigate = useNavigate();
@@ -38,7 +39,18 @@ function AppLayout() {
   const { user, accessToken: token, initialize, logout } = useAuthStore();
   const { features } = useSettingsStore();
   const aiEnabled = features.aiAssistant;
+  const collaborationEnabled = features.collaboration || features.presenceTracking;
   const isAdmin = user?.isAdmin === true;
+
+  // Collaboration hook for real-time presence
+  const {
+    users: collaborationUsers,
+    isConnected: collaborationConnected,
+    syncRequired,
+  } = useCollaboration({
+    sessionId: 'global-session', // Using a global session for now
+    enabled: collaborationEnabled && !!token,
+  });
 
   useEffect(() => {
     initialize();
@@ -167,6 +179,15 @@ function AppLayout() {
           onAdminClick={() => setShowAdminPanel(true)}
           onLogout={handleLogout}
           user={user}
+          collaborationSlot={
+            <CollaborationPresence
+              users={collaborationUsers}
+              currentUserId={user?.id}
+              isConnected={collaborationConnected}
+              syncRequired={syncRequired}
+              enabled={collaborationEnabled}
+            />
+          }
         >
           <div className="flex items-center gap-3">
             {/* Workspace Switcher (hidden on mobile) */}
