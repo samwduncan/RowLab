@@ -41,7 +41,7 @@ function PDFExportModal({ isOpen, onClose, lineupName, boats }) {
       <div className="relative glass-card rounded-2xl p-6 w-full max-w-md mx-4 animate-slide-up">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          className="absolute top-4 right-4 text-text-muted hover:text-text-primary transition-colors"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -50,16 +50,16 @@ function PDFExportModal({ isOpen, onClose, lineupName, boats }) {
 
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">📄</div>
-          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
+          <h2 className="text-xl font-bold text-text-primary">
             Export to PDF
           </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+          <p className="text-sm text-text-secondary mt-1">
             Choose your layout preference
           </p>
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg text-sm">
+          <div className="mb-4 p-3 bg-danger-red/10 text-danger-red rounded-lg text-sm border border-danger-red/20">
             {error}
           </div>
         )}
@@ -67,7 +67,7 @@ function PDFExportModal({ isOpen, onClose, lineupName, boats }) {
         <div className="space-y-4 mb-6">
           {/* Layout Options */}
           <div className="space-y-3">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-medium text-text-secondary">
               Layout Style
             </label>
 
@@ -77,20 +77,20 @@ function PDFExportModal({ isOpen, onClose, lineupName, boats }) {
               className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                 layout === 'compact'
                   ? 'border-blade-blue bg-blade-blue/10'
-                  : 'border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20'
+                  : 'border-white/10 hover:border-white/20'
               }`}
             >
               <div className="flex items-center gap-3">
                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  layout === 'compact' ? 'border-blade-blue' : 'border-gray-400 dark:border-white/30'
+                  layout === 'compact' ? 'border-blade-blue' : 'border-white/30'
                 }`}>
                   {layout === 'compact' && (
                     <div className="w-2.5 h-2.5 rounded-full bg-blade-blue" />
                   )}
                 </div>
                 <div>
-                  <div className="font-medium text-gray-800 dark:text-gray-200">Compact</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                  <div className="font-medium text-text-primary">Compact</div>
+                  <div className="text-sm text-text-muted">
                     Multiple boats per page, athletes in columns
                   </div>
                 </div>
@@ -103,20 +103,20 @@ function PDFExportModal({ isOpen, onClose, lineupName, boats }) {
               className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                 layout === 'detailed'
                   ? 'border-blade-blue bg-blade-blue/10'
-                  : 'border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20'
+                  : 'border-white/10 hover:border-white/20'
               }`}
             >
               <div className="flex items-center gap-3">
                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  layout === 'detailed' ? 'border-blade-blue' : 'border-gray-400 dark:border-white/30'
+                  layout === 'detailed' ? 'border-blade-blue' : 'border-white/30'
                 }`}>
                   {layout === 'detailed' && (
                     <div className="w-2.5 h-2.5 rounded-full bg-blade-blue" />
                   )}
                 </div>
                 <div>
-                  <div className="font-medium text-gray-800 dark:text-gray-200">Detailed</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                  <div className="font-medium text-text-primary">Detailed</div>
+                  <div className="text-sm text-text-muted">
                     One seat per line with full information
                   </div>
                 </div>
@@ -125,9 +125,9 @@ function PDFExportModal({ isOpen, onClose, lineupName, boats }) {
           </div>
 
           {/* Preview Info */}
-          <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              <div className="font-medium text-gray-800 dark:text-gray-200 mb-2">
+          <div className="p-4 bg-void-elevated/50 rounded-lg">
+            <div className="text-sm text-text-secondary">
+              <div className="font-medium text-text-primary mb-2">
                 {lineupName || 'Untitled Lineup'}
               </div>
               <div>{boats.length} boat{boats.length !== 1 ? 's' : ''}</div>
