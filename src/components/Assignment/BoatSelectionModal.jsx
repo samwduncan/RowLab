@@ -27,16 +27,16 @@ const BoatSelectionModal = ({ boatConfigs, shells, onSelect, onCancel }) => {
     <div className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
       <div className="glass-card rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-scale-in">
         {/* Header */}
-        <div className="sticky top-0 glass-elevated rounded-t-2xl border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+        <div className="sticky top-0 glass-elevated rounded-t-2xl border-b border-white/10 px-6 py-4">
           <h2 className="text-2xl font-bold text-text-primary">Add Boat to Lineup</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Select boat class and shell name</p>
+          <p className="text-sm text-text-secondary mt-1">Select boat class and shell name</p>
         </div>
 
         {/* Content */}
         <div className="p-6 space-y-6">
           {/* Step 1: Select Boat Class */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">
+            <h3 className="text-lg font-semibold text-text-primary mb-3">
               1. Select Boat Class
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -51,7 +51,7 @@ const BoatSelectionModal = ({ boatConfigs, shells, onSelect, onCancel }) => {
                     px-4 py-3 rounded-xl border-2 font-medium transition-all
                     ${selectedClass?.id === config.id
                       ? 'border-blade-blue bg-blade-blue/10 text-blade-blue shadow-lg scale-105'
-                      : 'border-gray-300 dark:border-white/10 bg-white dark:bg-void-elevated/50 text-gray-700 dark:text-gray-300 hover:border-white/30 hover:scale-105'
+                      : 'border-white/10 bg-void-elevated/50 text-text-secondary hover:border-white/30 hover:scale-105'
                     }
                   `}
                 >
@@ -64,7 +64,7 @@ const BoatSelectionModal = ({ boatConfigs, shells, onSelect, onCancel }) => {
           {/* Step 2: Select Shell (if class selected) */}
           {selectedClass && (
             <div>
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">
+              <h3 className="text-lg font-semibold text-text-primary mb-3">
                 2. Select Shell for {selectedClass.name}
               </h3>
 
@@ -85,22 +85,22 @@ const BoatSelectionModal = ({ boatConfigs, shells, onSelect, onCancel }) => {
                         }
                       `}
                     >
-                      <div className="font-semibold text-gray-900 dark:text-gray-100">{shell.name}</div>
+                      <div className="font-semibold text-text-primary">{shell.name}</div>
                       {shell.notes && (
-                        <div className="text-sm text-gray-600 dark:text-gray-400">{shell.notes}</div>
+                        <div className="text-sm text-text-muted">{shell.notes}</div>
                       )}
                     </button>
                   ))}
                 </div>
               ) : (
-                <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                <div className="text-sm text-text-secondary mb-4">
                   No shells configured for {selectedClass.name}
                 </div>
               )}
 
               {/* Custom shell name option */}
-              <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <div className="border-t border-white/10 pt-4">
+                <label className="block text-sm font-medium text-text-secondary mb-2">
                   Or enter custom shell name:
                 </label>
                 <input
@@ -119,10 +119,10 @@ const BoatSelectionModal = ({ boatConfigs, shells, onSelect, onCancel }) => {
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 glass-elevated rounded-b-2xl border-t border-gray-200 dark:border-gray-700 px-6 py-4 flex justify-end gap-3">
+        <div className="sticky bottom-0 glass-elevated rounded-b-2xl border-t border-white/10 px-6 py-4 flex justify-end gap-3">
           <button
             onClick={onCancel}
-            className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-dark-card border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all hover:scale-105 active:scale-95"
+            className="px-4 py-2 text-text-secondary bg-void-elevated border border-white/10 rounded-lg hover:bg-white/5 hover:text-text-primary transition-all hover:scale-105 active:scale-95"
           >
             Cancel
           </button>

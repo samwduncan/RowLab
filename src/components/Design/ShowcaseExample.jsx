@@ -60,10 +60,10 @@ function ShowcaseExample() {
         <main className="max-w-7xl mx-auto px-4 py-8">
           {/* Header */}
           <div className="mb-8 text-center">
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">
+            <h1 className="text-4xl font-bold text-text-primary mb-3">
               Liquid Glass Design System
             </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-300">
+            <p className="text-lg text-text-secondary">
               Inspired by Apple iOS 26 - Translucent, fluid, and elegant
             </p>
           </div>
@@ -72,30 +72,30 @@ function ShowcaseExample() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             {/* Card Variants */}
             <GlassCard variant="base" className="p-6 animate-slide-up">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-xl font-semibold text-text-primary mb-4">
                 Card Variants
               </h2>
               <div className="space-y-3">
                 <GlassCard variant="subtle" className="p-4">
-                  <p className="text-sm text-gray-700 dark:text-gray-200">
+                  <p className="text-sm text-text-secondary">
                     <strong>Subtle:</strong> Minimal depth, perfect for nested elements
                   </p>
                 </GlassCard>
 
                 <GlassCard variant="base" className="p-4">
-                  <p className="text-sm text-gray-700 dark:text-gray-200">
+                  <p className="text-sm text-text-secondary">
                     <strong>Base:</strong> Standard cards with balanced translucency
                   </p>
                 </GlassCard>
 
                 <GlassCard variant="elevated" className="p-4">
-                  <p className="text-sm text-gray-700 dark:text-gray-200">
+                  <p className="text-sm text-text-secondary">
                     <strong>Elevated:</strong> Interactive elements with stronger glass
                   </p>
                 </GlassCard>
 
                 <GlassCard variant="strong" className="p-4">
-                  <p className="text-sm text-gray-700 dark:text-gray-200">
+                  <p className="text-sm text-text-secondary">
                     <strong>Strong:</strong> Modals and important overlays
                   </p>
                 </GlassCard>
@@ -104,7 +104,7 @@ function ShowcaseExample() {
 
             {/* Button Variants */}
             <GlassCard variant="base" className="p-6 animate-slide-up" style={{ animationDelay: '100ms' }}>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-xl font-semibold text-text-primary mb-4">
                 Button Variants
               </h2>
               <div className="space-y-3">
@@ -137,7 +137,7 @@ function ShowcaseExample() {
 
             {/* Badge Collection */}
             <GlassCard variant="base" className="p-6 animate-slide-up" style={{ animationDelay: '200ms' }}>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-xl font-semibold text-text-primary mb-4">
                 Status Badges
               </h2>
               <div className="flex flex-wrap gap-2">
@@ -151,8 +151,8 @@ function ShowcaseExample() {
                 <GlassBadge variant="starboard" glow>Starboard</GlassBadge>
               </div>
 
-              <div className="mt-4 pt-4 border-t border-white/10 dark:border-white/5">
-                <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              <div className="mt-4 pt-4 border-t border-white/10">
+                <h3 className="text-sm font-semibold text-text-secondary mb-2">
                   Size Variants
                 </h3>
                 <div className="flex flex-wrap gap-2 items-center">
@@ -165,7 +165,7 @@ function ShowcaseExample() {
 
             {/* Form Inputs */}
             <GlassCard variant="base" className="p-6 animate-slide-up" style={{ animationDelay: '300ms' }}>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-xl font-semibold text-text-primary mb-4">
                 Form Inputs
               </h2>
               <div className="space-y-4">
@@ -205,7 +205,7 @@ function ShowcaseExample() {
 
             {/* Interactive Cards */}
             <GlassCard variant="elevated" className="p-6 animate-slide-up" style={{ animationDelay: '400ms' }}>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-xl font-semibold text-text-primary mb-4">
                 Interactive Elements
               </h2>
 
@@ -217,10 +217,10 @@ function ShowcaseExample() {
                   className="p-4 text-center cursor-pointer"
                 >
                   <div className="text-3xl mb-2">🚣</div>
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                  <p className="text-sm font-semibold text-text-primary">
                     8+
                   </p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                  <p className="text-xs text-text-muted">
                     Eight with Cox
                   </p>
                 </GlassCard>
@@ -232,10 +232,10 @@ function ShowcaseExample() {
                   className="p-4 text-center cursor-pointer"
                 >
                   <div className="text-3xl mb-2">🚣</div>
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                  <p className="text-sm font-semibold text-text-primary">
                     4-
                   </p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                  <p className="text-xs text-text-muted">
                     Coxless Four
                   </p>
                 </GlassCard>
@@ -247,10 +247,10 @@ function ShowcaseExample() {
                   className="p-4 text-center cursor-pointer"
                 >
                   <div className="text-3xl mb-2">🚣</div>
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                  <p className="text-sm font-semibold text-text-primary">
                     2x
                   </p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                  <p className="text-xs text-text-muted">
                     Double Scull
                   </p>
                 </GlassCard>
@@ -262,10 +262,10 @@ function ShowcaseExample() {
                   className="p-4 text-center cursor-pointer"
                 >
                   <div className="text-3xl mb-2">🚣</div>
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                  <p className="text-sm font-semibold text-text-primary">
                     1x
                   </p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                  <p className="text-xs text-text-muted">
                     Single Scull
                   </p>
                 </GlassCard>
@@ -274,10 +274,10 @@ function ShowcaseExample() {
 
             {/* Modal Trigger */}
             <GlassCard variant="base" className="p-6 animate-slide-up" style={{ animationDelay: '500ms' }}>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-xl font-semibold text-text-primary mb-4">
                 Modal Component
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">
+              <p className="text-text-secondary mb-4">
                 Click the button below to see the Liquid Glass modal with ultra-blur backdrop.
               </p>
               <GlassButton
@@ -299,12 +299,12 @@ function ShowcaseExample() {
 
           {/* Full-width Example */}
           <GlassCard variant="elevated" className="p-8 text-center animate-fade-in">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+            <h2 className="text-2xl font-bold text-text-primary mb-3">
               Ready to Transform Your App?
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
+            <p className="text-text-secondary mb-6 max-w-2xl mx-auto">
               The Liquid Glass design system is ready to use. Check out{' '}
-              <code className="px-2 py-1 bg-white/30 dark:bg-white/10 rounded text-sm">
+              <code className="px-2 py-1 bg-white/10 rounded text-sm">
                 IMPLEMENTATION_EXAMPLES.md
               </code>{' '}
               to see how to transform your existing components.
@@ -331,10 +331,10 @@ function ShowcaseExample() {
           closeOnEscape
         >
           <div className="space-y-4">
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-text-secondary">
               This modal demonstrates the Liquid Glass aesthetic with:
             </p>
-            <ul className="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-400 text-sm">
+            <ul className="list-disc list-inside space-y-2 text-text-muted text-sm">
               <li>Ultra-blurred backdrop (40px blur)</li>
               <li>Floating glass panel with depth shadows</li>
               <li>Smooth scale-in animation</li>

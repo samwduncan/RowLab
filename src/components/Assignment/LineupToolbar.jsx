@@ -62,7 +62,7 @@ function LineupToolbar({ onExportPDF, onExportCSV }) {
 
   return (
     <>
-      <div className="flex items-center gap-2 p-2 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+      <div className="flex items-center gap-2 p-2 bg-void-elevated/50 rounded-xl border border-white/10">
         {/* Lineup Name */}
         {lineupName && (
           <span className="px-3 py-1 bg-white/10 text-text-primary rounded-lg text-sm font-medium border border-white/10">
@@ -75,7 +75,7 @@ function LineupToolbar({ onExportPDF, onExportCSV }) {
         {/* New Lineup */}
         <button
           onClick={handleNewLineup}
-          className="px-3 py-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 text-sm font-medium flex items-center gap-1"
+          className="px-3 py-1.5 text-text-secondary hover:text-text-primary text-sm font-medium flex items-center gap-1 transition-colors"
           title="New Lineup"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -87,7 +87,7 @@ function LineupToolbar({ onExportPDF, onExportCSV }) {
         {/* Load */}
         <button
           onClick={() => setShowLoadModal(true)}
-          className="px-3 py-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 text-sm font-medium flex items-center gap-1"
+          className="px-3 py-1.5 text-text-secondary hover:text-text-primary text-sm font-medium flex items-center gap-1 transition-colors"
           title="Load Lineup"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,7 +118,7 @@ function LineupToolbar({ onExportPDF, onExportCSV }) {
         {isAuthenticated && (
           <button
             onClick={() => setShowShellModal(true)}
-            className="px-3 py-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 text-sm font-medium flex items-center gap-1"
+            className="px-3 py-1.5 text-text-secondary hover:text-text-primary text-sm font-medium flex items-center gap-1 transition-colors"
             title="Manage Shells"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,7 +132,7 @@ function LineupToolbar({ onExportPDF, onExportCSV }) {
         {hasLineup && (
           <div className="relative group">
             <button
-              className="px-3 py-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 text-sm font-medium flex items-center gap-1"
+              className="px-3 py-1.5 text-text-secondary hover:text-text-primary text-sm font-medium flex items-center gap-1 transition-colors"
               title="Export"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -140,16 +140,16 @@ function LineupToolbar({ onExportPDF, onExportCSV }) {
               </svg>
               Export
             </button>
-            <div className="absolute right-0 mt-1 w-32 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+            <div className="absolute right-0 mt-1 w-32 bg-void-elevated rounded-lg shadow-lg border border-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
               <button
                 onClick={onExportPDF}
-                className="w-full px-3 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg"
+                className="w-full px-3 py-2 text-left text-sm text-text-secondary hover:bg-white/5 hover:text-text-primary rounded-t-lg transition-colors"
               >
                 Export PDF
               </button>
               <button
                 onClick={onExportCSV}
-                className="w-full px-3 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-b-lg"
+                className="w-full px-3 py-2 text-left text-sm text-text-secondary hover:bg-white/5 hover:text-text-primary rounded-b-lg transition-colors"
               >
                 Export CSV
               </button>
@@ -166,38 +166,38 @@ function LineupToolbar({ onExportPDF, onExportCSV }) {
             onClick={() => setShowSaveModal(false)}
           />
           <div className="relative glass-card rounded-2xl p-6 w-full max-w-md mx-4 animate-slide-up">
-            <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">
+            <h3 className="text-xl font-bold text-text-primary mb-4">
               {currentLineupId ? 'Update Lineup' : 'Save Lineup'}
             </h3>
 
             {saveError && (
-              <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg text-sm">
+              <div className="mb-4 p-3 bg-danger-red/10 text-danger-red rounded-lg text-sm border border-danger-red/20">
                 {saveError}
               </div>
             )}
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-text-secondary mb-1">
                 Lineup Name
               </label>
               <input
                 type="text"
                 value={saveName}
                 onChange={(e) => setSaveName(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blade-blue/50"
+                className="w-full px-3 py-2 rounded-lg border border-white/10 bg-void-deep text-text-primary focus:ring-2 focus:ring-blade-blue/50 focus:border-blade-blue/50"
                 placeholder="e.g., Race Day Lineup"
                 autoFocus
               />
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-text-secondary mb-1">
                 Notes (optional)
               </label>
               <textarea
                 value={saveNotes}
                 onChange={(e) => setSaveNotes(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blade-blue/50"
+                className="w-full px-3 py-2 rounded-lg border border-white/10 bg-void-deep text-text-primary focus:ring-2 focus:ring-blade-blue/50 focus:border-blade-blue/50"
                 placeholder="Any notes about this lineup..."
                 rows={2}
               />
@@ -206,7 +206,7 @@ function LineupToolbar({ onExportPDF, onExportCSV }) {
             <div className="flex gap-2 justify-end">
               <button
                 onClick={() => setShowSaveModal(false)}
-                className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+                className="px-4 py-2 text-text-muted hover:text-text-primary transition-colors"
               >
                 Cancel
               </button>

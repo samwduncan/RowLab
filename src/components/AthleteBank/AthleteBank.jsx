@@ -56,7 +56,7 @@ const AthleteBank = () => {
         <h2 className="text-2xl font-bold text-text-primary mb-2">
           Athlete Roster
         </h2>
-        <div className="flex gap-4 text-sm text-gray-600 dark:text-gray-400">
+        <div className="flex gap-4 text-sm text-text-secondary">
           <span>Total: {athletes.length}</span>
           <span>Available: {availableCount}</span>
           <span>Assigned: {assignedCount}</span>
@@ -70,7 +70,7 @@ const AthleteBank = () => {
           placeholder="Search by name..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blade-blue/50 focus:border-blade-blue/30 bg-white dark:bg-void-elevated text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-all"
+          className="w-full px-4 py-2 border border-white/10 rounded-lg focus:ring-2 focus:ring-blade-blue/50 focus:border-blade-blue/30 bg-void-elevated text-text-primary placeholder-text-muted transition-all"
         />
       </div>
 
@@ -97,7 +97,7 @@ const AthleteBank = () => {
               </button>
               <button
                 onClick={clearAthleteSelection}
-                className="px-2 py-1 bg-gray-500 hover:bg-gray-600 text-white text-xs font-medium rounded transition-all"
+                className="px-2 py-1 bg-white/10 hover:bg-white/15 text-white text-xs font-medium rounded transition-all border border-white/10"
               >
                 Clear
               </button>
@@ -113,7 +113,7 @@ const AthleteBank = () => {
           className={`px-3 py-1 rounded-lg text-sm font-medium transition-all ${
             sideFilter === 'all'
               ? 'bg-blade-blue text-void-deep shadow-lg shadow-blade-blue/20'
-              : 'bg-gray-200 dark:bg-white/5 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-white/10 border border-transparent dark:border-white/5'
+              : 'bg-white/5 text-text-secondary hover:bg-white/10 border border-white/5'
           } hover:scale-105 active:scale-95`}
         >
           All
@@ -123,7 +123,7 @@ const AthleteBank = () => {
           className={`px-3 py-1 rounded-lg text-sm font-medium transition-all ${
             sideFilter === 'port'
               ? 'bg-port text-white shadow-lg'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+              : 'bg-white/5 text-text-secondary hover:bg-white/10 border border-white/5'
           } hover:scale-105 active:scale-95`}
           title="Filter by Port capability (needs full athlete data)"
         >
@@ -134,7 +134,7 @@ const AthleteBank = () => {
           className={`px-3 py-1 rounded-lg text-sm font-medium transition-all ${
             sideFilter === 'starboard'
               ? 'bg-starboard text-white shadow-lg'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+              : 'bg-white/5 text-text-secondary hover:bg-white/10 border border-white/5'
           } hover:scale-105 active:scale-95`}
           title="Filter by Starboard capability (needs full athlete data)"
         >
@@ -144,8 +144,8 @@ const AthleteBank = () => {
           onClick={() => setSideFilter('sculling')}
           className={`px-3 py-1 rounded-lg text-sm font-medium transition-all ${
             sideFilter === 'sculling'
-              ? 'bg-purple-600 dark:bg-coxswain-violet text-white shadow-lg'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+              ? 'bg-coxswain-violet text-white shadow-lg'
+              : 'bg-white/5 text-text-secondary hover:bg-white/10 border border-white/5'
           } hover:scale-105 active:scale-95`}
           title="Filter by Sculling capability (needs full athlete data)"
         >
@@ -155,8 +155,8 @@ const AthleteBank = () => {
           onClick={() => setSideFilter('coxswain')}
           className={`px-3 py-1 rounded-lg text-sm font-medium transition-all ${
             sideFilter === 'coxswain'
-              ? 'bg-gradient-to-r from-purple-600 to-pink-600 dark:from-coxswain-violet dark:to-pink-500 text-white shadow-lg'
-              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+              ? 'bg-gradient-to-r from-coxswain-violet to-pink-500 text-white shadow-lg'
+              : 'bg-white/5 text-text-secondary hover:bg-white/10 border border-white/5'
           } hover:scale-105 active:scale-95`}
           title="Filter for Coxswains"
         >
@@ -179,22 +179,22 @@ const AthleteBank = () => {
         </div>
 
         {filteredAthletes.length === 0 && (
-          <div className="text-center text-gray-500 dark:text-gray-400 mt-8">
+          <div className="text-center text-text-muted mt-8">
             No athletes found matching filters
           </div>
         )}
       </div>
 
       {/* Instructions */}
-      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400">
+      <div className="mt-4 pt-4 border-t border-white/10 text-sm text-text-secondary">
         <p className="mb-1">
-          <strong className="text-gray-800 dark:text-gray-300">To assign:</strong> Click athlete, then click empty seat
+          <strong className="text-text-primary">To assign:</strong> Click athlete, then click empty seat
         </p>
         <p className="mb-1">
-          <strong className="text-gray-800 dark:text-gray-300">To swap:</strong> Click two filled seats
+          <strong className="text-text-primary">To swap:</strong> Click two filled seats
         </p>
         <p>
-          <strong className="text-gray-800 dark:text-gray-300">Erg data:</strong> Double-click athlete or select and click "Erg Data"
+          <strong className="text-text-primary">Erg data:</strong> Double-click athlete or select and click "Erg Data"
         </p>
       </div>
 

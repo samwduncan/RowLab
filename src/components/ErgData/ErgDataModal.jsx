@@ -80,7 +80,7 @@ function ErgDataModal({ athlete, isOpen, onClose }) {
       <div className="relative glass-card rounded-2xl p-6 w-full max-w-2xl mx-4 animate-slide-up max-h-[85vh] overflow-hidden flex flex-col">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          className="absolute top-4 right-4 text-text-muted hover:text-text-primary transition-colors"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -88,10 +88,10 @@ function ErgDataModal({ athlete, isOpen, onClose }) {
         </button>
 
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+          <h2 className="text-2xl font-bold text-text-primary">
             Erg Data: {athlete?.firstName} {athlete?.lastName}
           </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+          <p className="text-sm text-text-secondary mt-1">
             Performance history and test results
           </p>
         </div>
@@ -99,11 +99,11 @@ function ErgDataModal({ athlete, isOpen, onClose }) {
         {/* Controls */}
         <div className="flex items-center justify-between mb-4 gap-4">
           <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-600 dark:text-gray-400">Filter:</label>
+            <label className="text-sm text-text-secondary">Filter:</label>
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-sm"
+              className="px-3 py-1.5 rounded-lg border border-white/10 bg-void-elevated text-text-primary text-sm"
             >
               <option value="all">All Tests</option>
               {testTypes.map(type => (
@@ -123,7 +123,7 @@ function ErgDataModal({ athlete, isOpen, onClose }) {
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg text-sm">
+          <div className="mb-4 p-3 bg-danger-red/10 text-danger-red rounded-lg text-sm border border-danger-red/20">
             {error}
           </div>
         )}
@@ -138,7 +138,7 @@ function ErgDataModal({ athlete, isOpen, onClose }) {
               </svg>
             </div>
           ) : filteredTests.length === 0 ? (
-            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+            <div className="text-center py-12 text-text-secondary">
               <div className="text-5xl mb-3">📊</div>
               <p>No erg tests recorded</p>
               {isAuthenticated && (
@@ -155,7 +155,7 @@ function ErgDataModal({ athlete, isOpen, onClose }) {
               {filteredTests.map((test) => (
                 <div
                   key={test.id}
-                  className="p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700"
+                  className="p-4 bg-void-elevated/50 rounded-xl border border-white/10"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -163,36 +163,36 @@ function ErgDataModal({ athlete, isOpen, onClose }) {
                         <span className="px-2 py-1 bg-white/10 text-text-primary text-sm font-medium rounded border border-white/10">
                           {test.testType}
                         </span>
-                        <span className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+                        <span className="text-2xl font-bold text-text-primary">
                           {test.result}
                         </span>
                       </div>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm text-gray-600 dark:text-gray-400">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm text-text-secondary">
                         <div>
-                          <span className="text-gray-400 dark:text-gray-500">Date:</span>{' '}
+                          <span className="text-text-muted">Date:</span>{' '}
                           {formatDate(test.testDate)}
                         </div>
                         {test.split && (
                           <div>
-                            <span className="text-gray-400 dark:text-gray-500">Split:</span>{' '}
+                            <span className="text-text-muted">Split:</span>{' '}
                             {test.split}
                           </div>
                         )}
                         {test.strokeRate && (
                           <div>
-                            <span className="text-gray-400 dark:text-gray-500">Rate:</span>{' '}
+                            <span className="text-text-muted">Rate:</span>{' '}
                             {test.strokeRate} spm
                           </div>
                         )}
                         {test.watts && (
                           <div>
-                            <span className="text-gray-400 dark:text-gray-500">Watts:</span>{' '}
+                            <span className="text-text-muted">Watts:</span>{' '}
                             {test.watts}W
                           </div>
                         )}
                       </div>
                       {test.notes && (
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 italic">
+                        <p className="text-sm text-text-muted mt-2 italic">
                           {test.notes}
                         </p>
                       )}
@@ -200,7 +200,7 @@ function ErgDataModal({ athlete, isOpen, onClose }) {
                     {isAuthenticated && (
                       <button
                         onClick={() => handleDeleteTest(test.id)}
-                        className="ml-4 p-2 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                        className="ml-4 p-2 text-danger-red hover:text-danger-red/80 transition-colors"
                         title="Delete test"
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -217,8 +217,8 @@ function ErgDataModal({ athlete, isOpen, onClose }) {
 
         {/* Stats Summary */}
         {filteredTests.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="mt-4 pt-4 border-t border-white/10">
+            <div className="text-sm text-text-secondary">
               <span className="font-medium">{filteredTests.length}</span> test{filteredTests.length !== 1 ? 's' : ''} recorded
               {filterType !== 'all' && ` (${filterType})`}
             </div>
