@@ -19,6 +19,8 @@ interface TopNavProps {
   user?: { name?: string; email?: string; username?: string; isAdmin?: boolean } | null;
   /** Additional content for center slot (breadcrumbs, title, etc.) */
   children?: React.ReactNode;
+  /** Collaboration presence indicator slot */
+  collaborationSlot?: React.ReactNode;
 }
 
 /**
@@ -37,7 +39,8 @@ export function TopNav({
   onAdminClick,
   onLogout,
   user,
-  children
+  children,
+  collaborationSlot
 }: TopNavProps) {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -88,6 +91,13 @@ export function TopNav({
             <span className="text-[11px]">&#8984;</span>K
           </kbd>
         </button>
+
+        {/* Collaboration presence slot */}
+        {collaborationSlot && (
+          <div className="hidden sm:flex">
+            {collaborationSlot}
+          </div>
+        )}
 
         {/* Notifications button */}
         <button
