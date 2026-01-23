@@ -3,9 +3,9 @@
 ## Current Status
 
 **Milestone:** v1.0 — Full UX Redesign
-**Phase:** 2 (Foundation) — COMPLETE
-**Status:** Phase 2 verified and complete
-**Last activity:** 2026-01-23 — Phase 2 complete, human checkpoint approved
+**Phase:** 3 (Vertical Slice) — IN PROGRESS
+**Status:** Phase 3 plan 02 of 04 complete
+**Last activity:** 2026-01-23 — Completed 03-02-PLAN.md (Dashboard Preferences API)
 
 ## Project Reference
 
@@ -20,11 +20,11 @@ See: .planning/PROJECT.md (updated 2026-01-23)
 |-------|------|--------|-------|
 | 1 | Clean Room Setup | ● Complete | 4/4 |
 | 2 | Foundation | ● Complete | 4/4 |
-| 3 | Vertical Slice | ○ Pending | — |
+| 3 | Vertical Slice | ◐ In Progress | 2/4 |
 | 4 | Migration Loop | ○ Pending | — |
 | 5 | The Flip | ○ Pending | — |
 
-Progress: ████░░░░░░ ~40%
+Progress: █████░░░░░ ~50%
 
 ## Quick Context
 
@@ -59,6 +59,17 @@ Progress: ████░░░░░░ ~40%
 
 **Commits:** 9 task commits + 1 metadata commit
 
+## Phase 3 Deliverables
+
+| Plan | Description | Status |
+|------|-------------|--------|
+| 03-01 | TanStack Query setup | ● Complete |
+| 03-02 | Dashboard preferences API endpoints | ● Complete |
+| 03-03 | Dashboard preferences store | ○ Pending |
+| 03-04 | Personal dashboard UI | ○ Pending |
+
+**Commits (so far):** 3 task commits
+
 ## Accumulated Decisions
 
 | Phase | Decision | Rationale |
@@ -90,11 +101,15 @@ Progress: ████░░░░░░ ~40%
 | 02-04 | Scope theme CSS selectors to .v2[data-theme="..."] | data-theme on .v2 div not :root; selectors must match for cascade |
 | 02-04 | V1 store access via Context providers (AuthStoreContext, SettingsStoreContext) | V2 components access V1 Zustand stores without cross-contamination |
 | 02-04 | Defer light/field theme visual rendering to post-Phase 5 | Dark theme works; light/field have CSS cascade issues; low priority vs. feature development |
+| 03-02 | Upsert pattern for dashboard preferences PUT endpoint | Single atomic operation for create-or-update eliminates race conditions |
+| 03-02 | Return empty arrays as defaults for missing preferences | Avoids 404 errors for new users, provides predictable response shape |
+| 03-02 | Validate hiddenSources against full ActivitySource enum | Includes CALENDAR, WATER_SESSION for future-proofing beyond plan spec |
+| 03-02 | Dashboard preferences are per-user, not per-team | authenticateToken without teamIsolation - same preferences across all teams |
 
 ## Session Continuity
 
-**Last session:** 2026-01-23 14:32 UTC
-**Stopped at:** Completed 02-04-PLAN.md (Shell Layout Integration) with checkpoint approval
+**Last session:** 2026-01-23 16:17 UTC
+**Stopped at:** Completed 03-02-PLAN.md (Dashboard Preferences API)
 **Resume file:** None
 
 ## Known Limitations
@@ -103,7 +118,7 @@ Progress: ████░░░░░░ ~40%
 
 ## Next Action
 
-Start Phase 3: Vertical Slice (Personal Dashboard) with `/gsd:plan-phase 3`
+Continue Phase 3: Execute plan 03-03 (Dashboard Preferences Store) with `/gsd:execute-phase 3 03`
 
 ---
-*Last updated: 2026-01-23 — Phase 2 complete*
+*Last updated: 2026-01-23 — Phase 3 in progress (2/4 plans complete)*
