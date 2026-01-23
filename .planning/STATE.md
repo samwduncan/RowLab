@@ -4,8 +4,8 @@
 
 **Milestone:** v1.0 — Full UX Redesign
 **Phase:** 5 (The Flip) — IN PROGRESS
-**Status:** Phase 5 plan 1 complete (1/3 plans) — User preference foundation ready
-**Last activity:** 2026-01-23 — Completed user preference store (05-01)
+**Status:** Phase 5 plan 4 complete (2/3 plans) — Analytics tracking and user preferences ready
+**Last activity:** 2026-01-23 — Completed route analytics tracking (05-04)
 
 ## Project Reference
 
@@ -22,9 +22,9 @@ See: .planning/PROJECT.md (updated 2026-01-23)
 | 2 | Foundation | ● Complete | 4/4 |
 | 3 | Vertical Slice | ● Complete | 7/7 |
 | 4 | Migration Loop | ● Complete | 12/12 |
-| 5 | The Flip | ◐ In Progress | 1/3 |
+| 5 | The Flip | ◐ In Progress | 2/3 |
 
-Progress: ███████████ ~96%
+Progress: ███████████ ~97%
 
 ## Quick Context
 
@@ -104,10 +104,11 @@ Note: Plan 03-01 contributed 3 commits, 03-02 contributed 2 commits, 03-03 contr
 | Plan | Description | Status |
 |------|-------------|--------|
 | 05-01 | User preference store (userPreferenceStore, useVersionRedirect) | ● Complete |
+| 05-04 | Route analytics tracking (useRouteAnalytics, usage stats) | ● Complete |
 | 05-02 | Flip mechanics (FLIP date, route switch, toggle UI) | ○ Pending |
 | 05-03 | V1 integration (legacy banner, opt-out UI) | ○ Pending |
 
-**Commits:** 3 commits (2 task + 1 deviation fix)
+**Commits:** 6 commits (5 task + 1 deviation fix)
 
 ## Accumulated Decisions
 
@@ -196,12 +197,16 @@ Note: Plan 03-01 contributed 3 commits, 03-02 contributed 2 commits, 03-03 contr
 | 05-01 | Manual localStorage over Zustand persist middleware | Simpler pattern matching research; direct control over storage key |
 | 05-01 | Exclude auth routes from redirect logic | Prevents login loops when switching versions |
 | 05-01 | Use replace: true for version redirects | Avoids polluting browser history with redirect entries |
-| 05-01 | @v2 path alias in both Vite and tsconfig.json | Ensures TypeScript module resolution matches Vite bundler
+| 05-01 | @v2 path alias in both Vite and tsconfig.json | Ensures TypeScript module resolution matches Vite bundler |
+| 05-04 | Track at layout level, not route level | Layout component receives all route changes via useLocation, simpler than per-route tracking |
+| 05-04 | 100 event cap in localStorage | Prevents localStorage bloat while maintaining sufficient sample size for V1/V2 usage stats |
+| 05-04 | Timestamp in ISO format | Enables future time-based analysis (hourly/daily patterns) |
+| 05-04 | localStorage over backend API | Faster implementation, no backend changes needed, sufficient for FLIP decision metrics
 
 ## Session Continuity
 
-**Last session:** 2026-01-23 23:39 UTC
-**Stopped at:** Completed 05-01-PLAN.md (User Preference Store) - Phase 5 in progress
+**Last session:** 2026-01-23 23:43 UTC
+**Stopped at:** Completed 05-04-PLAN.md (Route Analytics Tracking) - Phase 5 in progress
 **Resume file:** None
 
 ## Known Limitations
@@ -210,12 +215,13 @@ Note: Plan 03-01 contributed 3 commits, 03-02 contributed 2 commits, 03-03 contr
 
 ## Next Action
 
-**Phase 5 in progress** — User preference foundation complete:
+**Phase 5 in progress** — Analytics and preferences ready:
 - ✓ User preference store with localStorage (05-01)
+- ✓ Route analytics tracking (05-04)
 - ○ Flip mechanics (05-02) — Route switch, FLIP date, toggle UI
 - ○ V1 integration (05-03) — Legacy banner, opt-out UI
 
-Next: Execute **05-02-PLAN.md** to implement flip switch mechanics.
+Next: Execute **05-02-PLAN.md** or **05-03-PLAN.md** (no dependencies between them).
 
 ---
-*Last updated: 2026-01-23 — Phase 5 in progress (1/3 plans)*
+*Last updated: 2026-01-23 — Phase 5 in progress (2/3 plans)*
