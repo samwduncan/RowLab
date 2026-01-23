@@ -25,15 +25,17 @@ model User {
   updatedAt     DateTime @updatedAt
 
   // Relations
-  memberships   TeamMember[]
-  refreshTokens RefreshToken[]
-  announcements Announcement[]
-  settings      UserSettings?
-  concept2Auth  Concept2Auth?
-  stravaAuth    StravaAuth?
-  boatSessions  BoatSession[]
-  createdPlans  TrainingPlan[]     @relation("PlanCreator")
-  assignedPlans WorkoutAssignment[] @relation("PlanAssigner")
+  memberships          TeamMember[]
+  refreshTokens        RefreshToken[]
+  announcements        Announcement[]
+  settings             UserSettings?
+  concept2Auth         Concept2Auth?
+  stravaAuth           StravaAuth?
+  boatSessions         BoatSession[]
+  createdPlans         TrainingPlan[]         @relation("PlanCreator")
+  assignedPlans        WorkoutAssignment[]    @relation("PlanAssigner")
+  dashboardPreferences DashboardPreferences?
+  whiteboards          Whiteboard[]
 
   @@map("users")
 }
@@ -68,6 +70,7 @@ model Team {
   calendarEvents     CalendarEvent[]
   waterSessions      WaterSession[]
   trainingPlans      TrainingPlan[]
+  whiteboards        Whiteboard[]
 
   @@map("teams")
 }
@@ -192,6 +195,65 @@ model DefaultSchedule {
   athlete Athlete @relation(fields: [athleteId], references: [id], onDelete: Cascade)
 
   @@map("default_schedules")
+}
+
+// ============================================
+// WHITEBOARD: Daily team communications
+// ============================================
+
+model Whiteboard {
+  id        String   @id @default(uuid())
+  teamId    String
+  date      DateTime
+  content   String   @db.Text
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  team   Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id])
+
+  @@unique([teamId, date])
+  @@index([teamId])
+  @@index([date])
+  @@map("whiteboards")
+}
+
+// ============================================
+// DASHBOARD: User preferences and activity feed
+// ============================================
+
+model DashboardPreferences {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  pinnedModules Json     @default("[]") // Array of module IDs
+  hiddenSources Json     @default("[]") // Array of ActivitySource values
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("dashboard_preferences")
+}
+
+model Activity {
+  id          String         @id @default(uuid())
+  userId      String
+  teamId      String?
+  source      ActivitySource
+  sourceId    String         // Unique ID from source system
+  activityType String?       // erg, row, strength, etc.
+  title       String
+  description String?        @db.Text
+  date        DateTime
+  data        Json?          // Source-specific data
+  createdAt   DateTime       @default(now())
+
+  @@unique([source, sourceId]) // Prevent duplicates from same source
+  @@index([userId])
+  @@index([teamId])
+  @@index([date])
+  @@map("activities")
 }
 
 model Concept2Auth {
