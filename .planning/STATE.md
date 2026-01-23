@@ -4,8 +4,8 @@
 
 **Milestone:** v1.0 — Full UX Redesign
 **Phase:** 4 (Migration Loop) — IN PROGRESS
-**Status:** Phase 4 in progress (5/12 plans)
-**Last activity:** 2026-01-23 — Completed 04-06-PLAN.md (Availability Hooks)
+**Status:** Phase 4 in progress (6/12 plans)
+**Last activity:** 2026-01-23 — Completed 04-12-PLAN.md (Athlete Biometrics)
 
 ## Project Reference
 
@@ -21,7 +21,7 @@ See: .planning/PROJECT.md (updated 2026-01-23)
 | 1 | Clean Room Setup | ● Complete | 4/4 |
 | 2 | Foundation | ● Complete | 4/4 |
 | 3 | Vertical Slice | ● Complete | 7/7 |
-| 4 | Migration Loop | ◐ In Progress | 5/12 |
+| 4 | Migration Loop | ◐ In Progress | 6/12 |
 | 5 | The Flip | ○ Pending | — |
 
 Progress: █████████░ ~89%
@@ -90,9 +90,10 @@ Note: Plan 03-01 contributed 3 commits, 03-02 contributed 2 commits, 03-03 contr
 | 04-03 | OarSet API (REST endpoints, service layer) | ● Complete |
 | 04-04 | Availability API (REST endpoints, service layer) | ● Complete |
 | 04-06 | Availability hooks (TanStack Query data layer) | ● Complete |
+| 04-12 | Athlete biometrics (schema, API, types) | ● Complete |
 | 04-05+ | TBD | ○ Pending |
 
-**Commits:** 9 task commits across 5 plans
+**Commits:** 12 task commits across 6 plans
 
 ## Accumulated Decisions
 
@@ -161,11 +162,13 @@ Note: Plan 03-01 contributed 3 commits, 03-02 contributed 2 commits, 03-03 contr
 | 04-06 | formatDate helper for stable query keys | Removes time component from dates to prevent unnecessary refetches |
 | 04-06 | Dual invalidation pattern on availability mutations | Refreshes both team grid and athlete detail views for UI consistency |
 | 04-06 | Conditional query enabling for athlete availability | enabled: !!athleteId prevents requests when no athlete selected |
+| 04-12 | Default false for canScull and canCox | Safe default - coaches explicitly enable capabilities |
+| 04-12 | UI implementation deferred to plan 04-09 | Types updated now, AvailabilityGrid UI added when component created |
 
 ## Session Continuity
 
-**Last session:** 2026-01-23 19:29 UTC
-**Stopped at:** Completed 04-06-PLAN.md (Availability Hooks) - Phase 4 in progress
+**Last session:** 2026-01-23 19:36 UTC
+**Stopped at:** Completed 04-12-PLAN.md (Athlete Biometrics) - Phase 4 in progress
 **Resume file:** None
 
 ## Known Limitations
@@ -180,8 +183,9 @@ Phase 4 in progress! Backend API foundation complete, frontend hooks started:
 - ✓ OarSet API (04-03)
 - ✓ Availability API (04-04)
 - ✓ Availability hooks (04-06)
+- ✓ Athlete biometrics (04-12)
 
 Ready for UI components and additional coach features.
 
 ---
-*Last updated: 2026-01-23 — Phase 4 in progress (5/12 plans)*
+*Last updated: 2026-01-23 — Phase 4 in progress (6/12 plans)*
