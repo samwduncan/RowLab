@@ -139,8 +139,63 @@ function App() {
               }
             />
 
-            {/* App routes with layout */}
-            <Route path="/app" element={<AppLayout />}>
+            {/* V2 routes at /app (new default for authenticated users) */}
+            <Route path="/app" element={<V2Layout />}>
+              {/* Routes with shell (rail + sidebar + content) */}
+              <Route
+                element={
+                  <Suspense fallback={<LoadingFallback variant="component" message="Loading shell..." />}>
+                    <ShellLayout />
+                  </Suspense>
+                }
+              >
+                <Route
+                  index
+                  element={
+                    <Suspense fallback={<LoadingFallback variant="component" message="Loading dashboard..." />}>
+                      <MeDashboard />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="me"
+                  element={
+                    <Suspense fallback={<LoadingFallback variant="component" message="Loading dashboard..." />}>
+                      <MeDashboard />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="coach/whiteboard"
+                  element={
+                    <Suspense fallback={<LoadingFallback variant="component" message="Loading whiteboard..." />}>
+                      <CoachWhiteboard />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="coach/fleet"
+                  element={
+                    <Suspense fallback={<LoadingFallback variant="component" message="Loading fleet..." />}>
+                      <CoachFleet />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="coach/availability"
+                  element={
+                    <Suspense fallback={<LoadingFallback variant="component" message="Loading availability..." />}>
+                      <CoachAvailability />
+                    </Suspense>
+                  }
+                />
+              </Route>
+
+              {/* Routes without shell (future: onboarding, etc.) can go here */}
+            </Route>
+
+            {/* V1 legacy routes at /legacy */}
+            <Route path="/legacy" element={<AppLayout />}>
               <Route
                 index
                 element={
@@ -255,7 +310,7 @@ function App() {
               />
               <Route
                 path="billing"
-                element={<Navigate to="/app/settings?tab=billing" replace />}
+                element={<Navigate to="/legacy/settings?tab=billing" replace />}
               />
               <Route
                 path="coxswain"
@@ -267,60 +322,8 @@ function App() {
               />
             </Route>
 
-            {/* V2 Beta routes - isolated under /beta */}
-            <Route path="/beta" element={<V2Layout />}>
-              {/* Routes with shell (rail + sidebar + content) */}
-              <Route
-                element={
-                  <Suspense fallback={<LoadingFallback variant="component" message="Loading shell..." />}>
-                    <ShellLayout />
-                  </Suspense>
-                }
-              >
-                <Route
-                  index
-                  element={
-                    <Suspense fallback={<LoadingFallback variant="component" message="Loading V2..." />}>
-                      <BetaHome />
-                    </Suspense>
-                  }
-                />
-                <Route
-                  path="me"
-                  element={
-                    <Suspense fallback={<LoadingFallback variant="component" message="Loading dashboard..." />}>
-                      <MeDashboard />
-                    </Suspense>
-                  }
-                />
-                <Route
-                  path="coach/whiteboard"
-                  element={
-                    <Suspense fallback={<LoadingFallback variant="component" message="Loading whiteboard..." />}>
-                      <CoachWhiteboard />
-                    </Suspense>
-                  }
-                />
-                <Route
-                  path="coach/fleet"
-                  element={
-                    <Suspense fallback={<LoadingFallback variant="component" message="Loading fleet..." />}>
-                      <CoachFleet />
-                    </Suspense>
-                  }
-                />
-                <Route
-                  path="coach/availability"
-                  element={
-                    <Suspense fallback={<LoadingFallback variant="component" message="Loading availability..." />}>
-                      <CoachAvailability />
-                    </Suspense>
-                  }
-                />
-              </Route>
-
-              {/* Routes without shell (future: onboarding, etc.) can go here */}
-            </Route>
+            {/* Redirect /beta to /app for bookmark compatibility */}
+            <Route path="/beta/*" element={<Navigate to="/app" replace />} />
 
             {/* 404 fallback */}
             <Route
