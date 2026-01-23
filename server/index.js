@@ -21,6 +21,7 @@ import stravaRoutes from './routes/strava.js';
 import fitImportRoutes from './routes/fitImport.js';
 import boatConfigRoutes from './routes/boatConfigs.js';
 import shellRoutes from './routes/v1/shells.js';
+import oarSetRoutes from './routes/v1/oarSets.js';
 import seatRaceRoutes from './routes/seatRaces.js';
 import rankingsRoutes from './routes/rankings.js';
 import regattaRoutes from './routes/regattas.js';
@@ -39,6 +40,8 @@ import backgroundSyncRoutes from './routes/backgroundSync.js';
 import trainingPlanRoutes from './routes/trainingPlans.js';
 import dashboardPreferencesRoutes from './routes/dashboardPreferences.js';
 import activitiesRoutes from './routes/activities.js';
+import whiteboardRoutes from './routes/whiteboards.js';
+import availabilityRoutes from './routes/availability.js';
 import { getStorageInfo } from './utils/storageMonitor.js';
 import { startBackgroundSync } from './services/backgroundSyncService.js';
 import { verifyToken, authenticateToken } from './middleware/auth.js';
@@ -97,6 +100,7 @@ app.use('/api/v1/strava', apiLimiter, stravaRoutes);
 app.use('/api/v1/fit', apiLimiter, fitImportRoutes);
 app.use('/api/v1/boat-configs', apiLimiter, boatConfigRoutes);
 app.use('/api/v1/shells', apiLimiter, shellRoutes);
+app.use('/api/v1/oar-sets', apiLimiter, oarSetRoutes);
 app.use('/api/v1/lineups', apiLimiter, lineupRoutesV1);
 app.use('/api/v1/seat-races', apiLimiter, seatRaceRoutes);
 app.use('/api/v1/rankings', apiLimiter, rankingsRoutes);
@@ -116,6 +120,8 @@ app.use('/api/v1/ai', apiLimiter, aiRoutes);
 app.use('/api/v1/training-plans', apiLimiter, trainingPlanRoutes);
 app.use('/api/v1/dashboard-preferences', apiLimiter, dashboardPreferencesRoutes);
 app.use('/api/v1/activities', apiLimiter, activitiesRoutes);
+app.use('/api/v1/whiteboards', apiLimiter, whiteboardRoutes);
+app.use('/api/v1/availability', apiLimiter, availabilityRoutes);
 
 // Legacy API Routes (will be migrated to v1)
 app.use('/api/auth', authLimiter, authRoutes); // Keep for backward compatibility
