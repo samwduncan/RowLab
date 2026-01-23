@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { useEffect } from 'react';
 
 /**
  * Theme options
@@ -7,8 +9,6 @@ import { useState, useEffect } from 'react';
  * - field: High-contrast theme for outdoor visibility
  */
 export type Theme = 'dark' | 'light' | 'field';
-
-const THEME_STORAGE_KEY = 'v2-theme';
 
 /**
  * Get system color scheme preference
@@ -20,21 +20,51 @@ function getSystemTheme(): 'dark' | 'light' {
   return prefersDark ? 'dark' : 'light';
 }
 
-/**
- * Get initial theme from localStorage or system preference
- */
-function getInitialTheme(): Theme {
-  if (typeof window === 'undefined') return 'dark';
-
-  // 1. Check localStorage first (user override)
-  const saved = localStorage.getItem(THEME_STORAGE_KEY);
-  if (saved && (saved === 'dark' || saved === 'light' || saved === 'field')) {
-    return saved as Theme;
-  }
-
-  // 2. Fall back to system preference
-  return getSystemTheme();
+interface ThemeState {
+  theme: Theme;
+  isSystemDefault: boolean;
+  setTheme: (theme: Theme) => void;
+  clearThemePreference: () => void;
+  _applySystemTheme: () => void;
 }
+
+/**
+ * Theme store using Zustand
+ *
+ * Uses Zustand so all components share the same state.
+ * Persists to localStorage with key 'v2-theme-store'.
+ */
+const useThemeStore = create<ThemeState>()(
+  persist(
+    (set, get) => ({
+      theme: 'dark',
+      isSystemDefault: true,
+
+      setTheme: (newTheme: Theme) => {
+        set({ theme: newTheme, isSystemDefault: false });
+      },
+
+      clearThemePreference: () => {
+        set({ theme: getSystemTheme(), isSystemDefault: true });
+      },
+
+      _applySystemTheme: () => {
+        if (get().isSystemDefault) {
+          set({ theme: getSystemTheme() });
+        }
+      },
+    }),
+    {
+      name: 'v2-theme-store',
+      // On rehydrate, apply system theme if no manual preference
+      onRehydrateStorage: () => (state) => {
+        if (state?.isSystemDefault) {
+          state.theme = getSystemTheme();
+        }
+      },
+    }
+  )
+);
 
 /**
  * Theme management hook
@@ -44,6 +74,7 @@ function getInitialTheme(): Theme {
  * - Persists manual theme changes to localStorage
  * - Listens for system preference changes
  * - Only updates theme on system change if no manual override exists
+ * - Uses Zustand store so all components share the same state
  *
  * @returns {object} Theme state and controls
  * @returns {Theme} theme - Current active theme
@@ -52,10 +83,8 @@ function getInitialTheme(): Theme {
  * @returns {function} clearThemePreference - Remove manual override and use system preference
  */
 export function useTheme() {
-  const [theme, setThemeState] = useState<Theme>(getInitialTheme);
-  const [isSystemDefault, setIsSystemDefault] = useState<boolean>(
-    () => !localStorage.getItem(THEME_STORAGE_KEY)
-  );
+  const { theme, isSystemDefault, setTheme, clearThemePreference, _applySystemTheme } =
+    useThemeStore();
 
   // Listen for system preference changes
   useEffect(() => {
@@ -63,36 +92,13 @@ export function useTheme() {
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    const handler = (e: MediaQueryListEvent) => {
-      // Only update theme on system change if user hasn't set manual preference
-      if (isSystemDefault) {
-        setThemeState(e.matches ? 'dark' : 'light');
-      }
+    const handler = () => {
+      _applySystemTheme();
     };
 
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
-  }, [isSystemDefault]);
-
-  /**
-   * Set theme manually
-   * Persists to localStorage and marks as non-system-default
-   */
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
-    localStorage.setItem(THEME_STORAGE_KEY, newTheme);
-    setIsSystemDefault(false);
-  };
-
-  /**
-   * Clear manual theme preference
-   * Removes localStorage override and returns to system preference
-   */
-  const clearThemePreference = () => {
-    localStorage.removeItem(THEME_STORAGE_KEY);
-    setIsSystemDefault(true);
-    setThemeState(getSystemTheme());
-  };
+  }, [_applySystemTheme]);
 
   return {
     theme,
