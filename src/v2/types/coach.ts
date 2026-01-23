@@ -61,6 +61,9 @@ export interface AvailabilityDay {
 export interface AthleteAvailability {
   athleteId: string;
   athleteName: string;
+  side: string | null;      // Port, Starboard, Both, Cox
+  canScull: boolean;
+  canCox: boolean;
   dates: AvailabilityDay[];
 }
 
