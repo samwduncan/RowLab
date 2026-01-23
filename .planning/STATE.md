@@ -33,7 +33,7 @@ Progress: █████░░░░░ ~50%
 - Shares existing Zustand stores with V1
 - V1 remains untouched until V2 feature parity
 
-**Tech Stack:** React 18, TypeScript, Zustand, Tailwind CSS 3.4, Framer Motion
+**Tech Stack:** React 18, TypeScript, Zustand, Tailwind CSS 3.4, Framer Motion, TanStack Query v5
 
 **Codebase Map:** .planning/codebase/ (7 documents, 1,978 lines)
 
@@ -70,6 +70,8 @@ Progress: █████░░░░░ ~50%
 
 **Commits (so far):** 3 task commits
 
+Note: Plan 03-01 contributed 3 commits, 03-02 contributed 2 commits
+
 ## Accumulated Decisions
 
 | Phase | Decision | Rationale |
@@ -101,6 +103,11 @@ Progress: █████░░░░░ ~50%
 | 02-04 | Scope theme CSS selectors to .v2[data-theme="..."] | data-theme on .v2 div not :root; selectors must match for cascade |
 | 02-04 | V1 store access via Context providers (AuthStoreContext, SettingsStoreContext) | V2 components access V1 Zustand stores without cross-contamination |
 | 02-04 | Defer light/field theme visual rendering to post-Phase 5 | Dark theme works; light/field have CSS cascade issues; low priority vs. feature development |
+| 03-01 | QueryClient singleton exported from dedicated module | Prevent recreation on render; follows React Query best practices |
+| 03-01 | staleTime 5min and gcTime 10min for external APIs | External APIs (C2, Strava) change infrequently; reduce refetch overhead |
+| 03-01 | refetchOnWindowFocus disabled | Prevent API hammering when switching tabs; critical for rate-limited APIs |
+| 03-01 | retry: 1 for queries, 0 for mutations | Network resilience without retry loops; avoid duplicate mutations |
+| 03-01 | QueryClientProvider as outermost provider in V2Layout | TanStack Query context available to all V2 components |
 | 03-02 | Upsert pattern for dashboard preferences PUT endpoint | Single atomic operation for create-or-update eliminates race conditions |
 | 03-02 | Return empty arrays as defaults for missing preferences | Avoids 404 errors for new users, provides predictable response shape |
 | 03-02 | Validate hiddenSources against full ActivitySource enum | Includes CALENDAR, WATER_SESSION for future-proofing beyond plan spec |
