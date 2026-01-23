@@ -54,7 +54,7 @@ export function WorkspaceSidebar() {
   return (
     <nav
       aria-label={`${activeContext} workspace navigation`}
-      className="flex flex-col gap-1 p-4 w-64 h-full bg-bg-surface border-r border-border-default"
+      className="workspace-sidebar flex flex-col gap-1 p-4 w-64 h-full bg-bg-surface border-r border-border-default"
     >
       {navItems.map((item) => {
         const isActive = location.pathname === item.to;
