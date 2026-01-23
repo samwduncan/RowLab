@@ -59,6 +59,7 @@ model Team {
   workouts           Workout[]
   announcements      Announcement[]
   shells             Shell[]
+  oarSets            OarSet[]
   boatConfigs        BoatConfig[]
   seatRaceSessions   SeatRaceSession[]
   regattas           Regatta[]
@@ -305,17 +306,87 @@ model LineupAssignment {
   @@map("lineup_assignments")
 }
 
+// ============================================
+// ENUMS: Equipment and Availability
+// ============================================
+
+enum ShellType {
+  EIGHT
+  FOUR
+  QUAD
+  DOUBLE
+  PAIR
+  SINGLE
+}
+
+enum WeightClass {
+  HEAVYWEIGHT
+  LIGHTWEIGHT
+  OPENWEIGHT
+}
+
+enum RiggingType {
+  SWEEP
+  SCULL
+}
+
+enum OarType {
+  SWEEP
+  SCULL
+}
+
+enum EquipmentStatus {
+  AVAILABLE
+  IN_USE
+  MAINTENANCE
+  RETIRED
+}
+
+enum AvailabilitySlot {
+  AVAILABLE
+  UNAVAILABLE
+  MAYBE
+  NOT_SET
+}
+
+enum ActivitySource {
+  CONCEPT2
+  STRAVA
+  MANUAL
+  CALENDAR
+  WATER_SESSION
+}
+
 model Shell {
-  id        String  @id @default(uuid())
-  teamId    String
-  name      String
-  boatClass String
-  notes     String?
+  id          String          @id @default(uuid())
+  teamId      String
+  name        String
+  boatClass   String
+  type        ShellType
+  weightClass WeightClass
+  rigging     RiggingType
+  status      EquipmentStatus @default(AVAILABLE)
+  notes       String?
 
   team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
 
   @@unique([teamId, name])
   @@map("shells")
+}
+
+model OarSet {
+  id      String          @id @default(uuid())
+  teamId  String
+  name    String
+  type    OarType
+  count   Int
+  status  EquipmentStatus @default(AVAILABLE)
+  notes   String?
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, name])
+  @@map("oar_sets")
 }
 
 model BoatConfig {
