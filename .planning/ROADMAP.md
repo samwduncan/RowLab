@@ -23,10 +23,10 @@ Ground-up rebuild with multi-persona Workspace/Context architecture using In-Pla
 **Plans:** 4 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Frontend foundation (V2 directory, design tokens, Tailwind config)
-- [ ] 01-02-PLAN.md — Backend schema (Prisma models for V2 features)
-- [ ] 01-03-PLAN.md — V2 entry point (V2Layout + /beta routes)
-- [ ] 01-04-PLAN.md — Verification checkpoint (human verification)
+- [x] 01-01-PLAN.md — Frontend foundation (V2 directory, design tokens, Tailwind config)
+- [x] 01-02-PLAN.md — Backend schema (Prisma models for V2 features)
+- [x] 01-03-PLAN.md — V2 entry point (V2Layout + /beta routes)
+- [x] 01-04-PLAN.md — Verification checkpoint (human verification)
 
 **Success Criteria:**
 - `/beta` route renders V2 app shell
@@ -126,7 +126,7 @@ Plans:
 
 | Phase | Name | Requirements | Plans | Status |
 |-------|------|--------------|-------|--------|
-| 1 | Clean Room Setup | 14 | 4 | ○ Planned |
+| 1 | Clean Room Setup | 14 | 4 | ● Complete |
 | 2 | Foundation | 8 | — | ○ Pending |
 | 3 | Vertical Slice | 14 | — | ○ Pending |
 | 4 | Migration Loop | 11 | — | ○ Pending |
