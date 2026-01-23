@@ -4,8 +4,8 @@
 
 **Milestone:** v1.0 — Full UX Redesign
 **Phase:** 3 (Vertical Slice) — COMPLETE
-**Status:** Phase 3 complete (4/4 plans)
-**Last activity:** 2026-01-23 — Completed 03-04-PLAN.md (TanStack Query Hooks)
+**Status:** Phase 3 complete (5/5 plans)
+**Last activity:** 2026-01-23 — Completed 03-06-PLAN.md (Activity Feed Widget)
 
 ## Project Reference
 
@@ -67,10 +67,11 @@ Progress: ████████░░ ~80%
 | 03-02 | Dashboard preferences API endpoints | ● Complete |
 | 03-03 | Unified activity feed API | ● Complete |
 | 03-04 | TanStack Query hooks (data layer) | ● Complete |
+| 03-06 | Activity feed widget (ActivityCard, UnifiedActivityFeed) | ● Complete |
 
-**Commits:** 11 task commits
+**Commits:** 13 task commits
 
-Note: Plan 03-01 contributed 3 commits, 03-02 contributed 2 commits, 03-03 contributed 3 commits, 03-04 contributed 3 commits
+Note: Plan 03-01 contributed 3 commits, 03-02 contributed 2 commits, 03-03 contributed 3 commits, 03-04 contributed 3 commits, 03-06 contributed 2 commits
 
 ## Accumulated Decisions
 
@@ -121,11 +122,14 @@ Note: Plan 03-01 contributed 3 commits, 03-02 contributed 2 commits, 03-03 contr
 | 03-04 | Export formatting helpers from hooks | Colocate view logic with data fetching (getActivityTypeName, formatDuration, formatDistance) |
 | 03-04 | Different staleTimes for preferences vs activities | 10min for preferences (change infrequently), 5min for activities (external sync) |
 | 03-04 | Helper methods on hook return object | setPinnedModules and toggleSourceVisibility encapsulate mutation logic |
+| 03-06 | Fixed V2 design token class names in ActivityCard | Corrected bg-surface-tertiary → bg-card-bg, text-text-tertiary → text-text-secondary to match tailwind.v2.config.js |
+| 03-06 | Loading skeleton shows 3 cards | Matches typical viewport height without overwhelming initial render |
+| 03-06 | Error state includes retry button | Manual recovery without page refresh |
 
 ## Session Continuity
 
-**Last session:** 2026-01-23 16:48 UTC
-**Stopped at:** Completed 03-04-PLAN.md (TanStack Query Hooks) - Phase 3 complete
+**Last session:** 2026-01-23 17:17 UTC
+**Stopped at:** Completed 03-06-PLAN.md (Activity Feed Widget) - Phase 3 complete
 **Resume file:** None
 
 ## Known Limitations
@@ -137,4 +141,4 @@ Note: Plan 03-01 contributed 3 commits, 03-02 contributed 2 commits, 03-03 contr
 Phase 3 complete! Ready for Phase 4 (Migration Loop) or continue building on vertical slice foundation.
 
 ---
-*Last updated: 2026-01-23 — Phase 3 complete (4/4 plans)*
+*Last updated: 2026-01-23 — Phase 3 complete (5/5 plans)*
