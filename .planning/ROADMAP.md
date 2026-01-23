@@ -20,6 +20,14 @@ Ground-up rebuild with multi-persona Workspace/Context architecture using In-Pla
 
 **Requirements:** SETUP-01, SETUP-02, SETUP-03, SETUP-06, MODEL-01 through MODEL-08
 
+**Plans:** 4 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Frontend foundation (V2 directory, design tokens, Tailwind config)
+- [ ] 01-02-PLAN.md — Backend schema (Prisma models for V2 features)
+- [ ] 01-03-PLAN.md — V2 entry point (V2Layout + /beta routes)
+- [ ] 01-04-PLAN.md — Verification checkpoint (human verification)
+
 **Success Criteria:**
 - `/beta` route renders V2 app shell
 - Design tokens applied via CSS variables
@@ -116,13 +124,13 @@ Ground-up rebuild with multi-persona Workspace/Context architecture using In-Pla
 
 ## Phase Summary
 
-| Phase | Name | Requirements | Status |
-|-------|------|--------------|--------|
-| 1 | Clean Room Setup | 14 | ○ Pending |
-| 2 | Foundation | 8 | ○ Pending |
-| 3 | Vertical Slice | 14 | ○ Pending |
-| 4 | Migration Loop | 11 | ○ Pending |
-| 5 | The Flip | 5 | ○ Pending |
+| Phase | Name | Requirements | Plans | Status |
+|-------|------|--------------|-------|--------|
+| 1 | Clean Room Setup | 14 | 4 | ○ Planned |
+| 2 | Foundation | 8 | — | ○ Pending |
+| 3 | Vertical Slice | 14 | — | ○ Pending |
+| 4 | Migration Loop | 11 | — | ○ Pending |
+| 5 | The Flip | 5 | — | ○ Pending |
 
 **Total:** 45 requirements across 5 phases
 
@@ -143,4 +151,4 @@ Backend APIs are scheduled to complete before frontend features need them.
 
 ---
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-01-23 after initial definition*
+*Last updated: 2026-01-23 after Phase 1 planning*
