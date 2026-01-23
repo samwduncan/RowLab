@@ -35,6 +35,7 @@ const Concept2CallbackPage = lazy(() => import('./pages/Concept2CallbackPage'));
 const V2Layout = lazy(() => import('@v2/layouts/V2Layout'));
 const ShellLayout = lazy(() => import('@v2/layouts/ShellLayout'));
 const BetaHome = lazy(() => import('@v2/pages/BetaHome'));
+const MeDashboard = lazy(() => import('@v2/pages/MeDashboard'));
 
 // Error Boundary for catching rendering errors
 class ErrorBoundary extends React.Component {
@@ -278,6 +279,14 @@ function App() {
                   element={
                     <Suspense fallback={<LoadingFallback variant="component" message="Loading V2..." />}>
                       <BetaHome />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="me"
+                  element={
+                    <Suspense fallback={<LoadingFallback variant="component" message="Loading dashboard..." />}>
+                      <MeDashboard />
                     </Suspense>
                   }
                 />
