@@ -52,16 +52,16 @@ Plans:
 **Plans:** 4 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Context store, theme hook, shared stores (foundations)
-- [ ] 02-02-PLAN.md — ContextRail component (workspace switching)
-- [ ] 02-03-PLAN.md — WorkspaceSidebar component (context-aware navigation)
-- [ ] 02-04-PLAN.md — ShellLayout integration + keyboard navigation
+- [x] 02-01-PLAN.md — Context store, theme hook, shared stores (foundations)
+- [x] 02-02-PLAN.md — ContextRail component (workspace switching)
+- [x] 02-03-PLAN.md — WorkspaceSidebar component (context-aware navigation)
+- [x] 02-04-PLAN.md — ShellLayout integration + keyboard navigation
 
 **Success Criteria:**
-- Shell renders with rail + sidebar + content areas
-- Context switching between Me/Coach/Admin works
-- Theme persists across sessions
-- V1 stores accessible from V2 components
+- [x] Shell renders with rail + sidebar + content areas
+- [x] Context switching between Me/Coach/Admin works
+- [x] Theme persists across sessions (dark mode; light/field deferred)
+- [x] V1 stores accessible from V2 components
 
 ---
 
@@ -135,7 +135,7 @@ Plans:
 | Phase | Name | Requirements | Plans | Status |
 |-------|------|--------------|-------|--------|
 | 1 | Clean Room Setup | 14 | 4 | ● Complete |
-| 2 | Foundation | 8 | 4 | ○ Planned |
+| 2 | Foundation | 8 | 4 | ● Complete |
 | 3 | Vertical Slice | 14 | — | ○ Pending |
 | 4 | Migration Loop | 11 | — | ○ Pending |
 | 5 | The Flip | 5 | — | ○ Pending |
