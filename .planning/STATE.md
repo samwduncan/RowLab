@@ -70,8 +70,14 @@ Progress: █████████░ ~85%
 | 03-05 | Adaptive headline widget (useAdaptiveHeadline, HeadlineWidget) | ● Complete |
 | 03-06 | Activity feed widget (ActivityCard, UnifiedActivityFeed) | ● Complete |
 | 03-07 | Dashboard page with bento grid (MeDashboard, DashboardGrid) | ● Complete |
+| 03-08 | Human verification checkpoint | ● Approved |
 
-**Commits:** 18 task commits
+**Commits:** 18 task commits + verification bug fixes
+
+**Bug Fixes During Verification:**
+- Merged V2 Tailwind tokens into main config (V2 config wasn't used by PostCSS)
+- Renamed conflicting tokens: `text-text-*` → `text-txt-*`, `border-border-*` → `border-bdr-*`
+- Fixed `card-bg` token to use elevated surface for proper contrast
 
 Note: Plan 03-01 contributed 3 commits, 03-02 contributed 2 commits, 03-03 contributed 3 commits, 03-04 contributed 3 commits, 03-05 contributed 2 commits, 03-06 contributed 2 commits, 03-07 contributed 3 commits
 

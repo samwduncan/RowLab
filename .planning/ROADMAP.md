@@ -83,20 +83,25 @@ Plans:
 **Plans:** 8 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Install TanStack Query v5 and QueryClientProvider setup
-- [ ] 03-02-PLAN.md — Dashboard preferences API (GET/PUT /api/v1/dashboard-preferences)
-- [ ] 03-03-PLAN.md — Activity feed API with deduplication service
-- [ ] 03-04-PLAN.md — TanStack Query hooks (useDashboardPrefs, useActivityFeed)
-- [ ] 03-05-PLAN.md — Adaptive headline hook and HeadlineWidget component
-- [ ] 03-06-PLAN.md — ActivityCard and UnifiedActivityFeed components
-- [ ] 03-07-PLAN.md — DashboardGrid with bento layout and MeDashboard page
-- [ ] 03-08-PLAN.md — Human verification checkpoint
+- [x] 03-01-PLAN.md — Install TanStack Query v5 and QueryClientProvider setup
+- [x] 03-02-PLAN.md — Dashboard preferences API (GET/PUT /api/v1/dashboard-preferences)
+- [x] 03-03-PLAN.md — Activity feed API with deduplication service
+- [x] 03-04-PLAN.md — TanStack Query hooks (useDashboardPrefs, useActivityFeed)
+- [x] 03-05-PLAN.md — Adaptive headline hook and HeadlineWidget component
+- [x] 03-06-PLAN.md — ActivityCard and UnifiedActivityFeed components
+- [x] 03-07-PLAN.md — DashboardGrid with bento layout and MeDashboard page
+- [x] 03-08-PLAN.md — Human verification checkpoint
+
+**Bug Fixes During Verification:**
+- Merged V2 Tailwind tokens into main config (V2 config wasn't being used by PostCSS)
+- Renamed conflicting tokens: `text-text-*` → `text-txt-*`, `border-border-*` → `border-bdr-*`
+- Fixed `card-bg` token to use elevated surface color for proper contrast
 
 **Success Criteria:**
-- Dashboard shows personalized headline
-- C2 and Strava data display correctly
-- Activity feed deduplicates across sources
-- User can pin/hide dashboard modules
+- [x] Dashboard shows personalized headline (skeleton renders; content requires auth)
+- [x] C2 and Strava data display correctly (API ready; requires auth)
+- [x] Activity feed deduplicates across sources (dedup service implemented)
+- [x] User can pin/hide dashboard modules (preferences API and drag-drop ready)
 
 ---
 
