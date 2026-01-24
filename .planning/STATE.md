@@ -3,9 +3,9 @@
 ## Current Status
 
 **Milestone:** v2.0 — Core Migration
-**Phase:** 7 (Erg Data & Performance) — Complete
-**Status:** Phase 7 verified and complete
-**Last activity:** 2026-01-24 — Phase 7 complete
+**Phase:** 8 (Lineup Builder) — In Progress
+**Status:** Plan 08-01 complete
+**Last activity:** 2026-01-24 — Completed 08-01-PLAN.md
 
 ## Project Reference
 
@@ -34,7 +34,7 @@ v1.0 Progress: 100% Complete
 |-------|------|--------|-------|
 | 6 | Athletes & Roster | Complete | 6/6 |
 | 7 | Erg Data & Performance | Complete | 6/6 |
-| 8 | Lineup Builder | Pending | —/— |
+| 8 | Lineup Builder | In Progress | 1/— |
 | 9 | Seat Racing | Pending | —/— |
 | 10 | Training Plans & NCAA | Pending | —/— |
 | 11 | Racing & Regattas | Pending | —/— |
@@ -111,12 +111,15 @@ Key architectural decisions carrying forward:
 | 07-05 | Custom relative time formatting | More readable than absolute timestamps, matches modern UI patterns (2m ago, 3h ago, etc) |
 | 07-05 | Team C2 status uses bulk query | useTeamC2Statuses prevents N+1 query problem when loading team overview |
 | 07-05 | Slide-out panel for C2 status | Non-modal allows viewing tests while checking status, matches Linear/GitHub patterns |
+| 08-01 | Use existing lineupStore instead of new V2 store | lineupStore has undo/redo middleware, boat management, API integration - V1/V2 can share state during migration |
+| 08-01 | Display seats bow-at-top by reversing store order | boatConfig generates seats high-to-low, but traditional notation shows bow at top - reverse in display layer |
+| 08-01 | Defer shell selector to future enhancement | Plan scope is foundational components - shell assignment can be added post-creation via boat header edit |
 
 ## Session Continuity
 
-**Last session:** 2026-01-24T18:43:41Z
-**Stopped at:** Completed 07-04-PLAN.md (CSV Bulk Import Wizard)
-**Resume file:** None — ready for next plan in Phase 7
+**Last session:** 2026-01-24T19:56:36Z
+**Stopped at:** Completed 08-01-PLAN.md (Lineup Builder Foundation)
+**Resume file:** None — ready for Plan 08-02 (Drag-Drop Seat Assignment)
 
 ## Known Limitations
 
@@ -124,16 +127,20 @@ None - all v2.0 foundation issues resolved.
 
 ## Next Action
 
-Continue Phase 7 execution with next plan.
+Continue Phase 8 execution with Plan 08-02 (Drag-Drop Seat Assignment).
 
-**Phase 7 Scope:**
-- Erg test data layer (types, hooks) ✓
-- Erg test table with virtualization ✓
-- Erg test detail/edit forms ✓
-- CSV bulk import wizard ✓
-- Erg history visualization (charts, personal bests)
-- Leaderboard views
-- Concept2 sync integration ✓
+**Phase 8 Scope:**
+- Lineup builder foundation (AthleteBank, BoatView, AddBoatButton) ✓
+- Drag-drop seat assignment
+- Seat validation warnings
+- Undo/redo UI controls
+- Save/load lineups
+- Duplicate lineups
+- Export as PDF
+- Live biometrics display
+- Version history
+- Boat margin visualizer
+- Multi-boat workspace
 
 ---
-*Last updated: 2026-01-24 — Completed 07-04: CSV Bulk Import Wizard*
+*Last updated: 2026-01-24 — Completed 08-01: Lineup Builder Foundation*
