@@ -3,9 +3,9 @@
 ## Current Status
 
 **Milestone:** v2.0 — Core Migration
-**Phase:** 6 (Athletes & Roster Management) — In Progress
-**Status:** Plan 06-06 complete (Attendance Tracking UI)
-**Last activity:** 2026-01-24 — Completed 06-06-PLAN.md
+**Phase:** 7 (Erg Data & Performance) — In Progress
+**Status:** Plan 07-01 complete (Erg Data Foundation)
+**Last activity:** 2026-01-24 — Completed 07-01-PLAN.md
 
 ## Project Reference
 
@@ -32,15 +32,15 @@ v1.0 Progress: 100% Complete
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
-| 6 | Athletes & Roster | In Progress | 7/? |
-| 7 | Erg Data & Performance | Pending | —/— |
+| 6 | Athletes & Roster | Complete | 6/6 |
+| 7 | Erg Data & Performance | In Progress | 1/? |
 | 8 | Lineup Builder | Pending | —/— |
 | 9 | Seat Racing | Pending | —/— |
 | 10 | Training Plans & NCAA | Pending | —/— |
 | 11 | Racing & Regattas | Pending | —/— |
 | 12 | Settings & Polish | Pending | —/— |
 
-v2.0 Progress: ░░░░░░░░░░░░ 0%
+v2.0 Progress: █░░░░░░░░░░░ 8%
 
 ## Quick Context
 
@@ -55,26 +55,6 @@ v2.0 Progress: ░░░░░░░░░░░░ 0%
 
 **Codebase Map:** .planning/codebase/ (7 documents, 1,978 lines)
 
-## Phase 6 Overview
-
-**Goal:** Coach has complete visibility into roster with filtering, biometrics, and attendance tracking
-
-**Requirements (14):**
-- ATH-01 through ATH-08 (Athletes Page)
-- ATT-01 through ATT-03 (Attendance Tracking)
-- DESIGN-02, DESIGN-03, DESIGN-04 (Theme fixes, virtualization)
-
-**Success Criteria:**
-1. Coach can view full roster in grid or list view with biometrics
-2. Coach can search and filter by side preference and capabilities
-3. Coach can bulk import from CSV with preview validation
-4. Coach can record and view attendance history
-5. Tables scroll smoothly at 60 FPS with 100+ athletes
-
-**Dependencies:** None (foundation phase)
-
-**Research Flag:** SKIP (standard CRUD patterns)
-
 ## Accumulated Decisions
 
 See STATE.md.backup for full v1.0 decision history (211 decisions across 5 phases)
@@ -86,7 +66,7 @@ Key architectural decisions carrying forward:
 - @dnd-kit for drag-drop interactions
 - recharts for data visualization
 
-### v2.0 Decisions (Phase 6)
+### v2.0 Decisions (Phases 6-7)
 
 | Plan | Decision | Rationale |
 |------|----------|-----------|
@@ -115,12 +95,16 @@ Key architectural decisions carrying forward:
 | 06-06 | Attendance rate = (present + late) / total | Late arrivals count toward attendance for coaching purposes |
 | 06-06 | Summary sorted by rate descending | Coaches quickly identify low-attendance athletes needing intervention |
 | 06-06 | Date presets (7d/30d/90d) | Common reporting periods for coaching analysis |
+| 07-01 | Query keys include filters for erg tests | Enables proper cache isolation when filtering by athlete/testType/date |
+| 07-01 | Separate hooks by access pattern for erg data | useErgTests, useAthleteErgHistory, useErgLeaderboard provide clarity and prevent over-fetching |
+| 07-01 | C2 status staleTime 5 minutes | Connection status changes infrequently, reduces unnecessary API calls |
+| 07-01 | useTeamC2Statuses for bulk queries | Provided but UI should use individual queries to avoid N+1 at load time |
 
 ## Session Continuity
 
-**Last session:** 2026-01-24T16:14:07Z
-**Stopped at:** Completed 06-06-PLAN.md (Attendance Tracking UI)
-**Resume file:** None — ready for next plan in Phase 6
+**Last session:** 2026-01-24T18:13:10Z
+**Stopped at:** Completed 07-01-PLAN.md (Erg Data Foundation)
+**Resume file:** None — ready for next plan in Phase 7
 
 ## Known Limitations
 
@@ -128,15 +112,15 @@ None - all v2.0 foundation issues resolved.
 
 ## Next Action
 
-Run `/gsd:plan-phase 6` to create executable plans for Athletes & Roster Management phase.
+Continue Phase 7 execution with next plan.
 
-**Phase 6 Scope:**
-- Athletes page with grid/list views, search, filters
-- Athlete profile with biometrics editing
-- Bulk CSV import with preview
-- Attendance recording and history
-- Light/field theme CSS fixes
-- Table virtualization
+**Phase 7 Scope:**
+- Erg test data layer (types, hooks) ✓
+- Erg test table with virtualization
+- Erg test detail/edit forms
+- Leaderboard views
+- Personal best tracking
+- Concept2 sync integration
 
 ---
-*Last updated: 2026-01-24 — Completed 06-06: Attendance Tracking UI*
+*Last updated: 2026-01-24 — Completed 07-01: Erg Data Foundation*
