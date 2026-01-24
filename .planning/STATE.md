@@ -4,8 +4,8 @@
 
 **Milestone:** v2.0 — Core Migration
 **Phase:** 7 (Erg Data & Performance) — In Progress
-**Status:** Plan 07-05 complete (C2 Sync Status & Manual Sync UI)
-**Last activity:** 2026-01-24 — Completed 07-05-PLAN.md
+**Status:** Plan 07-04 complete (CSV Bulk Import Wizard)
+**Last activity:** 2026-01-24 — Completed 07-04-PLAN.md
 
 ## Project Reference
 
@@ -103,6 +103,10 @@ Key architectural decisions carrying forward:
 | 07-02 | Auto-calculate watts from split (and vice versa) | Using standard erg formula (watts = 2.80 / pace^3) reduces manual calculation work |
 | 07-02 | Mobile card view below 768px | Responsive design essential for coaches using tablets on deck |
 | 07-02 | Test type color coding (2k=red, 6k=blue, etc) | Visual distinction helps coaches quickly identify test types in table |
+| 07-04 | parseTimeToSeconds() supports multiple formats | Handles MM:SS.s, MM:SS, HH:MM:SS, and numeric seconds for CSV import flexibility |
+| 07-04 | parseTestType() normalizes test type variations | Maps 2k/2K/2000m/2000 → canonical types, reduces data entry errors |
+| 07-04 | Athlete matching uses fuzzy search | Handles "First Last" or "Last, First" formats with partial matching for CSV import |
+| 07-04 | Worker threads at 500KB CSV threshold | Same as Phase 6 pattern - prevents UI blocking for ~5,000 rows |
 | 07-05 | 60-minute stale threshold for C2 sync | Balances alerting coaches to outdated data without excessive yellow badges during normal usage |
 | 07-05 | Custom relative time formatting | More readable than absolute timestamps, matches modern UI patterns (2m ago, 3h ago, etc) |
 | 07-05 | Team C2 status uses bulk query | useTeamC2Statuses prevents N+1 query problem when loading team overview |
@@ -110,8 +114,8 @@ Key architectural decisions carrying forward:
 
 ## Session Continuity
 
-**Last session:** 2026-01-24T18:37:42Z
-**Stopped at:** Completed 07-05-PLAN.md (C2 Sync Status & Manual Sync UI)
+**Last session:** 2026-01-24T18:43:41Z
+**Stopped at:** Completed 07-04-PLAN.md (CSV Bulk Import Wizard)
 **Resume file:** None — ready for next plan in Phase 7
 
 ## Known Limitations
@@ -126,9 +130,10 @@ Continue Phase 7 execution with next plan.
 - Erg test data layer (types, hooks) ✓
 - Erg test table with virtualization ✓
 - Erg test detail/edit forms ✓
+- CSV bulk import wizard ✓
 - Erg history visualization (charts, personal bests)
 - Leaderboard views
-- Concept2 sync integration
+- Concept2 sync integration ✓
 
 ---
-*Last updated: 2026-01-24 — Completed 07-05: C2 Sync Status & Manual Sync UI*
+*Last updated: 2026-01-24 — Completed 07-04: CSV Bulk Import Wizard*
