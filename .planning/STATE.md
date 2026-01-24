@@ -4,8 +4,8 @@
 
 **Milestone:** v2.0 — Core Migration
 **Phase:** 9 (Seat Racing) — In Progress
-**Status:** Completed 09-05-PLAN.md (Athlete Assignment Step)
-**Last activity:** 2026-01-24 — Completed 09-05-PLAN.md
+**Status:** Completed 09-06-PLAN.md (Review & Submit Step)
+**Last activity:** 2026-01-24 — Completed 09-06-PLAN.md
 
 ## Project Reference
 
@@ -171,11 +171,16 @@ Key architectural decisions carrying forward:
 | 09-05 | Switches auto-detected rather than manual entry | Reduces data entry burden - coaches just assign athletes and system figures out who swapped |
 | 09-05 | Partial lineups allowed - seats can remain empty | Seat races often test partial lineups, strict validation would block valid use cases |
 | 09-05 | Global athlete assignment tracking across all boats | Prevents double-assignment errors, provides real-time feedback in dropdowns |
+| 09-08 | Dedicated ratings API with 4 routes | Separates rating concerns from seat race sessions, provides clean API surface for rating operations |
+| 09-08 | Server-side side filtering in ratings API | More flexible than client-only, reduces payload size for port/starboard-specific requests |
+| 09-08 | Parameters route before :athleteId route | Prevents "parameters" from being treated as athleteId, avoids route conflicts |
+| 09-08 | ParametersPanel read-only for Phase 9 MVP | Editing adds complexity, viewing ratings is sufficient for MVP scope |
+| 09-08 | 1-hour stale time for parameters query | Rating parameters are system-level constants that rarely change |
 
 ## Session Continuity
 
 **Last session:** 2026-01-24
-**Stopped at:** Completed 09-05-PLAN.md (Athlete Assignment Step)
+**Stopped at:** Completed 09-08-PLAN.md (Ratings API & Parameters UI)
 **Resume file:** None — continuing Phase 9
 
 ## Known Limitations
