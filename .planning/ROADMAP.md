@@ -121,17 +121,18 @@ Plans:
 **Plans:** 11 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Install npm packages (react-hook-form, resolvers, md-editor)
-- [ ] 04-02-PLAN.md — Whiteboard API endpoints (CRUD + latest)
-- [ ] 04-03-PLAN.md — OarSet API endpoints (CRUD)
-- [ ] 04-04-PLAN.md — Availability API endpoints (team view, athlete edit)
-- [ ] 04-05-PLAN.md — TanStack Query hooks (useWhiteboard, useShells, useOarSets)
-- [ ] 04-06-PLAN.md — Availability hooks (useTeamAvailability, useAthleteAvailability)
-- [ ] 04-07-PLAN.md — Whiteboard components (WhiteboardView, WhiteboardEditor)
-- [ ] 04-08-PLAN.md — Fleet components (tables, forms, CrudModal)
-- [ ] 04-09-PLAN.md — Availability components (AvailabilityGrid, AvailabilityEditor)
-- [ ] 04-10-PLAN.md — Coach pages (CoachWhiteboard, CoachFleet, CoachAvailability)
-- [ ] 04-11-PLAN.md — Human verification checkpoint
+- [x] 04-01-PLAN.md — Install npm packages (react-hook-form, resolvers, md-editor)
+- [x] 04-02-PLAN.md — Whiteboard API endpoints (CRUD + latest)
+- [x] 04-03-PLAN.md — OarSet API endpoints (CRUD)
+- [x] 04-04-PLAN.md — Availability API endpoints (team view, athlete edit)
+- [x] 04-05-PLAN.md — TanStack Query hooks (useWhiteboard, useShells, useOarSets)
+- [x] 04-06-PLAN.md — Availability hooks (useTeamAvailability, useAthleteAvailability)
+- [x] 04-07-PLAN.md — Whiteboard components (WhiteboardView, WhiteboardEditor)
+- [x] 04-08-PLAN.md — Fleet components (tables, forms, CrudModal)
+- [x] 04-09-PLAN.md — Availability components (AvailabilityGrid, AvailabilityEditor)
+- [x] 04-10-PLAN.md — Coach pages (CoachWhiteboard, CoachFleet, CoachAvailability)
+- [x] 04-11-PLAN.md — Human verification checkpoint
+- [x] 04-12-PLAN.md — Athlete biometrics (schema, API, types)
 
 **Success Criteria:**
 - Coach can post daily whiteboard
@@ -157,11 +158,11 @@ Plans:
 **Plans:** 5 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — User preference store and redirect hook (legacy mode opt-in)
-- [ ] 05-02-PLAN.md — Route migration (V2 at /app, V1 at /legacy)
-- [ ] 05-03-PLAN.md — Version toggle component (switch between V1/V2)
-- [ ] 05-04-PLAN.md — Route analytics (V1 vs V2 usage tracking)
-- [ ] 05-05-PLAN.md — Feature parity checklist and verification checkpoint
+- [x] 05-01-PLAN.md — User preference store and redirect hook (legacy mode opt-in)
+- [x] 05-02-PLAN.md — Route migration (V2 at /app, V1 at /legacy)
+- [x] 05-03-PLAN.md — Version toggle component (switch between V1/V2)
+- [x] 05-04-PLAN.md — Route analytics (V1 vs V2 usage tracking)
+- [x] 05-05-PLAN.md — Feature parity checklist and verification checkpoint
 
 **Success Criteria:**
 - New users land on V2 by default
@@ -179,7 +180,7 @@ Plans:
 | 2 | Foundation | 8 | 4 | Complete |
 | 3 | Vertical Slice | 14 | 8 | Complete |
 | 4 | Migration Loop | 11 | 12 | Complete |
-| 5 | The Flip | 5 | 5 | Pending |
+| 5 | The Flip | 5 | 5 | Complete |
 
 **Total:** 45 requirements across 5 phases
 
@@ -200,4 +201,4 @@ Backend APIs are scheduled to complete before frontend features need them.
 
 ---
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-01-23 after Phase 5 planning*
+*Last updated: 2026-01-24 — Milestone v1.0 complete*
