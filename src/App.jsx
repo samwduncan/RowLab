@@ -41,6 +41,7 @@ const CoachFleet = lazy(() => import('@v2/pages/CoachFleet'));
 const CoachAvailability = lazy(() => import('@v2/pages/CoachAvailability'));
 const V2AthletesPage = lazy(() => import('@v2/pages/AthletesPage'));
 const V2AttendancePage = lazy(() => import('@v2/pages/AttendancePage'));
+const V2ErgTestsPage = lazy(() => import('@v2/pages/ErgTestsPage'));
 
 // Error Boundary for catching rendering errors
 class ErrorBoundary extends React.Component {
@@ -204,6 +205,14 @@ function App() {
                   element={
                     <Suspense fallback={<LoadingFallback variant="component" message="Loading attendance..." />}>
                       <V2AttendancePage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="erg-tests"
+                  element={
+                    <Suspense fallback={<LoadingFallback variant="component" message="Loading erg tests..." />}>
+                      <V2ErgTestsPage />
                     </Suspense>
                   }
                 />
