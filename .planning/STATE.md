@@ -4,8 +4,8 @@
 
 **Milestone:** v2.0 — Core Migration
 **Phase:** 8 (Lineup Builder) — In Progress
-**Status:** Plan 08-01 complete
-**Last activity:** 2026-01-24 — Completed 08-01-PLAN.md
+**Status:** Plan 08-02 complete
+**Last activity:** 2026-01-24 — Completed 08-02-PLAN.md
 
 ## Project Reference
 
@@ -34,7 +34,7 @@ v1.0 Progress: 100% Complete
 |-------|------|--------|-------|
 | 6 | Athletes & Roster | Complete | 6/6 |
 | 7 | Erg Data & Performance | Complete | 6/6 |
-| 8 | Lineup Builder | In Progress | 1/— |
+| 8 | Lineup Builder | In Progress | 2/— |
 | 9 | Seat Racing | Pending | —/— |
 | 10 | Training Plans & NCAA | Pending | —/— |
 | 11 | Racing & Regattas | Pending | —/— |
@@ -114,12 +114,16 @@ Key architectural decisions carrying forward:
 | 08-01 | Use existing lineupStore instead of new V2 store | lineupStore has undo/redo middleware, boat management, API integration - V1/V2 can share state during migration |
 | 08-01 | Display seats bow-at-top by reversing store order | boatConfig generates seats high-to-low, but traditional notation shows bow at top - reverse in display layer |
 | 08-01 | Defer shell selector to future enhancement | Plan scope is foundational components - shell assignment can be added post-creation via boat header edit |
+| 08-02 | Track source position in drag data for auto-swap | Source tracking (bank/seat/coxswain) enables proper athlete exchange when dropping on occupied seats |
+| 08-02 | Use DragOverlay for cursor preview | Shows full athlete card at cursor during drag, better visibility than transform-only approach |
+| 08-02 | Green border for all drop zones, defer red for validation | Plan scope is core drag-drop, validation warnings come in 08-03 |
+| 08-02 | 10px mouse activation, 250ms touch delay | Prevents accidental drags, balances responsiveness with intentionality |
 
 ## Session Continuity
 
-**Last session:** 2026-01-24T19:56:36Z
-**Stopped at:** Completed 08-01-PLAN.md (Lineup Builder Foundation)
-**Resume file:** None — ready for Plan 08-02 (Drag-Drop Seat Assignment)
+**Last session:** 2026-01-24T20:05:41Z
+**Stopped at:** Completed 08-02-PLAN.md (Drag-Drop Seat Assignment)
+**Resume file:** None — ready for Plan 08-03 (Seat Validation Warnings)
 
 ## Known Limitations
 
@@ -127,11 +131,11 @@ None - all v2.0 foundation issues resolved.
 
 ## Next Action
 
-Continue Phase 8 execution with Plan 08-02 (Drag-Drop Seat Assignment).
+Continue Phase 8 execution with Plan 08-03 (Seat Validation Warnings).
 
 **Phase 8 Scope:**
 - Lineup builder foundation (AthleteBank, BoatView, AddBoatButton) ✓
-- Drag-drop seat assignment
+- Drag-drop seat assignment ✓
 - Seat validation warnings
 - Undo/redo UI controls
 - Save/load lineups
@@ -143,4 +147,4 @@ Continue Phase 8 execution with Plan 08-02 (Drag-Drop Seat Assignment).
 - Multi-boat workspace
 
 ---
-*Last updated: 2026-01-24 — Completed 08-01: Lineup Builder Foundation*
+*Last updated: 2026-01-24 — Completed 08-02: Drag-Drop Seat Assignment*
