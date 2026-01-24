@@ -4,8 +4,8 @@
 
 **Milestone:** v2.0 — Core Migration
 **Phase:** 6 (Athletes & Roster Management) — In Progress
-**Status:** Plan 06-07 complete (Theme CSS cascade fix)
-**Last activity:** 2026-01-24 — Completed 06-07-PLAN.md
+**Status:** Plan 06-03 complete (Athletes & Attendance data layer)
+**Last activity:** 2026-01-24 — Completed 06-03-PLAN.md
 
 ## Project Reference
 
@@ -93,14 +93,17 @@ Key architectural decisions carrying forward:
 | 06-02 | VirtualTable uses TanStack Virtual + Table | Combines virtualization for performance with full table features (sorting, filtering) |
 | 06-02 | 20-item overscan for virtualization | Balances performance with smooth scrolling, prevents blank areas during fast scroll |
 | 06-02 | Generic TypeScript VirtualTable component | Enables reuse across athletes, erg data, and all future large tables |
+| 06-03 | Client-side filtering for athletes | Reduces API calls, improves UX responsiveness for small datasets (<200 athletes) |
+| 06-03 | Attendance map conversion for O(1) lookup | Eliminates O(n) find() calls when rendering roster with attendance status |
+| 06-03 | Separate hooks by access pattern | useAttendance (date), useAthleteAttendance (athlete), useAttendanceSummary (stats) |
 | 06-07 | Always apply data-theme attribute for all themes | CSS cascade requires attribute presence for selectors like .v2[data-theme="X"] to match |
 | 06-07 | Explicit CSS selectors for each theme | Each theme needs .v2[data-theme="X"] selector for proper cascade behavior |
 | 06-07 | Field theme uses high-contrast amber/yellow | Outdoor rowing requires high visibility in bright sunlight conditions |
 
 ## Session Continuity
 
-**Last session:** 2026-01-24T15:45:51Z
-**Stopped at:** Completed 06-07-PLAN.md (Theme CSS cascade fix)
+**Last session:** 2026-01-24T15:45:38Z
+**Stopped at:** Completed 06-03-PLAN.md (Athletes & Attendance data layer)
 **Resume file:** None — ready for next plan in Phase 6
 
 ## Known Limitations
@@ -120,4 +123,4 @@ Run `/gsd:plan-phase 6` to create executable plans for Athletes & Roster Managem
 - Table virtualization
 
 ---
-*Last updated: 2026-01-24 — Completed 06-07: Theme CSS cascade fix*
+*Last updated: 2026-01-24 — Completed 06-03: Athletes & Attendance data layer*
