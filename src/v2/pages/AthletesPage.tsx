@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAthletes } from '@v2/hooks/useAthletes';
-import useAuthStore from '../../store/authStore';
+import { useRequireAuth } from '../../hooks/useAuth';
 import {
   ViewToggle,
   AthleteFilters,
@@ -36,20 +35,11 @@ export function AthletesPage() {
   const [selectedAthlete, setSelectedAthlete] = useState<Athlete | null>(null);
   const [isEditPanelOpen, setIsEditPanelOpen] = useState(false);
 
-  // Auth state
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const isInitialized = useAuthStore((s) => s.isInitialized);
-  const navigate = useNavigate();
+  // Auth - redirects to login if not authenticated
+  const { isLoading: isAuthLoading } = useRequireAuth();
 
   // Fetch athletes with filters
   const { athletes, isLoading, updateAthlete, isUpdating } = useAthletes(filters);
-
-  // Redirect to login if not authenticated after initialization
-  useEffect(() => {
-    if (isInitialized && !isAuthenticated) {
-      navigate('/login', { replace: true });
-    }
-  }, [isInitialized, isAuthenticated, navigate]);
 
   // Persist view preference
   useEffect(() => {
@@ -74,6 +64,15 @@ export function AthletesPage() {
       },
     });
   };
+
+  // Show loading while checking auth
+  if (isAuthLoading) {
+    return (
+      <div className="flex items-center justify-center h-full bg-bg-default">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-interactive-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-full bg-bg-default">
