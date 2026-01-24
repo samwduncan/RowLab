@@ -1,7 +1,9 @@
 import { useDroppable } from '@dnd-kit/core';
 import { X } from 'lucide-react';
+import { validateSeatAssignment } from '@/utils/boatConfig';
 import { DraggableAthleteCard } from './DraggableAthleteCard';
-import type { SeatSlotData } from '@v2/types/lineup';
+import { SeatWarningBadge } from './SeatWarningBadge';
+import type { SeatSlotData, SeatWarning } from '@v2/types/lineup';
 
 /**
  * Props for SeatSlot component
@@ -14,24 +16,50 @@ interface SeatSlotProps {
 }
 
 /**
- * SeatSlot - Droppable seat slot with drag-over feedback
+ * SeatSlot - Droppable seat slot with validation warnings and drag-over feedback
  *
  * Features:
  * - Uses useDroppable hook from @dnd-kit/core
- * - Visual feedback on drag-over (green border for valid, red for invalid - validation in 08-03)
+ * - Validation warnings for port/starboard mismatches and coxswain seat violations
+ * - Visual feedback on drag-over (green for valid match, yellow for warnings)
+ * - Non-blocking warnings: coach can always override assignments
  * - Empty state: dashed border, "Empty" text
  * - Occupied state: shows DraggableAthleteCard (athlete in seat is also draggable)
  * - Displays seat number (left), side indicator badge (right)
  * - Remove button on hover for occupied seats
  * - Rounded corners, proper padding, V2 design tokens
  *
- * Per CONTEXT.md: "Seats show glow/highlight border on drag-over (green=valid, red=invalid)"
+ * Per CONTEXT.md:
+ * - "Port/starboard validation: soft warning - allow drop but show warning badge"
+ * - "Coxswain seat validation: soft warning - non-cox in cox seat shows warning"
+ * - "Save always allowed regardless of warnings - warnings are informational only"
  *
  * The SeatSlot wraps DraggableAthleteCard when occupied - athletes in seats can be
  * dragged to other seats for rearranging.
  */
 export function SeatSlot({ boatId, seat, isCoxswain = false, onRemoveAthlete }: SeatSlotProps) {
   const isEmpty = !seat.athlete;
+
+  // Calculate validation warnings
+  const warnings: SeatWarning[] = [];
+
+  if (seat.athlete) {
+    // Port/starboard side check
+    const sideValidation = validateSeatAssignment(seat.athlete, seat);
+    if (sideValidation.warning) {
+      warnings.push({ type: 'side', message: sideValidation.warning });
+    }
+
+    // Coxswain seat check (only for coxswain seats)
+    if (isCoxswain && !seat.athlete.isCoxswain) {
+      warnings.push({
+        type: 'cox',
+        message: 'Non-coxswain assigned to coxswain seat',
+      });
+    }
+  }
+
+  const hasWarnings = warnings.length > 0;
 
   // Setup droppable
   const { setNodeRef, isOver } = useDroppable({
@@ -53,10 +81,19 @@ export function SeatSlot({ boatId, seat, isCoxswain = false, onRemoveAthlete }: 
             ? 'border-dashed border-bdr-default bg-bg-base'
             : 'border-bdr-default bg-bg-surface'
         }
-        ${isOver ? 'border-green-500 bg-green-500/5 ring-2 ring-green-500/20' : ''}
-        ${!isEmpty && !isOver ? 'hover:border-interactive-primary/50' : ''}
+        ${
+          isOver
+            ? hasWarnings
+              ? 'border-amber-500 bg-amber-500/5 ring-2 ring-amber-500/20'
+              : 'border-green-500 bg-green-500/5 ring-2 ring-green-500/20'
+            : ''
+        }
+        ${!isEmpty && !isOver && hasWarnings ? 'hover:border-amber-500/50' : ''}
+        ${!isEmpty && !isOver && !hasWarnings ? 'hover:border-interactive-primary/50' : ''}
       `}
     >
+      {/* Warning Badge (if warnings present) */}
+      {hasWarnings && <SeatWarningBadge warnings={warnings} />}
       {/* Seat Number or Cox Label */}
       <div className="flex-shrink-0 w-8 text-center">
         {isCoxswain ? (
