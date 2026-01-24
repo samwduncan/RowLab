@@ -84,7 +84,7 @@ router.get(
  */
 router.get(
   '/summary',
-  requireRole(['COACH', 'ADMIN', 'OWNER']),
+  requireRole('COACH', 'ADMIN', 'OWNER'),
   [
     query('startDate').isISO8601(),
     query('endDate').isISO8601(),
@@ -113,7 +113,7 @@ router.get(
  */
 router.post(
   '/',
-  requireRole(['COACH', 'ADMIN', 'OWNER']),
+  requireRole('COACH', 'ADMIN', 'OWNER'),
   [
     body('athleteId').isUUID(),
     body('date').isISO8601(),
@@ -144,7 +144,7 @@ router.post(
  */
 router.post(
   '/bulk',
-  requireRole(['COACH', 'ADMIN', 'OWNER']),
+  requireRole('COACH', 'ADMIN', 'OWNER'),
   [
     body('date').isISO8601(),
     body('records').isArray({ min: 1 }),
@@ -176,7 +176,7 @@ router.post(
  */
 router.delete(
   '/:id',
-  requireRole(['COACH', 'ADMIN', 'OWNER']),
+  requireRole('COACH', 'ADMIN', 'OWNER'),
   [param('id').isUUID()],
   validateRequest,
   async (req, res) => {
