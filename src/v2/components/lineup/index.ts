@@ -16,6 +16,4 @@ export { ExportPDFButton } from './ExportPDFButton';
 export { PrintableLineup } from './PrintableLineup';
 export { VersionHistory } from './VersionHistory';
 export { SaveLineupDialog } from './SaveLineupDialog';
-
-// Future exports (plan 08-06+):
-// export { MarginVisualizer } from './MarginVisualizer';
+export { MarginVisualizer } from './MarginVisualizer';
