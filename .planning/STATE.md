@@ -4,8 +4,8 @@
 
 **Milestone:** v2.0 — Core Migration
 **Phase:** 8 (Lineup Builder) — In Progress
-**Status:** Plan 08-08 complete
-**Last activity:** 2026-01-24 — Completed 08-08-PLAN.md
+**Status:** Plan 08-09 complete
+**Last activity:** 2026-01-24 — Completed 08-09-PLAN.md
 
 ## Project Reference
 
@@ -34,13 +34,13 @@ v1.0 Progress: 100% Complete
 |-------|------|--------|-------|
 | 6 | Athletes & Roster | Complete | 6/6 |
 | 7 | Erg Data & Performance | Complete | 6/6 |
-| 8 | Lineup Builder | In Progress | 8/— |
+| 8 | Lineup Builder | In Progress | 9/— |
 | 9 | Seat Racing | Pending | —/— |
 | 10 | Training Plans & NCAA | Pending | —/— |
 | 11 | Racing & Regattas | Pending | —/— |
 | 12 | Settings & Polish | Pending | —/— |
 
-v2.0 Progress: ███░░░░░░░░░ 29%
+v2.0 Progress: ███░░░░░░░░░ 30%
 
 ## Quick Context
 
@@ -142,11 +142,15 @@ Key architectural decisions carrying forward:
 | 08-08 | 10 units = 1 meter viewBox scaling | Consistent proportions across boat classes (8+ is 180 units, 1x is 82 units) |
 | 08-08 | Cap visual gap at 50% of container width | Prevents extreme margins from breaking layout while maintaining readability |
 | 08-08 | Use rowing-specific margin terminology | Dead heat, canvas, 1/4 length terms are standard rowing language coaches expect |
+| 08-09 | 768px breakpoint for mobile detection | Standard tablet/mobile breakpoint, matches Tailwind md:, allows iPad portrait to use mobile UI |
+| 08-09 | Separate mobile components instead of CSS-only responsive | Per CONTEXT.md: full redesign for mobile, tap-to-select requires different interaction model |
+| 08-09 | Bottom sheet slides to 80% viewport height | Leaves space for user to see boat context while selecting, full-screen would hide what they're building |
+| 08-09 | No DndContext on mobile layout | Drag-drop conflicts with scroll on touch, tap-to-select is cleaner mobile UX |
 
 ## Session Continuity
 
-**Last session:** 2026-01-24T20:34:13Z
-**Stopped at:** Completed 08-08-PLAN.md (Boat Margin Visualizer)
+**Last session:** 2026-01-24T20:36:57Z
+**Stopped at:** Completed 08-09-PLAN.md (Mobile Lineup Builder)
 **Resume file:** None — ready for next plan
 
 ## Known Limitations
@@ -168,7 +172,8 @@ Continue Phase 8 execution with remaining plans.
 - Export as PDF ✓
 - Live biometrics display ✓
 - Boat margin visualizer ✓
+- Mobile lineup builder ✓
 - Multi-boat workspace (remaining)
 
 ---
-*Last updated: 2026-01-24 — Completed 08-08: Boat Margin Visualizer*
+*Last updated: 2026-01-24 — Completed 08-09: Mobile Lineup Builder*
