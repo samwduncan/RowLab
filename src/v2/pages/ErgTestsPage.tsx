@@ -8,8 +8,9 @@ import {
   ErgTestForm,
   ErgTestsTable,
   TeamC2StatusList,
+  ErgCSVImportModal,
 } from '@v2/components/erg';
-import { Plus, Network } from 'lucide-react';
+import { Plus, Network, Upload } from 'lucide-react';
 import type { ErgTest, ErgTestFilters as FilterState, CreateErgTestInput, UpdateErgTestInput } from '@v2/types/ergTests';
 
 /**
@@ -24,6 +25,7 @@ export function ErgTestsPage() {
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTest, setEditingTest] = useState<ErgTest | null>(null);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
 
   // C2 status panel state
   const [showC2Status, setShowC2Status] = useState(false);
@@ -60,6 +62,18 @@ export function ErgTestsPage() {
     setIsModalOpen(false);
     // Delay clearing editing test to allow modal close animation
     setTimeout(() => setEditingTest(null), 300);
+  };
+
+  const handleOpenImportModal = () => {
+    setIsImportModalOpen(true);
+  };
+
+  const handleCloseImportModal = () => {
+    setIsImportModalOpen(false);
+  };
+
+  const handleImportSuccess = (count: number) => {
+    console.log(`Successfully imported ${count} erg tests`);
   };
 
   const handleSubmit = (data: CreateErgTestInput | UpdateErgTestInput) => {
@@ -146,6 +160,14 @@ export function ErgTestsPage() {
             </button>
 
             <button
+              onClick={handleOpenImportModal}
+              className="flex items-center gap-2 px-4 py-2 bg-bg-subtle text-txt-secondary hover:bg-bg-default rounded-md transition-colors font-medium"
+            >
+              <Upload size={18} />
+              Import CSV
+            </button>
+
+            <button
               onClick={handleOpenAddModal}
               className="flex items-center gap-2 px-4 py-2 bg-interactive-primary text-white rounded-md hover:bg-interactive-primary-hover transition-colors"
             >
@@ -194,6 +216,13 @@ export function ErgTestsPage() {
           isSubmitting={isCreating || isUpdating}
         />
       </CrudModal>
+
+      {/* CSV Import Modal */}
+      <ErgCSVImportModal
+        isOpen={isImportModalOpen}
+        onClose={handleCloseImportModal}
+        onSuccess={handleImportSuccess}
+      />
     </div>
   );
 }
