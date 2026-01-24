@@ -4,8 +4,8 @@
 
 **Milestone:** v2.0 — Core Migration
 **Phase:** 6 (Athletes & Roster Management) — In Progress
-**Status:** Plan 06-05 complete (CSV Import Wizard)
-**Last activity:** 2026-01-24 — Completed 06-05-PLAN.md
+**Status:** Plan 06-06 complete (Attendance Tracking UI)
+**Last activity:** 2026-01-24 — Completed 06-06-PLAN.md
 
 ## Project Reference
 
@@ -111,11 +111,15 @@ Key architectural decisions carrying forward:
 | 06-05 | Fuzzy column matching | Normalize case/punctuation for auto-mapping common variations (first/fname/First Name all match) |
 | 06-05 | Partial import strategy | Allow importing valid rows while showing errors for invalid ones - doesn't block bulk import |
 | 06-05 | Worker threads at 500KB threshold | Prevents UI blocking during large CSV parsing (~5,000 rows with 10 columns) |
+| 06-06 | Single-letter status labels (P/L/E/U) | Compact display for mobile, full words shown on hover/title |
+| 06-06 | Attendance rate = (present + late) / total | Late arrivals count toward attendance for coaching purposes |
+| 06-06 | Summary sorted by rate descending | Coaches quickly identify low-attendance athletes needing intervention |
+| 06-06 | Date presets (7d/30d/90d) | Common reporting periods for coaching analysis |
 
 ## Session Continuity
 
-**Last session:** 2026-01-24T16:09:52Z
-**Stopped at:** Completed 06-05-PLAN.md (CSV Import Wizard)
+**Last session:** 2026-01-24T16:14:07Z
+**Stopped at:** Completed 06-06-PLAN.md (Attendance Tracking UI)
 **Resume file:** None — ready for next plan in Phase 6
 
 ## Known Limitations
@@ -135,4 +139,4 @@ Run `/gsd:plan-phase 6` to create executable plans for Athletes & Roster Managem
 - Table virtualization
 
 ---
-*Last updated: 2026-01-24 — Completed 06-05: CSV Import Wizard*
+*Last updated: 2026-01-24 — Completed 06-06: Attendance Tracking UI*
