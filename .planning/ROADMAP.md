@@ -301,16 +301,29 @@ Plans:
 
 **Requirements:** SEAT-01, SEAT-02, SEAT-03, SEAT-04, SEAT-05, SEAT-06, SEAT-07, SEAT-08, SEAT-09, SEAT-10
 
+**Plans:** 9 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — Types and TanStack Query hooks for seat racing data layer
+- [ ] 09-02-PLAN.md — Rankings table, confidence badges, session list UI components
+- [ ] 09-03-PLAN.md — Session wizard foundation and Step 1 (metadata)
+- [ ] 09-04-PLAN.md — Wizard Step 2 (piece and boat management with time entry)
+- [ ] 09-05-PLAN.md — Wizard Step 3 (athlete assignment to seats)
+- [ ] 09-06-PLAN.md — Wizard Step 4 (review) and API submission with rating calculation
+- [ ] 09-07-PLAN.md — Main Seat Racing page and routing integration
+- [ ] 09-08-PLAN.md — Ratings API endpoint and parameters panel
+- [ ] 09-09-PLAN.md — Human verification checkpoint
+
 **Delivers:**
 - Seat race session creation with metadata
 - Piece management (multiple boats per piece)
 - Time entry and athlete assignments
-- Switch recording between pieces
+- Switch recording between pieces (auto-detected)
 - ELO-style ranking calculations
 - Confidence intervals on rankings
 - Sorted athlete rankings view
-- Optimal switch sequence generator
-- Configurable parameters (K-factor, piece weight)
+- Configurable parameters display (K-factor)
+- Note: SEAT-09 (optimal switch sequence) deferred to Phase 9.5
 
 **Success Criteria:**
 1. Coach can create a seat race session with date/conditions, add multiple pieces with boats and times, and assign athletes to seats
