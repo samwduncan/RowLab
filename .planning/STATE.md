@@ -4,8 +4,8 @@
 
 **Milestone:** v2.0 — Core Migration
 **Phase:** 9 (Seat Racing) — In Progress
-**Status:** Completed 09-06-PLAN.md (Review & Submit Step)
-**Last activity:** 2026-01-24 — Completed 09-06-PLAN.md
+**Status:** Completed 09-07-PLAN.md (Seat Racing Page & Navigation)
+**Last activity:** 2026-01-24 — Completed 09-07-PLAN.md
 
 ## Project Reference
 
@@ -171,6 +171,10 @@ Key architectural decisions carrying forward:
 | 09-05 | Switches auto-detected rather than manual entry | Reduces data entry burden - coaches just assign athletes and system figures out who swapped |
 | 09-05 | Partial lineups allowed - seats can remain empty | Seat races often test partial lineups, strict validation would block valid use cases |
 | 09-05 | Global athlete assignment tracking across all boats | Prevents double-assignment errors, provides real-time feedback in dropdowns |
+| 09-07 | Headless UI Tab.Group for Rankings/Sessions tabs | Consistent with V2 patterns, accessible, keyboard navigable |
+| 09-07 | Side filter buttons inline in Rankings tab header | Keeps filters visible and accessible, All/Port/Starboard with color coding |
+| 09-07 | SessionWizard in modal, SessionDetail in slide-out panel | Wizard requires focus, detail allows browsing context, matches Linear/GitHub patterns |
+| 09-07 | Rankings tab combines chart and table vertically | Chart provides visual distribution, table provides sortable detail, better for mobile |
 | 09-08 | Dedicated ratings API with 4 routes | Separates rating concerns from seat race sessions, provides clean API surface for rating operations |
 | 09-08 | Server-side side filtering in ratings API | More flexible than client-only, reduces payload size for port/starboard-specific requests |
 | 09-08 | Parameters route before :athleteId route | Prevents "parameters" from being treated as athleteId, avoids route conflicts |
@@ -183,7 +187,7 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-01-24
-**Stopped at:** Completed 09-06-PLAN.md (Review & Submit Step)
+**Stopped at:** Completed 09-07-PLAN.md (Seat Racing Page & Navigation)
 **Resume file:** None — continuing Phase 9
 
 ## Known Limitations
