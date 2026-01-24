@@ -184,6 +184,18 @@ Complete V1 to V2 feature migration with world-class UI following "Precision Ins
 
 **Requirements:** ATH-01, ATH-02, ATH-03, ATH-04, ATH-05, ATH-06, ATH-07, ATH-08, ATT-01, ATT-02, ATT-03, DESIGN-02, DESIGN-03, DESIGN-04
 
+**Plans:** 8 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Attendance schema and backend API
+- [ ] 06-02-PLAN.md — Install @tanstack/react-virtual and VirtualTable component
+- [ ] 06-03-PLAN.md — Athlete and Attendance types with TanStack Query hooks
+- [ ] 06-04-PLAN.md — Athletes page with grid/list views, search, filters, profile panel
+- [ ] 06-05-PLAN.md — CSV bulk import wizard modal
+- [ ] 06-06-PLAN.md — Attendance recording and history components
+- [ ] 06-07-PLAN.md — Light and field theme CSS fixes
+- [ ] 06-08-PLAN.md — Human verification checkpoint
+
 **Delivers:**
 - Athletes page with grid/list views
 - Search and filter by side preference and capabilities
@@ -399,7 +411,7 @@ The following requirements apply across all v2.0 phases:
 
 | Phase | Name | Requirements | Plans | Status |
 |-------|------|--------------|-------|--------|
-| 6 | Athletes & Roster | 14 | — | Pending |
+| 6 | Athletes & Roster | 14 | 8 | Pending |
 | 7 | Erg Data & Performance | 9 | — | Pending |
 | 8 | Lineup Builder | 18 | — | Pending |
 | 9 | Seat Racing | 10 | — | Pending |
