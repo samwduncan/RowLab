@@ -4,8 +4,8 @@
 
 **Milestone:** v2.0 — Core Migration
 **Phase:** 8 (Lineup Builder) — In Progress
-**Status:** Plan 08-02 complete
-**Last activity:** 2026-01-24 — Completed 08-02-PLAN.md
+**Status:** Plan 08-03 complete
+**Last activity:** 2026-01-24 — Completed 08-03-PLAN.md
 
 ## Project Reference
 
@@ -34,7 +34,7 @@ v1.0 Progress: 100% Complete
 |-------|------|--------|-------|
 | 6 | Athletes & Roster | Complete | 6/6 |
 | 7 | Erg Data & Performance | Complete | 6/6 |
-| 8 | Lineup Builder | In Progress | 2/— |
+| 8 | Lineup Builder | In Progress | 3/— |
 | 9 | Seat Racing | Pending | —/— |
 | 10 | Training Plans & NCAA | Pending | —/— |
 | 11 | Racing & Regattas | Pending | —/— |
@@ -118,12 +118,16 @@ Key architectural decisions carrying forward:
 | 08-02 | Use DragOverlay for cursor preview | Shows full athlete card at cursor during drag, better visibility than transform-only approach |
 | 08-02 | Green border for all drop zones, defer red for validation | Plan scope is core drag-drop, validation warnings come in 08-03 |
 | 08-02 | 10px mouse activation, 250ms touch delay | Prevents accidental drags, balances responsiveness with intentionality |
+| 08-03 | Validation warnings never block assignment | Trust the coach - warnings are informational only, coach knows best for experimental lineups |
+| 08-03 | Warning badges always visible (not hover-only) | Per CONTEXT.md: constant awareness required, no hover interaction needed |
+| 08-03 | Spring physics for all drag-drop animations | Spring physics feel more natural, velocity-aware, don't require precise timing curves |
+| 08-03 | Shared spring config (stiffness: 300, damping: 28) | Consistent animation feel across all drag-drop interactions throughout lineup builder |
 
 ## Session Continuity
 
-**Last session:** 2026-01-24T20:05:41Z
-**Stopped at:** Completed 08-02-PLAN.md (Drag-Drop Seat Assignment)
-**Resume file:** None — ready for Plan 08-03 (Seat Validation Warnings)
+**Last session:** 2026-01-24T20:06:42Z
+**Stopped at:** Completed 08-03-PLAN.md (Seat Validation Warnings & Spring Animations)
+**Resume file:** None — ready for Plan 08-04 (Undo/Redo UI Controls)
 
 ## Known Limitations
 
