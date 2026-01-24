@@ -5,15 +5,27 @@ import { LineupWorkspace } from '@v2/components/lineup';
 import useLineupStore from '@/store/lineupStore';
 
 /**
+ * Default boat configurations for standard rowing boat classes
+ */
+const DEFAULT_BOAT_CONFIGS = [
+  { id: 'boat-config-8plus', name: '8+', numSeats: 8, hasCoxswain: true },
+  { id: 'boat-config-4plus', name: '4+', numSeats: 4, hasCoxswain: true },
+  { id: 'boat-config-4minus', name: '4-', numSeats: 4, hasCoxswain: false },
+  { id: 'boat-config-4x', name: '4x', numSeats: 4, hasCoxswain: false },
+  { id: 'boat-config-2plus', name: '2+', numSeats: 2, hasCoxswain: true },
+  { id: 'boat-config-2minus', name: '2-', numSeats: 2, hasCoxswain: false },
+  { id: 'boat-config-2x', name: '2x', numSeats: 2, hasCoxswain: false },
+  { id: 'boat-config-1x', name: '1x', numSeats: 1, hasCoxswain: false },
+];
+
+/**
  * LineupBuilderPage - Main page for the V2 Lineup Builder
  *
  * Responsibilities:
  * - Loads athletes data on mount
- * - Initializes lineupStore with athletes
+ * - Initializes lineupStore with athletes and boat configs
  * - Renders LineupWorkspace component
  * - Shows loading state while data loads
- *
- * Note: Boat configs are loaded via API in AppLayout.jsx and already in lineupStore.
  *
  * Features available via LineupWorkspace:
  * - Drag-drop athlete assignment (desktop)
@@ -33,15 +45,24 @@ export function LineupBuilderPage() {
   // Fetch athletes data
   const { allAthletes, isLoading: isAthletesLoading } = useAthletes();
 
-  // Store actions
+  // Store state and actions
   const setAthletes = useLineupStore((state) => state.setAthletes);
+  const boatConfigs = useLineupStore((state) => state.boatConfigs);
+  const setBoatConfigs = useLineupStore((state) => state.setBoatConfigs);
 
-  // Initialize store with data when loaded
+  // Initialize store with athletes when loaded
   useEffect(() => {
     if (allAthletes.length > 0) {
       setAthletes(allAthletes);
     }
   }, [allAthletes, setAthletes]);
+
+  // Initialize default boat configs if not already loaded
+  useEffect(() => {
+    if (!boatConfigs || boatConfigs.length === 0) {
+      setBoatConfigs(DEFAULT_BOAT_CONFIGS);
+    }
+  }, [boatConfigs, setBoatConfigs]);
 
   // Show loading while checking auth
   if (isAuthLoading) {
