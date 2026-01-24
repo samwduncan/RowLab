@@ -3,9 +3,9 @@
 ## Current Status
 
 **Milestone:** v2.0 — Core Migration
-**Phase:** 7 (Erg Data & Performance) — In Progress
-**Status:** Plan 07-04 complete (CSV Bulk Import Wizard)
-**Last activity:** 2026-01-24 — Completed 07-04-PLAN.md
+**Phase:** 7 (Erg Data & Performance) — Complete
+**Status:** Phase 7 verified and complete
+**Last activity:** 2026-01-24 — Phase 7 complete
 
 ## Project Reference
 
@@ -33,14 +33,14 @@ v1.0 Progress: 100% Complete
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
 | 6 | Athletes & Roster | Complete | 6/6 |
-| 7 | Erg Data & Performance | In Progress | 5/? |
+| 7 | Erg Data & Performance | Complete | 6/6 |
 | 8 | Lineup Builder | Pending | —/— |
 | 9 | Seat Racing | Pending | —/— |
 | 10 | Training Plans & NCAA | Pending | —/— |
 | 11 | Racing & Regattas | Pending | —/— |
 | 12 | Settings & Polish | Pending | —/— |
 
-v2.0 Progress: ██░░░░░░░░░░ 11%
+v2.0 Progress: ███░░░░░░░░░ 29%
 
 ## Quick Context
 

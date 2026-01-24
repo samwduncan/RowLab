@@ -226,12 +226,12 @@ Plans:
 **Plans:** 6 plans
 
 Plans:
-- [ ] 07-01-PLAN.md — Erg test types and TanStack Query hooks (data layer)
-- [ ] 07-02-PLAN.md — Erg tests page with table, filters, and CRUD forms
-- [ ] 07-03-PLAN.md — Athlete erg history with trend charts and personal bests
-- [ ] 07-04-PLAN.md — CSV bulk import wizard for erg tests
-- [ ] 07-05-PLAN.md — Concept2 sync status and manual sync components
-- [ ] 07-06-PLAN.md — Human verification checkpoint
+- [x] 07-01-PLAN.md — Erg test types and TanStack Query hooks (data layer)
+- [x] 07-02-PLAN.md — Erg tests page with table, filters, and CRUD forms
+- [x] 07-03-PLAN.md — Athlete erg history with trend charts and personal bests
+- [x] 07-04-PLAN.md — CSV bulk import wizard for erg tests
+- [x] 07-05-PLAN.md — Concept2 sync status and manual sync components
+- [x] 07-06-PLAN.md — Human verification checkpoint
 
 **Delivers:**
 - Team erg tests table (sortable, filterable)
@@ -422,7 +422,7 @@ The following requirements apply across all v2.0 phases:
 | Phase | Name | Requirements | Plans | Status |
 |-------|------|--------------|-------|--------|
 | 6 | Athletes & Roster | 14 | 8 | Complete |
-| 7 | Erg Data & Performance | 9 | 6 | Pending |
+| 7 | Erg Data & Performance | 9 | 6 | Complete |
 | 8 | Lineup Builder | 18 | — | Pending |
 | 9 | Seat Racing | 10 | — | Pending |
 | 10 | Training Plans & NCAA | 15 | — | Pending |
@@ -452,4 +452,4 @@ Phases with standard patterns (skip research):
 ---
 
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-01-24 — Phase 7 plans created*
+*Last updated: 2026-01-24 — Phase 7 complete*
