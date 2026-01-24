@@ -3,9 +3,9 @@
 ## Current Status
 
 **Milestone:** v2.0 — Core Migration
-**Phase:** 6 (Athletes & Roster Management) — NOT STARTED
-**Status:** Roadmap complete, ready for phase planning
-**Last activity:** 2026-01-24 — Created v2.0 roadmap
+**Phase:** 6 (Athletes & Roster Management) — In Progress
+**Status:** Plan 06-02 complete (VirtualTable component)
+**Last activity:** 2026-01-24 — Completed 06-02-PLAN.md
 
 ## Project Reference
 
@@ -32,7 +32,7 @@ v1.0 Progress: 100% Complete
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
-| 6 | Athletes & Roster | Pending | —/— |
+| 6 | Athletes & Roster | In Progress | 2/? |
 | 7 | Erg Data & Performance | Pending | —/— |
 | 8 | Lineup Builder | Pending | —/— |
 | 9 | Seat Racing | Pending | —/— |
@@ -49,7 +49,7 @@ v2.0 Progress: ░░░░░░░░░░░░ 0%
 - V1 at `/legacy` (fallback)
 - Shares existing Zustand stores with V1
 
-**Tech Stack:** React 18, TypeScript, Zustand, Tailwind CSS 3.4, Framer Motion, TanStack Query v5
+**Tech Stack:** React 18, TypeScript, Zustand, Tailwind CSS 3.4, Framer Motion, TanStack Query v5, TanStack Table, TanStack Virtual
 
 **v2.0 Design Philosophy:** "Precision Instrument" (Raycast/Linear/Vercel inspired)
 
@@ -75,7 +75,7 @@ v2.0 Progress: ░░░░░░░░░░░░ 0%
 
 **Research Flag:** SKIP (standard CRUD patterns)
 
-## Accumulated Decisions (v1.0)
+## Accumulated Decisions
 
 See STATE.md.backup for full v1.0 decision history (211 decisions across 5 phases)
 
@@ -86,11 +86,19 @@ Key architectural decisions carrying forward:
 - @dnd-kit for drag-drop interactions
 - recharts for data visualization
 
+### v2.0 Decisions (Phase 6)
+
+| Plan | Decision | Rationale |
+|------|----------|-----------|
+| 06-02 | VirtualTable uses TanStack Virtual + Table | Combines virtualization for performance with full table features (sorting, filtering) |
+| 06-02 | 20-item overscan for virtualization | Balances performance with smooth scrolling, prevents blank areas during fast scroll |
+| 06-02 | Generic TypeScript VirtualTable component | Enables reuse across athletes, erg data, and all future large tables |
+
 ## Session Continuity
 
-**Last session:** 2026-01-24
-**Stopped at:** Created v2.0 roadmap (milestone initialization)
-**Resume file:** None — ready for `/gsd:plan-phase 6`
+**Last session:** 2026-01-24T15:44:15Z
+**Stopped at:** Completed 06-02-PLAN.md (VirtualTable component)
+**Resume file:** None — ready for next plan in Phase 6
 
 ## Known Limitations
 
@@ -109,4 +117,4 @@ Run `/gsd:plan-phase 6` to create executable plans for Athletes & Roster Managem
 - Table virtualization
 
 ---
-*Last updated: 2026-01-24 — v2.0 roadmap created*
+*Last updated: 2026-01-24 — Completed 06-02: VirtualTable component*
