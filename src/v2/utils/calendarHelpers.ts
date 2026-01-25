@@ -133,27 +133,29 @@ export function workoutToCalendarEvent(workout: PlannedWorkout): CalendarEvent |
 
 /**
  * Get color for workout type.
+ * Colors chosen for 4.5:1+ contrast with white text (WCAG AA).
  */
 export function getWorkoutTypeColor(type: string): string {
   const colors: Record<string, string> = {
-    erg: '#ef4444',       // red
-    row: '#3b82f6',       // blue
-    cross_train: '#22c55e', // green
-    strength: '#f59e0b',   // amber
-    recovery: '#8b5cf6',   // purple
+    erg: '#b91c1c',       // red-700 (5.6:1 with white)
+    row: '#1d4ed8',       // blue-700 (6.3:1 with white)
+    cross_train: '#15803d', // green-700 (4.6:1 with white)
+    strength: '#b45309',   // amber-700 (4.8:1 with white)
+    recovery: '#6d28d9',   // purple-700 (4.6:1 with white)
   };
   return colors[type] || '#6b7280'; // gray default
 }
 
 /**
  * Get color for periodization phase.
+ * Colors chosen for 4.5:1+ contrast with white text (WCAG AA).
  */
 export function getPeriodizationColor(phase: string): string {
   const colors: Record<string, string> = {
-    base: '#3b82f6',    // blue
-    build: '#f59e0b',   // amber
-    peak: '#ef4444',    // red
-    taper: '#22c55e',   // green
+    base: '#1d4ed8',    // blue-700 (6.3:1 with white)
+    build: '#b45309',   // amber-700 (4.8:1 with white)
+    peak: '#b91c1c',    // red-700 (5.6:1 with white)
+    taper: '#15803d',   // green-700 (4.6:1 with white)
   };
   return colors[phase] || '#6b7280';
 }

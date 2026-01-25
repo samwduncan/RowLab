@@ -30,7 +30,7 @@ export function ThemeToggle() {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm text-txt-muted">Theme:</span>
+      <span className="text-sm text-txt-tertiary">Theme:</span>
       <select
         value={displayValue}
         onChange={handleChange}

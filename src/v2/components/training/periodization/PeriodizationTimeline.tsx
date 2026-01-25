@@ -123,6 +123,7 @@ export function PeriodizationTimeline({
                 backgroundColor: block.color || getPeriodizationColor(block.phase),
               }}
               title={`${phaseLabels[block.phase]}: ${format(parseISO(block.startDate), 'MMM d')} - ${format(parseISO(block.endDate), 'MMM d')}`}
+              aria-label={`${phaseLabels[block.phase]} phase: ${format(parseISO(block.startDate), 'MMM d')} to ${format(parseISO(block.endDate), 'MMM d')}, ${block.weeks} weeks`}
             >
               <div className="h-full flex flex-col justify-center px-2 text-white">
                 <div className="flex items-center gap-1">
@@ -134,7 +135,7 @@ export function PeriodizationTimeline({
                   </span>
                 </div>
                 {block.weeks >= 2 && (
-                  <span className="text-[10px] opacity-80 truncate">
+                  <span className="text-[10px] truncate">
                     {block.weeks}w
                   </span>
                 )}

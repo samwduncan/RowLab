@@ -165,6 +165,7 @@ export function CoachTrainingPage() {
                   className="px-3 py-2 bg-surface-default border border-bdr-default rounded-md
                              text-txt-primary text-sm
                              focus:outline-none focus:ring-2 focus:ring-accent-primary"
+                  aria-label="Filter training calendar by plan"
                 >
                   <option value="">All Plans</option>
                   {plans?.map((plan) => (
