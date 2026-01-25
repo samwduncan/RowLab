@@ -1,0 +1,254 @@
+/**
+ * Responsive utility styles
+ * Breakpoints: 375px (mobile), 768px (tablet), 1024px (desktop)
+ *
+ * This file provides responsive utility classes for the V2 design system.
+ * Works in conjunction with useBreakpoint hook for JS-based responsive logic.
+ */
+
+/* ========================================
+   VISIBILITY UTILITIES
+   Hide/show elements at specific breakpoints
+   ======================================== */
+
+/* Hide on specific breakpoints */
+@media (max-width: 767px) {
+  .v2 .hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .v2 .hide-tablet {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .v2 .hide-desktop {
+    display: none !important;
+  }
+}
+
+/* Show only on specific breakpoints */
+@media (min-width: 768px) {
+  .v2 .show-mobile-only {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .v2 .show-tablet-up {
+    display: none !important;
+  }
+}
+
+/* ========================================
+   TOUCH TARGET UTILITIES
+   WCAG 2.1 requires 44px minimum tap targets
+   ======================================== */
+
+.v2 .tap-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Tap target with centered content */
+.v2 .tap-target-center {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========================================
+   MOBILE LAYOUT UTILITIES
+   Stacking and responsive grid helpers
+   ======================================== */
+
+/* Mobile-first stack layout */
+.v2 .mobile-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .v2 .mobile-stack.tablet-row {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 1024px) {
+  .v2 .mobile-stack.desktop-row {
+    flex-direction: row;
+  }
+}
+
+/* ========================================
+   RESPONSIVE TABLE UTILITIES
+   Horizontal scroll or card transformation
+   ======================================== */
+
+/* Responsive table - horizontal scroll on mobile */
+.v2 .responsive-table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 767px) {
+  .v2 .responsive-table-container {
+    margin: 0 -1rem;
+    padding: 0 1rem;
+    width: calc(100% + 2rem);
+  }
+}
+
+/* Card view for tables on mobile */
+@media (max-width: 767px) {
+  .v2 .table-to-cards thead {
+    display: none;
+  }
+
+  .v2 .table-to-cards tbody tr {
+    display: block;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 0.5rem;
+    background: var(--color-bg-surface);
+  }
+
+  .v2 .table-to-cards tbody td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border: none;
+  }
+
+  .v2 .table-to-cards tbody td::before {
+    content: attr(data-label);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+  }
+}
+
+/* ========================================
+   MOBILE FORM UTILITIES
+   Form layout adjustments for mobile
+   ======================================== */
+
+@media (max-width: 767px) {
+  .v2 .form-row {
+    flex-direction: column;
+  }
+
+  .v2 .form-row > * {
+    width: 100%;
+  }
+
+  .v2 .button-group {
+    flex-direction: column;
+  }
+
+  .v2 .button-group > button {
+    width: 100%;
+  }
+}
+
+/* ========================================
+   FIXED NAVIGATION UTILITIES
+   Mobile action bars and safe areas
+   ======================================== */
+
+/* Fixed bottom action bar for mobile */
+.v2 .mobile-action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  background: var(--color-bg-surface);
+  border-top: 1px solid var(--color-border-subtle);
+  z-index: 40;
+}
+
+@media (min-width: 768px) {
+  .v2 .mobile-action-bar {
+    position: static;
+    padding: 0;
+    background: transparent;
+    border: none;
+  }
+}
+
+/* Safe area insets for notched phones */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .v2 .mobile-action-bar {
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  }
+
+  .v2 .safe-area-inset-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Fixed mobile header spacer */
+.v2 .mobile-header-spacer {
+  height: 3.5rem; /* 56px - matches mobile header height */
+}
+
+/* Fixed mobile nav bottom spacer */
+.v2 .mobile-nav-spacer {
+  height: 4rem; /* 64px - matches bottom nav height */
+}
+
+/* ========================================
+   RESPONSIVE TEXT UTILITIES
+   Text sizing adjustments for mobile
+   ======================================== */
+
+@media (max-width: 767px) {
+  .v2 .text-responsive-sm {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+
+  .v2 .text-responsive-base {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .v2 .heading-responsive {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+}
+
+/* ========================================
+   RESPONSIVE PADDING/MARGIN
+   Container padding adjustments
+   ======================================== */
+
+@media (max-width: 767px) {
+  .v2 .page-padding-responsive {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .v2 .page-padding-responsive {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .v2 .page-padding-responsive {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
