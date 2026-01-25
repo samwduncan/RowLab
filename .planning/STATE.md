@@ -4,8 +4,8 @@
 
 **Milestone:** v2.0 — Core Migration
 **Phase:** 10 (Training Plans & NCAA Compliance) — In Progress
-**Status:** Completed 10-06-PLAN.md (Periodization Management Components)
-**Last activity:** 2026-01-25 — Completed 10-06-PLAN.md
+**Status:** Completed 10-08-PLAN.md (Compliance Dashboard Components)
+**Last activity:** 2026-01-25 — Completed 10-08-PLAN.md
 
 ## Project Reference
 
@@ -36,11 +36,11 @@ v1.0 Progress: 100% Complete
 | 7 | Erg Data & Performance | Complete | 6/6 |
 | 8 | Lineup Builder | In Progress | 9/10 |
 | 9 | Seat Racing | In Progress | 8/9 |
-| 10 | Training Plans & NCAA | In Progress | 7/11 |
+| 10 | Training Plans & NCAA | In Progress | 9/11 |
 | 11 | Racing & Regattas | Pending | —/— |
 | 12 | Settings & Polish | Pending | —/— |
 
-v2.0 Progress: ██████████░░ 86% (38/44)
+v2.0 Progress: ██████████░░ 90% (40/44)
 
 ## Quick Context
 
@@ -244,4 +244,10 @@ Continue Phase 10 (Training Plans & NCAA Compliance) - execute remaining plans.
 | 10-03 | Loading spinner overlay for async event fetching | Preserves calendar layout during loading, overlay doesn't shift content |
 
 ---
-*Last updated: 2026-01-25 — Phase 10 Plan 04 Complete*
+*Last updated: 2026-01-25 — Phase 10 Plan 07 Complete*
+| 10-07 | Aggregated assignments fetch | Fetch all plans and aggregate assignments when no planId specified, enables cross-plan queries for coaches |
+| 10-07 | Athlete load endpoint for workouts | Use /api/v1/training-plans/athlete/:athleteId/load which returns assignments, workouts, completions in single response |
+| 10-07 | Select All filters out assigned athletes | Select All only selects available (non-assigned) athletes to prevent re-assignment errors |
+| 10-07 | Week navigation with offset state | Week navigation uses offset (0 = current week) for simple state management and easy reset |
+| 10-07 | Workout status in useMemo | Calculate isPastDue, isCompleted, isUpcoming in useMemo to prevent expensive date recalculations on every render |
+| 10-07 | Default compliance score 1.0 | Mark complete defaults to 100% compliance for athlete self-reporting, coaches can adjust later |
