@@ -3,9 +3,9 @@
 ## Current Status
 
 **Milestone:** v2.0 — Core Migration
-**Phase:** 11 (Racing & Regattas) — COMPLETE
-**Status:** Phase 11 complete
-**Last activity:** 2026-01-25 — Phase 11 complete (10 plans executed)
+**Phase:** 12 (Settings & Polish) — In Progress
+**Status:** Plan 02 complete
+**Last activity:** 2026-01-25 — Completed 12-02-PLAN.md (settings types and hooks)
 
 ## Project Reference
 
@@ -38,7 +38,7 @@ v1.0 Progress: 100% Complete
 | 9 | Seat Racing | Complete | 9/9 |
 | 10 | Training Plans & NCAA | Complete | 11/11 |
 | 11 | Racing & Regattas | Complete | 10/10 |
-| 12 | Settings & Polish | Pending | —/— |
+| 12 | Settings & Polish | In Progress | 1/16 |
 | 13 | Cross-Feature Integrations | Pending | —/— |
 | 14 | Advanced Seat Racing Analytics | Pending | —/— |
 
@@ -212,8 +212,8 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-01-25
-**Stopped at:** Completed Phase 11: Racing & Regattas
-**Resume file:** None — Phase 11 complete
+**Stopped at:** Completed 12-02-PLAN.md (settings types and hooks)
+**Resume file:** None
 
 ## Known Limitations
 
@@ -221,19 +221,13 @@ None - all v2.0 foundation issues resolved.
 
 ## Next Action
 
-Phase 11 complete. Continue to Phase 12 (Settings & Polish) or Phase 13 (Cross-Feature Integrations).
+Phase 12 in progress. Continue with Plan 03 (Settings Page Shell).
 
-**Phase 11 Complete (10/10 plans):**
-- ✓ Plan 00: Backend API Foundation
-- ✓ Plan 01: Schema, Seed, Types
-- ✓ Plan 02: TanStack Query Hooks
-- ✓ Plan 03: Regatta Form Components
-- ✓ Plan 04: Results & Margin Components
-- ✓ Plan 05: Warmup Calculator
-- ✓ Plan 06: Race Day Timeline
-- ✓ Plan 07: Pre-Race Checklists
-- ✓ Plan 08: Team Rankings
-- ✓ Plan 09: Page Integration
+**Phase 12 Progress (1/16 plans):**
+- ✓ Plan 02: Settings Types and Hooks
+
+**Remaining Phase 12 Plans:**
+- Plan 03-16: Settings UI components, photo upload, polish
 
 **User Feedback for Phase 13:**
 - Restructure: Practice → Workouts (instead of Workout → Exercises)
@@ -265,6 +259,9 @@ Phase 11 complete. Continue to Phase 12 (Settings & Polish) or Phase 13 (Cross-F
 | 10-08 | Week navigation at dashboard level | All views (hours, load, attendance) sync to same week, single control prevents confusion |
 | 10-08 | Summary stats calculated from entries in useMemo | Backend doesn't provide summary counts, client calculation prevents extra API call |
 | 10-08 | Conditional NCAA alert banner | Show red alert banner only when athletesOver > 0, reduces noise when no violations |
+| 12-02 | Hooks in src/v2/hooks/ not feature dir | Follow existing codebase pattern where all V2 hooks are in shared hooks directory |
+| 12-02 | 5-minute staleTime for settings queries | Consistent with Phase 7 C2 status pattern |
+| 12-02 | useAuthStore instead of accessToken param | Existing hooks use store directly which is cleaner than passing token |
 
 ---
-*Last updated: 2026-01-25 — Phase 10 Plan 08 Complete*
+*Last updated: 2026-01-25 — Phase 12 Plan 02 Complete*
