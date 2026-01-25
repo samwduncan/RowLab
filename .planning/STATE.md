@@ -290,3 +290,10 @@ Phase 12 in progress. Continue with remaining plans.
 
 ---
 *Last updated: 2026-01-25 — Phase 12 Plan 04 Complete*
+| 12-06 | Components in src/v2/components/settings/ | Follows existing codebase pattern, not src/v2/features/ |
+| 12-06 | Singleton pattern for model loading | Prevents duplicate face-api.js model loads |
+| 12-06 | 30% padding on face bounding box | Standard headshot framing includes head plus shoulders |
+| 12-06 | Max 400px cropped output | Balances quality with storage for profile photos |
+
+---
+*Last updated: 2026-01-25 — Phase 12 Plan 06 Complete*
