@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { ContextRail } from '@v2/components/shell/ContextRail';
 import { WorkspaceSidebar } from '@v2/components/shell/WorkspaceSidebar';
+import { SkipLink } from '@v2/components/shell/SkipLink';
 import { useContextStore } from '@v2/stores/contextStore';
 
 /**
@@ -104,6 +105,9 @@ export function ShellLayout() {
   if (isMobile) {
     return (
       <div className="v2 h-screen flex flex-col">
+        {/* Skip link for keyboard/screen reader users */}
+        <SkipLink />
+
         {/* Screen reader live region for context announcements */}
         <div
           aria-live="polite"
@@ -129,7 +133,7 @@ export function ShellLayout() {
         </header>
 
         {/* Main content - full width */}
-        <main className="flex-1 overflow-y-auto bg-bg-surface">
+        <main id="main-content" tabIndex={-1} className="flex-1 overflow-y-auto bg-bg-surface outline-none">
           <Outlet />
         </main>
 
@@ -172,6 +176,9 @@ export function ShellLayout() {
   // Desktop layout
   return (
     <div className="v2 h-screen grid grid-cols-[auto_1fr]">
+      {/* Skip link for keyboard/screen reader users */}
+      <SkipLink />
+
       {/* Screen reader live region for context announcements */}
       <div
         aria-live="polite"
@@ -194,7 +201,7 @@ export function ShellLayout() {
         </aside>
 
         {/* Main content area */}
-        <main className="h-full overflow-y-auto p-6 bg-bg-surface">
+        <main id="main-content" tabIndex={-1} className="h-full overflow-y-auto p-6 bg-bg-surface outline-none">
           <Outlet />
         </main>
       </div>
