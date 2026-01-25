@@ -1,0 +1,153 @@
+/**
+ * Typography Utility Classes
+ * Semantic naming for consistent text styling across V2
+ *
+ * Hierarchy:
+ * - Display: Hero sections, marketing pages
+ * - Heading 1: Page titles
+ * - Heading 2: Section headings
+ * - Heading 3: Card/panel titles
+ * - Heading 4: Subsection titles
+ * - Body: Main content
+ * - Body Small: Secondary content
+ * - Label: Form labels, metadata
+ * - Caption: Hints, timestamps
+ */
+
+/* Display - Hero text */
+.v2 .text-display {
+  font-family: var(--font-display);
+  font-size: 2.25rem; /* 36px */
+  line-height: 2.5rem; /* 40px */
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+}
+
+/* Heading 1 - Page titles */
+.v2 .text-heading-1,
+.v2 h1 {
+  font-family: var(--font-display);
+  font-size: 1.875rem; /* 30px */
+  line-height: 2.25rem; /* 36px */
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+}
+
+/* Heading 2 - Section headings */
+.v2 .text-heading-2,
+.v2 h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem; /* 24px */
+  line-height: 2rem; /* 32px */
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+}
+
+/* Heading 3 - Card/panel titles */
+.v2 .text-heading-3,
+.v2 h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem; /* 20px */
+  line-height: 1.75rem; /* 28px */
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+/* Heading 4 - Subsection titles */
+.v2 .text-heading-4,
+.v2 h4 {
+  font-family: var(--font-display);
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.75rem; /* 28px */
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+/* Body - Main content text */
+.v2 .text-body {
+  font-family: var(--font-body);
+  font-size: 1rem; /* 16px */
+  line-height: 1.5rem; /* 24px */
+  font-weight: 400;
+  color: var(--color-text-primary);
+}
+
+/* Body Small - Secondary content */
+.v2 .text-body-sm {
+  font-family: var(--font-body);
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.25rem; /* 20px */
+  font-weight: 400;
+  color: var(--color-text-secondary);
+}
+
+/* Label - Form labels, metadata */
+.v2 .text-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem; /* 12px */
+  line-height: 1rem; /* 16px */
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+}
+
+/* Caption - Hints, timestamps */
+.v2 .text-caption {
+  font-family: var(--font-body);
+  font-size: 0.75rem; /* 12px */
+  line-height: 1rem; /* 16px */
+  font-weight: 400;
+  color: var(--color-text-tertiary);
+}
+
+/* Mono - Code, data values */
+.v2 .text-mono {
+  font-family: var(--font-mono);
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.25rem; /* 20px */
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Data emphasis - erg times, rankings */
+.v2 .text-data {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .v2 .text-display {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+
+  .v2 .text-heading-1,
+  .v2 h1 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
+  .v2 .text-heading-2,
+  .v2 h2 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+}
+
+/* Color modifiers */
+.v2 .text-primary { color: var(--color-text-primary); }
+.v2 .text-secondary { color: var(--color-text-secondary); }
+.v2 .text-tertiary { color: var(--color-text-tertiary); }
+.v2 .text-brand { color: var(--color-interactive-primary); }
+.v2 .text-success { color: var(--color-status-success); }
+.v2 .text-warning { color: var(--color-status-warning); }
+.v2 .text-error { color: var(--color-status-error); }

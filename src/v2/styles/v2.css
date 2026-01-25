@@ -21,6 +21,13 @@
 
 /* Accessibility styles */
 @import './focus-rings.css';
+@import './reduced-motion.css';
+
+/* Responsive utilities */
+@import './responsive.css';
+
+/* Typography utility classes */
+@import './typography.css';
 
 /* V2-scoped Tailwind - loaded by V2Layout */
 @tailwind base;
