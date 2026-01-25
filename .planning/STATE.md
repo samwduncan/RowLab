@@ -36,7 +36,7 @@ v1.0 Progress: 100% Complete
 | 7 | Erg Data & Performance | Complete | 6/6 |
 | 8 | Lineup Builder | Complete | 10/10 |
 | 9 | Seat Racing | Pending | —/— |
-| 10 | Training Plans & NCAA | In Progress | 1/— |
+| 10 | Training Plans & NCAA | In Progress | 2/11 |
 | 11 | Racing & Regattas | Pending | —/— |
 | 12 | Settings & Polish | Pending | —/— |
 
@@ -216,4 +216,9 @@ Continue Phase 10 (Training Plans & NCAA Compliance) - execute remaining plans.
 - Plan assignment UI for coaches
 
 ---
-*Last updated: 2026-01-25 — Phase 10 Plan 01 Complete*
+*Last updated: 2026-01-25 — Phase 10 Plan 02 Complete*
+| 10-02 | Inline types in hooks instead of shared training.ts | training.ts wasn't created yet, inline types make hooks self-contained and executable now |
+| 10-02 | 5-minute staleTime for training queries | Follows useSeatRaceSessions pattern, balances data freshness with API efficiency |
+| 10-02 | Optimistic updates for useRescheduleWorkout | Enables smooth drag-drop calendar rescheduling without loading states |
+| 10-02 | useCalendarEvents expands recurring workouts | Converts recurrenceRule into individual calendar events for calendar view |
+| 10-02 | Cross-plan workout aggregation for calendar | Fetches all plans when no planId specified, enables team-wide calendar view |
