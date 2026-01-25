@@ -388,13 +388,27 @@ Plans:
 
 ---
 
-### Phase 11: Racing & Regattas
+### Phase 11: Racing & Regattas (COMPLETE)
 
 **Goal:** Coach can manage regattas, entries, results, and track team rankings against competitors.
 
 **Dependencies:** Phase 8 (lineups for race entries)
 
 **Requirements:** RACE-01, RACE-02, RACE-03, RACE-04, RACE-05, RACE-06, RACE-07, RACE-08, RACE-09, RACE-10, RANK-01, RANK-02, RANK-03, RANK-04, RANK-05
+
+**Plans:** 10 plans
+
+Plans:
+- [x] 11-00-PLAN.md — Backend API foundation (routes, schema, seed data)
+- [x] 11-01-PLAN.md — Schema, seed data, and TypeScript types
+- [x] 11-02-PLAN.md — TanStack Query hooks for regattas, rankings, checklists
+- [x] 11-03-PLAN.md — Regatta form components (RegattaForm, EventForm, RaceForm, ResultsForm)
+- [x] 11-04-PLAN.md — Results display and margin components
+- [x] 11-05-PLAN.md — Warmup calculator utility
+- [x] 11-06-PLAN.md — Race day timeline and warmup components
+- [x] 11-07-PLAN.md — Pre-race checklist components
+- [x] 11-08-PLAN.md — Team rankings components
+- [x] 11-09-PLAN.md — Page integration and navigation
 
 **Delivers:**
 - Regatta management (name, location, dates)
@@ -413,10 +427,10 @@ Plans:
 - Ranking confidence and contributing races
 
 **Success Criteria:**
-1. Coach can create regattas with metadata, add races with event details, and link lineup entries to races
-2. Coach can enter race results and system auto-calculates margins between finishers; regatta summary shows all results
-3. Race Day Command Center shows countdown to next race, heat sheet with progression rules, and warm-up launch schedule
-4. Coach can import external rankings, view team's estimated ranking vs competitors with confidence indicators and contributing race data
+1. [x] Coach can create regattas with metadata, add races with event details, and link lineup entries to races
+2. [x] Coach can enter race results and system auto-calculates margins between finishers; regatta summary shows all results
+3. [x] Race Day Command Center shows countdown to next race, heat sheet with progression rules, and warm-up launch schedule
+4. [x] Coach can import external rankings, view team's estimated ranking vs competitors with confidence indicators and contributing race data
 
 ---
 
@@ -684,7 +698,7 @@ The following requirements apply across all v2.0 phases:
 | 8 | Lineup Builder | 18 | 10 | Complete |
 | 9 | Seat Racing | 10 | 9 | Complete |
 | 10 | Training Plans & NCAA | 15 | 11 | Complete |
-| 11 | Racing & Regattas | 15 | — | Pending |
+| 11 | Racing & Regattas | 15 | 10 | Complete |
 | 12 | Settings & Polish | 7 | — | Pending |
 | 13 | Cross-Feature Integrations | 8 | — | Pending |
 | 14 | Advanced Seat Racing Analytics ⚡ | 12 | — | Research |
