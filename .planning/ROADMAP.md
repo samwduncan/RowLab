@@ -345,9 +345,10 @@ Plans:
 
 **Requirements:** TRAIN-01, TRAIN-02, TRAIN-03, TRAIN-04, TRAIN-05, TRAIN-06, TRAIN-07, TRAIN-08, TRAIN-09, TRAIN-10, ATT-04, NCAA-01, NCAA-02, NCAA-03, NCAA-04
 
-**Plans:** 10 plans
+**Plans:** 11 plans
 
 Plans:
+- [ ] 10-00-PLAN.md — Backend API for NCAA compliance, training load, and attendance-training linkage (ATT-04)
 - [ ] 10-01-PLAN.md — Dependencies, types, and utility functions
 - [ ] 10-02-PLAN.md — TanStack Query hooks for training data
 - [ ] 10-03-PLAN.md — Training calendar with month/week views
@@ -565,7 +566,7 @@ The following requirements apply across all v2.0 phases:
 | 7 | Erg Data & Performance | 9 | 6 | Complete |
 | 8 | Lineup Builder | 18 | 10 | Complete |
 | 9 | Seat Racing | 10 | 9 | Complete |
-| 10 | Training Plans & NCAA | 15 | 10 | Planned |
+| 10 | Training Plans & NCAA | 15 | 11 | Planned |
 | 11 | Racing & Regattas | 15 | — | Pending |
 | 12 | Settings & Polish | 7 | — | Pending |
 | 13 | Advanced Seat Racing Analytics ⚡ | 12 | — | Research |
@@ -626,4 +627,4 @@ Phase 13 is flagged for extensive pre-implementation research:
 ---
 
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-01-24 — Phase 10 planned with 10 plans in 6 waves*
+*Last updated: 2026-01-25 — Phase 10 revised with 11 plans (10-00 added for backend APIs, ATT-04 coverage)*
