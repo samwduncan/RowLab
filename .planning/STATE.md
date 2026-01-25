@@ -4,8 +4,8 @@
 
 **Milestone:** v2.0 — Core Migration
 **Phase:** 12 (Settings & Polish) — In Progress
-**Status:** Plans 01-07, 08-11 complete
-**Last activity:** 2026-01-25 — Completed 12-07-PLAN.md (Settings Page Integration)
+**Status:** Plans 01-07, 08-12 complete
+**Last activity:** 2026-01-25 — Completed 12-12-PLAN.md (Theme Polish and Accessibility)
 
 ## Project Reference
 
@@ -38,7 +38,7 @@ v1.0 Progress: 100% Complete
 | 9 | Seat Racing | Complete | 9/9 |
 | 10 | Training Plans & NCAA | Complete | 11/11 |
 | 11 | Racing & Regattas | Complete | 10/10 |
-| 12 | Settings & Polish | In Progress | 10/16 |
+| 12 | Settings & Polish | In Progress | 11/16 |
 | 13 | Cross-Feature Integrations | Pending | —/— |
 | 14 | Advanced Seat Racing Analytics | Pending | —/— |
 
@@ -212,7 +212,7 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-01-25
-**Stopped at:** Completed 12-10-PLAN.md (Skeleton Loading States)
+**Stopped at:** Completed 12-12-PLAN.md (Theme Polish and Accessibility)
 **Resume file:** None
 
 ## Known Limitations
@@ -223,7 +223,7 @@ None - all v2.0 foundation issues resolved.
 
 Phase 12 in progress. Continue with remaining plans.
 
-**Phase 12 Progress (10/16 plans):**
+**Phase 12 Progress (11/16 plans):**
 - ✓ Plan 01: Common UI Foundation (deps, animations, loading/empty/error/toast)
 - ✓ Plan 02: Settings Types and Hooks
 - ✓ Plan 05: Team & Billing Sections (visibility toggles, Stripe portal)
@@ -232,6 +232,7 @@ Phase 12 in progress. Continue with remaining plans.
 - ✓ Plan 09: Interactive Elements Polish (Button, Toggle, Modal, Card with animations)
 - ✓ Plan 10: Skeleton Loading States (23 skeletons across 6 features)
 - ✓ Plan 11: Empty States (5 feature empty states)
+- ✓ Plan 12: Theme Polish and Accessibility (focus rings, reduced motion)
 
 **Remaining Phase 12 Plans:**
 - Plan 03: Settings Page Shell
@@ -328,3 +329,10 @@ Phase 12 in progress. Continue with remaining plans.
 
 ---
 *Last updated: 2026-01-25 — Phase 12 Plan 11 Complete*
+| 12-12 | :focus-visible over :focus for keyboard focus | Shows focus rings only for keyboard navigation, not mouse clicks |
+| 12-12 | Field theme 3px focus rings | Outdoor visibility requires thicker focus indicators than standard 2px |
+| 12-12 | Animation duration 0.01ms for reduced motion | Using 0.01ms instead of 0 ensures browser compatibility |
+| 12-12 | Forced-colors media query support | High contrast mode support in focus-rings.css for Windows users |
+
+---
+*Last updated: 2026-01-25 — Phase 12 Plan 12 Complete*
