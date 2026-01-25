@@ -72,6 +72,8 @@ model Team {
   trainingPlans      TrainingPlan[]
   whiteboards        Whiteboard[]
   attendance         Attendance[]
+  checklistTemplates ChecklistTemplate[]
+  externalRankings   ExternalRanking[]
 
   @@map("teams")
 }
@@ -675,36 +677,62 @@ model AthleteTelemetry {
 // ============================================
 
 model Regatta {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   teamId      String
   name        String
   location    String?
   date        DateTime
-  courseType  String?  // 2000m, 1500m, head
-  conditions  Json?    // wind, temp, current
+  endDate     DateTime? // For multi-day regattas
+  host        String?   // Hosting organization
+  venueType   String?   // lake, river, etc.
+  courseType  String?   // 2000m, 1500m, head
+  conditions  Json?     // wind, temp, current
   description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  externalUrl String?   // RegattaCentral/Row2k link
+  teamGoals   String?   // Pre-regatta notes
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  team  Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  races Race[]
+  team   Team    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  events Event[]
+  races  Race[]  // Keep for backward compatibility during migration
 
   @@index([teamId])
   @@map("regattas")
 }
 
+model Event {
+  id           String   @id @default(uuid())
+  regattaId    String
+  name         String   // "Varsity 8+", "2V8+", "JV4+", etc.
+  category     String?  // Predefined or custom category
+  scheduledDay Int?     // Day number for multi-day regattas (1, 2, 3)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  regatta Regatta @relation(fields: [regattaId], references: [id], onDelete: Cascade)
+  races   Race[]
+
+  @@index([regattaId])
+  @@map("events")
+}
+
 model Race {
   id             String    @id @default(uuid())
-  regattaId      String
+  regattaId      String    // Keep for backward compatibility
+  eventId        String?   // Optional during migration
   eventName      String
   boatClass      String
   distanceMeters Int       @default(2000)
   isHeadRace     Boolean   @default(false)
   scheduledTime  DateTime?
 
-  regatta Regatta      @relation(fields: [regattaId], references: [id], onDelete: Cascade)
-  results RaceResult[]
+  regatta   Regatta        @relation(fields: [regattaId], references: [id], onDelete: Cascade)
+  event     Event?         @relation(fields: [eventId], references: [id])
+  results   RaceResult[]
+  checklist RaceChecklist?
 
+  @@index([eventId])
   @@map("races")
 }
 
@@ -733,7 +761,91 @@ model ExternalTeam {
   division   String?  // D1, D2, D3, Club
   createdAt  DateTime @default(now())
 
+  externalRankings ExternalRanking[]
+
   @@map("external_teams")
+}
+
+// ============================================
+// CHECKLISTS: Pre-race checklists
+// ============================================
+
+model ChecklistTemplate {
+  id        String   @id @default(uuid())
+  teamId    String
+  name      String   // "Home Regatta", "Away Regatta"
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  team       Team                    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  items      ChecklistTemplateItem[]
+  checklists RaceChecklist[]
+
+  @@index([teamId])
+  @@map("checklist_templates")
+}
+
+model ChecklistTemplateItem {
+  id         String @id @default(uuid())
+  templateId String
+  text       String
+  role       String // "coach", "coxswain", "anyone"
+  sortOrder  Int    @default(0)
+
+  template ChecklistTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@map("checklist_template_items")
+}
+
+model RaceChecklist {
+  id         String   @id @default(uuid())
+  raceId     String   @unique
+  templateId String?
+  createdAt  DateTime @default(now())
+
+  race     Race                @relation(fields: [raceId], references: [id], onDelete: Cascade)
+  template ChecklistTemplate?  @relation(fields: [templateId], references: [id])
+  items    RaceChecklistItem[]
+
+  @@map("race_checklists")
+}
+
+model RaceChecklistItem {
+  id          String    @id @default(uuid())
+  checklistId String
+  text        String
+  role        String
+  completed   Boolean   @default(false)
+  completedBy String?   // User ID who completed
+  completedAt DateTime?
+  sortOrder   Int       @default(0)
+
+  checklist RaceChecklist @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+
+  @@map("race_checklist_items")
+}
+
+// ============================================
+// EXTERNAL RANKINGS: Team rankings from external sources
+// ============================================
+
+model ExternalRanking {
+  id             String   @id @default(uuid())
+  teamId         String
+  externalTeamId String
+  boatClass      String
+  source         String   // "row2k", "usrowing", "regattacentral", "manual"
+  ranking        Int
+  season         String?
+  updatedDate    DateTime
+  notes          String?
+  createdAt      DateTime @default(now())
+
+  team         Team         @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  externalTeam ExternalTeam @relation(fields: [externalTeamId], references: [id])
+
+  @@unique([teamId, externalTeamId, boatClass, source, season])
+  @@map("external_rankings")
 }
 
 model TeamSpeedEstimate {
