@@ -3,9 +3,9 @@
 ## Current Status
 
 **Milestone:** v2.0 — Core Migration
-**Phase:** 10 (Training Plans & NCAA Compliance) — In Progress
-**Status:** Completed 10-09-PLAN.md (NCAA Warning & Audit Components)
-**Last activity:** 2026-01-25 — Completed 10-09-PLAN.md
+**Phase:** 10 (Training Plans & NCAA Compliance) — COMPLETE
+**Status:** Phase 10 complete with user feedback captured for Phase 13
+**Last activity:** 2026-01-25 — Phase 10 complete, Phase 13 (Cross-Feature Integrations) added
 
 ## Project Reference
 
@@ -34,13 +34,15 @@ v1.0 Progress: 100% Complete
 |-------|------|--------|-------|
 | 6 | Athletes & Roster | Complete | 8/8 |
 | 7 | Erg Data & Performance | Complete | 6/6 |
-| 8 | Lineup Builder | In Progress | 9/10 |
-| 9 | Seat Racing | In Progress | 8/9 |
-| 10 | Training Plans & NCAA | In Progress | 10/11 |
+| 8 | Lineup Builder | Complete | 10/10 |
+| 9 | Seat Racing | Complete | 9/9 |
+| 10 | Training Plans & NCAA | Complete | 11/11 |
 | 11 | Racing & Regattas | Pending | —/— |
 | 12 | Settings & Polish | Pending | —/— |
+| 13 | Cross-Feature Integrations | Pending | —/— |
+| 14 | Advanced Seat Racing Analytics | Pending | —/— |
 
-v2.0 Progress: ██████████░░ 91% (41/45)
+v2.0 Progress: ██████████░░ 100% (44/44 planned phases 6-10)
 
 ## Quick Context
 
@@ -219,27 +221,25 @@ None - all v2.0 foundation issues resolved.
 
 ## Next Action
 
-Continue Phase 10 (Training Plans & NCAA Compliance) - execute remaining plans.
+Phase 10 complete. Continue to Phase 11 (Racing & Regattas) or Phase 13 (Cross-Feature Integrations).
 
-**Phase 10 Progress:**
-- ✓ Plan 01: Foundation Types & Utilities (TSS calculation, NCAA compliance, calendar helpers)
-- ✓ Plan 02: TanStack Query hooks for training data
-- ✓ Plan 03: Training Calendar UI (month/week views, custom toolbar, event rendering)
-- ✓ Plan 04: Workout Form Components (WorkoutForm, ExerciseFieldArray with dynamic lists)
-- ✓ Plan 05: Drag-Drop Calendar Rescheduling (withDragAndDrop HOC, optimistic updates)
-- ✓ Plan 06: Periodization Management Components (PeriodizationTimeline, BlockForm, TemplateApplicator)
-- ✓ Plan 07: Assignment Management Components (AssignmentManager, AthleteWorkoutView)
-- ✓ Plan 08: Compliance Dashboard Components (ComplianceDashboard, WeeklyHoursTable, TrainingLoadChart, AttendanceTrainingLinkPanel)
-- ✓ Plan 09: NCAA Warning & Audit Components (NCAA20HourWarning, NCAAAuditReport)
-- Next: Plan 10 (Workout creation modal with recurring patterns)
+**Phase 10 Complete (11/11 plans):**
+- ✓ Plan 00: Backend API for NCAA compliance
+- ✓ Plan 01: Foundation Types & Utilities
+- ✓ Plan 02: TanStack Query hooks
+- ✓ Plan 03: Training Calendar UI
+- ✓ Plan 04: Workout Form Components
+- ✓ Plan 05: Drag-Drop Calendar Rescheduling
+- ✓ Plan 06: Periodization Management Components
+- ✓ Plan 07: Assignment Management Components
+- ✓ Plan 08: Compliance Dashboard Components
+- ✓ Plan 09: NCAA Warning & Audit Components
+- ✓ Plan 10: Page Integration and Verification
 
-**Phase 10 Remaining Scope:**
-- TanStack Query hooks for training data
-- Calendar component with drag-drop and plan filtering
-- Training plan creation wizard with periodization
-- Workout creation modal with recurring patterns
-- NCAA compliance dashboard with weekly reports
-- Plan assignment UI for coaches
+**User Feedback for Phase 13:**
+- Restructure: Practice → Workouts (instead of Workout → Exercises)
+- Integration: Calendar → Live Erg session launch
+- Cross-feature linking and navigation
 
 | 10-02 | Inline types in hooks instead of shared training.ts | training.ts wasn't created yet, inline types make hooks self-contained and executable now |
 | 10-02 | 5-minute staleTime for training queries | Follows useSeatRaceSessions pattern, balances data freshness with API efficiency |

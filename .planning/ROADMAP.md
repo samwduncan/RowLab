@@ -337,7 +337,7 @@ Plans:
 
 ---
 
-### Phase 10: Training Plans & NCAA Compliance
+### Phase 10: Training Plans & NCAA Compliance (COMPLETE)
 
 **Goal:** Coach can build periodized training programs with calendar scheduling and NCAA 20-hour rule tracking.
 
@@ -348,17 +348,21 @@ Plans:
 **Plans:** 11 plans
 
 Plans:
-- [ ] 10-00-PLAN.md — Backend API for NCAA compliance, training load, and attendance-training linkage (ATT-04)
-- [ ] 10-01-PLAN.md — Dependencies, types, and utility functions
-- [ ] 10-02-PLAN.md — TanStack Query hooks for training data
-- [ ] 10-03-PLAN.md — Training calendar with month/week views
-- [ ] 10-04-PLAN.md — Workout form with dynamic exercises
-- [ ] 10-05-PLAN.md — Drag-drop calendar rescheduling
-- [ ] 10-06-PLAN.md — Periodization timeline and blocks
-- [ ] 10-07-PLAN.md — Plan assignment management
-- [ ] 10-08-PLAN.md — Compliance dashboard and charts
-- [ ] 10-09-PLAN.md — NCAA warnings and audit reports
-- [ ] 10-10-PLAN.md — Page integration and verification
+- [x] 10-00-PLAN.md — Backend API for NCAA compliance, training load, and attendance-training linkage (ATT-04)
+- [x] 10-01-PLAN.md — Dependencies, types, and utility functions
+- [x] 10-02-PLAN.md — TanStack Query hooks for training data
+- [x] 10-03-PLAN.md — Training calendar with month/week views
+- [x] 10-04-PLAN.md — Workout form with dynamic exercises
+- [x] 10-05-PLAN.md — Drag-drop calendar rescheduling
+- [x] 10-06-PLAN.md — Periodization timeline and blocks
+- [x] 10-07-PLAN.md — Plan assignment management
+- [x] 10-08-PLAN.md — Compliance dashboard and charts
+- [x] 10-09-PLAN.md — NCAA warnings and audit reports
+- [x] 10-10-PLAN.md — Page integration and verification
+
+**Feedback for Phase 13:**
+- Restructure data model: Practice → Workouts (instead of Workout → Exercises)
+- Integration: Calendar → Live Erg session launch
 
 **Delivers:**
 - Training calendar (month/week views)
@@ -416,15 +420,17 @@ Plans:
 
 ---
 
-### Phase 12: Settings & Polish
+### Phase 12: Settings, Photos & Design Polish
 
-**Goal:** Complete settings migration, athlete photo uploads, and ensure all components follow Precision Instrument design language.
+**Goal:** Complete settings migration, athlete photo uploads, and comprehensive design polish to achieve "Precision Instrument" quality across all V2 components.
 
 **Dependencies:** Phases 6-11 (all features complete)
 
-**Requirements:** SET-01, SET-02, SET-03, SET-04, PHOTO-01, PHOTO-02, PHOTO-03
+**Requirements:** SET-01, SET-02, SET-03, SET-04, PHOTO-01, PHOTO-02, PHOTO-03, POLISH-01 through POLISH-12
 
 **Delivers:**
+
+#### Settings & Photos
 - Full settings page (migrated from V1)
 - Integration management (C2, Strava)
 - Billing management (Stripe)
@@ -433,6 +439,56 @@ Plans:
 - Automatic headshot standardization via AI cropping service
 - Profile photo fallback for non-headshot images
 
+#### Design System Audit
+- Token review: colors, spacing, typography, shadows, radii
+- Component inventory: audit all V2 components for consistency
+- Design language documentation (internal style guide)
+
+#### Component Polish (by feature area)
+- **Athletes Page:** Card hover states, profile panel animations, grid/list transitions
+- **Erg Data:** Chart styling, table row hover, trend indicators
+- **Lineup Builder:** Drag feedback polish, seat slot animations, PDF export styling
+- **Seat Racing:** Wizard step transitions, confidence badge styling, rankings table
+- **Training Calendar:** Event card design, drag preview, periodization block colors
+- **Compliance Dashboard:** Warning styling, chart polish, audit report formatting
+
+#### Micro-Interactions & Animation
+- Framer Motion spring configs standardized across app
+- Loading skeletons for all data-fetching components
+- Button press/hover states with subtle scale transforms
+- Modal open/close animations (slide + fade)
+- Toast notifications with entrance/exit animations
+- Drag-drop feedback (scale, shadow, rotation hints)
+
+#### State Design
+- Empty states: Illustrations + helpful CTAs for all list views
+- Error states: Friendly error messages with retry actions
+- Loading states: Skeleton loaders matching content shape
+- Success states: Subtle confirmation feedback (checkmarks, color flash)
+
+#### Theme Consistency
+- Dark theme: Final polish, ensure all components render correctly
+- Light theme: Fix CSS cascade issues, ensure contrast ratios
+- Field theme: High-contrast outdoor mode, large touch targets
+
+#### Responsive & Mobile
+- Mobile breakpoint audit (all pages tested at 375px, 768px, 1024px)
+- Touch-friendly tap targets (minimum 44px)
+- Mobile navigation polish
+- Swipe gestures where appropriate (calendar, cards)
+
+#### Accessibility (WCAG 2.1 AA)
+- Focus ring visibility on all interactive elements
+- Keyboard navigation for all features
+- Screen reader labels (aria-labels, roles)
+- Color contrast verification (4.5:1 minimum)
+- Reduced motion support (@media prefers-reduced-motion)
+
+#### Typography & Icons
+- Type scale audit (consistent heading hierarchy)
+- Icon system review (Lucide icons, consistent sizing)
+- Text truncation with tooltips for long content
+
 **Success Criteria:**
 1. User can access complete settings page with all V1 settings functionality intact
 2. User can connect/disconnect integrations (Concept2, Strava) and see connection status
@@ -440,10 +496,71 @@ Plans:
 4. Coach can manage team members, invite new members, and assign roles
 5. Coach can upload athlete photos; system auto-detects faces and crops to standardized headshot format
 6. Non-headshot photos (team photos, action shots) can be uploaded as profile photos without cropping
+7. All components pass design audit against "Precision Instrument" checklist (Raycast/Linear/Vercel quality)
+8. All interactive elements have polished hover, focus, and active states with appropriate animations
+9. App renders correctly across dark, light, and field themes with no CSS cascade issues
+10. All pages are responsive and usable on mobile devices (375px minimum)
+11. App meets WCAG 2.1 AA accessibility standards (keyboard nav, screen readers, contrast)
+12. Loading, empty, and error states are designed and implemented for all data views
 
 ---
 
-### Phase 13: Advanced Seat Racing Analytics ⚡ DIFFERENTIATOR
+### Phase 13: Cross-Feature Integrations
+
+**Goal:** Tie features together to create seamless workflows across calendar, live erg monitoring, performance tracking, and attendance.
+
+**Dependencies:** Phase 7 (Erg Data), Phase 10 (Training Plans)
+
+**Requirements:** INT-01 through INT-08 (to be defined during planning)
+
+**Planned Features:**
+
+1. **Training Data Model Restructure**
+   - Rename: Practice → Session (calendar event), Workout → Piece (segment within session)
+   - Practice types: Erg, Row, Lift, Run, Cross-train
+   - Pieces: 40' SS, 5x4', intervals, etc.
+
+2. **Calendar → Live Erg Integration**
+   - Click workout piece in calendar → "Start Live Session"
+   - Links to live erg dashboard with rank per piece
+   - Athletes connect ergs to scheduled session
+   - Real-time data monitoring during practice
+   - Post-session: "View Results" shows recorded data
+
+3. **Practice → Performance Tracking**
+   - Piece results automatically feed into athlete profiles
+   - Historical piece data accessible from calendar events
+   - Coach can review any past practice and see all results
+
+4. **Attendance → Training Link Enhancement**
+   - Attendance automatically logged when athletes join live session
+   - NCAA hours auto-calculated from actual practice participation
+   - Discrepancy alerts (scheduled vs actual duration)
+
+5. **Cross-Feature Search**
+   - Global search finds athletes, practices, erg tests, lineups
+   - Quick navigation between related entities
+
+6. **Unified Activity Timeline**
+   - Single view of athlete's complete activity history
+   - Combines: erg tests, practice participation, race results, attendance
+
+**Delivers:**
+- Restructured Practice → Pieces data model
+- Calendar-to-live-erg session launching
+- Automatic attendance from session participation
+- Cross-feature navigation and linking
+- Unified athlete activity timeline
+
+**Success Criteria:**
+1. Coach can schedule a practice with multiple pieces, then click a piece to launch a live erg session
+2. Athlete erg data from live session automatically links back to the calendar event
+3. Attendance is auto-recorded when athletes participate in live sessions
+4. Coach can navigate from any entity to related entities (athlete → their practices → their erg results)
+
+---
+
+### Phase 14: Advanced Seat Racing Analytics ⚡ DIFFERENTIATOR
 
 **Goal:** World-class, scientifically rigorous athlete ranking system using matrix seat racing, Bradley-Terry statistical models, and optimal swap scheduling.
 
@@ -566,12 +683,13 @@ The following requirements apply across all v2.0 phases:
 | 7 | Erg Data & Performance | 9 | 6 | Complete |
 | 8 | Lineup Builder | 18 | 10 | Complete |
 | 9 | Seat Racing | 10 | 9 | Complete |
-| 10 | Training Plans & NCAA | 15 | 11 | Planned |
+| 10 | Training Plans & NCAA | 15 | 11 | Complete |
 | 11 | Racing & Regattas | 15 | — | Pending |
 | 12 | Settings & Polish | 7 | — | Pending |
-| 13 | Advanced Seat Racing Analytics ⚡ | 12 | — | Research |
+| 13 | Cross-Feature Integrations | 8 | — | Pending |
+| 14 | Advanced Seat Racing Analytics ⚡ | 12 | — | Research |
 
-**v2.0 Total:** 100 requirements across 8 phases
+**v2.0 Total:** 108 requirements across 9 phases
 
 ---
 
