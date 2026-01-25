@@ -232,7 +232,7 @@ Phase 12 in progress. Continue with remaining plans.
 **Remaining Phase 12 Plans:**
 - Plan 03: Settings Page Shell
 - Plan 04: Profile & Preferences sections
-- Plan 06: Frontend PhotoCropper components
+- Plan 06: Athlete Photo Upload with Face Detection (frontend)
 - Plan 07-16: Integrations, polish
 
 **User Feedback for Phase 13:**
@@ -282,3 +282,11 @@ Phase 12 in progress. Continue with remaining plans.
 
 ---
 *Last updated: 2026-01-25 — Phase 12 Plan 06b Complete*
+| 12-04 | IntegrationCard accentColor prop | Each integration has custom connected-state color (blue C2, orange Strava) |
+| 12-04 | OAuth popup dimensions 600x700 | Standard size, centered on screen, matches V1 pattern |
+| 12-04 | postMessage for OAuth callback | Listens for c2_oauth_success/strava_oauth_success events from popup |
+| 12-04 | Internal Toggle in C2StravaSync | Self-contained component follows V2 design tokens |
+| 12-04 | FitImportSection uses fitImportService.js | Reuses V1 service utilities (formatDuration, formatDistance, formatWorkoutType) |
+
+---
+*Last updated: 2026-01-25 — Phase 12 Plan 04 Complete*
