@@ -205,7 +205,7 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-01-25
-**Stopped at:** Completed 10-06-PLAN.md (Periodization Management Components)
+**Stopped at:** Completed 10-08-PLAN.md (Compliance Dashboard Components)
 **Resume file:** None — continuing Phase 10
 
 ## Known Limitations
@@ -223,7 +223,9 @@ Continue Phase 10 (Training Plans & NCAA Compliance) - execute remaining plans.
 - ✓ Plan 04: Workout Form Components (WorkoutForm, ExerciseFieldArray with dynamic lists)
 - ✓ Plan 05: Drag-Drop Calendar Rescheduling (withDragAndDrop HOC, optimistic updates)
 - ✓ Plan 06: Periodization Management Components (PeriodizationTimeline, BlockForm, TemplateApplicator)
-- Next: Plan 07 (Workout creation modal with recurring patterns)
+- ✓ Plan 07: Assignment Management Components (AssignmentManager, AthleteWorkoutView)
+- ✓ Plan 08: Compliance Dashboard Components (ComplianceDashboard, WeeklyHoursTable, TrainingLoadChart, AttendanceTrainingLinkPanel)
+- Next: Plan 09 (Workout creation modal with recurring patterns)
 
 **Phase 10 Remaining Scope:**
 - TanStack Query hooks for training data
@@ -251,3 +253,13 @@ Continue Phase 10 (Training Plans & NCAA Compliance) - execute remaining plans.
 | 10-07 | Week navigation with offset state | Week navigation uses offset (0 = current week) for simple state management and easy reset |
 | 10-07 | Workout status in useMemo | Calculate isPastDue, isCompleted, isUpcoming in useMemo to prevent expensive date recalculations on every render |
 | 10-07 | Default compliance score 1.0 | Mark complete defaults to 100% compliance for athlete self-reporting, coaches can adjust later |
+| 10-08 | Chart data transformation in component | API returns weekStart/weekEnd/totalMinutes/totalTSS, chart needs week/tss/volume - transform in component keeps API stable |
+| 10-08 | DailyHours array to map conversion | WeeklyHoursTable renders 7 days × N athletes, array.find() would be O(n) per cell, map is O(1) |
+| 10-08 | Sort WeeklyHoursTable by hours descending | Coaches want to see compliance concerns first, highest hours = highest risk |
+| 10-08 | Tabbed dashboard layout (Hours/Load/Attendance) | Reduces vertical scroll, focuses coach attention on one view at a time, matches Linear/GitHub patterns |
+| 10-08 | Week navigation at dashboard level | All views (hours, load, attendance) sync to same week, single control prevents confusion |
+| 10-08 | Summary stats calculated from entries in useMemo | Backend doesn't provide summary counts, client calculation prevents extra API call |
+| 10-08 | Conditional NCAA alert banner | Show red alert banner only when athletesOver > 0, reduces noise when no violations |
+
+---
+*Last updated: 2026-01-25 — Phase 10 Plan 08 Complete*
