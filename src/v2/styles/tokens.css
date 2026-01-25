@@ -11,6 +11,15 @@
 
 :root {
   /* ========================================
+     FONT TOKENS
+     CSS custom properties for typography system
+     ======================================== */
+
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
+
+  /* ========================================
      LEVEL 1: BASE PALETTE
      Raw color values - never use directly
      ======================================== */
