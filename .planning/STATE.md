@@ -4,8 +4,8 @@
 
 **Milestone:** v2.0 — Core Migration
 **Phase:** 12 (Settings & Polish) — In Progress
-**Status:** Plans 01-07, 08-12 complete
-**Last activity:** 2026-01-25 — Completed 12-12-PLAN.md (Theme Polish and Accessibility)
+**Status:** Plans 01-07, 08-15 complete
+**Last activity:** 2026-01-25 — Completed 12-15-PLAN.md (WCAG 2.1 AA Accessibility Audit)
 
 ## Project Reference
 
@@ -38,7 +38,7 @@ v1.0 Progress: 100% Complete
 | 9 | Seat Racing | Complete | 9/9 |
 | 10 | Training Plans & NCAA | Complete | 11/11 |
 | 11 | Racing & Regattas | Complete | 10/10 |
-| 12 | Settings & Polish | In Progress | 11/16 |
+| 12 | Settings & Polish | In Progress | 12/16 |
 | 13 | Cross-Feature Integrations | Pending | —/— |
 | 14 | Advanced Seat Racing Analytics | Pending | —/— |
 
@@ -209,10 +209,15 @@ Key architectural decisions carrying forward:
 | 10-09 | Report uses off-screen render ref for printing | Maintains separation between screen UI and print layout, full control over print formatting |
 | 10-09 | Activity type labels via Record<ActivityType, string> | Type-safe mapping ensures all activity types covered, prevents runtime errors from missing cases |
 
+| 12-15 | txt-tertiary instead of txt-muted for better contrast | txt-muted (#525252) only achieves 2.6:1 contrast failing WCAG AA, txt-tertiary (#737373) achieves 4.6:1 |
+| 12-15 | Tailwind 700-level colors for periodization phases | Original 500-level colors fail 4.5:1 contrast with white text, 700-level meet WCAG AA (blue-700 6.3:1, amber-700 4.8:1, red-700 5.6:1, green-700 4.6:1) |
+| 12-15 | CSS overrides for react-big-calendar accessibility | Forking library not needed, scoped .v2 CSS overrides apply design tokens while maintaining library updates |
+| 12-15 | Document but don't fix V1 login accessibility in tests | V1 is legacy, V2 components meet WCAG AA, test auth setup is separate concern |
+
 ## Session Continuity
 
 **Last session:** 2026-01-25
-**Stopped at:** Completed 12-12-PLAN.md (Theme Polish and Accessibility)
+**Stopped at:** Completed 12-15-PLAN.md (WCAG 2.1 AA Accessibility Audit)
 **Resume file:** None
 
 ## Known Limitations
@@ -223,7 +228,7 @@ None - all v2.0 foundation issues resolved.
 
 Phase 12 in progress. Continue with remaining plans.
 
-**Phase 12 Progress (11/16 plans):**
+**Phase 12 Progress (12/16 plans):**
 - ✓ Plan 01: Common UI Foundation (deps, animations, loading/empty/error/toast)
 - ✓ Plan 02: Settings Types and Hooks
 - ✓ Plan 05: Team & Billing Sections (visibility toggles, Stripe portal)
@@ -233,6 +238,7 @@ Phase 12 in progress. Continue with remaining plans.
 - ✓ Plan 10: Skeleton Loading States (23 skeletons across 6 features)
 - ✓ Plan 11: Empty States (5 feature empty states)
 - ✓ Plan 12: Theme Polish and Accessibility (focus rings, reduced motion)
+- ✓ Plan 13: Responsive Audit (useBreakpoint, MobileNav, responsive utilities)
 
 **Remaining Phase 12 Plans:**
 - Plan 03: Settings Page Shell
@@ -333,6 +339,12 @@ Phase 12 in progress. Continue with remaining plans.
 | 12-12 | Field theme 3px focus rings | Outdoor visibility requires thicker focus indicators than standard 2px |
 | 12-12 | Animation duration 0.01ms for reduced motion | Using 0.01ms instead of 0 ensures browser compatibility |
 | 12-12 | Forced-colors media query support | High contrast mode support in focus-rings.css for Windows users |
+| 12-13 | 768px tablet, 1024px desktop breakpoints | Matches Tailwind md: and lg: breakpoints, standard for tablet/desktop detection |
+| 12-13 | 44px minimum tap targets per WCAG 2.1 | AAA requirement for touch accessibility |
+| 12-13 | Context-aware MobileNav | Uses contextStore to show relevant nav items for Me/Coach/Admin contexts |
+| 12-13 | Bottom tabs show first 4 items + More | Balances quick access with screen real estate |
+| 12-13 | Safe area insets via env() | Required for notched phones (iPhone X+) |
+| 12-13 | .v2 prefix on all CSS utilities | Scopes responsive utilities to V2 layout, prevents conflicts with legacy V1 |
 
 ---
-*Last updated: 2026-01-25 — Phase 12 Plan 12 Complete*
+*Last updated: 2026-01-25 — Phase 12 Plan 13 Complete*
