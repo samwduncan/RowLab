@@ -32,15 +32,15 @@ v1.0 Progress: 100% Complete
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
-| 6 | Athletes & Roster | Complete | 6/6 |
+| 6 | Athletes & Roster | Complete | 8/8 |
 | 7 | Erg Data & Performance | Complete | 6/6 |
-| 8 | Lineup Builder | Complete | 10/10 |
-| 9 | Seat Racing | Pending | —/— |
-| 10 | Training Plans & NCAA | In Progress | 6/11 |
+| 8 | Lineup Builder | In Progress | 9/10 |
+| 9 | Seat Racing | In Progress | 8/9 |
+| 10 | Training Plans & NCAA | In Progress | 7/11 |
 | 11 | Racing & Regattas | Pending | —/— |
 | 12 | Settings & Polish | Pending | —/— |
 
-v2.0 Progress: ████░░░░░░░░ 43%
+v2.0 Progress: ██████████░░ 86% (38/44)
 
 ## Quick Context
 
@@ -196,11 +196,16 @@ Key architectural decisions carrying forward:
 | 10-05 | Extract planId from event.resource.planId | rescheduleWorkout API requires planId, event.resource already carries workout metadata for drag operations |
 | 10-05 | Prevent dragging recurring event instances | Dragging instance creates ambiguity (edit series vs. create exception), require editing parent workout for MVP |
 | 10-05 | Optimistic updates via useRescheduleWorkout hook | Hook implements optimistic update pattern with automatic rollback on error, DragDropCalendar just triggers mutation |
+| 10-06 | Visual radio button grid for phase selection | Color-coded phase selection (blue base, amber build, red peak, green taper) provides immediate visual feedback matching timeline colors |
+| 10-06 | Duration guidelines as warnings, not blockers | Coaches may have valid reasons for non-standard block durations, yellow warning informs without preventing creation |
+| 10-06 | Conflict detection shows first 5 workouts with expand/collapse | Large date ranges could have dozens of conflicts, preview prevents UI clutter while showing enough info for decision |
+| 10-06 | Replace existing as opt-in checkbox | Default behavior preserves existing workouts (safer), coach explicitly chooses to replace when needed |
+| 10-06 | Focus areas as multi-select toggle buttons | More engaging than checkboxes, shows selected state clearly, easier to tap on mobile than small checkboxes |
 
 ## Session Continuity
 
 **Last session:** 2026-01-25
-**Stopped at:** Completed 10-05-PLAN.md (Drag-Drop Calendar Rescheduling)
+**Stopped at:** Completed 10-06-PLAN.md (Periodization Management Components)
 **Resume file:** None — continuing Phase 10
 
 ## Known Limitations
@@ -217,7 +222,8 @@ Continue Phase 10 (Training Plans & NCAA Compliance) - execute remaining plans.
 - ✓ Plan 03: Training Calendar UI (month/week views, custom toolbar, event rendering)
 - ✓ Plan 04: Workout Form Components (WorkoutForm, ExerciseFieldArray with dynamic lists)
 - ✓ Plan 05: Drag-Drop Calendar Rescheduling (withDragAndDrop HOC, optimistic updates)
-- Next: Plan 06 (Workout creation modal with recurring patterns)
+- ✓ Plan 06: Periodization Management Components (PeriodizationTimeline, BlockForm, TemplateApplicator)
+- Next: Plan 07 (Workout creation modal with recurring patterns)
 
 **Phase 10 Remaining Scope:**
 - TanStack Query hooks for training data
