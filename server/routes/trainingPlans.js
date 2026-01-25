@@ -19,6 +19,12 @@ import {
   getTemplates,
   createFromTemplate,
 } from '../services/trainingPlanService.js';
+import {
+  getWeeklyCompliance,
+  getComplianceReport,
+  getTrainingLoad as getNCAATrainingLoad,
+  linkAttendanceToTraining,
+} from '../services/ncaaComplianceService.js';
 import { authenticateToken, requireRole, teamIsolation } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -239,6 +245,140 @@ router.get(
       res.status(500).json({
         success: false,
         error: { code: 'SERVER_ERROR', message: 'Failed to get training load' },
+      });
+    }
+  }
+);
+
+// ============================================
+// NCAA COMPLIANCE ENDPOINTS
+// ============================================
+
+/**
+ * GET /api/v1/training-plans/compliance/weekly
+ * Get weekly NCAA compliance data
+ */
+router.get(
+  '/compliance/weekly',
+  authenticateToken,
+  teamIsolation,
+  [
+    query('weekStart').isISO8601(),
+    query('athleteId').optional().isUUID(),
+  ],
+  validateRequest,
+  async (req, res) => {
+    try {
+      const entries = await getWeeklyCompliance(
+        req.user.activeTeamId,
+        req.query.weekStart,
+        req.query.athleteId
+      );
+      res.json({
+        success: true,
+        data: { entries },
+      });
+    } catch (error) {
+      logger.error('Get weekly compliance error', { error: error.message });
+      res.status(500).json({
+        success: false,
+        error: { code: 'SERVER_ERROR', message: 'Failed to get weekly compliance' },
+      });
+    }
+  }
+);
+
+/**
+ * GET /api/v1/training-plans/compliance/report
+ * Get compliance audit report for a week
+ */
+router.get(
+  '/compliance/report',
+  authenticateToken,
+  teamIsolation,
+  [query('weekStart').isISO8601()],
+  validateRequest,
+  async (req, res) => {
+    try {
+      const report = await getComplianceReport(
+        req.user.activeTeamId,
+        req.query.weekStart
+      );
+      res.json({
+        success: true,
+        data: { report },
+      });
+    } catch (error) {
+      logger.error('Get compliance report error', { error: error.message });
+      res.status(500).json({
+        success: false,
+        error: { code: 'SERVER_ERROR', message: 'Failed to get compliance report' },
+      });
+    }
+  }
+);
+
+/**
+ * GET /api/v1/training-plans/load
+ * Get training load (TSS/volume) over date range for team or athlete
+ */
+router.get(
+  '/load',
+  authenticateToken,
+  teamIsolation,
+  [
+    query('startDate').isISO8601(),
+    query('endDate').isISO8601(),
+    query('athleteId').optional().isUUID(),
+  ],
+  validateRequest,
+  async (req, res) => {
+    try {
+      const weeks = await getNCAATrainingLoad(
+        req.user.activeTeamId,
+        req.query.startDate,
+        req.query.endDate,
+        req.query.athleteId
+      );
+      res.json({
+        success: true,
+        data: { weeks },
+      });
+    } catch (error) {
+      logger.error('Get NCAA training load error', { error: error.message });
+      res.status(500).json({
+        success: false,
+        error: { code: 'SERVER_ERROR', message: 'Failed to get training load' },
+      });
+    }
+  }
+);
+
+/**
+ * GET /api/v1/training-plans/attendance-link
+ * Link attendance records to training sessions for a date
+ */
+router.get(
+  '/attendance-link',
+  authenticateToken,
+  teamIsolation,
+  [query('date').isISO8601()],
+  validateRequest,
+  async (req, res) => {
+    try {
+      const linkedData = await linkAttendanceToTraining(
+        req.user.activeTeamId,
+        req.query.date
+      );
+      res.json({
+        success: true,
+        data: linkedData,
+      });
+    } catch (error) {
+      logger.error('Link attendance to training error', { error: error.message });
+      res.status(500).json({
+        success: false,
+        error: { code: 'SERVER_ERROR', message: 'Failed to link attendance to training' },
       });
     }
   }
