@@ -4,8 +4,8 @@
 
 **Milestone:** v2.0 — Core Migration
 **Phase:** 12 (Settings & Polish) — In Progress
-**Status:** Plan 02 complete
-**Last activity:** 2026-01-25 — Completed 12-02-PLAN.md (settings types and hooks)
+**Status:** Plans 01-02 complete
+**Last activity:** 2026-01-25 — Completed 12-01-PLAN.md (common UI foundation) and 12-02-PLAN.md (settings types and hooks)
 
 ## Project Reference
 
@@ -38,7 +38,7 @@ v1.0 Progress: 100% Complete
 | 9 | Seat Racing | Complete | 9/9 |
 | 10 | Training Plans & NCAA | Complete | 11/11 |
 | 11 | Racing & Regattas | Complete | 10/10 |
-| 12 | Settings & Polish | In Progress | 1/16 |
+| 12 | Settings & Polish | In Progress | 2/16 |
 | 13 | Cross-Feature Integrations | Pending | —/— |
 | 14 | Advanced Seat Racing Analytics | Pending | —/— |
 
@@ -212,7 +212,7 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-01-25
-**Stopped at:** Completed 12-02-PLAN.md (settings types and hooks)
+**Stopped at:** Completed 12-01-PLAN.md (common UI foundation) and 12-02-PLAN.md
 **Resume file:** None
 
 ## Known Limitations
@@ -223,7 +223,8 @@ None - all v2.0 foundation issues resolved.
 
 Phase 12 in progress. Continue with Plan 03 (Settings Page Shell).
 
-**Phase 12 Progress (1/16 plans):**
+**Phase 12 Progress (2/16 plans):**
+- ✓ Plan 01: Common UI Foundation (deps, animations, loading/empty/error/toast)
 - ✓ Plan 02: Settings Types and Hooks
 
 **Remaining Phase 12 Plans:**
@@ -259,9 +260,13 @@ Phase 12 in progress. Continue with Plan 03 (Settings Page Shell).
 | 10-08 | Week navigation at dashboard level | All views (hours, load, attendance) sync to same week, single control prevents confusion |
 | 10-08 | Summary stats calculated from entries in useMemo | Backend doesn't provide summary counts, client calculation prevents extra API call |
 | 10-08 | Conditional NCAA alert banner | Show red alert banner only when athletesOver > 0, reduces noise when no violations |
+| 12-01 | SPRING_CONFIG with stiffness 300, damping 28 centralized | Matches 08-03 decision, ensures consistent animation feel across all V2 components |
+| 12-01 | react-loading-skeleton for skeleton loaders | Auto-sizing, built-in shimmer, theme support - avoids reinventing wheel |
+| 12-01 | Toast context with useToast hook pattern | Global notification system accessible from any component without prop drilling |
+| 12-01 | usePrefersReducedMotion hook for WCAG | POLISH-11 requires reduced motion support for users with vestibular disorders |
 | 12-02 | Hooks in src/v2/hooks/ not feature dir | Follow existing codebase pattern where all V2 hooks are in shared hooks directory |
 | 12-02 | 5-minute staleTime for settings queries | Consistent with Phase 7 C2 status pattern |
 | 12-02 | useAuthStore instead of accessToken param | Existing hooks use store directly which is cleaner than passing token |
 
 ---
-*Last updated: 2026-01-25 — Phase 12 Plan 02 Complete*
+*Last updated: 2026-01-25 — Phase 12 Plans 01-02 Complete*
