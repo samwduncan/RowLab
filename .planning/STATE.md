@@ -4,8 +4,8 @@
 
 **Milestone:** v2.0 — Core Migration
 **Phase:** 10 (Training Plans & NCAA Compliance) — In Progress
-**Status:** Completed 10-04-PLAN.md (Workout Form Components)
-**Last activity:** 2026-01-25 — Completed 10-04-PLAN.md
+**Status:** Completed 10-06-PLAN.md (Periodization Management Components)
+**Last activity:** 2026-01-25 — Completed 10-06-PLAN.md
 
 ## Project Reference
 
@@ -36,7 +36,7 @@ v1.0 Progress: 100% Complete
 | 7 | Erg Data & Performance | Complete | 6/6 |
 | 8 | Lineup Builder | Complete | 10/10 |
 | 9 | Seat Racing | Pending | —/— |
-| 10 | Training Plans & NCAA | In Progress | 4/11 |
+| 10 | Training Plans & NCAA | In Progress | 6/11 |
 | 11 | Racing & Regattas | Pending | —/— |
 | 12 | Settings & Polish | Pending | —/— |
 
@@ -192,11 +192,15 @@ Key architectural decisions carrying forward:
 | 10-04 | Duration conversion in form layer | Coaches think in minutes, API expects seconds - form handles conversion keeping UX friendly |
 | 10-04 | TSS auto-calculation with useEffect | Reduces coach effort - TSS updates immediately when duration/intensity change using estimateTSSFromPlan |
 | 10-04 | Exercise intensity as optional string | Exercises need flexibility for targets like "70% FTP" or "Rate 22", not just easy/moderate/hard/max enum |
+| 10-05 | withDragAndDrop HOC for calendar rescheduling | react-big-calendar provides official drag-drop addon, eliminates need for custom drag implementation |
+| 10-05 | Extract planId from event.resource.planId | rescheduleWorkout API requires planId, event.resource already carries workout metadata for drag operations |
+| 10-05 | Prevent dragging recurring event instances | Dragging instance creates ambiguity (edit series vs. create exception), require editing parent workout for MVP |
+| 10-05 | Optimistic updates via useRescheduleWorkout hook | Hook implements optimistic update pattern with automatic rollback on error, DragDropCalendar just triggers mutation |
 
 ## Session Continuity
 
 **Last session:** 2026-01-25
-**Stopped at:** Completed 10-04-PLAN.md (Workout Form Components)
+**Stopped at:** Completed 10-05-PLAN.md (Drag-Drop Calendar Rescheduling)
 **Resume file:** None — continuing Phase 10
 
 ## Known Limitations
@@ -212,7 +216,8 @@ Continue Phase 10 (Training Plans & NCAA Compliance) - execute remaining plans.
 - ✓ Plan 02: TanStack Query hooks for training data
 - ✓ Plan 03: Training Calendar UI (month/week views, custom toolbar, event rendering)
 - ✓ Plan 04: Workout Form Components (WorkoutForm, ExerciseFieldArray with dynamic lists)
-- Next: Plan 05 (Workout creation modal with recurring patterns)
+- ✓ Plan 05: Drag-Drop Calendar Rescheduling (withDragAndDrop HOC, optimistic updates)
+- Next: Plan 06 (Workout creation modal with recurring patterns)
 
 **Phase 10 Remaining Scope:**
 - TanStack Query hooks for training data
