@@ -51,9 +51,11 @@ import recruitVisitsRoutes from './routes/recruitVisits.js';
 import uploadRoutes from './routes/uploads.js';
 import personalRecordsRoutes from './routes/personalRecords.js';
 import challengeRoutes from './routes/challenges.js';
+import achievementRoutes from './routes/achievements.js';
 import { getStorageInfo } from './utils/storageMonitor.js';
 import { startBackgroundSync } from './services/backgroundSyncService.js';
 import { verifyToken, authenticateToken } from './middleware/auth.js';
+import { seedDefaultAchievements } from './services/achievementService.js';
 
 // Security & Logging
 import {
@@ -139,6 +141,7 @@ app.use('/api/v1/recruit-visits', apiLimiter, recruitVisitsRoutes);
 app.use('/api/v1/uploads', apiLimiter, uploadRoutes);
 app.use('/api/v1/personal-records', apiLimiter, personalRecordsRoutes);
 app.use('/api/v1/challenges', apiLimiter, challengeRoutes);
+app.use('/api/v1/achievements', apiLimiter, achievementRoutes);
 
 // Legacy API Routes (will be migrated to v1)
 app.use('/api/auth', authLimiter, authRoutes); // Keep for backward compatibility
@@ -327,6 +330,15 @@ app.listen(PORT, async () => {
 
   // Check database health on startup
   const dbHealth = await checkDatabaseHealth();
+
+  // Seed default achievements if needed
+  if (dbHealth.healthy) {
+    try {
+      await seedDefaultAchievements();
+    } catch (err) {
+      logger.error('Failed to seed achievements', { error: err.message });
+    }
+  }
 
   // Start background sync jobs in production
   let syncStatus = 'Disabled';
