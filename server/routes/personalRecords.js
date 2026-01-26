@@ -4,7 +4,7 @@ import { authenticateToken, teamIsolation } from '../middleware/auth.js';
 import { validateRequest } from '../middleware/validation.js';
 import * as prService from '../services/prDetectionService.js';
 import { prisma } from '../db/connection.js';
-import { logger } from '../utils/logger.js';
+import logger from '../utils/logger.js';
 
 const router = Router();
 
