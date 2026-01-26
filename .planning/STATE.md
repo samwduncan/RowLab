@@ -441,6 +441,9 @@ Phase 13 delivered the cross-feature integration layer:
 | 14-13 | Minimum split threshold 0.5 seconds | Sub-second differences likely measurement noise or conditions, ignoring improves signal-to-noise ratio |
 | 14-13 | Clean 1:1 swaps only for observations | Multiple simultaneous swaps create ambiguous attribution - can't determine individual athlete impact |
 | 14-13 | Deferred ELO application pattern | Separating observation recording from rating updates enables batch processing, dry-run testing, and audit trail |
+| 14-09 | Proportional weight redistribution | When adjusting one slider, remaining weight distributed proportionally to other factors maintaining intuitive behavior |
+| 14-09 | Two-tier breakdown visualization | Compact stacked bar for scanning, expanded view with progress bars for deep inspection |
+| 14-09 | Abbreviated confidence indicators | Single letter (H/M/L) in table for space efficiency, full labels in expanded view for clarity |
 
 ---
-*Last updated: 2026-01-26 — Phase 14 Plan 13 Complete*
+*Last updated: 2026-01-26 — Phase 14 Plan 09 Complete*
