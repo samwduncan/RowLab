@@ -3,9 +3,9 @@
 ## Current Status
 
 **Milestone:** v2.0 — Core Migration
-**Phase:** 12 (Settings & Polish) — COMPLETE
-**Status:** All Phase 12 requirements satisfied (17 plans executed)
-**Last activity:** 2026-01-25 — Phase 12 complete with all 19 requirements verified
+**Phase:** 13 (Cross-Feature Integrations) — In Progress
+**Status:** Executing Phase 13 plans
+**Last activity:** 2026-01-26 — Completed 13-01-PLAN.md (Foundation Setup)
 
 ## Project Reference
 
@@ -39,10 +39,10 @@ v1.0 Progress: 100% Complete
 | 10 | Training Plans & NCAA | Complete | 11/11 |
 | 11 | Racing & Regattas | Complete | 10/10 |
 | 12 | Settings & Polish | Complete | 17/17 |
-| 13 | Cross-Feature Integrations | Pending | —/— |
+| 13 | Cross-Feature Integrations | In Progress | 1/— |
 | 14 | Advanced Seat Racing Analytics | Pending | —/— |
 
-v2.0 Progress: ████████████ 100% (71/71 planned phases 6-12)
+v2.0 Progress: ████████████░ (71 phases 6-12 complete, Phase 13 in progress)
 
 ## Quick Context
 
@@ -216,9 +216,9 @@ Key architectural decisions carrying forward:
 
 ## Session Continuity
 
-**Last session:** 2026-01-25
-**Stopped at:** Phase 12 complete - all 17 plans executed, 19 requirements verified
-**Resume file:** None
+**Last session:** 2026-01-26
+**Stopped at:** Completed 13-01-PLAN.md (Foundation Setup)
+**Resume file:** .planning/phases/13-cross-feature-integrations/13-02-PLAN.md
 
 ## Known Limitations
 
@@ -226,25 +226,16 @@ None - all v2.0 foundation issues resolved.
 
 ## Next Action
 
-**Phase 12: COMPLETE** ✅
+**Phase 13: IN PROGRESS**
 
-All 19 requirements satisfied (SET-01-04, PHOTO-01-03, POLISH-01-12).
+Plan 13-01 complete. Foundation dependencies and Session/Piece models established.
 
-**Key Deliverables:**
-- Settings page migrated to V2 at /app/settings
-- Photo upload with AI face detection (face-api.js)
-- Design system audit and documentation
-- Skeleton loaders and empty states for all features
-- WCAG 2.1 AA accessibility compliance
-- Responsive design (375px, 768px, 1024px)
-- Three themes verified (dark, light, field)
+**Completed in 13-01:**
+- Installed cmdk, rrule, react-intersection-observer, react-grid-layout, @radix-ui/react-hover-card, fuse.js
+- Created Session and Piece Prisma models with enums
+- Applied database migration via db push
 
-**Phase 13 Planning:**
-Phase 13 (Cross-Feature Integrations) will focus on:
-- Dashboard widgets pulling from all features
-- Global search across athletes, erg tests, lineups
-- Notifications system
-- Cross-feature navigation and linking
+**Next:** 13-02-PLAN.md (TypeScript types and Sessions API)
 
 | 10-02 | Inline types in hooks instead of shared training.ts | training.ts wasn't created yet, inline types make hooks self-contained and executable now |
 | 10-02 | 5-minute staleTime for training queries | Follows useSeatRaceSessions pattern, balances data freshness with API efficiency |
@@ -341,5 +332,14 @@ Phase 13 (Cross-Feature Integrations) will focus on:
 | 12-13 | Safe area insets via env() | Required for notched phones (iPhone X+) |
 | 12-13 | .v2 prefix on all CSS utilities | Scopes responsive utilities to V2 layout, prevents conflicts with legacy V1 |
 
+### v2.0 Decisions (Phase 13)
+
+| Plan | Decision | Rationale |
+|------|----------|-----------|
+| 13-01 | Session model uses cuid() for IDs | Consistent with newer patterns, cleaner than uuid |
+| 13-01 | Session replaces Practice/Workout concept | Cleaner Session → Pieces hierarchy for training data |
+| 13-01 | Piece segments: WARMUP, MAIN, COOLDOWN | Structured workout classification for UI organization |
+| 13-01 | db push instead of migrate | Phase 6 decision - database drift from migration history |
+
 ---
-*Last updated: 2026-01-25 — Phase 12 Plan 13 Complete*
+*Last updated: 2026-01-26 — Phase 13 Plan 01 Complete*
