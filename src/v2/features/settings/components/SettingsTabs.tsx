@@ -7,6 +7,7 @@ import {
   Bell,
   Users,
   CreditCard,
+  ToggleLeft,
 } from 'lucide-react';
 import type { SettingsTab } from '../../../types/settings';
 
@@ -23,6 +24,7 @@ const TABS: TabConfig[] = [
   { id: 'security', label: 'Security', icon: Shield },
   { id: 'integrations', label: 'Integrations', icon: Plug },
   { id: 'notifications', label: 'Notifications', icon: Bell },
+  { id: 'features', label: 'Features', icon: ToggleLeft },
   { id: 'team', label: 'Team', icon: Users, ownerOnly: true },
   { id: 'billing', label: 'Billing', icon: CreditCard, ownerOnly: true },
 ];
