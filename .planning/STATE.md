@@ -4,8 +4,8 @@
 
 **Milestone:** v2.0 — Core Migration
 **Phase:** 14 (Advanced Seat Racing Analytics) — In Progress
-**Status:** Plan 14-03 complete (5 of 14 plans)
-**Last activity:** 2026-01-26 — Completed 14-03-PLAN.md (Matrix Session Planner)
+**Status:** Plan 14-02 complete (2 of 14 plans)
+**Last activity:** 2026-01-26 — Completed 14-02-PLAN.md (Bradley-Terry Model)
 
 ## Project Reference
 
@@ -40,9 +40,9 @@ v1.0 Progress: 100% Complete
 | 11 | Racing & Regattas | Complete | 10/10 |
 | 12 | Settings & Polish | Complete | 17/17 |
 | 13 | Cross-Feature Integrations | Complete | 12/12 |
-| 14 | Advanced Seat Racing Analytics | In Progress | 5/14 |
+| 14 | Advanced Seat Racing Analytics | In Progress | 2/14 |
 
-v2.0 Progress: █████████████░ (8 phases complete, Phase 14 in progress: 5/14 plans)
+v2.0 Progress: █████████████░ (8 phases complete, Phase 14 in progress: 2/14 plans)
 
 ## Quick Context
 
@@ -251,7 +251,7 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-01-26
-**Stopped at:** Completed 14-04-PLAN.md (Composite Ranking & Side-Specific ELO)
+**Stopped at:** Completed 14-02-PLAN.md (Bradley-Terry Model)
 **Resume file:** None
 
 ## Known Limitations
@@ -411,10 +411,21 @@ Phase 13 delivered the cross-feature integration layer:
 
 | Plan | Decision | Rationale |
 |------|----------|-----------|
+| 14-01 | simple-statistics for statistical functions | Pure JavaScript with no native dependencies, provides descriptive statistics for Bradley-Terry analysis |
+| 14-01 | jstat for probability distributions | Required for confidence interval calculations and statistical significance testing |
+| 14-02 | Custom Nelder-Mead implementation | fmin library had broken ES module exports, custom implementation provides full control with zero dependencies |
+| 14-02 | Log-scale parameter optimization | Ensures positivity constraints (strengths > 0) naturally without bounds, improves numerical stability |
+| 14-02 | Identifiability via normalization | Sum of log-strengths = 0 for athletes, product of gammas = 1 for shells prevents parameter redundancy |
+| 14-02 | Numerical Hessian via finite differences | Provides standard errors from Fisher information without analytical derivatives, simpler for model extensions |
+| 14-01 | fmin for Nelder-Mead optimization | Maximum likelihood estimation for Bradley-Terry model parameter fitting |
+| 14-01 | Composite ranking weights sum to 1.0 | Zod schema enforces weight constraint (onWater + erg + attendance = 1.0) for proper normalization |
+| 14-01 | Default weight profiles (85/10/5, 75/15/10, 65/15/20) | Performance-First, Balanced, Reliability profiles cover common coaching priorities |
+| 14-01 | Side-specific ratings in separate Port/Starboard/Cox fields | Enables dual-side athlete tracking without conflating different side performances |
+| 14-01 | Practice observation weight 0.5 vs 1.0 formal | Reduces noise from informal practice while still incorporating passive data into ratings |
 | 14-03 | Latin Square rotation for assignment pattern | Formula `(boatIdx * boatSize + seatIdx + pieceNum) % n` ensures systematic rotation through athlete pool for even distribution |
 | 14-03 | Comparison tracking via sorted athlete ID pairs | Key format "a-b" enables efficient duplicate detection and count tracking for variance calculation |
 | 14-03 | Balance score formula: 1 / (1 + variance) | Normalizes variance to 0-1 range for consistent scoring, lower variance = higher balance |
 | 14-03 | Named export for BOAT_SIZES constant | Enables direct import in test files while maintaining backward compatibility with default export |
 
 ---
-*Last updated: 2026-01-26 — Phase 14 Plan 03 Complete*
+*Last updated: 2026-01-26 — Phase 14 Plan 01 Complete*
