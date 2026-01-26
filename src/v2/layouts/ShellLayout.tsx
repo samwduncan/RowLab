@@ -1,9 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { ContextRail } from '@v2/components/shell/ContextRail';
 import { WorkspaceSidebar } from '@v2/components/shell/WorkspaceSidebar';
 import { SkipLink } from '@v2/components/shell/SkipLink';
+import { Header } from '@v2/components/shell/Header';
+import { CommandPalette } from '@v2/features/search/components/CommandPalette';
 import { useContextStore } from '@v2/stores/contextStore';
 
 /**
@@ -105,6 +107,9 @@ export function ShellLayout() {
   if (isMobile) {
     return (
       <div className="v2 h-screen flex flex-col">
+        {/* Global command palette (keyboard shortcut: Cmd/Ctrl+K) */}
+        <CommandPalette />
+
         {/* Skip link for keyboard/screen reader users */}
         <SkipLink />
 
@@ -118,19 +123,7 @@ export function ShellLayout() {
         </div>
 
         {/* Mobile header */}
-        <header className="flex-shrink-0 h-14 flex items-center justify-between px-4 bg-bg-surface border-b border-bdr-default">
-          <button
-            onClick={() => setMobileMenuOpen(true)}
-            className="p-2 -ml-2 rounded-lg hover:bg-bg-hover transition-colors"
-            aria-label="Open menu"
-          >
-            <Menu size={24} className="text-txt-primary" />
-          </button>
-          <span className="text-sm font-medium text-txt-secondary capitalize">
-            {activeContext}
-          </span>
-          <div className="w-10" /> {/* Spacer for centering */}
-        </header>
+        <Header onMenuClick={() => setMobileMenuOpen(true)} />
 
         {/* Main content - full width */}
         <main id="main-content" tabIndex={-1} className="flex-1 overflow-y-auto bg-bg-surface outline-none">
@@ -176,6 +169,9 @@ export function ShellLayout() {
   // Desktop layout
   return (
     <div className="v2 h-screen grid grid-cols-[auto_1fr]">
+      {/* Global command palette (keyboard shortcut: Cmd/Ctrl+K) */}
+      <CommandPalette />
+
       {/* Skip link for keyboard/screen reader users */}
       <SkipLink />
 
