@@ -63,8 +63,10 @@ export function useLiveErgPolling({
   sessionId,
   config = {},
 }: UseLiveErgPollingOptions) {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const isInitialized = useAuthStore((state) => state.isInitialized);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isAuthenticated = useAuthStore((state: any) => state.isAuthenticated);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isInitialized = useAuthStore((state: any) => state.isInitialized);
 
   const pollingConfig: PollingConfig = {
     interval: config.interval ?? DEFAULT_POLLING_INTERVAL,
