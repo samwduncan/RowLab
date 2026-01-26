@@ -1,4 +1,5 @@
 import express from 'express';
+import { param, validationResult } from 'express-validator';
 import { authenticateToken, requireTeam, requireRole } from '../middleware/auth.js';
 import { prisma } from '../db/connection.js';
 import logger from '../utils/logger.js';
@@ -600,6 +601,138 @@ router.delete('/pieces/:pieceId', requireRole('OWNER', 'COACH'), async (req, res
       success: false,
       error: { code: 'SERVER_ERROR', message: 'Failed to delete piece' },
     });
+  }
+});
+
+// ============================================
+// Live Session Data
+// ============================================
+
+/**
+ * GET /api/v1/sessions/:id/live-data
+ * Get live erg data for session athletes by fetching from C2 Logbook
+ * Returns aggregated athlete performance data for active sessions
+ */
+router.get('/:id/live-data', param('id').isString(), async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { id } = req.params;
+  const teamId = req.user.activeTeamId;
+
+  try {
+    // Fetch session with pieces
+    const session = await prisma.session.findFirst({
+      where: { id, teamId },
+      include: {
+        pieces: { orderBy: { order: 'asc' } },
+      },
+    });
+
+    if (!session) {
+      return res.status(404).json({ error: 'Session not found' });
+    }
+
+    if (session.status !== 'ACTIVE') {
+      return res.status(400).json({ error: 'Session is not active' });
+    }
+
+    // Fetch all athletes on the team with their C2 connections
+    const athletes = await prisma.athlete.findMany({
+      where: { teamId },
+      include: {
+        c2Connection: true,
+      },
+    });
+
+    // Build athlete data array
+    const athleteData = [];
+
+    for (const athlete of athletes) {
+      const baseData = {
+        athleteId: athlete.id,
+        athleteName: `${athlete.firstName} ${athlete.lastName}`,
+        distance: 0,
+        time: 0,
+        pace: 0,
+        watts: 0,
+        strokeRate: 0,
+        heartRate: null,
+        strokeCount: null,
+        status: 'pending',
+        lastUpdated: new Date().toISOString(),
+      };
+
+      // If athlete has C2 connection, try to fetch their latest data
+      if (athlete.c2Connection?.accessToken) {
+        try {
+          // Fetch latest workout from C2 Logbook
+          const c2Response = await fetch(
+            `https://log.concept2.com/api/users/${athlete.c2Connection.c2UserId}/results?type=rower`,
+            {
+              headers: {
+                Authorization: `Bearer ${athlete.c2Connection.accessToken}`,
+                Accept: 'application/vnd.c2logbook.v1+json',
+              },
+            }
+          );
+
+          if (c2Response.ok) {
+            const c2Data = await c2Response.json();
+
+            // Get most recent workout from today
+            const today = new Date().toISOString().split('T')[0];
+            const todayWorkouts = c2Data.data?.filter((w) =>
+              w.date?.startsWith(today)
+            ) || [];
+
+            if (todayWorkouts.length > 0) {
+              const latest = todayWorkouts[0];
+
+              athleteData.push({
+                ...baseData,
+                distance: latest.distance || 0,
+                time: latest.time || 0,
+                pace: latest.time && latest.distance
+                  ? (latest.time / (latest.distance / 500))
+                  : 0,
+                watts: latest.watts_avg || 0,
+                strokeRate: latest.stroke_rate || 0,
+                heartRate: latest.heart_rate_avg || null,
+                strokeCount: latest.stroke_count || null,
+                status: latest.workout_type === 'JustRow' ? 'active' : 'finished',
+                lastUpdated: latest.date || new Date().toISOString(),
+              });
+              continue;
+            }
+          }
+        } catch (c2Error) {
+          logger.error('C2 fetch error', { athleteId: athlete.id, error: c2Error.message });
+        }
+      }
+
+      // No C2 data available, add as pending
+      athleteData.push(baseData);
+    }
+
+    // Find active piece (first incomplete piece, or first if all complete)
+    const activePiece = session.pieces.find((p) => !p.completedAt) || session.pieces[0];
+
+    // Return structured response
+    res.json({
+      sessionId: session.id,
+      sessionName: session.name,
+      activePieceId: activePiece?.id,
+      activePieceName: activePiece?.name,
+      athletes: athleteData,
+      startedAt: session.updatedAt.toISOString(),
+      sessionCode: session.sessionCode,
+    });
+  } catch (error) {
+    logger.error('Live data fetch error', { error: error.message });
+    res.status(500).json({ error: 'Failed to fetch live erg data' });
   }
 });
 
