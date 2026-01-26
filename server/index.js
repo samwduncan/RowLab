@@ -47,6 +47,7 @@ import whiteboardRoutes from './routes/whiteboards.js';
 import availabilityRoutes from './routes/availability.js';
 import attendanceRoutes from './routes/attendance.js';
 import sessionRoutes from './routes/sessions.js';
+import recruitVisitsRoutes from './routes/recruitVisits.js';
 import { getStorageInfo } from './utils/storageMonitor.js';
 import { startBackgroundSync } from './services/backgroundSyncService.js';
 import { verifyToken, authenticateToken } from './middleware/auth.js';
@@ -131,6 +132,7 @@ app.use('/api/v1/whiteboards', apiLimiter, whiteboardRoutes);
 app.use('/api/v1/availability', apiLimiter, availabilityRoutes);
 app.use('/api/v1/attendance', apiLimiter, attendanceRoutes);
 app.use('/api/v1/sessions', apiLimiter, sessionRoutes);
+app.use('/api/v1/recruit-visits', apiLimiter, recruitVisitsRoutes);
 
 // Legacy API Routes (will be migrated to v1)
 app.use('/api/auth', authLimiter, authRoutes); // Keep for backward compatibility
