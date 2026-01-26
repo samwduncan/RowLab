@@ -4,8 +4,8 @@
 
 **Milestone:** v2.1 — Feature Expansion
 **Phase:** 15 (Feature Toggles & Recruiting) — In Progress
-**Status:** Plan 15-06 complete
-**Last activity:** 2026-01-26 — Completed 15-06-PLAN.md (Rich Text Editor with Lexical)
+**Status:** Plan 15-05 complete
+**Last activity:** 2026-01-26 — Completed 15-05-PLAN.md (TanStack Query Hooks for Recruit Visits)
 
 ## Project Reference
 
@@ -295,11 +295,14 @@ Key architectural decisions carrying forward:
 | 15-09 | localStorage persistence via Zustand | Consistent with feature preference pattern, survives page refresh, syncs across tabs |
 | 15-09 | 8 notification features defined | Recruit visits, seat racing, training plans, erg tests, regattas, sessions, achievements cover major notification needs |
 | 15-09 | ToastProvider at V2Layout root | Single provider for entire V2 app, bottom-right positioning, V2 design tokens |
+| 15-05 | Violet/purple theme for recruiting | bg-violet-500/10 background, border-violet-500 accent distinguishes recruit visits from workouts on calendar |
+| 15-05 | Compact/full display modes for RecruitVisitCard | Compact mode for calendar cells, full mode for expanded view - matches WorkoutEventCard pattern |
+| 15-05 | Query keys factory for recruit visits | Hierarchical query keys (all, lists, list, details, detail, upcoming, byHost) enable efficient cache invalidation |
 
 ## Session Continuity
 
-**Last session:** 2026-01-26T20:19:16Z
-**Stopped at:** Completed 15-06-PLAN.md (Rich Text Editor with Lexical)
+**Last session:** 2026-01-26T20:26:58Z
+**Stopped at:** Completed 15-05-PLAN.md (TanStack Query Hooks for Recruit Visits)
 **Resume file:** None
 
 ## Known Limitations
