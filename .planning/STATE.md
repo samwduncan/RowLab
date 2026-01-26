@@ -5,7 +5,7 @@
 **Milestone:** v2.0 — Core Migration
 **Phase:** 13 (Cross-Feature Integrations) — In Progress
 **Status:** Executing Phase 13 plans
-**Last activity:** 2026-01-26 — Completed 13-11-PLAN.md (Session Pages with Live Erg Launch)
+**Last activity:** 2026-01-26 — Completed 13-12-PLAN.md (Cross-Feature Dashboard Widgets)
 
 ## Project Reference
 
@@ -39,7 +39,7 @@ v1.0 Progress: 100% Complete
 | 10 | Training Plans & NCAA | Complete | 11/11 |
 | 11 | Racing & Regattas | Complete | 10/10 |
 | 12 | Settings & Polish | Complete | 17/17 |
-| 13 | Cross-Feature Integrations | In Progress | 11/— |
+| 13 | Cross-Feature Integrations | In Progress | 12/— |
 | 14 | Advanced Seat Racing Analytics | Pending | —/— |
 
 v2.0 Progress: ████████████░ (71 phases 6-12 complete, Phase 13 in progress)
@@ -232,11 +232,15 @@ Key architectural decisions carrying forward:
 | 13-10 | Collapsible segment sections for piece organization | Sessions with many pieces would create excessive scroll, collapse provides better UX scalability |
 | 13-10 | Type-specific targets shown conditionally | ERG sessions show split/rate/watts, avoids cluttering form with irrelevant fields |
 | 13-10 | RRULE preview uses formatRRule utility | Human-readable schedule confirmation ("Every Mon, Wed, Fri") prevents user confusion |
+| 13-12 | react-grid-layout over dnd-kit for dashboard | More robust grid-based widget system with built-in resize handles vs freeform dnd-kit approach |
+| 13-12 | localStorage for dashboard layout persistence | Retains user widget arrangement preferences between sessions without server state |
+| 13-12 | Cross-feature widgets pull from multiple domains | Dashboard widgets aggregate data from sessions, activity feed, and attendance for unified overview |
+| 13-12 | Edit mode toggle for dashboard customization | Separates view mode from edit mode, prevents accidental widget rearrangement during normal use |
 
 ## Session Continuity
 
 **Last session:** 2026-01-26
-**Stopped at:** Completed 13-10-PLAN.md (Session Creation UI)
+**Stopped at:** Completed 13-12-PLAN.md (Cross-Feature Dashboard Widgets)
 **Resume file:** None - waiting for next plan
 
 ## Known Limitations
