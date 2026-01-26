@@ -4,8 +4,8 @@
 
 **Milestone:** v2.1 — Feature Expansion
 **Phase:** 16 (Gamification & Engagement) — In Progress
-**Status:** 10 of 12 plans complete
-**Last activity:** 2026-01-26 — Completed 16-10-PLAN.md
+**Status:** 11 of 12 plans complete
+**Last activity:** 2026-01-26 — Completed 16-11-PLAN.md
 
 ## Project Reference
 
@@ -49,7 +49,7 @@ v2.0 Progress: ██████████████ (9 phases complete) �
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
 | 15 | Feature Toggles & Recruiting | Complete | 10/10 |
-| 16 | Gamification & Engagement | In Progress | 10/12 |
+| 16 | Gamification & Engagement | In Progress | 11/12 |
 | 17 | Complete Design Overhaul 🎨 | Planned | TBD |
 | 18 | Lineup & Boat Improvements | Planned | TBD |
 
@@ -313,11 +313,14 @@ Key architectural decisions carrying forward:
 | 16-10 | LeaderboardLive 5s polling with staleTime: 0 | Ensures real-time updates during active challenges per RESEARCH.md specifications |
 | 16-10 | Rank change animation for 3 seconds | Provides visual feedback when positions change without cluttering the UI permanently |
 | 16-10 | Template-based challenge creation | Simplifies challenge creation while allowing custom configurations for flexibility |
+| 16-11 | Status-based coloring: active (green), at-risk (amber), broken (gray) for streaks | Clear visual feedback for streak health at a glance |
+| 16-11 | Timeline visualization with staggered animation for season milestones | Familiar chronological pattern with polished appearance |
+| 16-11 | Toggle-based opt-out UI pattern for gamification settings | Modern pattern that's self-explanatory and mobile-friendly |
 
 ## Session Continuity
 
-**Last session:** 2026-01-26T23:01:19Z
-**Stopped at:** Completed 16-10-PLAN.md (Challenge Display & Management)
+**Last session:** 2026-01-26T23:06:45Z
+**Stopped at:** Completed 16-11-PLAN.md (Gamification UI Pages)
 **Resume file:** None
 
 ## Known Limitations
