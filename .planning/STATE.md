@@ -3,9 +3,9 @@
 ## Current Status
 
 **Milestone:** v2.1 — Feature Expansion
-**Phase:** 15 (Feature Toggles & Recruiting) — Complete ✅
-**Status:** All 10 plans complete, human verified
-**Last activity:** 2026-01-26 — Phase 15 complete
+**Phase:** 16 (Gamification & Engagement) — In Progress
+**Status:** 1 of 12 plans complete
+**Last activity:** 2026-01-26 — Completed 16-01-PLAN.md
 
 ## Project Reference
 
@@ -49,11 +49,11 @@ v2.0 Progress: ██████████████ (9 phases complete) �
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
 | 15 | Feature Toggles & Recruiting | Complete | 10/10 |
-| 16 | Gamification & Engagement | Planned | TBD |
+| 16 | Gamification & Engagement | In Progress | 1/12 |
 | 17 | Complete Design Overhaul 🎨 | Planned | TBD |
 | 18 | Lineup & Boat Improvements | Planned | TBD |
 
-v2.1 Progress: ██░░░░░░░░░░░░ (1 phase complete)
+v2.1 Progress: ██░░░░░░░░░░░░ (1 phase complete, 1 in progress)
 
 ### v2.2 Milestone (Planned)
 
@@ -304,8 +304,8 @@ Key architectural decisions carrying forward:
 
 ## Session Continuity
 
-**Last session:** 2026-01-26T20:50:26Z
-**Stopped at:** Completed 15-08-PLAN.md (Host Dashboard & Recruiting Page)
+**Last session:** 2026-01-26T22:32:42Z
+**Stopped at:** Completed 16-01-PLAN.md (Gamification Schema & Dependencies)
 **Resume file:** None
 
 ## Known Limitations
@@ -534,5 +534,15 @@ Phase 13 delivered the cross-feature integration layer:
 | 15-04 | Host athlete SetNull cascade | Preserves recruit visits when host athlete deleted, prevents data loss |
 | 15-04 | Status as string enum (not Prisma enum) | Follows Phase 6 attendance pattern, flexible for future status additions without migration |
 
+### v2.1 Decisions (Phase 16)
+
+| Plan | Decision | Rationale |
+|------|----------|-----------|
+| 16-01 | Explicit AthleteAchievement join table | Required to store progress metadata (progress count, unlockedAt timestamp, isPinned) not possible with implicit m-n |
+| 16-01 | Per-athlete gamificationEnabled field | Athletes can disable gamification individually even if team has it enabled per CONTEXT.md |
+| 16-01 | html-to-image over html2canvas | 3x faster per RESEARCH.md for shareable achievement card generation |
+| 16-01 | Challenge type as string (individual/collective) | Supports both competitive individual leaderboards and collaborative team goals |
+| 16-01 | PersonalRecord scope + scopeContext pattern | Enables all-time, season, training-block PRs with clear context filtering |
+
 ---
-*Last updated: 2026-01-26 — Phase 15 Plan 03 Complete*
+*Last updated: 2026-01-26 — Phase 16 Plan 01 Complete*
