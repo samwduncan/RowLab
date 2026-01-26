@@ -8,7 +8,8 @@ import { AuthStoreContext, SettingsStoreContext } from '@v2/hooks/useSharedStore
 import { ThemeToggle } from '@v2/components/shell/ThemeToggle';
 import { VersionToggle } from '@v2/components/shell/VersionToggle';
 import { VersionRedirectGuard } from '@v2/components/shell/VersionRedirectGuard';
-import { ToastProvider } from '@v2/components/common';
+import { ToastProvider as SonnerToast } from '@v2/components/common';
+import { ToastProvider } from '@v2/contexts/ToastContext';
 import { queryClient } from '../queryClient';
 import useAuthStore from '../../store/authStore';
 import useSettingsStore from '../../store/settingsStore';
@@ -30,32 +31,33 @@ export default function V2Layout() {
     <QueryClientProvider client={queryClient}>
       <AuthStoreContext.Provider value={useAuthStore}>
         <SettingsStoreContext.Provider value={useSettingsStore}>
-          <VersionRedirectGuard>
-            <div
-              className="v2"
-              data-theme={theme}
-            >
-              <div className="min-h-screen bg-bg-surface">
-              <header className="bg-bg-surface-elevated border-b border-bdr-default px-4 py-3">
-                <div className="flex items-center justify-between max-w-7xl mx-auto">
-                  <div className="flex items-center gap-3">
-                    <h1 className="text-xl font-display text-txt-primary">
-                      RowLab
-                    </h1>
+          <ToastProvider>
+            <VersionRedirectGuard>
+              <div
+                className="v2"
+                data-theme={theme}
+              >
+                <div className="min-h-screen bg-bg-surface">
+                <header className="bg-bg-surface-elevated border-b border-bdr-default px-4 py-3">
+                  <div className="flex items-center justify-between max-w-7xl mx-auto">
+                    <div className="flex items-center gap-3">
+                      <h1 className="text-xl font-display text-txt-primary">
+                        RowLab
+                      </h1>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <VersionToggle currentVersion="v2" />
+                      <ThemeToggle />
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <VersionToggle currentVersion="v2" />
-                    <ThemeToggle />
-                  </div>
+                </header>
+                <main className="min-h-[calc(100vh-57px)]">
+                  <Outlet />
+                </main>
                 </div>
-              </header>
-              <main className="min-h-[calc(100vh-57px)]">
-                <Outlet />
-              </main>
               </div>
-            </div>
-          </VersionRedirectGuard>
-          <ToastProvider />
+            </VersionRedirectGuard>
+          </ToastProvider>
           <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
         </SettingsStoreContext.Provider>
       </AuthStoreContext.Provider>
