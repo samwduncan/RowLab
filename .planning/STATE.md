@@ -5,7 +5,7 @@
 **Milestone:** v2.1 — Feature Expansion
 **Phase:** 16 (Gamification & Engagement) — In Progress
 **Status:** 7 of 12 plans complete
-**Last activity:** 2026-01-26 — Completed 16-07-PLAN.md
+**Last activity:** 2026-01-26 — Completed 16-06-PLAN.md
 
 ## Project Reference
 
@@ -550,6 +550,11 @@ Phase 13 delivered the cross-feature integration layer:
 | 16-05 | Multi-metric challenge scoring | Support meters, workouts, attendance, and weighted composite metrics with optional handicapping |
 | 16-05 | Zod validation for challenges | Use Zod schemas instead of express-validator for consistency with project-wide validation patterns |
 | 16-05 | Rank calculation on update | Calculate and store ranks in database during leaderboard updates for fast retrieval |
+| 16-06 | Real-time leaderboard polling with 5s interval | Use refetchInterval: 5000 and staleTime: 0 per RESEARCH.md for real-time updates without WebSocket complexity |
+| 16-06 | Two-level gamification preference check | Hooks check both team-level feature toggle and athlete-level opt-out before enabling queries |
+| 16-06 | Query key factories for structured caching | achievementKeys, prKeys, challengeKeys patterns enable proper cache invalidation and management |
+| 16-06 | Conditional polling based on challenge status | Leaderboard polling stops when challenge inactive to conserve API resources |
+| 16-06 | Variable staleTime per data mutability | Immutable data (PR detection, templates) uses Infinity, real-time (leaderboards) uses 0, dynamic uses 2min |
 
 ---
-*Last updated: 2026-01-26 — Phase 16 Plan 03 Complete*
+*Last updated: 2026-01-26 — Phase 16 Plan 06 Complete*
