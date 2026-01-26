@@ -157,6 +157,7 @@ model Athlete {
   heightCm       Int?
   country        String? // ISO 3166-1 alpha-3 country code (e.g., USA, GBR)
   avatar         String?  @db.Text // Base64 encoded image data URL
+  gamificationEnabled Boolean @default(true) // Per-athlete opt-out
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -175,6 +176,9 @@ model Athlete {
   passiveSwapsAs1     PassiveObservation[] @relation("PassiveSwap1")
   passiveSwapsAs2     PassiveObservation[] @relation("PassiveSwap2")
   recruitVisits       RecruitVisit[]
+  achievements        AthleteAchievement[]
+  challengeParticipations ChallengeParticipant[]
+  personalRecords     PersonalRecord[]
 
   @@unique([teamId, lastName, firstName])
   @@index([teamId])
