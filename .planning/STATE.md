@@ -281,10 +281,22 @@ Key architectural decisions carrying forward:
 | 14-10 | Methodology toggle for Bradley-Terry | Power users want details, beginners don't need complexity upfront - toggle balances both needs |
 | 14-10 | Side filter as button group | Button group faster than dropdown - all options visible simultaneously, clearer current state |
 
+### Phase 15 Decisions
+
+| Plan | Decision | Rationale |
+|------|----------|-----------|
+| 15-09 | Sonner for toast notifications | Battle-tested library with accessibility built-in, rich features (richColors, closeButton), clean API |
+| 15-09 | Three-tier notification control | Channel master switches → feature toggles → quiet hours provides granular control from broad to specific |
+| 15-09 | Quiet hours exclude in-app toasts by default | Email/push suppressed for sleep/focus, but in-app toasts still shown for urgent notifications when actively using app |
+| 15-09 | shouldNotify() as central gating function | Single source of truth for notification permission, checks channel → feature → quiet hours |
+| 15-09 | localStorage persistence via Zustand | Consistent with feature preference pattern, survives page refresh, syncs across tabs |
+| 15-09 | 8 notification features defined | Recruit visits, seat racing, training plans, erg tests, regattas, sessions, achievements cover major notification needs |
+| 15-09 | ToastProvider at V2Layout root | Single provider for entire V2 app, bottom-right positioning, V2 design tokens |
+
 ## Session Continuity
 
-**Last session:** 2026-01-26T20:17:17Z
-**Stopped at:** Completed 15-04-PLAN.md (Recruit Visit Backend)
+**Last session:** 2026-01-26T18:57:32Z
+**Stopped at:** Completed 15-09-PLAN.md (Notification Preferences Foundation)
 **Resume file:** None
 
 ## Known Limitations
