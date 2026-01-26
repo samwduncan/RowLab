@@ -4,8 +4,8 @@
 
 **Milestone:** v2.0 — Core Migration
 **Phase:** 14 (Advanced Seat Racing Analytics) — In Progress
-**Status:** Plan 14-14 complete (6 of 14 plans)
-**Last activity:** 2026-01-26 — Completed 14-14-PLAN.md (Passive ELO Tracking API)
+**Status:** Plan 14-08 complete (6 of 14 plans)
+**Last activity:** 2026-01-26 — Completed 14-08-PLAN.md (Matrix Session Planner UI)
 
 ## Project Reference
 
