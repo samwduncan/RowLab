@@ -4,8 +4,8 @@
 
 **Milestone:** v2.1 — Feature Expansion
 **Phase:** 16 (Gamification & Engagement) — In Progress
-**Status:** 4 of 12 plans complete
-**Last activity:** 2026-01-26 — Completed 16-04-PLAN.md
+**Status:** 5 of 12 plans complete
+**Last activity:** 2026-01-26 — Completed 16-05-PLAN.md
 
 ## Project Reference
 
@@ -49,7 +49,7 @@ v2.0 Progress: ██████████████ (9 phases complete) �
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
 | 15 | Feature Toggles & Recruiting | Complete | 10/10 |
-| 16 | Gamification & Engagement | In Progress | 4/12 |
+| 16 | Gamification & Engagement | In Progress | 5/12 |
 | 17 | Complete Design Overhaul 🎨 | Planned | TBD |
 | 18 | Lineup & Boat Improvements | Planned | TBD |
 
@@ -304,8 +304,8 @@ Key architectural decisions carrying forward:
 
 ## Session Continuity
 
-**Last session:** 2026-01-26T22:40:21Z
-**Stopped at:** Completed 16-04-PLAN.md (PR Detection & Team Records API)
+**Last session:** 2026-01-26T22:42:16Z
+**Stopped at:** Completed 16-05-PLAN.md (Team Challenges Backend API)
 **Resume file:** None
 
 ## Known Limitations
@@ -546,6 +546,10 @@ Phase 13 delivered the cross-feature integration layer:
 | 16-04 | Automatic PR detection on test creation | Integrate processNewErgTest() in ergTestService to detect and record PRs immediately when tests are created |
 | 16-04 | Fall/Spring season boundaries | Use Aug-Dec for Fall, Jan-May for Spring, aligned with NCAA rowing seasons |
 | 16-04 | Team rank via athlete grouping | Use Prisma groupBy with _min aggregation to count athletes with better all-time bests, avoiding N+1 queries |
+| 16-05 | Auto-enroll with gamificationEnabled flag | Only enroll athletes with gamificationEnabled:true for challenges, giving opt-in control |
+| 16-05 | Multi-metric challenge scoring | Support meters, workouts, attendance, and weighted composite metrics with optional handicapping |
+| 16-05 | Zod validation for challenges | Use Zod schemas instead of express-validator for consistency with project-wide validation patterns |
+| 16-05 | Rank calculation on update | Calculate and store ranks in database during leaderboard updates for fast retrieval |
 
 ---
-*Last updated: 2026-01-26 — Phase 16 Plan 04 Complete*
+*Last updated: 2026-01-26 — Phase 16 Plan 05 Complete*
