@@ -4,13 +4,16 @@ export { ProgressBar } from './components/ProgressBar';
 export { AchievementCard } from './components/AchievementCard';
 export { PinnedBadges } from './components/PinnedBadges';
 export { AchievementGrid } from './components/AchievementGrid';
+export { PRCelebration } from './components/PRCelebration';
+export { PRSparkline } from './components/PRSparkline';
+export { ShareableCard } from './components/ShareableCard';
 export { ChallengeCard } from './components/ChallengeCard';
 export { LeaderboardLive } from './components/LeaderboardLive';
 export { CreateChallengeForm } from './components/CreateChallengeForm';
 export { ChallengeList } from './components/ChallengeList';
-export { PRCelebration } from './components/PRCelebration';
-export { PRSparkline } from './components/PRSparkline';
-export { ShareableCard } from './components/ShareableCard';
+export { StreakDisplay, StreakCard } from './components/StreakDisplay';
+export { SeasonJourney } from './components/SeasonJourney';
+export { GamificationSettings } from './components/GamificationSettings';
 
 // Hooks
 export { useShareCard } from './hooks/useShareCard';
