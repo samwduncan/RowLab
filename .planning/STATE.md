@@ -4,8 +4,8 @@
 
 **Milestone:** v2.0 — Core Migration
 **Phase:** 14 (Advanced Seat Racing Analytics) — In Progress
-**Status:** Plan 14-02 complete (2 of 14 plans)
-**Last activity:** 2026-01-26 — Completed 14-02-PLAN.md (Bradley-Terry Model)
+**Status:** Plan 14-06 complete (4 of 14 plans)
+**Last activity:** 2026-01-26 — Completed 14-05-PLAN.md (Advanced Ranking API Endpoints)
 
 ## Project Reference
 
@@ -40,9 +40,9 @@ v1.0 Progress: 100% Complete
 | 11 | Racing & Regattas | Complete | 10/10 |
 | 12 | Settings & Polish | Complete | 17/17 |
 | 13 | Cross-Feature Integrations | Complete | 12/12 |
-| 14 | Advanced Seat Racing Analytics | In Progress | 2/14 |
+| 14 | Advanced Seat Racing Analytics | In Progress | 4/14 |
 
-v2.0 Progress: █████████████░ (8 phases complete, Phase 14 in progress: 2/14 plans)
+v2.0 Progress: █████████████░ (8 phases complete, Phase 14 in progress: 4/14 plans)
 
 ## Quick Context
 
@@ -247,11 +247,15 @@ Key architectural decisions carrying forward:
 | 14-04 | Side-specific rating suffix pattern | seat_race_elo_port/starboard/cox preserves backward compatibility with existing seat_race_elo combined rating |
 | 14-04 | 90-day erg window, 30-day attendance window | Balances recency with sufficient data points - erg captures training block, attendance shows recent reliability |
 | 14-04 | Confidence threshold at 5 data points | Conservative approach: 5+ data points = 100% confidence, provides reasonable certainty for ranking decisions |
+| 14-06 | Query key factory pattern for cache management | Namespaced keys (advancedRankingKeys, compositeRankingKeys) enable efficient cache invalidation across related queries |
+| 14-06 | 5-minute stale time for rankings | Stable data that changes only after seat race processing, prevents excessive refetches while ensuring freshness |
+| 14-06 | Split matrix planner into generate/validate hooks | Clear separation of concerns with combined useMatrixPlanner convenience hook for components needing both |
+| 14-06 | Auth-aware query enabling | All hooks check isAuthenticated, isInitialized, activeTeamId before enabling queries, prevents unnecessary API calls during initialization |
 
 ## Session Continuity
 
 **Last session:** 2026-01-26
-**Stopped at:** Completed 14-02-PLAN.md (Bradley-Terry Model)
+**Stopped at:** Completed 14-06-PLAN.md (Frontend Data Hooks)
 **Resume file:** None
 
 ## Known Limitations
