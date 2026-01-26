@@ -327,7 +327,7 @@ Plans:
 - Confidence intervals on rankings
 - Sorted athlete rankings view
 - Configurable parameters display (K-factor)
-- Note: Advanced matrix seat racing and Bradley-Terry model planned for Phase 13
+- Note: Advanced matrix seat racing and Bradley-Terry model planned for Phase 14
 
 **Success Criteria:**
 1. ✅ Coach can create a seat race session with date/conditions, add multiple pieces with boats and times, and assign athletes to seats
@@ -596,78 +596,35 @@ Plans:
 
 **Dependencies:** Phase 9 (basic seat racing infrastructure)
 
-**Research Flag:** DEEP RESEARCH REQUIRED — This phase should establish RowLab as the definitive platform for rowing selection decisions. Research topics include:
-- Bradley-Terry paired comparison models
-- Latin Square and Balanced Incomplete Block Designs for swap scheduling
-- Boat speed bias correction techniques
-- Confidence interval calculation methods
-- Existing implementations in elite rowing programs (GB, US, Australian national teams)
+**Research:** Complete (14-RESEARCH.md)
 
-**Requirements:** MATRIX-01 through MATRIX-12 (to be defined during research)
+**Requirements:** MATRIX-01 through MATRIX-12
 
-**Planned Features (subject to research findings):**
+**Plans:** 12 plans
 
-1. **Matrix Session Planner**
-   - "I have N athletes, K boats, want M pieces" → generates optimal swap schedule
-   - Latin Square or BIB design for maximum comparison coverage
-   - Visual swap matrix showing who races with whom
-   - Automatic detection of comparison graph completeness
-
-2. **Bradley-Terry Ranking Model**
-   - Probabilistic model superior to ELO for rowing context
-   - Proper confidence intervals (not just count-based)
-   - Handles incomplete comparison graphs
-   - Margin-of-victory integration
-   - Maximum likelihood estimation
-
-3. **Boat Speed Bias Correction**
-   - Statistical regression to separate athlete skill from boat equipment
-   - Multi-piece calibration across different boats
-   - Environmental drift correction across session
-
-4. **Multi-Way Swap Support**
-   - Support for 2:2, 3:3 swaps (not just 1:1)
-   - Proper statistical attribution in multi-swap scenarios
-   - Common in larger squad selections
-
-5. **Comparison Graph Visualization**
-   - Network graph showing which athletes have been compared
-   - Gap detection (who needs more comparisons)
-   - Confidence heatmap across roster
-
-6. **Scientific Export & Reports**
-   - PDF reports with statistical methodology explanation
-   - Raw data export for external analysis
-   - Publishable-quality visualizations
-
-7. **Passive ELO from Practice Data** ⭐ UNIQUE DIFFERENTIATOR
-   - Track athlete boat assignments during regular water workouts (not just formal seat races)
-   - When athletes float between 1V, 2V, 3V etc., accumulate comparison data
-   - Piece times from daily practice feed into ranking system continuously
-   - Coach links lineup to workout → piece results → automatic ELO updates
-   - Answers "where should this athlete be?" based on season-long data
-   - Works even without formal seat racing sessions
-   - "Ambient seat racing" from normal training patterns
-
-8. **Composite Ranking System** (Weighted Factors)
-   - **Primary (70-80%):** On-water performance (boat lineups + piece times via Bradley-Terry)
-   - **Secondary: Erg Performance (10-15%):** Relative rankings from all erg workouts (not just formal tests), Bradley-Terry applied to erg comparisons
-   - **Secondary: Attendance (5-10%):** Practice attendance rate, reliability factor
-   - Coach-configurable weight profiles (Performance-First, Balanced, Reliability-Focus)
-   - Clear breakdown showing contribution from each factor
+Plans:
+- [ ] 14-01-PLAN.md — Dependencies (simple-statistics, jstat, fmin) and TypeScript types
+- [ ] 14-02-PLAN.md — Bradley-Terry model service (TDD: MLE, confidence intervals)
+- [ ] 14-03-PLAN.md — Matrix planner service (Latin Square scheduling)
+- [ ] 14-04-PLAN.md — Composite ranking service and side-specific ELO
+- [ ] 14-05-PLAN.md — API endpoints for all advanced ranking features
+- [ ] 14-06-PLAN.md — TanStack Query hooks for advanced rankings
+- [ ] 14-07-PLAN.md — Comparison graph and probability matrix components (vis-network)
+- [ ] 14-08-PLAN.md — Matrix planner UI and swap schedule views
+- [ ] 14-09-PLAN.md — Composite rankings UI with weight profile selector
+- [ ] 14-10-PLAN.md — Bradley-Terry rankings with confidence visualization
+- [ ] 14-11-PLAN.md — Pages, routing, and component exports
+- [ ] 14-12-PLAN.md — Navigation integration and human verification
 
 **Delivers:**
-- Matrix session planning wizard
-- Bradley-Terry ranking algorithm
-- Boat speed bias correction
-- 2:2 and 3:3 swap support
-- Comparison completeness visualization
-- Scientific methodology documentation
-- Export for academic/coaching analysis
-- **Passive ELO accumulation from practice lineups and piece data**
-- Workout-to-ranking integration (lineup + times → ELO update)
-- **Composite ranking with erg and attendance factors** (weighted secondary factors)
-- Coach-configurable ranking weight profiles
+- Bradley-Terry ranking algorithm with MLE optimization
+- Matrix session planner with Latin Square scheduling
+- Comparison graph visualization (vis-network)
+- Probability matrix heatmap (P(A beats B))
+- Composite rankings (on-water + erg + attendance)
+- Side-specific ELO tracking (port/starboard/cox)
+- Weight profile configuration (Performance-First, Balanced, Reliability)
+- Two new pages: Advanced Rankings, Matrix Planner
 
 **Success Criteria:**
 1. Coach can plan a matrix seat race session specifying athletes, boats, and pieces; system generates statistically optimal swap schedule
@@ -717,9 +674,9 @@ The following requirements apply across all v2.0 phases:
 | 11 | Racing & Regattas | 15 | 10 | Complete |
 | 12 | Settings & Polish | 19 | 17 | Complete |
 | 13 | Cross-Feature Integrations | 8 | 12 | Active |
-| 14 | Advanced Seat Racing Analytics ⚡ | 12 | — | Research |
+| 14 | Advanced Seat Racing Analytics ⚡ | 12 | 12 | Planned |
 
-**v2.0 Total:** 108 requirements across 9 phases
+**v2.0 Total:** 120 requirements across 9 phases
 
 ---
 
@@ -732,7 +689,7 @@ Phases requiring deeper research during planning (from SUMMARY.md):
 | 8 | Drag-drop with undo/redo | Complex @dnd-kit + Zustand temporal middleware integration |
 | 9 | ELO calculation | Optimal K-factor for rowing, confidence intervals, edge cases |
 | 10 | Calendar integration | react-big-calendar virtualization, mobile-first patterns |
-| 13 | **Bradley-Terry & Matrix Racing** | **DEEP RESEARCH** — Differentiator feature requiring academic literature review, elite program methodology analysis, and novel statistical implementation |
+| 14 | **Bradley-Terry & Matrix Racing** | **DEEP RESEARCH COMPLETE** — See 14-RESEARCH.md |
 
 Phases with standard patterns (skip research):
 - Phase 6: Standard CRUD with virtualization
@@ -740,39 +697,7 @@ Phases with standard patterns (skip research):
 - Phase 11: Hierarchical CRUD, established patterns
 - Phase 12: Settings migration, no new patterns
 
-### Phase 13 Research Topics
-
-Phase 13 is flagged for extensive pre-implementation research:
-
-1. **Statistical Models**
-   - Bradley-Terry paired comparison model (vs ELO)
-   - Thurstone-Mosteller model variations
-   - Maximum likelihood estimation methods
-   - Handling ties and margins of victory
-
-2. **Experimental Design**
-   - Latin Square designs for fair comparisons
-   - Balanced Incomplete Block Designs (BIBD)
-   - Optimal assignment algorithms
-   - Comparison graph connectivity requirements
-
-3. **Rowing-Specific Methodology**
-   - GB Rowing national team selection methods
-   - US Rowing athlete ranking systems
-   - Australian Rowing Institute protocols
-   - Academic papers on rowing biomechanics and selection
-
-4. **Implementation References**
-   - Existing Bradley-Terry libraries (R, Python, JavaScript)
-   - Graph visualization libraries for comparison networks
-   - Statistical computing in browser (TensorFlow.js, stdlib)
-
-5. **Validation**
-   - Backtesting against historical race results
-   - Comparison with expert coach rankings
-   - Cross-validation methodologies
-
 ---
 
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-01-26 — Phase 13 planned (12 plans, 8 requirements)*
+*Last updated: 2026-01-26 — Phase 14 planned (12 plans, 5 waves)*
