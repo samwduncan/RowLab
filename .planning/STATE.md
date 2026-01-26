@@ -4,8 +4,8 @@
 
 **Milestone:** v2.1 — Feature Expansion
 **Phase:** 15 (Feature Toggles & Recruiting) — In Progress
-**Status:** Plan 15-09 complete
-**Last activity:** 2026-01-26 — Completed 15-09-PLAN.md (Notification Preferences Foundation)
+**Status:** Plan 15-06 complete
+**Last activity:** 2026-01-26 — Completed 15-06-PLAN.md (Rich Text Editor with Lexical)
 
 ## Project Reference
 
@@ -48,7 +48,7 @@ v2.0 Progress: ██████████████ (9 phases complete) �
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
-| 15 | Feature Toggles & Recruiting | In Progress | 9/? |
+| 15 | Feature Toggles & Recruiting | In Progress | 10/? |
 | 16 | Gamification & Engagement | Planned | TBD |
 | 17 | Complete Design Overhaul 🎨 | Planned | TBD |
 | 18 | Lineup & Boat Improvements | Planned | TBD |
@@ -285,6 +285,9 @@ Key architectural decisions carrying forward:
 
 | Plan | Decision | Rationale |
 |------|----------|-----------|
+| 15-06 | Lexical for rich text editing | Modern, accessible, framework-agnostic, actively maintained by Meta - better architecture than Draft.js/Slate |
+| 15-06 | DOMPurify for HTML sanitization | Industry-standard XSS prevention, defense-in-depth (sanitize on input AND display) |
+| 15-06 | Separate toolbar component | Better separation of concerns, easier to customize, cleaner component hierarchy |
 | 15-09 | Sonner for toast notifications | Battle-tested library with accessibility built-in, rich features (richColors, closeButton), clean API |
 | 15-09 | Three-tier notification control | Channel master switches → feature toggles → quiet hours provides granular control from broad to specific |
 | 15-09 | Quiet hours exclude in-app toasts by default | Email/push suppressed for sleep/focus, but in-app toasts still shown for urgent notifications when actively using app |
@@ -295,8 +298,8 @@ Key architectural decisions carrying forward:
 
 ## Session Continuity
 
-**Last session:** 2026-01-26T18:57:32Z
-**Stopped at:** Completed 15-09-PLAN.md (Notification Preferences Foundation)
+**Last session:** 2026-01-26T20:19:16Z
+**Stopped at:** Completed 15-06-PLAN.md (Rich Text Editor with Lexical)
 **Resume file:** None
 
 ## Known Limitations
