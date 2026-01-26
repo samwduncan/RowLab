@@ -308,6 +308,150 @@ export async function recalculateAllRatings(teamId, ratingType = 'seat_race_elo'
   };
 }
 
+// ============================================
+// SIDE-SPECIFIC RATING FUNCTIONS
+// ============================================
+
+/**
+ * Get or create side-specific rating for an athlete
+ * @param {string} athleteId - Athlete UUID
+ * @param {string} teamId - Team UUID
+ * @param {string} side - 'Port', 'Starboard', or 'Cox'
+ * @param {string} baseType - Base rating type (default: 'seat_race_elo')
+ * @returns {Promise<Object>} Rating record for the specific side
+ */
+export async function getOrCreateSideSpecificRating(athleteId, teamId, side, baseType = 'seat_race_elo') {
+  const ratingType = `${baseType}_${side.toLowerCase()}`;
+  return getOrCreateRating(athleteId, teamId, ratingType);
+}
+
+/**
+ * Update ratings with automatic side detection from seat position
+ * @param {string} teamId - Team UUID
+ * @param {string} athlete1Id - First athlete UUID
+ * @param {string} athlete2Id - Second athlete UUID
+ * @param {string} athlete1Side - Side athlete1 was rowing ('Port', 'Starboard', 'Cox')
+ * @param {string} athlete2Side - Side athlete2 was rowing
+ * @param {number} performanceDiff - Time difference (positive = athlete1 faster)
+ * @returns {Promise<Object>} Updated ratings for both athletes
+ */
+export async function updateRatingsWithSideDetection(
+  teamId,
+  athlete1Id,
+  athlete2Id,
+  athlete1Side,
+  athlete2Side,
+  performanceDiff
+) {
+  // Update side-specific ratings
+  const ratingType1 = `seat_race_elo_${athlete1Side.toLowerCase()}`;
+  const ratingType2 = `seat_race_elo_${athlete2Side.toLowerCase()}`;
+
+  // Update athlete1's rating for their side
+  const result1 = await updateRatingsFromSeatRace(
+    teamId,
+    athlete1Id,
+    athlete2Id,
+    performanceDiff,
+    ratingType1
+  );
+
+  // If athletes are on different sides, also update athlete2's side-specific rating
+  if (athlete1Side !== athlete2Side) {
+    await updateRatingsFromSeatRace(
+      teamId,
+      athlete2Id,
+      athlete1Id,
+      -performanceDiff, // Reverse the diff
+      ratingType2
+    );
+  }
+
+  // Also update the combined (non-side-specific) rating for overall ranking
+  const combinedResult = await updateRatingsFromSeatRace(
+    teamId,
+    athlete1Id,
+    athlete2Id,
+    performanceDiff,
+    'seat_race_elo'
+  );
+
+  return {
+    sideSpecific: result1,
+    combined: combinedResult,
+    athlete1Side,
+    athlete2Side
+  };
+}
+
+/**
+ * Get all side-specific ratings for an athlete
+ * @param {string} athleteId - Athlete UUID
+ * @param {string} teamId - Team UUID
+ * @returns {Promise<Object>} Object with port, starboard, cox ratings
+ */
+export async function getAthleteSideRatings(athleteId, teamId) {
+  const athlete = await prisma.athlete.findUnique({
+    where: { id: athleteId },
+    select: { side: true }
+  });
+
+  const primarySide = athlete?.side || 'Port';
+
+  const ratings = await prisma.athleteRating.findMany({
+    where: {
+      athleteId,
+      teamId,
+      ratingType: {
+        startsWith: 'seat_race_elo'
+      }
+    }
+  });
+
+  const result = {
+    athleteId,
+    primarySide,
+    ratings: {
+      port: null,
+      starboard: null,
+      cox: null,
+      combined: null
+    },
+    primaryRating: null
+  };
+
+  for (const rating of ratings) {
+    if (rating.ratingType === 'seat_race_elo') {
+      result.ratings.combined = rating;
+    } else if (rating.ratingType === 'seat_race_elo_port') {
+      result.ratings.port = rating;
+    } else if (rating.ratingType === 'seat_race_elo_starboard') {
+      result.ratings.starboard = rating;
+    } else if (rating.ratingType === 'seat_race_elo_cox') {
+      result.ratings.cox = rating;
+    }
+  }
+
+  // Set primary rating based on athlete's designated side
+  result.primaryRating = result.ratings[primarySide.toLowerCase()] || result.ratings.combined;
+
+  return result;
+}
+
+/**
+ * Get team rankings filtered by side
+ * @param {string} teamId - Team UUID
+ * @param {string} side - 'Port', 'Starboard', 'Cox', or null for combined
+ * @returns {Promise<Array>} Ranked athletes for the specified side
+ */
+export async function getTeamRankingsBySide(teamId, side = null) {
+  const ratingType = side
+    ? `seat_race_elo_${side.toLowerCase()}`
+    : 'seat_race_elo';
+
+  return getTeamRankings(teamId, { ratingType });
+}
+
 export default {
   DEFAULT_RATING,
   K_FACTOR,
@@ -317,4 +461,9 @@ export default {
   updateRatingsFromSeatRace,
   getTeamRankings,
   recalculateAllRatings,
+  // New side-specific functions
+  getOrCreateSideSpecificRating,
+  updateRatingsWithSideDetection,
+  getAthleteSideRatings,
+  getTeamRankingsBySide
 };
