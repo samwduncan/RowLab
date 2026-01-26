@@ -4,8 +4,8 @@
 
 **Milestone:** v2.1 — Feature Expansion
 **Phase:** 16 (Gamification & Engagement) — In Progress
-**Status:** 9 of 12 plans complete
-**Last activity:** 2026-01-26 — Completed 16-09-PLAN.md
+**Status:** 10 of 12 plans complete
+**Last activity:** 2026-01-26 — Completed 16-10-PLAN.md
 
 ## Project Reference
 
@@ -49,7 +49,7 @@ v2.0 Progress: ██████████████ (9 phases complete) �
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
 | 15 | Feature Toggles & Recruiting | Complete | 10/10 |
-| 16 | Gamification & Engagement | In Progress | 9/12 |
+| 16 | Gamification & Engagement | In Progress | 10/12 |
 | 17 | Complete Design Overhaul 🎨 | Planned | TBD |
 | 18 | Lineup & Boat Improvements | Planned | TBD |
 
@@ -310,11 +310,14 @@ Key architectural decisions carrying forward:
 | 16-08 | Created Skeleton component | Missing UI primitive needed for loading states across gamification features |
 | 16-08 | PinnedBadges max 5 default | Prevents profile clutter while showcasing top achievements, configurable for flexibility |
 | 16-08 | Smart achievement sorting | Unlocked first, then by rarity (Legendary > Epic > Rare > Common) provides optimal UX prioritization |
+| 16-10 | LeaderboardLive 5s polling with staleTime: 0 | Ensures real-time updates during active challenges per RESEARCH.md specifications |
+| 16-10 | Rank change animation for 3 seconds | Provides visual feedback when positions change without cluttering the UI permanently |
+| 16-10 | Template-based challenge creation | Simplifies challenge creation while allowing custom configurations for flexibility |
 
 ## Session Continuity
 
-**Last session:** 2026-01-26T22:59:21Z
-**Stopped at:** Completed 16-09-PLAN.md (PR Celebration & Shareable Cards)
+**Last session:** 2026-01-26T23:01:19Z
+**Stopped at:** Completed 16-10-PLAN.md (Challenge Display & Management)
 **Resume file:** None
 
 ## Known Limitations
@@ -569,4 +572,4 @@ Phase 13 delivered the cross-feature integration layer:
 | 16-09 | Fixed 480x320px card dimensions | Consistent PNG output for social sharing with 16:9-ish aspect ratio |
 
 ---
-*Last updated: 2026-01-26 — Phase 16 Plan 09 Complete*
+*Last updated: 2026-01-26 — Phase 16 Plan 10 Complete*
