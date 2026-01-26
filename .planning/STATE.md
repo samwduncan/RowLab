@@ -4,8 +4,8 @@
 
 **Milestone:** v2.1 — Feature Expansion
 **Phase:** 15 (Feature Toggles & Recruiting) — In Progress
-**Status:** Plan 15-07 complete
-**Last activity:** 2026-01-26 — Completed 15-07-PLAN.md (Recruit Visit Form)
+**Status:** Plan 15-08 complete
+**Last activity:** 2026-01-26 — Completed 15-08-PLAN.md (Host Dashboard & Recruiting Page)
 
 ## Project Reference
 
@@ -298,11 +298,14 @@ Key architectural decisions carrying forward:
 | 15-05 | Violet/purple theme for recruiting | bg-violet-500/10 background, border-violet-500 accent distinguishes recruit visits from workouts on calendar |
 | 15-05 | Compact/full display modes for RecruitVisitCard | Compact mode for calendar cells, full mode for expanded view - matches WorkoutEventCard pattern |
 | 15-05 | Query keys factory for recruit visits | Hierarchical query keys (all, lists, list, details, detail, upcoming, byHost) enable efficient cache invalidation |
+| 15-08 | HostVisitsWidget returns null when no visits | Self-hiding widgets prevent empty dashboard clutter - only appears when athlete has upcoming hosting duties |
+| 15-08 | URL param state for visit deep linking | ?visit=id enables direct links from dashboard widget to specific visits, cleaned up when panel closes |
+| 15-08 | Slide-out panel pattern for details | AnimatePresence with spring animation from right, backdrop click to close, consistent with V2 UX patterns |
 
 ## Session Continuity
 
-**Last session:** 2026-01-26T20:43:13Z
-**Stopped at:** Completed 15-07-PLAN.md (Recruit Visit Form)
+**Last session:** 2026-01-26T20:50:26Z
+**Stopped at:** Completed 15-08-PLAN.md (Host Dashboard & Recruiting Page)
 **Resume file:** None
 
 ## Known Limitations
