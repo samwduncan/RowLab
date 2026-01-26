@@ -25,19 +25,20 @@ model User {
   updatedAt    DateTime @updatedAt
 
   // Relations
-  memberships          TeamMember[]
-  refreshTokens        RefreshToken[]
-  announcements        Announcement[]
-  settings             UserSettings?
-  concept2Auth         Concept2Auth?
-  stravaAuth           StravaAuth?
-  boatSessions         BoatSession[]
-  createdPlans         TrainingPlan[]        @relation("PlanCreator")
-  assignedPlans        WorkoutAssignment[]   @relation("PlanAssigner")
-  dashboardPreferences DashboardPreferences?
-  whiteboards          Whiteboard[]
-  createdSessions      Session[]             @relation("SessionCreator")
-  attendanceOverrides  SessionAttendance[]   @relation("AttendanceOverrides")
+  memberships            TeamMember[]
+  refreshTokens          RefreshToken[]
+  announcements          Announcement[]
+  settings               UserSettings?
+  concept2Auth           Concept2Auth?
+  stravaAuth             StravaAuth?
+  boatSessions           BoatSession[]
+  createdPlans           TrainingPlan[]        @relation("PlanCreator")
+  assignedPlans          WorkoutAssignment[]   @relation("PlanAssigner")
+  dashboardPreferences   DashboardPreferences?
+  whiteboards            Whiteboard[]
+  createdSessions        Session[]             @relation("SessionCreator")
+  attendanceOverrides    SessionAttendance[]   @relation("AttendanceOverrides")
+  createdRecruitVisits   RecruitVisit[]
 
   @@map("users")
 }
@@ -55,29 +56,30 @@ model Team {
   updatedAt         DateTime @updatedAt
 
   // Relations
-  members            TeamMember[]
-  athletes           Athlete[]
-  invitations        Invitation[]
-  lineups            Lineup[]
-  ergTests           ErgTest[]
-  workouts           Workout[]
-  announcements      Announcement[]
-  shells             Shell[]
-  oarSets            OarSet[]
-  boatConfigs        BoatConfig[]
-  seatRaceSessions   SeatRaceSession[]
-  regattas           Regatta[]
-  teamSpeedEstimates TeamSpeedEstimate[]
-  subscription       Subscription?
-  calendarEvents     CalendarEvent[]
-  waterSessions      WaterSession[]
-  trainingPlans      TrainingPlan[]
-  whiteboards        Whiteboard[]
-  attendance         Attendance[]
-  checklistTemplates ChecklistTemplate[]
-  externalRankings   ExternalRanking[]
-  sessions           Session[]
+  members             TeamMember[]
+  athletes            Athlete[]
+  invitations         Invitation[]
+  lineups             Lineup[]
+  ergTests            ErgTest[]
+  workouts            Workout[]
+  announcements       Announcement[]
+  shells              Shell[]
+  oarSets             OarSet[]
+  boatConfigs         BoatConfig[]
+  seatRaceSessions    SeatRaceSession[]
+  regattas            Regatta[]
+  teamSpeedEstimates  TeamSpeedEstimate[]
+  subscription        Subscription?
+  calendarEvents      CalendarEvent[]
+  waterSessions       WaterSession[]
+  trainingPlans       TrainingPlan[]
+  whiteboards         Whiteboard[]
+  attendance          Attendance[]
+  checklistTemplates  ChecklistTemplate[]
+  externalRankings    ExternalRanking[]
+  sessions            Session[]
   passiveObservations PassiveObservation[]
+  recruitVisits       RecruitVisit[]
 
   @@map("teams")
 }
@@ -172,6 +174,7 @@ model Athlete {
   sessionAttendance   SessionAttendance[]
   passiveSwapsAs1     PassiveObservation[] @relation("PassiveSwap1")
   passiveSwapsAs2     PassiveObservation[] @relation("PassiveSwap2")
+  recruitVisits       RecruitVisit[]
 
   @@unique([teamId, lastName, firstName])
   @@index([teamId])
@@ -1251,4 +1254,55 @@ model SessionAttendance {
   @@index([sessionId])
   @@index([athleteId])
   @@map("session_attendance")
+}
+
+// ============================================
+// RECRUITING: Recruit Visit Management
+// ============================================
+
+model RecruitVisit {
+  id              String    @id @default(cuid())
+  teamId          String
+  team            Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  // Recruit info
+  recruitName     String
+  recruitEmail    String?
+  recruitPhone    String?
+  recruitSchool   String?   // Current school
+  recruitGradYear Int?      // Graduation year
+
+  // Visit scheduling
+  date            DateTime
+  startTime       String    // HH:mm format
+  endTime         String    // HH:mm format
+
+  // Host assignment
+  hostAthleteId   String?
+  hostAthlete     Athlete?  @relation(fields: [hostAthleteId], references: [id], onDelete: SetNull)
+
+  // Schedule content (PDF or rich text)
+  scheduleType    String    @default("richtext") // "pdf" or "richtext"
+  scheduleContent String?   @db.Text             // Rich text HTML (sanitized)
+  schedulePdfUrl  String?                        // URL to uploaded PDF
+
+  // Additional info
+  notes           String?   @db.Text
+  status          String    @default("scheduled") // scheduled, completed, cancelled
+
+  // Sharing
+  shareToken      String?   @unique              // For public share link
+  shareEnabled    Boolean   @default(false)
+
+  // Timestamps
+  createdById     String
+  createdBy       User      @relation(fields: [createdById], references: [id])
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([teamId])
+  @@index([hostAthleteId])
+  @@index([date])
+  @@index([shareToken])
+  @@map("recruit_visits")
 }
