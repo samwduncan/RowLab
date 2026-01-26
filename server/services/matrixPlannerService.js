@@ -4,7 +4,7 @@ import { variance } from 'simple-statistics';
 // CONSTANTS
 // ============================================
 
-const BOAT_SIZES = {
+export const BOAT_SIZES = {
   '8+': 9, // 8 rowers + cox
   '4+': 5, // 4 rowers + cox
   '4-': 4, // 4 rowers
