@@ -5,7 +5,7 @@
 **Milestone:** v2.0 — Core Migration
 **Phase:** 13 (Cross-Feature Integrations) — In Progress
 **Status:** Executing Phase 13 plans
-**Last activity:** 2026-01-26 — Completed 13-02-PLAN.md (Session Frontend Types & Hooks)
+**Last activity:** 2026-01-26 — Completed 13-03-PLAN.md (Sessions API Backend)
 
 ## Project Reference
 
@@ -39,7 +39,7 @@ v1.0 Progress: 100% Complete
 | 10 | Training Plans & NCAA | Complete | 11/11 |
 | 11 | Racing & Regattas | Complete | 10/10 |
 | 12 | Settings & Polish | Complete | 17/17 |
-| 13 | Cross-Feature Integrations | In Progress | 2/— |
+| 13 | Cross-Feature Integrations | In Progress | 3/— |
 | 14 | Advanced Seat Racing Analytics | Pending | —/— |
 
 v2.0 Progress: ████████████░ (71 phases 6-12 complete, Phase 13 in progress)
@@ -217,8 +217,8 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-01-26
-**Stopped at:** Completed 13-02-PLAN.md (Session Frontend Types & Hooks)
-**Resume file:** .planning/phases/13-cross-feature-integrations/13-03-PLAN.md
+**Stopped at:** Completed 13-03-PLAN.md (Sessions API Backend)
+**Resume file:** .planning/phases/13-cross-feature-integrations/13-04-PLAN.md
 
 ## Known Limitations
 
@@ -241,7 +241,17 @@ Plans 13-01 and 13-02 complete. Foundation and frontend data layer established.
 - Created TanStack Query hooks (useSessions, useSession, useCreateSession, useUpdateSession, useDeleteSession)
 - Added Live session types and calendar event types for future plans
 
-**Next:** 13-03-PLAN.md (Sessions API Backend)
+**Completed in 13-03:**
+- Created Sessions API routes with full CRUD operations
+- GET /api/v1/sessions with filters (type, status, startDate, endDate)
+- GET /api/v1/sessions/active for currently active team session
+- POST /api/v1/sessions with nested pieces creation
+- PATCH /api/v1/sessions/:id with auto-generate session code when ACTIVE
+- DELETE /api/v1/sessions/:id with cascade delete of pieces
+- POST /api/v1/sessions/join/:code for live session joining
+- Piece CRUD nested under sessions
+
+**Next:** 13-04-PLAN.md (Session Builder UI)
 
 | 10-02 | Inline types in hooks instead of shared training.ts | training.ts wasn't created yet, inline types make hooks self-contained and executable now |
 | 10-02 | 5-minute staleTime for training queries | Follows useSeatRaceSessions pattern, balances data freshness with API efficiency |
@@ -350,6 +360,11 @@ Plans 13-01 and 13-02 complete. Foundation and frontend data layer established.
 | 13-02 | Added extra lifecycle hooks | useStartSession, useEndSession for complete session lifecycle management |
 | 13-02 | rrulePresets for rowing schedules | Common presets (MWF, TuTh, weekdays, daily) for quick session setup |
 | 13-02 | Live session types in session.ts | LiveSessionState, LiveParticipant, LiveErgData anticipate Phase 13-04 |
+| 13-03 | Session code uses 6-char alphanumeric excluding I/O/0/1 | Prevents confusion between similar characters when coaches read/enter codes |
+| 13-03 | Session code auto-generated on ACTIVE transition | Code only needed during live sessions, generated on demand |
+| 13-03 | Session code cleared on COMPLETED/CANCELLED | Frees up codes for reuse, signals session is no longer joinable |
+| 13-03 | Pieces cascade delete via Prisma onDelete | Ensures data integrity when sessions are deleted |
+| 13-03 | Join endpoint not restricted by team | Allows cross-team session joining for special events/camps |
 
 ---
-*Last updated: 2026-01-26 — Phase 13 Plan 02 Complete*
+*Last updated: 2026-01-26 — Phase 13 Plan 03 Complete*
