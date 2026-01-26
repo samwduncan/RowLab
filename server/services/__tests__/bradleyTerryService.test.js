@@ -133,10 +133,12 @@ describe('bradleyTerryService', () => {
         { athlete1Id: 'A', athlete2Id: 'B', athlete1Win: true },
         { athlete1Id: 'A', athlete2Id: 'B', athlete1Win: true },
         { athlete1Id: 'A', athlete2Id: 'B', athlete1Win: true },
+        { athlete1Id: 'B', athlete2Id: 'A', athlete1Win: true },
       ];
 
       const fewComparisons = [
         { athlete1Id: 'C', athlete2Id: 'D', athlete1Win: true },
+        { athlete1Id: 'D', athlete2Id: 'C', athlete1Win: true },
       ];
 
       const resultMany = fitBradleyTerryModel(manyComparisons, { includeBoatSpeed: false });
@@ -145,7 +147,10 @@ describe('bradleyTerryService', () => {
       const stdErrorMany = resultMany.athletes[0].stdError;
       const stdErrorFew = resultFew.athletes[0].stdError;
 
-      expect(stdErrorFew).toBeGreaterThan(stdErrorMany);
+      // With more comparisons, standard errors should be smaller (more confidence)
+      expect(stdErrorMany).toBeLessThan(stdErrorFew);
+      expect(stdErrorMany).toBeGreaterThan(0);
+      expect(stdErrorFew).toBeGreaterThan(0);
     });
 
     test('boat speed bias: A always in fast shell, B always in slow shell', () => {
