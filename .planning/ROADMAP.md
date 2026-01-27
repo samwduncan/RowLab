@@ -729,26 +729,41 @@ Plans:
 
 ### Phase 17: Complete Design Overhaul 🎨
 
-**Goal:** Rebuild design system with "Rowing Instrument" aesthetic.
+**Goal:** Rebuild design system with "Rowing Instrument" aesthetic - warm color system, data-forward typography, tactile component interactions, spring physics animations, theme polish, mobile responsive overhaul, and landing page redesign.
 
 **Dependencies:** All previous phases (components to update)
 
 **Requirements:** DESIGN-01 through DESIGN-07
 
+**Plans:** 9 plans
+
+Plans:
+- [ ] 17-01-PLAN.md — Warm color palette foundation (tokens.css, tailwind.config.js)
+- [ ] 17-02-PLAN.md — Typography system (Inter headings, Geist Mono data metrics)
+- [ ] 17-03-PLAN.md — Theme updates (dark.css, light.css, field.css with warm stone palette)
+- [ ] 17-04-PLAN.md — Animation system (spring configs, CSS keyframes)
+- [ ] 17-05-PLAN.md — Core UI components (Button, Card, Toggle with tactile feedback)
+- [ ] 17-06-PLAN.md — Modal, Input, Table components with warm palette
+- [ ] 17-07-PLAN.md — Mobile responsive overhaul (MobileNav, MobileCard, touch targets)
+- [ ] 17-08-PLAN.md — Landing page redesign
+- [ ] 17-09-PLAN.md — Final verification checkpoint
+
 **Delivers:**
-- Warm color system (dark and light modes)
-- Typography system with data-forward metrics
-- Component library rebuild with tactile interactions
-- Animation system (spring physics)
-- Theme polish (dark, light, field)
-- Mobile responsive overhaul
-- Landing page redesign
+- Warm color system (dark and light modes with stone neutrals)
+- Typography system with data-forward metrics (Inter + Geist Mono)
+- Component library rebuild with tactile interactions (0.96 press, hover lift)
+- Animation system (spring physics per CONTEXT.md spec)
+- Theme polish (dark, light, field with warm tones)
+- Mobile responsive overhaul (44px touch targets, swipe gestures)
+- Landing page redesign (dark mode, feature showcase, CTAs)
 
 **Success Criteria:**
-1. Color system updated with warm tones
-2. All components have satisfying interactions
-3. Animations consistent with spring physics
-4. Landing page matches app aesthetic
+1. Color system updated with warm tones (#0F0F0F base, stone palette)
+2. Typography feels like "precision instrument" for data display
+3. All components have tactile, satisfying interactions
+4. Animations consistent with spring physics (stiffness: 400, damping: 17)
+5. Landing page matches app aesthetic and converts
+6. Mobile experience is fully polished with 44px touch targets
 
 ---
 
@@ -936,7 +951,7 @@ The following requirements apply across all v2.0 phases:
 |-------|------|--------------|-------|--------|
 | 15 | Feature Toggles & Recruiting | 6 | 10 | Complete ✅ |
 | 16 | Gamification & Engagement | 8 | 12 | Complete ✅ |
-| 17 | Complete Design Overhaul | 7 | TBD | Planned |
+| 17 | Complete Design Overhaul | 7 | 9 | Planned |
 | 18 | Lineup & Boat Improvements | 9 | 11 | Complete ✅ |
 
 **v2.1 Total:** 30 requirements across 4 phases (3 complete, 1 planned)
@@ -982,4 +997,4 @@ Phases with standard patterns (skip research):
 ---
 
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-01-27 — Phase 18 complete (11 plans in 4 waves)*
+*Last updated: 2026-01-27 — Phase 17 planned (9 plans in 5 waves)*
