@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronRight } from 'lucide-react';
 import * as Icons from 'lucide-react';
-import { SPRING_CONFIG, usePrefersReducedMotion } from '@v2/utils/animations';
+import { SPRING_CONFIG, SPRING_FAST, usePrefersReducedMotion } from '@v2/utils/animations';
 import { useShowMobileLayout } from '@v2/hooks/useBreakpoint';
 import { useContextStore, CONTEXT_CONFIGS } from '@v2/stores/contextStore';
 import type { Context } from '@v2/types/context';
@@ -93,24 +93,24 @@ export const MobileNav: React.FC = () => {
 
   return (
     <>
-      {/* Mobile header with hamburger */}
-      <header className="fixed top-0 left-0 right-0 h-14 bg-bg-surface border-b border-bdr-default z-50 flex items-center justify-between px-4">
+      {/* Mobile header with hamburger - warm palette */}
+      <header className="fixed top-0 left-0 right-0 h-14 bg-[var(--color-bg-surface)] border-b border-[var(--color-border-subtle)] z-50 flex items-center justify-between px-4">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="tap-target flex items-center justify-center -ml-2"
+          className="min-w-[44px] min-h-[44px] flex items-center justify-center -ml-2"
           aria-label={isOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={isOpen}
         >
           {isOpen ? (
-            <X className="w-6 h-6 text-txt-primary" />
+            <X className="w-6 h-6 text-[var(--color-text-primary)]" />
           ) : (
-            <Menu className="w-6 h-6 text-txt-primary" />
+            <Menu className="w-6 h-6 text-[var(--color-text-primary)]" />
           )}
         </button>
-        <span className="text-sm font-semibold text-txt-primary">
+        <span className="text-sm font-semibold text-[var(--color-text-primary)]">
           RowLab
         </span>
-        <span className="text-xs font-medium text-txt-secondary capitalize px-2 py-1 bg-bg-surface-elevated rounded">
+        <span className="text-xs font-medium text-[var(--color-text-secondary)] capitalize px-2 py-1 bg-[var(--color-bg-elevated)] rounded">
           {contextLabels[activeContext]}
         </span>
       </header>
@@ -130,18 +130,18 @@ export const MobileNav: React.FC = () => {
               aria-hidden="true"
             />
 
-            {/* Slide-in menu */}
+            {/* Slide-in menu - warm palette */}
             <motion.nav
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={prefersReducedMotion ? { duration: 0 } : SPRING_CONFIG}
-              className="fixed top-14 left-0 bottom-0 w-72 max-w-[calc(100vw-3rem)] bg-bg-base border-r border-bdr-default z-50 overflow-y-auto flex flex-col"
+              className="fixed top-14 left-0 bottom-0 w-72 max-w-[calc(100vw-3rem)] bg-[var(--color-bg-base)] border-r border-[var(--color-border-subtle)] z-50 overflow-y-auto flex flex-col"
               aria-label="Mobile navigation"
             >
               {/* Context Switcher */}
-              <div className="p-4 border-b border-bdr-subtle">
-                <p className="text-xs font-medium text-txt-tertiary mb-3 uppercase tracking-wider">
+              <div className="p-4 border-b border-[var(--color-border-subtle)]">
+                <p className="text-xs font-medium text-[var(--color-text-tertiary)] mb-3 uppercase tracking-wider">
                   Workspace
                 </p>
                 <div className="flex gap-2">
@@ -153,10 +153,10 @@ export const MobileNav: React.FC = () => {
                         key={ctx.id}
                         onClick={() => setActiveContext(ctx.id as Context)}
                         className={cn(
-                          'flex-1 flex flex-col items-center gap-1 py-3 rounded-lg tap-target transition-colors',
+                          'flex-1 flex flex-col items-center gap-1 py-3 rounded-lg min-h-[44px] transition-colors',
                           isActive
-                            ? 'bg-interactive-primary text-button-primary-text'
-                            : 'bg-bg-surface-elevated text-txt-secondary hover:bg-bg-hover'
+                            ? 'bg-[var(--color-interactive-primary)] text-white'
+                            : 'bg-[var(--color-bg-elevated)] text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-hover)]'
                         )}
                       >
                         {IconComponent && <IconComponent className="w-5 h-5" />}
@@ -179,16 +179,16 @@ export const MobileNav: React.FC = () => {
                         to={item.to}
                         onClick={() => setIsOpen(false)}
                         className={cn(
-                          'flex items-center gap-3 px-4 py-3 tap-target mx-2 rounded-lg transition-colors',
+                          'flex items-center gap-3 px-4 py-3 min-h-[44px] mx-2 rounded-lg transition-colors',
                           isActive
-                            ? 'bg-interactive-primary/10 text-interactive-primary'
-                            : 'text-txt-secondary hover:bg-bg-hover hover:text-txt-primary'
+                            ? 'bg-[var(--color-interactive-primary)]/10 text-[var(--color-interactive-primary)]'
+                            : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-hover)] hover:text-[var(--color-text-primary)]'
                         )}
                       >
                         {IconComponent && <IconComponent className="w-5 h-5 flex-shrink-0" />}
                         <span className="font-medium flex-1">{item.label}</span>
                         {isActive && (
-                          <ChevronRight className="w-4 h-4 text-interactive-primary" />
+                          <ChevronRight className="w-4 h-4 text-[var(--color-interactive-primary)]" />
                         )}
                       </Link>
                     </li>
@@ -200,28 +200,41 @@ export const MobileNav: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Bottom tab bar for quick access (first 4 items + more) */}
+      {/* Bottom tab bar for quick access (first 4 items + more) - warm palette with safe area */}
       <nav
-        className="fixed bottom-0 left-0 right-0 h-16 bg-bg-surface border-t border-bdr-default z-50 safe-area-inset-bottom"
+        className="fixed bottom-0 left-0 right-0 bg-[var(--color-bg-surface)] border-t border-[var(--color-border-subtle)] z-50"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
         aria-label="Quick navigation"
       >
-        <ul className="flex items-center justify-around h-full px-2">
+        <ul className="flex items-center justify-around h-16 px-2">
           {navItems.slice(0, 4).map((item) => {
             const isActive = location.pathname === item.to;
             const IconComponent = ICON_MAP[item.icon];
 
             return (
-              <li key={item.to}>
+              <li key={item.to} className="relative">
                 <Link
                   to={item.to}
                   className={cn(
-                    'flex flex-col items-center justify-center gap-1 tap-target px-3',
-                    'transition-colors',
+                    'flex flex-col items-center justify-center gap-1 min-w-[64px] min-h-[44px] px-3',
+                    'transition-colors duration-100',
                     isActive
-                      ? 'text-interactive-primary'
-                      : 'text-txt-tertiary hover:text-txt-secondary'
+                      ? 'text-[var(--color-interactive-primary)]'
+                      : 'text-[var(--color-text-tertiary)] hover:text-[var(--color-text-secondary)]'
                   )}
+                  aria-current={isActive ? 'page' : undefined}
                 >
+                  {/* Active indicator bar */}
+                  {isActive && !prefersReducedMotion && (
+                    <motion.div
+                      layoutId="mobile-nav-indicator"
+                      className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-[var(--color-interactive-primary)] rounded-full"
+                      transition={SPRING_FAST}
+                    />
+                  )}
+                  {isActive && prefersReducedMotion && (
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-[var(--color-interactive-primary)] rounded-full" />
+                  )}
                   {IconComponent && <IconComponent className="w-5 h-5" />}
                   <span className="text-[10px] font-medium truncate max-w-[60px]">
                     {item.label.split(' ')[0]}
@@ -236,8 +249,8 @@ export const MobileNav: React.FC = () => {
               <button
                 onClick={() => setIsOpen(true)}
                 className={cn(
-                  'flex flex-col items-center justify-center gap-1 tap-target px-3',
-                  'text-txt-tertiary hover:text-txt-secondary transition-colors'
+                  'flex flex-col items-center justify-center gap-1 min-w-[64px] min-h-[44px] px-3',
+                  'text-[var(--color-text-tertiary)] hover:text-[var(--color-text-secondary)] transition-colors duration-100'
                 )}
                 aria-label="More navigation options"
               >
