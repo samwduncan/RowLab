@@ -4,8 +4,8 @@
 
 **Milestone:** v2.1 — Feature Expansion
 **Phase:** 17 (Complete Design Overhaul) — In Progress
-**Status:** 6 of 9 plans complete
-**Last activity:** 2026-01-27 — Completed 17-06-PLAN.md (Form & Table Components)
+**Status:** 7 of 9 plans complete
+**Last activity:** 2026-01-27 — Completed 17-07-PLAN.md (Mobile Responsive Overhaul)
 
 ## Project Reference
 
@@ -353,7 +353,7 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-01-27
-**Stopped at:** Completed 17-06-PLAN.md (Form & Table Components)
+**Stopped at:** Completed 17-07-PLAN.md (Mobile Responsive Overhaul)
 **Resume file:** None
 
 ## Known Limitations
@@ -650,5 +650,10 @@ Phase 13 delivered the cross-feature integration layer:
 | 17-06 | Input uses color-interactive-primary for focus | Clear visual focus indicator with warm palette consistency |
 | 17-06 | DataCell uses tabular-nums and right-alignment | Numbers align properly like SpeedCoach display, data-forward aesthetic |
 
+| 17-07 | 44px touch targets enforced via CSS | Global rules for buttons/links/role="button" on mobile for WCAG 2.1 AAA compliance |
+| 17-07 | MobileCard actions use color tokens | Mapped danger/warning/success/primary to status CSS variables for theme consistency |
+| 17-07 | Reduced motion fallback shows visible buttons | Accessibility: users with reduced motion see action buttons directly instead of swipe-only |
+| 17-07 | Active nav indicator uses layoutId | Enables smooth sliding animation between nav items with SPRING_FAST timing |
+
 ---
-*Last updated: 2026-01-27 — Phase 17 Plan 06 Complete*
+*Last updated: 2026-01-27 — Phase 17 Plan 07 Complete*
