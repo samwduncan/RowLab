@@ -308,6 +308,163 @@ export async function exportLineupData(teamId, lineupId) {
 }
 
 /**
+ * Search lineups with multi-criteria filtering - Phase 18 LINEUP-02
+ *
+ * Supports:
+ * - Filter by athlete IDs (any match)
+ * - Minimum N athletes requirement
+ * - Filter by boat classes
+ * - Filter by shell names
+ * - Date range filtering
+ * - Name search
+ * - Sorting options
+ */
+export async function searchLineups(teamId, filters = {}) {
+  const {
+    athleteIds = [],
+    minAthletes = 1,
+    boatClasses = [],
+    shellNames = [],
+    startDate,
+    endDate,
+    nameSearch,
+    sortBy = 'createdAt',
+    sortDirection = 'desc',
+    limit = 50,
+    offset = 0,
+  } = filters;
+
+  // Build the where clause
+  const where = { teamId };
+
+  // Date range filter
+  if (startDate || endDate) {
+    where.createdAt = {};
+    if (startDate) {
+      where.createdAt.gte = new Date(startDate);
+    }
+    if (endDate) {
+      where.createdAt.lte = new Date(endDate);
+    }
+  }
+
+  // Name search
+  if (nameSearch) {
+    where.name = {
+      contains: nameSearch,
+      mode: 'insensitive',
+    };
+  }
+
+  // For athlete filtering, we need to handle "at least N athletes" logic
+  // This is complex in Prisma, so we'll use a two-step approach:
+  // 1. Filter lineups that have ANY of the specified athletes
+  // 2. Post-process to check minimum count
+
+  if (athleteIds.length > 0) {
+    where.assignments = {
+      some: {
+        athleteId: { in: athleteIds },
+      },
+    };
+  }
+
+  // Boat class filter
+  if (boatClasses.length > 0) {
+    where.assignments = {
+      ...where.assignments,
+      some: {
+        ...where.assignments?.some,
+        boatClass: { in: boatClasses },
+      },
+    };
+  }
+
+  // Shell name filter
+  if (shellNames.length > 0) {
+    where.assignments = {
+      ...where.assignments,
+      some: {
+        ...where.assignments?.some,
+        shellName: { in: shellNames },
+      },
+    };
+  }
+
+  // Determine sort order
+  const orderBy = {};
+  if (sortBy === 'date' || sortBy === 'createdAt') {
+    orderBy.createdAt = sortDirection;
+  } else if (sortBy === 'name') {
+    orderBy.name = sortDirection;
+  } else if (sortBy === 'updatedAt') {
+    orderBy.updatedAt = sortDirection;
+  } else {
+    orderBy.createdAt = 'desc';
+  }
+
+  // Fetch lineups with assignments
+  const lineups = await prisma.lineup.findMany({
+    where,
+    include: {
+      assignments: {
+        select: {
+          athleteId: true,
+          boatClass: true,
+          shellName: true,
+        },
+      },
+    },
+    orderBy,
+    take: limit + offset, // Fetch extra for post-filtering
+  });
+
+  // Post-process to check minimum athlete count and build metadata
+  let results = lineups.map((lineup) => {
+    const athleteCount = lineup.assignments.length;
+    const boatClassSet = new Set(lineup.assignments.map((a) => a.boatClass));
+    const shellNameSet = new Set(
+      lineup.assignments.filter((a) => a.shellName).map((a) => a.shellName)
+    );
+
+    // Count matched athletes if filtering
+    let matchedAthleteCount = 0;
+    if (athleteIds.length > 0) {
+      const lineupAthleteIds = new Set(lineup.assignments.map((a) => a.athleteId));
+      matchedAthleteCount = athleteIds.filter((id) => lineupAthleteIds.has(id)).length;
+    }
+
+    return {
+      id: lineup.id,
+      name: lineup.name,
+      notes: lineup.notes,
+      createdAt: lineup.createdAt.toISOString(),
+      updatedAt: lineup.updatedAt.toISOString(),
+      athleteCount,
+      boatClasses: Array.from(boatClassSet),
+      shellNames: Array.from(shellNameSet),
+      matchedAthleteCount: athleteIds.length > 0 ? matchedAthleteCount : undefined,
+    };
+  });
+
+  // Filter by minimum athlete count if specified
+  if (athleteIds.length > 0 && minAthletes > 1) {
+    results = results.filter((r) => r.matchedAthleteCount >= minAthletes);
+  }
+
+  // Apply offset and limit after filtering
+  const total = results.length;
+  results = results.slice(offset, offset + limit);
+
+  return {
+    lineups: results,
+    total,
+    limit,
+    offset,
+  };
+}
+
+/**
  * Format lineup for API response
  */
 function formatLineup(lineup, includeAssignments = false) {
