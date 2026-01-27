@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { motion, HTMLMotionProps } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
-import { SPRING_FAST, usePrefersReducedMotion } from '../../utils/animations';
+import { SPRING_FAST, BUTTON_PRESS, usePrefersReducedMotion } from '../../utils/animations';
 
 /**
  * Button - Polished button component with animations
@@ -41,6 +41,7 @@ const variantStyles: Record<ButtonVariant, string> = {
     hover:bg-[var(--color-interactive-hover)]
     active:bg-[var(--color-interactive-active)]
     disabled:bg-[var(--color-interactive-disabled)] disabled:text-[var(--color-text-muted)]
+    shadow-sm hover:shadow-md
   `,
   secondary: `
     bg-[var(--color-bg-surface-elevated)] text-[var(--color-text-primary)]
@@ -57,9 +58,10 @@ const variantStyles: Record<ButtonVariant, string> = {
   `,
   danger: `
     bg-[var(--color-status-error)] text-white
-    hover:bg-[var(--color-status-error)]/90
-    active:bg-[var(--color-status-error)]/80
+    hover:brightness-110
+    active:brightness-90
     disabled:bg-[var(--color-interactive-disabled)] disabled:text-[var(--color-text-muted)]
+    shadow-sm hover:shadow-md
   `,
   outline: `
     bg-transparent text-[var(--color-interactive-primary)]
@@ -113,7 +115,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ? {}
       : {
           whileHover: isDisabled ? {} : { scale: 1.02 },
-          whileTap: isDisabled ? {} : { scale: 0.98 },
+          whileTap: isDisabled ? {} : { scale: 0.96 }, // Tactile press per CONTEXT.md
           transition: SPRING_FAST,
         };
 
@@ -192,7 +194,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       ? {}
       : {
           whileHover: isDisabled ? {} : { scale: 1.1 },
-          whileTap: isDisabled ? {} : { scale: 0.9 },
+          whileTap: isDisabled ? {} : { scale: 0.96 }, // Tactile press per CONTEXT.md
           transition: SPRING_FAST,
         };
 
