@@ -9,6 +9,7 @@ import {
   deleteLineup,
   duplicateLineup,
   exportLineupData,
+  searchLineups,
 } from '../../services/lineupService.js';
 import { authenticateToken, requireRole, teamIsolation } from '../../middleware/auth.js';
 
@@ -51,6 +52,78 @@ router.get(
       res.status(500).json({
         success: false,
         error: { code: 'SERVER_ERROR', message: 'Failed to get lineups' },
+      });
+    }
+  }
+);
+
+/**
+ * GET /api/v1/lineups/search
+ * Search historical lineups with multi-criteria filtering
+ *
+ * Query params:
+ * - athleteIds: comma-separated athlete IDs (any match)
+ * - minAthletes: minimum number of specified athletes (default: 1)
+ * - boatClasses: comma-separated boat classes
+ * - shellNames: comma-separated shell names
+ * - startDate: ISO date for range start
+ * - endDate: ISO date for range end
+ * - nameSearch: partial name match
+ * - sortBy: 'date' | 'name' | 'createdAt' | 'updatedAt' (default: createdAt)
+ * - sortDirection: 'asc' | 'desc' (default: desc)
+ * - limit: max results (default: 50)
+ * - offset: pagination offset (default: 0)
+ */
+router.get(
+  '/search',
+  authenticateToken,
+  teamIsolation,
+  [
+    query('athleteIds').optional().isString(),
+    query('minAthletes').optional().isInt({ min: 1 }),
+    query('boatClasses').optional().isString(),
+    query('shellNames').optional().isString(),
+    query('startDate').optional().isISO8601(),
+    query('endDate').optional().isISO8601(),
+    query('nameSearch').optional().isString(),
+    query('sortBy').optional().isIn(['date', 'name', 'createdAt', 'updatedAt']),
+    query('sortDirection').optional().isIn(['asc', 'desc']),
+    query('limit').optional().isInt({ min: 1, max: 200 }),
+    query('offset').optional().isInt({ min: 0 }),
+  ],
+  validateRequest,
+  async (req, res) => {
+    try {
+      const filters = {
+        athleteIds: req.query.athleteIds
+          ? req.query.athleteIds.split(',').filter(Boolean)
+          : [],
+        minAthletes: req.query.minAthletes
+          ? parseInt(req.query.minAthletes, 10)
+          : 1,
+        boatClasses: req.query.boatClasses
+          ? req.query.boatClasses.split(',').filter(Boolean)
+          : [],
+        shellNames: req.query.shellNames
+          ? req.query.shellNames.split(',').filter(Boolean)
+          : [],
+        startDate: req.query.startDate || null,
+        endDate: req.query.endDate || null,
+        nameSearch: req.query.nameSearch || null,
+        sortBy: req.query.sortBy || 'createdAt',
+        sortDirection: req.query.sortDirection || 'desc',
+        limit: req.query.limit ? parseInt(req.query.limit, 10) : 50,
+        offset: req.query.offset ? parseInt(req.query.offset, 10) : 0,
+      };
+
+      const result = await searchLineups(req.user.activeTeamId, filters);
+
+      res.json({ success: true, data: result });
+    } catch (error) {
+      logger.error('Error searching lineups:', error);
+      res.status(500).json({
+        success: false,
+        error: { code: 'SERVER_ERROR', message: error.message },
       });
     }
   }
