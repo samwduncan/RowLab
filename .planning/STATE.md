@@ -4,8 +4,8 @@
 
 **Milestone:** v2.1 — Feature Expansion
 **Phase:** 17 (Complete Design Overhaul) — In Progress
-**Status:** 1 of 9 plans complete
-**Last activity:** 2026-01-27 — Completed 17-01-PLAN.md
+**Status:** 4 of 9 plans complete
+**Last activity:** 2026-01-27 — Completed 17-04-PLAN.md (Animation System)
 
 ## Project Reference
 
@@ -50,7 +50,7 @@ v2.0 Progress: ██████████████ (9 phases complete) �
 |-------|------|--------|-------|
 | 15 | Feature Toggles & Recruiting | Complete | 10/10 |
 | 16 | Gamification & Engagement | Complete | 12/12 |
-| 17 | Complete Design Overhaul | In Progress | 1/9 |
+| 17 | Complete Design Overhaul | In Progress | 4/9 |
 | 18 | Lineup & Boat Improvements | In Progress | 8/11 |
 
 v2.1 Progress: ██████░░░░░░░░ (2 phases complete)
@@ -353,7 +353,7 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-01-27
-**Stopped at:** Completed 17-02-PLAN.md (Typography System)
+**Stopped at:** Completed 17-04-PLAN.md (Animation System)
 **Resume file:** None
 
 ## Known Limitations
@@ -640,6 +640,12 @@ Phase 13 delivered the cross-feature integration layer:
 | 17-03 | Warm rgba shadows in dark theme using rgba(15, 15, 15) | Matches warm near-black base color (#0F0F0F) for cohesive appearance |
 | 17-03 | Field theme keeps hardcoded hex values for stone colors | Consistency with existing amber hex values, clearer outdoor-specific documentation |
 | 17-03 | Added rowing semantic accents for field theme | High-contrast versions of port/starboard/water/gold for outdoor visibility |
+| 17-04 | SPRING_CONFIG stiffness 400 damping 17 per CONTEXT.md | Standard spring for drag-drop, modals, general interactions |
+| 17-04 | SPRING_FAST stiffness 500 damping 25 for micro-interactions | Snappier response for button hover/tap, focus states |
+| 17-04 | SPRING_GENTLE stiffness 300 damping 20 for subtle animations | Softer motion for fade reveals, list transitions |
+| 17-04 | Animation presets (BUTTON_PRESS, CARD_HOVER, etc.) | Standardize common interaction patterns across components |
+| 17-04 | CSS keyframes for non-spring effects | Success pulse, gold wash, shimmer don't need JS spring physics |
+| 17-04 | Reduced motion via media query AND hook | CSS handles keyframes, JS hook handles Framer Motion springs |
 
 ---
-*Last updated: 2026-01-27 — Phase 17 Plan 01 Complete*
+*Last updated: 2026-01-27 — Phase 17 Plan 04 Complete*
