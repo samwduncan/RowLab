@@ -5,7 +5,7 @@
 **Milestone:** v2.1 — Feature Expansion
 **Phase:** 18 (Lineup & Boat Improvements) — In Progress
 **Status:** 1 of 11 plans complete
-**Last activity:** 2026-01-27 — Completed 18-02-PLAN.md
+**Last activity:** 2026-01-27 — Completed 18-01-PLAN.md
 
 ## Project Reference
 
@@ -317,10 +317,20 @@ Key architectural decisions carrying forward:
 | 16-11 | Timeline visualization with staggered animation for season milestones | Familiar chronological pattern with polished appearance |
 | 16-11 | Toggle-based opt-out UI pattern for gamification settings | Modern pattern that's self-explanatory and mobile-friendly |
 
+### Phase 18 Decisions
+
+| Plan | Decision | Rationale |
+|------|----------|-----------|
+| 18-01 | Used cuid() for new model IDs | Follows Phase 13 Session model pattern, consistent with recent schema additions |
+| 18-01 | RiggingProfile stores defaults + per-seat overrides in Json | Rigging measurements vary by seat position, Json provides flexibility without per-seat tables |
+| 18-01 | LineupTemplate stores assignments as Json array | Templates are boat-agnostic patterns, Json array simpler than normalized assignment table |
+| 18-01 | EquipmentAssignment tracks equipment with optional sessionId | Links equipment usage to training sessions when available for automatic conflict detection |
+| 18-01 | SetNull cascade on equipment deletions | Preserves historical assignment records even when equipment is removed from inventory |
+
 ## Session Continuity
 
-**Last session:** 2026-01-27T12:59:46Z
-**Stopped at:** Completed 18-02-PLAN.md
+**Last session:** 2026-01-27T13:00:23Z
+**Stopped at:** Completed 18-01-PLAN.md
 **Resume file:** None
 
 ## Known Limitations
