@@ -4,8 +4,8 @@
 
 **Milestone:** v2.1 — Feature Expansion
 **Phase:** 18 (Lineup & Boat Improvements) — In Progress
-**Status:** 5 of 11 plans complete
-**Last activity:** 2026-01-27 — Completed 18-03-PLAN.md
+**Status:** 7 of 11 plans complete
+**Last activity:** 2026-01-27 — Completed 18-07-PLAN.md
 
 ## Project Reference
 
@@ -51,7 +51,7 @@ v2.0 Progress: ██████████████ (9 phases complete) �
 | 15 | Feature Toggles & Recruiting | Complete | 10/10 |
 | 16 | Gamification & Engagement | Complete | 12/12 |
 | 17 | Complete Design Overhaul 🎨 | Planned | TBD |
-| 18 | Lineup & Boat Improvements | In Progress | 5/11 |
+| 18 | Lineup & Boat Improvements | In Progress | 7/11 |
 
 v2.1 Progress: ██████░░░░░░░░ (2 phases complete)
 
@@ -597,3 +597,17 @@ Phase 13 delivered the cross-feature integration layer:
 
 ---
 *Last updated: 2026-01-26 — Phase 16 Plan 10 Complete*
+
+### v2.1 Decisions (Phase 18)
+
+| Plan | Decision | Rationale |
+|------|----------|-----------|
+| 18-07 | Query key factories for all hooks | Hierarchical structure (riggingKeys.all, riggingKeys.profile(id)) enables targeted cache invalidation and type safety |
+| 18-07 | Variable staleTime per data mutability | Equipment 30s (frequently changing), rigging 5min (stable), defaults Infinity (never change) balances freshness with cache efficiency |
+| 18-07 | keepPreviousData for lineup search | Maintains previous results visible during filter changes, prevents loading flash for smoother UX |
+| 18-07 | Multi-key invalidation for equipment mutations | Equipment assignment mutations invalidate availability, assignments, and lineup-specific queries to maintain cache consistency |
+| 18-07 | URL param helpers for lineup search | Bidirectional conversion functions enable deep linking, bookmarking, and URL-based search sharing |
+| 18-07 | Relative imports over path aliases | Follow useAthletes.ts pattern with `../../store/authStore` for consistency across v2 hooks |
+
+---
+*Last updated: 2026-01-27 — Phase 18 Plan 07 Complete*
