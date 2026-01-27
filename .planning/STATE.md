@@ -4,8 +4,8 @@
 
 **Milestone:** v2.1 — Feature Expansion
 **Phase:** 17 (Complete Design Overhaul) — In Progress
-**Status:** 1 of TBD plans complete
-**Last activity:** 2026-01-27 — Completed 17-02-PLAN.md
+**Status:** 3 of 9 plans complete
+**Last activity:** 2026-01-27 — Completed 17-03-PLAN.md
 
 ## Project Reference
 
@@ -632,6 +632,10 @@ Phase 13 delivered the cross-feature integration layer:
 | 17-02 | Geist Mono from jsDelivr CDN | Geist Mono is Vercel's font not on Google Fonts, jsDelivr CDN provides official package |
 | 17-02 | Legacy font fallbacks preserved | Backward compatibility for any components still referencing Space Grotesk or DM Sans |
 | 17-02 | All metric classes use tabular-nums | Ensures number alignment in tables and metrics like a SpeedCoach display |
+| 17-03 | Explicit stone palette variable references | Clear documentation of warm colors vs implicit neutral aliases |
+| 17-03 | Warm rgba shadows in dark theme using rgba(15, 15, 15) | Matches warm near-black base color (#0F0F0F) for cohesive appearance |
+| 17-03 | Field theme keeps hardcoded hex values for stone colors | Consistency with existing amber hex values, clearer outdoor-specific documentation |
+| 17-03 | Added rowing semantic accents for field theme | High-contrast versions of port/starboard/water/gold for outdoor visibility |
 
 ---
-*Last updated: 2026-01-27 — Phase 17 Plan 02 Complete*
+*Last updated: 2026-01-27 — Phase 17 Plan 03 Complete*
