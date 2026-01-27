@@ -752,13 +752,28 @@ Plans:
 
 ---
 
-### Phase 18: Lineup & Boat Configuration Improvements
+### Phase 18: Lineup & Boat Configuration Improvements ✅
 
 **Goal:** Enhanced lineup builder with custom configs, rigging, and equipment tracking.
 
 **Dependencies:** Phase 8 (lineup builder), Phase 4 (fleet)
 
 **Requirements:** BOAT-01 through BOAT-04, LINEUP-01 through LINEUP-05
+
+**Plans:** 11 plans
+
+Plans:
+- [x] 18-01-PLAN.md — Dependencies and Prisma schema (RiggingProfile, LineupTemplate, EquipmentAssignment)
+- [x] 18-02-PLAN.md — TypeScript types for rigging, templates, and equipment
+- [x] 18-03-PLAN.md — Rigging service and API endpoints
+- [x] 18-04-PLAN.md — Lineup template service and API endpoints
+- [x] 18-05-PLAN.md — Equipment assignment service and API endpoints
+- [x] 18-06-PLAN.md — Lineup search API endpoint
+- [x] 18-07-PLAN.md — TanStack Query hooks (rigging, templates, equipment, search)
+- [x] 18-08-PLAN.md — RiggingPanel and EquipmentPicker components
+- [x] 18-09-PLAN.md — TemplateManager and LineupComparison components
+- [x] 18-10-PLAN.md — HistoricalLineupBrowser component
+- [x] 18-11-PLAN.md — Enhanced export utilities (Excel, PDF with QR)
 
 **Delivers:**
 - Custom boat configurations
@@ -767,13 +782,14 @@ Plans:
 - Lineup comparison view
 - Historical lineup analysis
 - Lineup templates
-- Enhanced PDF export
+- Enhanced PDF export with QR codes
+- Excel export with lazy-loaded xlsx
 
 **Success Criteria:**
-1. Coach can create custom boat configurations
-2. Rigging settings stored per boat
-3. Equipment conflicts are warned
-4. Lineups can be compared side-by-side
+1. ✅ Coach can create custom boat configurations (RiggingPanel)
+2. ✅ Rigging settings stored per boat (RiggingProfile service + API)
+3. ✅ Equipment conflicts are warned (EquipmentPicker with conflict detection)
+4. ✅ Lineups can be compared side-by-side (LineupComparison component)
 
 ---
 
@@ -921,9 +937,9 @@ The following requirements apply across all v2.0 phases:
 | 15 | Feature Toggles & Recruiting | 6 | 10 | Complete ✅ |
 | 16 | Gamification & Engagement | 8 | 12 | Complete ✅ |
 | 17 | Complete Design Overhaul | 7 | TBD | Planned |
-| 18 | Lineup & Boat Improvements | 9 | TBD | Planned |
+| 18 | Lineup & Boat Improvements | 9 | 11 | Complete ✅ |
 
-**v2.1 Total:** 30 requirements across 4 phases (2 complete, 2 planned)
+**v2.1 Total:** 30 requirements across 4 phases (3 complete, 1 planned)
 
 ### v2.2 Milestone (Planned)
 
@@ -966,4 +982,4 @@ Phases with standard patterns (skip research):
 ---
 
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-01-26 — Phase 15 planning complete (10 plans in 5 waves)*
+*Last updated: 2026-01-27 — Phase 18 complete (11 plans in 4 waves)*
