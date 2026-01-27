@@ -1,141 +1,197 @@
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
-
 /**
- * Export lineup to PDF using html2canvas + jsPDF
+ * Lineup PDF Export - Phase 18 LINEUP-05 (Enhanced)
  *
- * Captures HTML element as canvas, converts to PDF with proper dimensions.
- * Handles US Letter (default) and A4 formats.
- *
- * Features:
- * - High-quality capture (scale: 2)
- * - Proper dimension calculation (per RESEARCH.md Pitfall 4)
- * - Single-page layout with margins
- * - Automatic download with filename
- * - PDF metadata (title, creation date)
- *
- * Per RESEARCH.md: "html2canvas captures at actual pixel dimensions, jsPDF expects specific units"
- *
- * @param element - HTML element to capture (usually PrintableLineup)
- * @param lineupName - Name for PDF filename and metadata
- * @param options - Optional configuration
+ * Enhanced PDF export with QR codes linking to digital lineup version.
  */
 
-export interface ExportPdfOptions {
-  /** Canvas scale factor (default: 2 for high quality) */
-  scale?: number;
-  /** Paper format (default: 'letter' for US standard) */
-  format?: 'a4' | 'letter';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
+interface ExportPdfOptions {
+  includeQRCode?: boolean;
+  lineupId?: string;
+  baseUrl?: string;
 }
 
+/**
+ * Convert a React QR code element to a data URL
+ */
+async function qrCodeToDataUrl(lineupId: string, baseUrl: string): Promise<string> {
+  // Create a temporary container
+  const container = document.createElement('div');
+  container.style.position = 'absolute';
+  container.style.left = '-9999px';
+  container.style.background = 'white';
+  container.style.padding = '8px';
+  document.body.appendChild(container);
+
+  // Dynamically import qrcode.react and render
+  const { QRCodeCanvas } = await import('qrcode.react');
+  const { createRoot } = await import('react-dom/client');
+  const React = await import('react');
+
+  const url = `${baseUrl}/lineups/${lineupId}/view`;
+
+  return new Promise((resolve) => {
+    const root = createRoot(container);
+    root.render(
+      React.createElement(QRCodeCanvas, {
+        value: url,
+        size: 100,
+        level: 'H',
+        includeMargin: true,
+        // Use callback to get data URL when rendered
+        bgColor: '#ffffff',
+        fgColor: '#000000',
+      })
+    );
+
+    // Wait for render then extract canvas
+    setTimeout(() => {
+      const canvas = container.querySelector('canvas');
+      if (canvas) {
+        resolve(canvas.toDataURL('image/png'));
+      } else {
+        resolve('');
+      }
+      root.unmount();
+      document.body.removeChild(container);
+    }, 100);
+  });
+}
+
+/**
+ * Export lineup container element to PDF with optional QR code
+ *
+ * @param element - The DOM element containing the lineup visual
+ * @param filename - Output filename (without .pdf extension)
+ * @param options - Export options including QR code settings
+ */
 export async function exportLineupToPdf(
   element: HTMLElement,
-  lineupName: string,
+  filename: string,
   options: ExportPdfOptions = {}
 ): Promise<void> {
-  const { scale = 2, format = 'letter' } = options;
+  const { includeQRCode = false, lineupId, baseUrl = window.location.origin } = options;
 
-  try {
-    // Step 1: Capture HTML as canvas with html2canvas
-    const canvas = await html2canvas(element, {
-      scale: scale,
-      useCORS: true,
-      backgroundColor: '#ffffff',
-      logging: false,
-      windowWidth: element.scrollWidth,
-      windowHeight: element.scrollHeight,
-    });
+  // Capture element as canvas
+  const canvas = await html2canvas(element, {
+    scale: 2, // Higher resolution
+    useCORS: true,
+    allowTaint: true,
+    backgroundColor: '#ffffff',
+  });
 
-    // Step 2: Convert canvas to image data
-    const imgData = canvas.toDataURL('image/png', 1.0);
+  const imgWidth = 210; // A4 width in mm
+  const pageHeight = 297; // A4 height in mm
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    // Step 3: Create PDF with specified format
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: format,
-    });
+  const pdf = new jsPDF('p', 'mm', 'a4');
 
-    // Step 4: Calculate dimensions explicitly (per RESEARCH.md Pitfall 4)
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = pdf.internal.pageSize.getHeight();
+  // Add lineup image
+  const imgData = canvas.toDataURL('image/png');
+  pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
 
-    // Apply margins (10mm on each side)
-    const marginLeft = 10;
-    const marginTop = 10;
-    const marginRight = 10;
-    const marginBottom = 10;
+  // Add QR code if requested
+  if (includeQRCode && lineupId) {
+    try {
+      const qrDataUrl = await qrCodeToDataUrl(lineupId, baseUrl);
+      if (qrDataUrl) {
+        // Position QR code in bottom right corner
+        const qrSize = 25; // mm
+        const qrX = imgWidth - qrSize - 10; // 10mm margin from right
+        const qrY = Math.min(imgHeight + 5, pageHeight - qrSize - 10); // Below content or near bottom
 
-    const availableWidth = pdfWidth - marginLeft - marginRight;
-    const availableHeight = pdfHeight - marginTop - marginBottom;
+        pdf.addImage(qrDataUrl, 'PNG', qrX, qrY, qrSize, qrSize);
 
-    // Calculate image dimensions proportionally
-    const imgWidth = availableWidth;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    // Step 5: Handle multi-page if content exceeds page height
-    if (imgHeight > availableHeight) {
-      // Scale down to fit single page
-      const scaleFactor = availableHeight / imgHeight;
-      const scaledWidth = imgWidth * scaleFactor;
-      const scaledHeight = imgHeight * scaleFactor;
-
-      // Center horizontally if scaled down
-      const xOffset = marginLeft + (availableWidth - scaledWidth) / 2;
-
-      pdf.addImage(imgData, 'PNG', xOffset, marginTop, scaledWidth, scaledHeight);
-    } else {
-      // Fits on single page without scaling
-      pdf.addImage(imgData, 'PNG', marginLeft, marginTop, imgWidth, imgHeight);
+        // Add small label under QR code
+        pdf.setFontSize(6);
+        pdf.setTextColor(128, 128, 128);
+        pdf.text('Scan for digital version', qrX + qrSize / 2, qrY + qrSize + 3, {
+          align: 'center',
+        });
+      }
+    } catch (error) {
+      console.warn('Failed to add QR code to PDF:', error);
+      // Continue without QR code
     }
-
-    // Step 6: Add PDF metadata
-    pdf.setProperties({
-      title: lineupName,
-      subject: 'Rowing Lineup',
-      author: 'RowLab',
-      creator: 'RowLab Lineup Builder',
-    });
-
-    // Step 7: Generate filename with date
-    const dateStr = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-    const sanitizedName = lineupName.replace(/[^a-zA-Z0-9-_]/g, '_'); // Remove special chars
-    const filename = `${sanitizedName}-${dateStr}.pdf`;
-
-    // Step 8: Trigger download
-    pdf.save(filename);
-  } catch (error) {
-    console.error('PDF export failed:', error);
-    throw new Error('Failed to generate PDF. Please try again.');
   }
+
+  // Save the PDF
+  pdf.save(`${filename}.pdf`);
 }
 
 /**
- * Calculate estimated PDF page count for given element
- * Useful for showing page count preview before export
- *
- * @param element - HTML element to measure
- * @param format - Paper format
- * @returns Estimated page count
+ * Export multiple boats to a single PDF (multiple boats per page)
  */
-export function estimatePdfPageCount(
-  element: HTMLElement,
-  format: 'a4' | 'letter' = 'letter'
-): number {
-  // Page dimensions in mm
-  const pageDimensions = {
-    letter: { width: 215.9, height: 279.4 },
-    a4: { width: 210, height: 297 },
-  };
+export async function exportMultiBoatPdf(
+  elements: HTMLElement[],
+  filename: string,
+  options: ExportPdfOptions = {}
+): Promise<void> {
+  const { includeQRCode = false, lineupId, baseUrl = window.location.origin } = options;
 
-  const { height: pageHeight } = pageDimensions[format];
-  const margins = 20; // 10mm top + 10mm bottom
-  const availableHeight = pageHeight - margins;
+  const pdf = new jsPDF('p', 'mm', 'a4');
+  const imgWidth = 210;
+  const pageHeight = 297;
+  const margin = 10;
+  let currentY = margin;
 
-  // Convert element height from pixels to mm (rough estimate: 96 DPI)
-  const elementHeightMm = (element.scrollHeight * 25.4) / 96;
+  for (let i = 0; i < elements.length; i++) {
+    const element = elements[i];
 
-  return Math.ceil(elementHeightMm / availableHeight);
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
+    });
+
+    const aspectRatio = canvas.width / canvas.height;
+    const imgW = imgWidth - margin * 2;
+    const imgH = imgW / aspectRatio;
+
+    // Check if we need a new page
+    if (currentY + imgH > pageHeight - margin) {
+      pdf.addPage();
+      currentY = margin;
+    }
+
+    const imgData = canvas.toDataURL('image/png');
+    pdf.addImage(imgData, 'PNG', margin, currentY, imgW, imgH);
+    currentY += imgH + 5; // 5mm gap between boats
+  }
+
+  // Add QR code on last page if requested
+  if (includeQRCode && lineupId) {
+    try {
+      const qrDataUrl = await qrCodeToDataUrl(lineupId, baseUrl);
+      if (qrDataUrl) {
+        const qrSize = 20;
+        const qrX = imgWidth - qrSize - margin;
+        const qrY = pageHeight - qrSize - margin;
+
+        pdf.addImage(qrDataUrl, 'PNG', qrX, qrY, qrSize, qrSize);
+        pdf.setFontSize(6);
+        pdf.setTextColor(128, 128, 128);
+        pdf.text('Scan for digital version', qrX + qrSize / 2, qrY + qrSize + 2, {
+          align: 'center',
+        });
+      }
+    } catch (error) {
+      console.warn('Failed to add QR code to PDF:', error);
+    }
+  }
+
+  pdf.save(`${filename}.pdf`);
 }
 
-export default exportLineupToPdf;
+/**
+ * Simple PDF export without QR code (backward compatible)
+ */
+export async function exportSimplePdf(
+  element: HTMLElement,
+  filename: string
+): Promise<void> {
+  return exportLineupToPdf(element, filename, { includeQRCode: false });
+}
