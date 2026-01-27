@@ -4,8 +4,8 @@
 
 **Milestone:** v2.1 — Feature Expansion
 **Phase:** 17 (Complete Design Overhaul) — In Progress
-**Status:** 3 of 9 plans complete
-**Last activity:** 2026-01-27 — Completed 17-03-PLAN.md
+**Status:** 1 of 9 plans complete
+**Last activity:** 2026-01-27 — Completed 17-01-PLAN.md
 
 ## Project Reference
 
@@ -50,7 +50,7 @@ v2.0 Progress: ██████████████ (9 phases complete) �
 |-------|------|--------|-------|
 | 15 | Feature Toggles & Recruiting | Complete | 10/10 |
 | 16 | Gamification & Engagement | Complete | 12/12 |
-| 17 | Complete Design Overhaul | In Progress | 1/TBD |
+| 17 | Complete Design Overhaul | In Progress | 1/9 |
 | 18 | Lineup & Boat Improvements | In Progress | 8/11 |
 
 v2.1 Progress: ██████░░░░░░░░ (2 phases complete)
@@ -628,6 +628,10 @@ Phase 13 delivered the cross-feature integration layer:
 
 | Plan | Decision | Rationale |
 |------|----------|-----------|
+| 17-01 | Stone palette replaces zinc for warm aesthetic | Warm near-black (#0F0F0F) creates premium "Rowing Instrument" feel vs cool (#0a0a0a) |
+| 17-01 | Rowing semantic colors match maritime conventions | port=red, starboard=green are standard maritime/rowing conventions, intuitive for coaches |
+| 17-01 | CSS variable-backed Tailwind rowing colors | Enables theme switching without Tailwind rebuild, consistent with existing token system |
+| 17-01 | Backwards-compatible neutral aliases | Prevents breaking ~100+ existing component references to palette-neutral-* variables |
 | 17-02 | Inter for headings and body, Geist Mono for data | Inter provides clean modern titles, Geist Mono gives stroke coach precision feel for numbers |
 | 17-02 | Geist Mono from jsDelivr CDN | Geist Mono is Vercel's font not on Google Fonts, jsDelivr CDN provides official package |
 | 17-02 | Legacy font fallbacks preserved | Backward compatibility for any components still referencing Space Grotesk or DM Sans |
@@ -638,4 +642,4 @@ Phase 13 delivered the cross-feature integration layer:
 | 17-03 | Added rowing semantic accents for field theme | High-contrast versions of port/starboard/water/gold for outdoor visibility |
 
 ---
-*Last updated: 2026-01-27 — Phase 17 Plan 03 Complete*
+*Last updated: 2026-01-27 — Phase 17 Plan 01 Complete*
