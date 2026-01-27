@@ -12,30 +12,62 @@
 :root {
   /* ========================================
      FONT TOKENS
-     CSS custom properties for typography system
+     "Rowing Instrument" Typography System
      ======================================== */
 
-  --font-display: "Space Grotesk", system-ui, sans-serif;
-  --font-body: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
+  /* Display/Headings: Inter Bold for clean, modern titles */
+  --font-display: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Body: Inter Regular for readable content */
+  --font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Data/Mono: Geist Mono for stroke coach precision numbers */
+  --font-mono: "Geist Mono", "JetBrains Mono", "SF Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
+
+  /* Large metrics: Inter Black for hero numbers */
+  --font-metric: "Inter", system-ui, sans-serif;
+
+  /* Legacy fallbacks (keep for backwards compat) */
+  --font-display-legacy: "Space Grotesk", system-ui, sans-serif;
+  --font-body-legacy: "DM Sans", system-ui, sans-serif;
 
   /* ========================================
      LEVEL 1: BASE PALETTE
      Raw color values - never use directly
      ======================================== */
 
-  /* Neutrals - Dark Theme Base */
-  --palette-neutral-950: #0a0a0a;
-  --palette-neutral-900: #171717;
-  --palette-neutral-800: #262626;
-  --palette-neutral-700: #404040;
-  --palette-neutral-600: #525252;
-  --palette-neutral-500: #737373;
-  --palette-neutral-400: #a3a3a3;
-  --palette-neutral-300: #d4d4d4;
-  --palette-neutral-200: #e5e5e5;
-  --palette-neutral-100: #f5f5f5;
-  --palette-neutral-50: #fafafa;
+  /* Warm Stone Neutrals - "Rowing Instrument" palette */
+  --palette-stone-950: #0F0F0F;   /* Base: warm near-black */
+  --palette-stone-900: #171717;   /* Surface */
+  --palette-stone-800: #1F1F1F;   /* Elevated */
+  --palette-stone-700: #292524;   /* Borders dark */
+  --palette-stone-600: #44403c;   /* Text muted */
+  --palette-stone-500: #78716c;   /* Text tertiary */
+  --palette-stone-400: #a8a29e;   /* Text secondary */
+  --palette-stone-300: #d6d3d1;   /* Light borders */
+  --palette-stone-200: #e7e5e4;   /* Light surface */
+  --palette-stone-100: #f5f5f4;   /* Light elevated - warm off-white */
+  --palette-stone-50: #fafaf9;    /* Light base */
+
+  /* Neutrals - Backwards compatible aliases to stone palette */
+  --palette-neutral-950: var(--palette-stone-950);
+  --palette-neutral-900: var(--palette-stone-900);
+  --palette-neutral-800: var(--palette-stone-800);
+  --palette-neutral-700: var(--palette-stone-700);
+  --palette-neutral-600: var(--palette-stone-600);
+  --palette-neutral-500: var(--palette-stone-500);
+  --palette-neutral-400: var(--palette-stone-400);
+  --palette-neutral-300: var(--palette-stone-300);
+  --palette-neutral-200: var(--palette-stone-200);
+  --palette-neutral-100: var(--palette-stone-100);
+  --palette-neutral-50: var(--palette-stone-50);
+
+  /* Rowing Semantic Accents */
+  --palette-rowing-water: #3b82f6;     /* Blue: Water/Erg related */
+  --palette-rowing-starboard: #10b981; /* Green: Starboard side / Success */
+  --palette-rowing-port: #ef4444;      /* Red: Port side / Attention */
+  --palette-rowing-gold: #f59e0b;      /* Gold: Achievements, PRs */
+  --palette-rowing-premium: #a855f7;   /* Purple: Premium features */
 
   /* Brand Colors */
   --palette-brand-red: #ef4444;
@@ -60,26 +92,26 @@
      ======================================== */
 
   /* Background Tokens */
-  --color-bg-base: var(--palette-neutral-950);
-  --color-bg-surface: var(--palette-neutral-900);
-  --color-bg-surface-elevated: var(--palette-neutral-800);
-  --color-bg-overlay: rgba(10, 10, 10, 0.8);
-  --color-bg-hover: var(--palette-neutral-800);
-  --color-bg-active: var(--palette-neutral-700);
+  --color-bg-base: var(--palette-stone-950);
+  --color-bg-surface: var(--palette-stone-900);
+  --color-bg-surface-elevated: var(--palette-stone-800);
+  --color-bg-overlay: rgba(15, 15, 15, 0.8);
+  --color-bg-hover: var(--palette-stone-800);
+  --color-bg-active: var(--palette-stone-700);
 
   /* Text Tokens */
-  --color-text-primary: var(--palette-neutral-50);
-  --color-text-secondary: var(--palette-neutral-400);
-  --color-text-tertiary: var(--palette-neutral-500);
-  --color-text-muted: var(--palette-neutral-600);
-  --color-text-inverse: var(--palette-neutral-950);
-  --color-text-brand: var(--palette-brand-blue);
+  --color-text-primary: var(--palette-stone-100);
+  --color-text-secondary: var(--palette-stone-400);
+  --color-text-tertiary: var(--palette-stone-500);
+  --color-text-muted: var(--palette-stone-600);
+  --color-text-inverse: var(--palette-stone-950);
+  --color-text-brand: var(--palette-rowing-water);
 
   /* Border Tokens */
-  --color-border-default: var(--palette-neutral-700);
-  --color-border-subtle: var(--palette-neutral-800);
-  --color-border-strong: var(--palette-neutral-600);
-  --color-border-brand: var(--palette-brand-blue);
+  --color-border-default: var(--palette-stone-700);
+  --color-border-subtle: var(--palette-stone-800);
+  --color-border-strong: var(--palette-stone-600);
+  --color-border-brand: var(--palette-rowing-water);
 
   /* Interactive Tokens */
   --color-interactive-primary: var(--palette-brand-blue);
@@ -151,32 +183,32 @@
    ======================================== */
 .v2[data-theme="dark"] {
   /* Background Tokens */
-  --color-bg-base: var(--palette-neutral-950);
-  --color-bg-surface: var(--palette-neutral-900);
-  --color-bg-surface-elevated: var(--palette-neutral-800);
-  --color-bg-overlay: rgba(10, 10, 10, 0.8);
-  --color-bg-hover: var(--palette-neutral-800);
-  --color-bg-active: var(--palette-neutral-700);
+  --color-bg-base: var(--palette-stone-950);
+  --color-bg-surface: var(--palette-stone-900);
+  --color-bg-surface-elevated: var(--palette-stone-800);
+  --color-bg-overlay: rgba(15, 15, 15, 0.8);
+  --color-bg-hover: var(--palette-stone-800);
+  --color-bg-active: var(--palette-stone-700);
 
   /* Text Tokens */
-  --color-text-primary: var(--palette-neutral-50);
-  --color-text-secondary: var(--palette-neutral-400);
-  --color-text-tertiary: var(--palette-neutral-500);
-  --color-text-muted: var(--palette-neutral-600);
-  --color-text-inverse: var(--palette-neutral-950);
-  --color-text-brand: var(--palette-brand-blue);
+  --color-text-primary: var(--palette-stone-100);
+  --color-text-secondary: var(--palette-stone-400);
+  --color-text-tertiary: var(--palette-stone-500);
+  --color-text-muted: var(--palette-stone-600);
+  --color-text-inverse: var(--palette-stone-950);
+  --color-text-brand: var(--palette-rowing-water);
 
   /* Border Tokens */
-  --color-border-default: var(--palette-neutral-700);
-  --color-border-subtle: var(--palette-neutral-800);
-  --color-border-strong: var(--palette-neutral-600);
-  --color-border-brand: var(--palette-brand-blue);
+  --color-border-default: var(--palette-stone-700);
+  --color-border-subtle: var(--palette-stone-800);
+  --color-border-strong: var(--palette-stone-600);
+  --color-border-brand: var(--palette-rowing-water);
 
   /* Interactive Tokens */
-  --color-interactive-primary: var(--palette-brand-blue);
+  --color-interactive-primary: var(--palette-rowing-water);
   --color-interactive-hover: #2563eb;
   --color-interactive-active: #1d4ed8;
-  --color-interactive-disabled: var(--palette-neutral-700);
+  --color-interactive-disabled: var(--palette-stone-700);
 }
 
 /* ========================================
@@ -185,43 +217,43 @@
 
 .v2[data-theme="light"] {
   /* Background Tokens */
-  --color-bg-base: var(--palette-neutral-50);
-  --color-bg-surface: var(--palette-neutral-100);
+  --color-bg-base: var(--palette-stone-50);
+  --color-bg-surface: var(--palette-stone-100);
   --color-bg-surface-elevated: #ffffff;
-  --color-bg-overlay: rgba(255, 255, 255, 0.9);
-  --color-bg-hover: var(--palette-neutral-200);
-  --color-bg-active: var(--palette-neutral-300);
+  --color-bg-overlay: rgba(250, 250, 249, 0.9);
+  --color-bg-hover: var(--palette-stone-200);
+  --color-bg-active: var(--palette-stone-300);
 
   /* Text Tokens */
-  --color-text-primary: var(--palette-neutral-950);
-  --color-text-secondary: var(--palette-neutral-600);
-  --color-text-tertiary: var(--palette-neutral-500);
-  --color-text-muted: var(--palette-neutral-400);
-  --color-text-inverse: var(--palette-neutral-50);
+  --color-text-primary: var(--palette-stone-950);
+  --color-text-secondary: var(--palette-stone-600);
+  --color-text-tertiary: var(--palette-stone-500);
+  --color-text-muted: var(--palette-stone-400);
+  --color-text-inverse: var(--palette-stone-50);
   --color-text-brand: #1d4ed8;
 
   /* Border Tokens */
-  --color-border-default: var(--palette-neutral-300);
-  --color-border-subtle: var(--palette-neutral-200);
-  --color-border-strong: var(--palette-neutral-400);
+  --color-border-default: var(--palette-stone-300);
+  --color-border-subtle: var(--palette-stone-200);
+  --color-border-strong: var(--palette-stone-400);
   --color-border-brand: #1d4ed8;
 
   /* Interactive Tokens */
-  --color-interactive-primary: var(--palette-brand-blue);
+  --color-interactive-primary: var(--palette-rowing-water);
   --color-interactive-hover: #1d4ed8;
   --color-interactive-active: #1e40af;
-  --color-interactive-disabled: var(--palette-neutral-300);
+  --color-interactive-disabled: var(--palette-stone-300);
 
   /* Component Tokens */
-  --color-card-bg: var(--palette-neutral-50);
+  --color-card-bg: var(--palette-stone-50);
   --color-card-border: var(--color-border-subtle);
-  --color-card-hover: var(--palette-neutral-100);
+  --color-card-hover: var(--palette-stone-100);
 
-  --color-button-secondary-bg: var(--palette-neutral-200);
-  --color-button-secondary-hover: var(--palette-neutral-300);
-  --color-button-secondary-text: var(--palette-neutral-900);
+  --color-button-secondary-bg: var(--palette-stone-200);
+  --color-button-secondary-hover: var(--palette-stone-300);
+  --color-button-secondary-text: var(--palette-stone-900);
 
-  --color-input-bg: var(--palette-neutral-50);
+  --color-input-bg: var(--palette-stone-50);
   --color-input-border: var(--color-border-default);
   --color-input-text: var(--color-text-primary);
 }
