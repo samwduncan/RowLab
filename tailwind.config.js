@@ -19,11 +19,11 @@ export default {
         // Void + Neon (Raycast/Linear aesthetic)
         // ============================================
 
-        // Void Scale - Warm black backgrounds
+        // Void Scale - Warm black backgrounds (matches stone palette)
         'void': {
-          'deep': '#08080A',      // Main app background
-          'surface': '#0c0c0e',   // Input backgrounds
-          'elevated': '#121214',  // Card surfaces
+          'deep': '#0F0F0F',      // Main app background (warm near-black, matches stone-950)
+          'surface': '#171717',   // Input backgrounds (matches stone-900)
+          'elevated': '#1F1F1F',  // Card surfaces (matches stone-800)
         },
 
         // Text Hierarchy (WCAG 2.1 AA compliant on void-deep)
@@ -83,9 +83,33 @@ export default {
         'error': '#EF4444',
         'info': '#7C3AED',
 
-        // Rowing-specific
-        'port': '#EF4444',        // Port side (red)
-        'starboard': '#10B981',   // Starboard (green) - maritime convention
+        // Rowing Semantic Colors (CSS variable-backed)
+        'rowing': {
+          'water': 'var(--palette-rowing-water)',      // Blue for erg/water contexts
+          'starboard': 'var(--palette-rowing-starboard)', // Green (maritime starboard)
+          'port': 'var(--palette-rowing-port)',        // Red (maritime port)
+          'gold': 'var(--palette-rowing-gold)',        // Achievement/PR highlights
+          'premium': 'var(--palette-rowing-premium)',  // Premium feature indicator
+        },
+
+        // Rowing-specific (legacy aliases using CSS variables)
+        'port': 'var(--palette-rowing-port)',        // Port side (red)
+        'starboard': 'var(--palette-rowing-starboard)',   // Starboard (green) - maritime convention
+
+        // Warm Stone Neutrals (explicit warm palette access)
+        'warm': {
+          '950': 'var(--palette-stone-950)',
+          '900': 'var(--palette-stone-900)',
+          '800': 'var(--palette-stone-800)',
+          '700': 'var(--palette-stone-700)',
+          '600': 'var(--palette-stone-600)',
+          '500': 'var(--palette-stone-500)',
+          '400': 'var(--palette-stone-400)',
+          '300': 'var(--palette-stone-300)',
+          '200': 'var(--palette-stone-200)',
+          '100': 'var(--palette-stone-100)',
+          '50': 'var(--palette-stone-50)',
+        },
 
         // Border colors (legacy support)
         'border': {
