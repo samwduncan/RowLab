@@ -4,8 +4,8 @@
 
 **Milestone:** v2.1 — Feature Expansion
 **Phase:** 19 (Penpot Design System & Visual Identity) — In Progress
-**Status:** 1 plan complete (foundation specification)
-**Last activity:** 2026-01-28 — Completed 19-01 (Design System Foundation Specification)
+**Status:** 2 plans complete (foundation + visual assets specifications)
+**Last activity:** 2026-01-28 — Completed 19-02 (Visual Assets Placeholder Specification)
 
 ## Project Reference
 
@@ -52,7 +52,7 @@ v2.0 Progress: ██████████████ (9 phases complete) �
 | 16 | Gamification & Engagement | Complete | 12/12 |
 | 17 | Complete Design Overhaul | In Progress | 7/8 |
 | 18 | Lineup & Boat Improvements | Complete | 11/11 |
-| 19 | Penpot Design System & Visual Identity | In Progress | 1/? |
+| 19 | Penpot Design System & Visual Identity | In Progress | 2/10 |
 
 v2.1 Progress: ████████░░░░░░ (3 phases complete, 2 in progress/planned)
 
@@ -354,7 +354,7 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-01-28
-**Stopped at:** Completed Phase 19 Plan 01 (Design System Foundation Specification)
+**Stopped at:** Completed Phase 19 Plan 02 (Visual Assets Placeholder Specification)
 **Resume file:** None
 
 ## Roadmap Evolution
@@ -674,6 +674,9 @@ Phase 13 delivered the cross-feature integration layer:
 | 19-01 | 28-color palette with hierarchical slash notation | Ink/Deep, Data/Excellent pattern creates auto-grouped Asset Library for clean navigation |
 | 19-01 | JetBrains Mono as Geist Mono fallback | Geist Mono may be unavailable in Penpot (Vercel proprietary), JetBrains Mono provides equivalent monospace aesthetic |
 | 19-01 | All Phase 17 color tokens in foundation | Complete palette upfront (Inkwell, Data, Chart, Rowing) prevents incremental additions during component design |
+| 19-02 | Placeholder-first approach for visual assets | Defer image upload to future manual step, specification documents all 24 placeholders (16 action images, 3 hero candidates, 5 videos) |
+| 19-02 | Prominent "VIDEO" labels for video placeholders | Videos can't embed in Penpot, prominent labeling with usage notes provides clear layout/behavior reference |
+| 19-02 | Detailed position specifications (exact x,y coordinates) | Enables precise manual recreation, eliminates guesswork, ensures professional spacing and alignment |
 
 ---
-*Last updated: 2026-01-28 — Phase 19 Plan 01 Complete*
+*Last updated: 2026-01-28 — Phase 19 Plan 02 Complete*
