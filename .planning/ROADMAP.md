@@ -735,7 +735,7 @@ Plans:
 
 **Requirements:** DESIGN-01 through DESIGN-07
 
-**Plans:** 9 plans
+**Plans:** 8 plans
 
 Plans:
 - [ ] 17-01-PLAN.md — Warm color palette foundation (tokens.css, tailwind.config.js)
@@ -743,10 +743,9 @@ Plans:
 - [ ] 17-03-PLAN.md — Theme updates (dark.css, light.css, field.css with warm stone palette)
 - [ ] 17-04-PLAN.md — Animation system (spring configs, CSS keyframes)
 - [ ] 17-05-PLAN.md — Core UI components (Button, Card, Toggle with tactile feedback)
-- [ ] 17-06-PLAN.md — Modal, Input, Table components with warm palette
+- [ ] 17-06-PLAN.md — Modal, Input, Table components with warm palette)
 - [ ] 17-07-PLAN.md — Mobile responsive overhaul (MobileNav, MobileCard, touch targets)
-- [ ] 17-08-PLAN.md — Landing page redesign
-- [ ] 17-09-PLAN.md — Final verification checkpoint
+- [ ] 17-08-PLAN.md — Final verification checkpoint
 
 **Delivers:**
 - Warm color system (dark and light modes with stone neutrals)
@@ -755,15 +754,13 @@ Plans:
 - Animation system (spring physics per CONTEXT.md spec)
 - Theme polish (dark, light, field with warm tones)
 - Mobile responsive overhaul (44px touch targets, swipe gestures)
-- Landing page redesign (dark mode, feature showcase, CTAs)
 
 **Success Criteria:**
 1. Color system updated with warm tones (#0F0F0F base, stone palette)
 2. Typography feels like "precision instrument" for data display
 3. All components have tactile, satisfying interactions
 4. Animations consistent with spring physics (stiffness: 400, damping: 17)
-5. Landing page matches app aesthetic and converts
-6. Mobile experience is fully polished with 44px touch targets
+5. Mobile experience is fully polished with 44px touch targets
 
 ---
 
@@ -808,11 +805,57 @@ Plans:
 
 ---
 
+### Phase 19: Penpot Design System & Visual Identity 🎨
+
+**Goal:** Create comprehensive visual designs in Penpot before implementation. Design landing page, application UI, and brand identity using Penpot's design libraries, templates, and plugins. Produce high-fidelity mockups that guide all future implementation.
+
+**Dependencies:** Phase 17 (design tokens and component foundations)
+
+**Requirements:** PENPOT-01 through PENPOT-10
+
+**Plans:** 10 plans
+
+Plans:
+- [ ] 19-01-PLAN.md — Penpot project setup + design token library (colors, typography)
+- [ ] 19-02-PLAN.md — Import rowing imagery assets into Penpot
+- [ ] 19-03-PLAN.md — Landing page hero + navigation design
+- [ ] 19-04-PLAN.md — Landing page features bento grid + technology cards
+- [ ] 19-05-PLAN.md — Landing page gallery + CTA sections + footer
+- [ ] 19-06-PLAN.md — Dashboard designs (coach and athlete views)
+- [ ] 19-07-PLAN.md — Athletes roster and profile panel designs
+- [ ] 19-08-PLAN.md — Lineup builder interface design
+- [ ] 19-09-PLAN.md — Extract reusable component library
+- [ ] 19-10-PLAN.md — Design specs, asset export, and stakeholder approval
+
+**Delivers:**
+- Complete Penpot design project with organized pages
+- Landing page high-fidelity mockups (hero, features, gallery, CTA, footer)
+- Application UI mockups (dashboard, athletes, lineup builder)
+- Design component library in Penpot (buttons, cards, forms, navigation)
+- Visual brand identity (colors, typography, imagery style)
+- Design specs and assets for developers
+- Integration of 16+ rowing images and videos from collection
+
+**Assets Available:**
+- 16 rowing images (rowing-1.jpg through rowing-16.jpg)
+- 3 scenic images (boathouse-sunset.jpg, crew-on-water.jpg, eight-skyline.jpg)
+- 5 videos (hero-video.mp4, video-2/3/5/6.mp4)
+
+**Success Criteria:**
+1. Penpot project created with organized page structure
+2. Landing page designs complete with all sections mockup-ready
+3. Application UI designs cover core workflows (dashboard, athletes, lineups)
+4. Design system components exportable for implementation
+5. All rowing imagery integrated into designs appropriately
+6. Stakeholder approval on visual direction before implementation
+
+---
+
 ## Milestone: v2.2 — Advanced Analytics (PLANNED)
 
 Telemetry, AI optimization, predictive modeling, and mobile coxswain experience.
 
-### Phase 19: Telemetry & Combined Scoring
+### Phase 20: Telemetry & Combined Scoring
 
 **Goal:** Import telemetry data from rowing sensors and create combined rankings.
 
@@ -834,11 +877,11 @@ Telemetry, AI optimization, predictive modeling, and mobile coxswain experience.
 
 ---
 
-### Phase 20: AI Lineup Optimizer (v2)
+### Phase 21: AI Lineup Optimizer (v2)
 
 **Goal:** AI-powered lineup recommendations with explanations.
 
-**Dependencies:** Phase 8, Phase 14, Phase 19
+**Dependencies:** Phase 8, Phase 14, Phase 20
 
 **Requirements:** AI-01 through AI-08
 
@@ -857,11 +900,11 @@ Telemetry, AI optimization, predictive modeling, and mobile coxswain experience.
 
 ---
 
-### Phase 21: Predictive Analytics
+### Phase 22: Predictive Analytics
 
 **Goal:** Data-driven predictions for performance, 2k potential, and injury risk.
 
-**Dependencies:** Phase 7, Phase 10, Phase 14, Phase 19
+**Dependencies:** Phase 7, Phase 10, Phase 14, Phase 20
 
 **Requirements:** PRED-01 through PRED-08
 
@@ -880,7 +923,7 @@ Telemetry, AI optimization, predictive modeling, and mobile coxswain experience.
 
 ---
 
-### Phase 22: Coxswain Mobile View
+### Phase 23: Coxswain Mobile View
 
 **Goal:** Dedicated mobile interface for on-water use with offline support.
 
@@ -951,19 +994,20 @@ The following requirements apply across all v2.0 phases:
 |-------|------|--------------|-------|--------|
 | 15 | Feature Toggles & Recruiting | 6 | 10 | Complete ✅ |
 | 16 | Gamification & Engagement | 8 | 12 | Complete ✅ |
-| 17 | Complete Design Overhaul | 7 | 9 | Planned |
+| 17 | Complete Design Overhaul | 7 | 8 | In Progress |
 | 18 | Lineup & Boat Improvements | 9 | 11 | Complete ✅ |
+| 19 | Penpot Design System & Visual Identity | 10 | 10 | Planned |
 
-**v2.1 Total:** 30 requirements across 4 phases (3 complete, 1 planned)
+**v2.1 Total:** 40 requirements across 5 phases (3 complete, 2 in progress/planned)
 
 ### v2.2 Milestone (Planned)
 
 | Phase | Name | Requirements | Plans | Status |
 |-------|------|--------------|-------|--------|
-| 19 | Telemetry & Combined Scoring | 8 | TBD | Planned |
-| 20 | AI Lineup Optimizer (v2) | 8 | TBD | Planned |
-| 21 | Predictive Analytics | 8 | TBD | Planned |
-| 22 | Coxswain Mobile View | 8 | TBD | Planned |
+| 20 | Telemetry & Combined Scoring | 8 | TBD | Planned |
+| 21 | AI Lineup Optimizer (v2) | 8 | TBD | Planned |
+| 22 | Predictive Analytics | 8 | TBD | Planned |
+| 23 | Coxswain Mobile View | 8 | TBD | Planned |
 
 **v2.2 Total:** 32 requirements across 4 phases
 
@@ -982,10 +1026,11 @@ Phases requiring deeper research during planning:
 | 15 | **Feature toggles & Recruiting** | **RESEARCH COMPLETE** — See 15-RESEARCH.md |
 | 16 | **Gamification patterns** | Achievement system design, streak mechanics, engagement psychology |
 | 17 | **Design system rebuild** | Framer Motion patterns, spring physics, satisfying interactions |
-| 19 | **Telemetry file formats** | Empower, Peach, NK have different file structures and metrics |
-| 20 | **AI/LLM integration** | GPT/Claude API patterns, prompt engineering for lineup optimization |
-| 21 | **Predictive modeling** | ML model selection, training data requirements, accuracy metrics |
-| 22 | **PWA offline patterns** | Service worker caching, IndexedDB, background sync strategies |
+| 19 | **Penpot Design System** | **RESEARCH COMPLETE** — See 19-RESEARCH.md |
+| 20 | **Telemetry file formats** | Empower, Peach, NK have different file structures and metrics |
+| 21 | **AI/LLM integration** | GPT/Claude API patterns, prompt engineering for lineup optimization |
+| 22 | **Predictive modeling** | ML model selection, training data requirements, accuracy metrics |
+| 23 | **PWA offline patterns** | Service worker caching, IndexedDB, background sync strategies |
 
 Phases with standard patterns (skip research):
 - Phase 6: Standard CRUD with virtualization
@@ -997,4 +1042,4 @@ Phases with standard patterns (skip research):
 ---
 
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-01-27 — Phase 17 planned (9 plans in 5 waves)*
+*Last updated: 2026-01-28 — Phase 19 planned (10 plans in 5 waves)*
