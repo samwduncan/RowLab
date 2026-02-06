@@ -3,15 +3,12 @@
  */
 
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import { queryKeys } from '../lib/queryKeys';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../utils/api';
 import type { LineupSearchFilters, LineupSearchResult } from '../types/equipment';
 
 // Query key factory
-export const lineupSearchKeys = {
-  all: ['lineup-search'] as const,
-  search: (filters: LineupSearchFilters) => [...lineupSearchKeys.all, filters] as const,
-};
 
 interface SearchResult {
   lineups: LineupSearchResult[];
@@ -28,7 +25,7 @@ export function useLineupSearch(filters: LineupSearchFilters, enabled = true) {
     useAuth();
 
   return useQuery({
-    queryKey: lineupSearchKeys.search(filters),
+    queryKey: queryKeys.lineupSearch.search(filters),
     queryFn: async (): Promise<SearchResult> => {
       const params = new URLSearchParams();
 

@@ -11,8 +11,8 @@ interface AttendanceSummary {
 }
 
 export function AttendanceSummaryWidget() {
-  const accessToken = useAuth().accessToken);
-  const activeTeamId = useAuth().activeTeamId);
+  const accessToken = useAuth().accessToken;
+  const activeTeamId = useAuth().activeTeamId;
 
   const { data, isLoading } = useQuery({
     queryKey: ['attendance-summary', activeTeamId],

@@ -3,17 +3,12 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '../lib/queryKeys';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../utils/api';
 import type { RiggingProfile, RiggingProfileInput, RiggingDefaults } from '../types/rigging';
 
 // Query key factory
-export const riggingKeys = {
-  all: ['rigging'] as const,
-  defaults: () => [...riggingKeys.all, 'defaults'] as const,
-  profiles: () => [...riggingKeys.all, 'profiles'] as const,
-  profile: (shellId: string) => [...riggingKeys.all, 'profile', shellId] as const,
-};
 
 /**
  * Get default rigging values for all boat classes
@@ -23,7 +18,7 @@ export function useDefaultRigging() {
     useAuth();
 
   return useQuery({
-    queryKey: riggingKeys.defaults(),
+    queryKey: queryKeys.rigging.defaults(),
     queryFn: async (): Promise<Record<string, RiggingDefaults>> => {
       const response = await api.get('/api/v1/rigging/defaults');
       const data = await response.data;
@@ -43,7 +38,7 @@ export function useTeamRiggingProfiles() {
     useAuth();
 
   return useQuery({
-    queryKey: riggingKeys.profiles(),
+    queryKey: queryKeys.rigging.profiles(),
     queryFn: async (): Promise<RiggingProfile[]> => {
       const response = await api.get('/api/v1/rigging');
       const data = await response.data;
@@ -63,7 +58,7 @@ export function useRiggingProfile(shellId: string | null) {
     useAuth();
 
   return useQuery({
-    queryKey: riggingKeys.profile(shellId || ''),
+    queryKey: queryKeys.rigging.profile(shellId || ''),
     queryFn: async (): Promise<RiggingProfile & { isCustom: boolean }> => {
       const response = await api.get(`/api/v1/rigging/shell/${shellId}`);
       const data = await response.data;
@@ -100,8 +95,8 @@ export function useSaveRiggingProfile() {
       return result.data.profile;
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: riggingKeys.profile(variables.shellId) });
-      queryClient.invalidateQueries({ queryKey: riggingKeys.profiles() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.rigging.profile(variables.shellId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.rigging.profiles() });
     },
   });
 }
@@ -122,8 +117,8 @@ export function useDeleteRiggingProfile() {
       if (!result.success) throw new Error(result.error?.message || 'Failed to delete profile');
     },
     onSuccess: (_, shellId) => {
-      queryClient.invalidateQueries({ queryKey: riggingKeys.profile(shellId) });
-      queryClient.invalidateQueries({ queryKey: riggingKeys.profiles() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.rigging.profile(shellId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.rigging.profiles() });
     },
   });
 }

@@ -3,6 +3,7 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '../lib/queryKeys';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../utils/api';
 import type {
@@ -13,14 +14,6 @@ import type {
 } from '../types/equipment';
 
 // Query key factory
-export const equipmentKeys = {
-  all: ['equipment'] as const,
-  availability: (date: string, excludeLineupId?: string) =>
-    [...equipmentKeys.all, 'availability', date, excludeLineupId] as const,
-  assignments: (date: string) => [...equipmentKeys.all, 'assignments', date] as const,
-  lineupAssignments: (lineupId: string) =>
-    [...equipmentKeys.all, 'lineup-assignments', lineupId] as const,
-};
 
 /**
  * Get equipment availability for a date
@@ -29,7 +22,7 @@ export function useEquipmentAvailability(date: string, excludeLineupId?: string)
   const { isAuthenticated, isInitialized, activeTeamId } = useAuth();
 
   return useQuery({
-    queryKey: equipmentKeys.availability(date, excludeLineupId),
+    queryKey: queryKeys.equipment.availability(date, excludeLineupId),
     queryFn: async (): Promise<EquipmentAvailability> => {
       let url = `/api/v1/equipment/availability?date=${encodeURIComponent(date)}`;
       if (excludeLineupId) {
@@ -52,7 +45,7 @@ export function useEquipmentAssignments(date: string) {
   const { isAuthenticated, isInitialized, activeTeamId } = useAuth();
 
   return useQuery({
-    queryKey: equipmentKeys.assignments(date),
+    queryKey: queryKeys.equipment.assignments(date),
     queryFn: async (): Promise<EquipmentAssignment[]> => {
       const response = await api.get(
         `/api/v1/equipment/assignments?date=${encodeURIComponent(date)}`
@@ -73,7 +66,7 @@ export function useLineupEquipmentAssignments(lineupId: string | null) {
   const { isAuthenticated, isInitialized, activeTeamId } = useAuth();
 
   return useQuery({
-    queryKey: equipmentKeys.lineupAssignments(lineupId || ''),
+    queryKey: queryKeys.equipment.lineupAssignments(lineupId || ''),
     queryFn: async (): Promise<EquipmentAssignment[]> => {
       const response = await api.get(`/api/v1/equipment/assignments/lineup/${lineupId}`);
       if (!response.data.success)
@@ -105,14 +98,14 @@ export function useCreateEquipmentAssignment() {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: equipmentKeys.availability(variables.assignedDate),
+        queryKey: queryKeys.equipment.availability(variables.assignedDate),
       });
       queryClient.invalidateQueries({
-        queryKey: equipmentKeys.assignments(variables.assignedDate),
+        queryKey: queryKeys.equipment.assignments(variables.assignedDate),
       });
       if (variables.lineupId) {
         queryClient.invalidateQueries({
-          queryKey: equipmentKeys.lineupAssignments(variables.lineupId),
+          queryKey: queryKeys.equipment.lineupAssignments(variables.lineupId),
         });
       }
     },
@@ -136,7 +129,7 @@ export function useDeleteEquipmentAssignment() {
     },
     onSuccess: () => {
       // Invalidate all equipment queries since we don't know the date/lineup
-      queryClient.invalidateQueries({ queryKey: equipmentKeys.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.equipment.all });
     },
   });
 }

@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '../lib/queryKeys';
 import api from '../utils/api';
 import { useAuth } from '../contexts/AuthContext';
 import { useShowGamification } from './useGamificationPreference';
@@ -11,12 +12,6 @@ import type {
 /**
  * Query key factory for achievements
  */
-export const achievementKeys = {
-  all: ['achievements'] as const,
-  list: () => [...achievementKeys.all, 'list'] as const,
-  athlete: (athleteId: string) => [...achievementKeys.all, 'athlete', athleteId] as const,
-  pinned: (athleteId: string) => [...achievementKeys.all, 'pinned', athleteId] as const,
-};
 
 /**
  * Fetch all achievements with current user's progress
@@ -41,7 +36,7 @@ export function useAchievements() {
   const showGamification = useShowGamification();
 
   const query = useQuery({
-    queryKey: achievementKeys.list(),
+    queryKey: queryKeys.achievements.list(),
     queryFn: fetchAchievements,
     enabled: isInitialized && isAuthenticated && showGamification,
     staleTime: 2 * 60 * 1000, // 2 minutes
@@ -65,7 +60,7 @@ export function useAthleteAchievements(athleteId: string) {
   const showGamification = useShowGamification();
 
   const query = useQuery({
-    queryKey: achievementKeys.athlete(athleteId),
+    queryKey: queryKeys.achievements.athlete(athleteId),
     queryFn: async () => {
       const response = await api.get<GamificationApiResponse<AchievementsResponse>>(
         `/api/v1/achievements/athlete/${athleteId}`
@@ -96,7 +91,7 @@ export function usePinnedAchievements(athleteId: string) {
   const showGamification = useShowGamification();
 
   return useQuery({
-    queryKey: achievementKeys.pinned(athleteId),
+    queryKey: queryKeys.achievements.pinned(athleteId),
     queryFn: async () => {
       const response = await api.get<GamificationApiResponse<{ pinned: AchievementWithProgress[] }>>(
         `/api/v1/achievements/pinned/${athleteId}`
@@ -128,7 +123,7 @@ export function useTogglePin() {
       return response.data.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: achievementKeys.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.achievements.all });
     },
   });
 }
@@ -150,7 +145,7 @@ export function useCheckProgress() {
       return response.data.data?.newlyUnlocked || [];
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: achievementKeys.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.achievements.all });
     },
   });
 }

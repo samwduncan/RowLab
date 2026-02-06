@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { queryKeys } from '../lib/queryKeys';
 import api from '../utils/api';
 import { useAuth } from '../contexts/AuthContext';
 import { useFeature } from './useFeaturePreference';
@@ -18,7 +19,7 @@ export function useGamificationEnabled() {
 
   // Athlete-level preference
   const { data: athletePrefs, isLoading } = useQuery({
-    queryKey: ['athlete', 'gamification-preference'],
+    queryKey: queryKeys.gamification.preferences(),
     queryFn: async () => {
       const response = await api.get<GamificationApiResponse<{ gamificationEnabled: boolean }>>(
         '/api/v1/athletes/me/preferences'
