@@ -1,18 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '../lib/queryKeys';
 import { useAuth } from '../contexts/AuthContext';
 import type { Regatta, RegattaFormData } from '../types/regatta';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
 // Query keys
-export const regattaKeys = {
-  all: ['regattas'] as const,
-  lists: () => [...regattaKeys.all, 'list'] as const,
-  list: (filters: { season?: string; limit?: number }) =>
-    [...regattaKeys.lists(), filters] as const,
-  details: () => [...regattaKeys.all, 'detail'] as const,
-  detail: (id: string) => [...regattaKeys.details(), id] as const,
-};
 
 // Fetch regattas list
 async function fetchRegattas(
@@ -114,7 +107,7 @@ export function useRegattas(options?: { season?: string; limit?: number }) {
   const { accessToken } = useAuth();
 
   return useQuery({
-    queryKey: regattaKeys.list(options || {}),
+    queryKey: queryKeys.regatta.list(options || {}),
     queryFn: () => fetchRegattas(accessToken!, options),
     enabled: !!accessToken,
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -128,7 +121,7 @@ export function useRegatta(id: string | undefined) {
   const { accessToken } = useAuth();
 
   return useQuery({
-    queryKey: regattaKeys.detail(id!),
+    queryKey: queryKeys.regatta.detail(id!),
     queryFn: () => fetchRegatta(accessToken!, id!),
     enabled: !!accessToken && !!id,
     staleTime: 5 * 60 * 1000,
@@ -145,7 +138,7 @@ export function useCreateRegatta() {
   return useMutation({
     mutationFn: (regatta: RegattaFormData) => createRegatta(accessToken!, regatta),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: regattaKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.regatta.lists() });
     },
   });
 }
@@ -161,8 +154,8 @@ export function useUpdateRegatta() {
     mutationFn: ({ id, updates }: { id: string; updates: Partial<RegattaFormData> }) =>
       updateRegatta(accessToken!, id, updates),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: regattaKeys.lists() });
-      queryClient.setQueryData(regattaKeys.detail(data.id), data);
+      queryClient.invalidateQueries({ queryKey: queryKeys.regatta.lists() });
+      queryClient.setQueryData(queryKeys.regatta.detail(data.id), data);
     },
   });
 }
@@ -177,8 +170,8 @@ export function useDeleteRegatta() {
   return useMutation({
     mutationFn: (id: string) => deleteRegatta(accessToken!, id),
     onSuccess: (_, id) => {
-      queryClient.invalidateQueries({ queryKey: regattaKeys.lists() });
-      queryClient.removeQueries({ queryKey: regattaKeys.detail(id) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.regatta.lists() });
+      queryClient.removeQueries({ queryKey: queryKeys.regatta.detail(id) });
     },
   });
 }
@@ -213,7 +206,7 @@ export function useDuplicateRegatta() {
       return createRegatta(accessToken!, newRegatta);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: regattaKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.regatta.lists() });
     },
   });
 }

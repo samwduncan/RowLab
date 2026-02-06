@@ -1,15 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '../lib/queryKeys';
 import { useAuth } from '../contexts/AuthContext';
 import type { ChecklistTemplate, ChecklistTemplateFormData, RaceChecklist } from '../types/regatta';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
-export const checklistKeys = {
-  all: ['checklists'] as const,
-  templates: () => [...checklistKeys.all, 'templates'] as const,
-  raceChecklist: (raceId: string) => [...checklistKeys.all, 'race', raceId] as const,
-  progress: (raceId: string) => [...checklistKeys.all, 'progress', raceId] as const,
-};
 
 // API Functions
 async function fetchTemplates(token: string): Promise<ChecklistTemplate[]> {
@@ -134,10 +129,10 @@ export function useChecklistTemplates() {
   const { accessToken } = useAuth();
 
   return useQuery({
-    queryKey: checklistKeys.templates(),
+    queryKey: queryKeys.checklist.templates(),
     queryFn: () => fetchTemplates(accessToken!),
     enabled: !!accessToken,
-    staleTime: 10 * 60 * 1000, // Templates rarely change
+    staleTime: 5 * 60 * 1000, // Templates rarely change
   });
 }
 
@@ -152,7 +147,7 @@ export function useCreateChecklistTemplate() {
     mutationFn: (template: ChecklistTemplateFormData) =>
       createTemplate(accessToken!, template),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: checklistKeys.templates() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.checklist.templates() });
     },
   });
 }
@@ -173,7 +168,7 @@ export function useUpdateChecklistTemplate() {
       updates: Partial<ChecklistTemplateFormData>;
     }) => updateTemplate(accessToken!, templateId, updates),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: checklistKeys.templates() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.checklist.templates() });
     },
   });
 }
@@ -188,7 +183,7 @@ export function useDeleteChecklistTemplate() {
   return useMutation({
     mutationFn: (templateId: string) => deleteTemplate(accessToken!, templateId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: checklistKeys.templates() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.checklist.templates() });
     },
   });
 }
@@ -204,7 +199,7 @@ export function useRaceChecklist(raceId: string | undefined) {
   const { accessToken } = useAuth();
 
   return useQuery({
-    queryKey: checklistKeys.raceChecklist(raceId!),
+    queryKey: queryKeys.checklist.raceChecklist(raceId!),
     queryFn: () => fetchRaceChecklist(accessToken!, raceId!),
     enabled: !!accessToken && !!raceId,
     staleTime: 30 * 1000, // 30 seconds - checklists update frequently during race day
@@ -218,7 +213,7 @@ export function useChecklistProgress(raceId: string | undefined) {
   const { accessToken } = useAuth();
 
   return useQuery({
-    queryKey: checklistKeys.progress(raceId!),
+    queryKey: queryKeys.checklist.progress(raceId!),
     queryFn: () => fetchChecklistProgress(accessToken!, raceId!),
     enabled: !!accessToken && !!raceId,
     staleTime: 30 * 1000,
@@ -236,8 +231,8 @@ export function useCreateRaceChecklist() {
     mutationFn: ({ raceId, templateId }: { raceId: string; templateId: string }) =>
       createRaceChecklist(accessToken!, raceId, templateId),
     onSuccess: (_, { raceId }) => {
-      queryClient.invalidateQueries({ queryKey: checklistKeys.raceChecklist(raceId) });
-      queryClient.invalidateQueries({ queryKey: checklistKeys.progress(raceId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.checklist.raceChecklist(raceId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.checklist.progress(raceId) });
     },
   });
 }
@@ -260,8 +255,8 @@ export function useToggleChecklistItem() {
       raceId: string;
     }) => toggleChecklistItem(accessToken!, itemId, completed),
     onSuccess: (_, { raceId }) => {
-      queryClient.invalidateQueries({ queryKey: checklistKeys.raceChecklist(raceId) });
-      queryClient.invalidateQueries({ queryKey: checklistKeys.progress(raceId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.checklist.raceChecklist(raceId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.checklist.progress(raceId) });
     },
   });
 }

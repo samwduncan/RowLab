@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '../lib/queryKeys';
 import api from '../utils/api';
 import { useAuth } from '../contexts/AuthContext';
 import type {
@@ -14,18 +15,6 @@ import type {
 /**
  * Query keys for integrations
  */
-export const integrationKeys = {
-  all: ['integrations'] as const,
-  c2: {
-    all: () => [...integrationKeys.all, 'c2'] as const,
-    status: () => [...integrationKeys.c2.all(), 'status'] as const,
-    syncConfig: () => [...integrationKeys.c2.all(), 'syncConfig'] as const,
-  },
-  strava: {
-    all: () => [...integrationKeys.all, 'strava'] as const,
-    status: () => [...integrationKeys.strava.all(), 'status'] as const,
-  },
-};
 
 // ============================================================================
 // Concept2 Integration Hooks
@@ -88,7 +77,7 @@ export function useC2Status() {
   const { isAuthenticated, isInitialized } = useAuth();
 
   const query = useQuery({
-    queryKey: integrationKeys.c2.status(),
+    queryKey: queryKeys.integration.c2.status(),
     queryFn: fetchC2Status,
     enabled: isInitialized && isAuthenticated,
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -113,7 +102,7 @@ export function useConnectC2() {
     mutationFn: connectC2,
     onSuccess: () => {
       // Invalidate C2 status after connection attempt
-      queryClient.invalidateQueries({ queryKey: integrationKeys.c2.status() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.integration.c2.status() });
     },
   });
 
@@ -136,9 +125,9 @@ export function useDisconnectC2() {
     mutationFn: disconnectC2,
     onSuccess: () => {
       // Invalidate C2 status after disconnect
-      queryClient.invalidateQueries({ queryKey: integrationKeys.c2.status() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.integration.c2.status() });
       // Also invalidate sync config
-      queryClient.invalidateQueries({ queryKey: integrationKeys.c2.syncConfig() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.integration.c2.syncConfig() });
     },
   });
 
@@ -161,7 +150,7 @@ export function useSyncC2() {
     onSuccess: () => {
       // Invalidate erg tests and C2 status after sync
       queryClient.invalidateQueries({ queryKey: ['ergTests'] });
-      queryClient.invalidateQueries({ queryKey: integrationKeys.c2.status() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.integration.c2.status() });
     },
   });
 
@@ -235,7 +224,7 @@ export function useStravaStatus() {
   const { isAuthenticated, isInitialized } = useAuth();
 
   const query = useQuery({
-    queryKey: integrationKeys.strava.status(),
+    queryKey: queryKeys.integration.strava.status(),
     queryFn: fetchStravaStatus,
     enabled: isInitialized && isAuthenticated,
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -260,7 +249,7 @@ export function useConnectStrava() {
     mutationFn: getStravaAuthUrl,
     onSuccess: () => {
       // Invalidate Strava status after connection attempt
-      queryClient.invalidateQueries({ queryKey: integrationKeys.strava.status() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.integration.strava.status() });
     },
   });
 
@@ -283,9 +272,9 @@ export function useDisconnectStrava() {
     mutationFn: disconnectStrava,
     onSuccess: () => {
       // Invalidate Strava status after disconnect
-      queryClient.invalidateQueries({ queryKey: integrationKeys.strava.status() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.integration.strava.status() });
       // Also invalidate C2 sync config (depends on Strava connection)
-      queryClient.invalidateQueries({ queryKey: integrationKeys.c2.syncConfig() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.integration.c2.syncConfig() });
     },
   });
 
@@ -307,7 +296,7 @@ export function useSyncStrava() {
     mutationFn: syncStrava,
     onSuccess: () => {
       // Invalidate Strava status after sync
-      queryClient.invalidateQueries({ queryKey: integrationKeys.strava.status() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.integration.strava.status() });
     },
   });
 
@@ -370,7 +359,7 @@ export function useC2SyncConfig() {
   const { isAuthenticated, isInitialized } = useAuth();
 
   const query = useQuery({
-    queryKey: integrationKeys.c2.syncConfig(),
+    queryKey: queryKeys.integration.c2.syncConfig(),
     queryFn: fetchC2SyncConfig,
     enabled: isInitialized && isAuthenticated,
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -396,14 +385,14 @@ export function useUpdateC2SyncConfig() {
     mutationFn: updateC2SyncConfig,
     onMutate: async (newConfig) => {
       // Cancel outgoing refetches
-      await queryClient.cancelQueries({ queryKey: integrationKeys.c2.syncConfig() });
+      await queryClient.cancelQueries({ queryKey: queryKeys.integration.c2.syncConfig() });
 
       // Snapshot previous value
-      const previousConfig = queryClient.getQueryData<C2SyncConfig>(integrationKeys.c2.syncConfig());
+      const previousConfig = queryClient.getQueryData<C2SyncConfig>(queryKeys.integration.c2.syncConfig());
 
       // Optimistically update
       if (previousConfig) {
-        queryClient.setQueryData(integrationKeys.c2.syncConfig(), {
+        queryClient.setQueryData(queryKeys.integration.c2.syncConfig(), {
           ...previousConfig,
           ...newConfig,
         });
@@ -414,12 +403,12 @@ export function useUpdateC2SyncConfig() {
     onError: (_err, _newConfig, context) => {
       // Rollback on error
       if (context?.previousConfig) {
-        queryClient.setQueryData(integrationKeys.c2.syncConfig(), context.previousConfig);
+        queryClient.setQueryData(queryKeys.integration.c2.syncConfig(), context.previousConfig);
       }
     },
     onSettled: () => {
       // Refetch after mutation settles
-      queryClient.invalidateQueries({ queryKey: integrationKeys.c2.syncConfig() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.integration.c2.syncConfig() });
     },
   });
 
@@ -441,7 +430,7 @@ export function useSyncC2ToStrava() {
     mutationFn: syncC2ToStrava,
     onSuccess: () => {
       // Invalidate sync config to refresh lastSyncedAt
-      queryClient.invalidateQueries({ queryKey: integrationKeys.c2.syncConfig() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.integration.c2.syncConfig() });
     },
   });
 

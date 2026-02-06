@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '../lib/queryKeys';
 import api from '../utils/api';
 import { useAuth } from '../contexts/AuthContext';
 import type { C2Status, C2SyncResult, ApiResponse } from '../types/ergTests';
@@ -46,7 +47,7 @@ export function useConcept2Status(athleteId?: string) {
   const { isAuthenticated, isInitialized } = useAuth();
 
   const query = useQuery({
-    queryKey: ['concept2', 'status', athleteId || 'me'],
+    queryKey: queryKeys.concept2.status(athleteId || 'me'),
     queryFn: () => fetchC2Status(athleteId),
     enabled: isInitialized && isAuthenticated,
     staleTime: 5 * 60 * 1000, // 5 minutes (status doesn't change frequently)
@@ -73,8 +74,8 @@ export function useTriggerC2Sync(athleteId?: string) {
     mutationFn: () => triggerC2Sync(athleteId),
     onSuccess: () => {
       // Invalidate erg tests and C2 status after sync
-      queryClient.invalidateQueries({ queryKey: ['ergTests'] });
-      queryClient.invalidateQueries({ queryKey: ['concept2', 'status'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.ergTests.all });
+      queryClient.invalidateQueries({ queryKey: [...queryKeys.concept2.all, 'status'] });
     },
   });
 
@@ -100,7 +101,7 @@ export function useTeamC2Statuses(athleteIds: string[]) {
 
   // Query all statuses in parallel
   const queries = useQuery({
-    queryKey: ['concept2', 'team-statuses', athleteIds],
+    queryKey: queryKeys.concept2.teamStatuses(),
     queryFn: async () => {
       const results = await Promise.all(
         athleteIds.map(async (id) => {

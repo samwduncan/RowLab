@@ -2,6 +2,7 @@
 // TanStack Query hooks for Recruit Visit CRUD operations
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '../lib/queryKeys';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../utils/api';
 import type {
@@ -33,15 +34,6 @@ interface ShareTokenResponse {
 // QUERY KEYS
 // ============================================
 
-export const recruitVisitKeys = {
-  all: ['recruitVisits'] as const,
-  lists: () => [...recruitVisitKeys.all, 'list'] as const,
-  list: (filters: RecruitVisitFilters) => [...recruitVisitKeys.lists(), filters] as const,
-  details: () => [...recruitVisitKeys.all, 'detail'] as const,
-  detail: (id: string) => [...recruitVisitKeys.details(), id] as const,
-  upcoming: () => [...recruitVisitKeys.all, 'upcoming'] as const,
-  byHost: (athleteId: string) => [...recruitVisitKeys.all, 'host', athleteId] as const,
-};
 
 // ============================================
 // API FUNCTIONS
@@ -136,10 +128,10 @@ export function useRecruitVisits(filters: RecruitVisitFilters = {}) {
   const { isAuthenticated, isInitialized } = useAuth();
 
   const query = useQuery({
-    queryKey: recruitVisitKeys.list(filters),
+    queryKey: queryKeys.recruitVisit.list(filters),
     queryFn: () => fetchRecruitVisits(filters),
     enabled: isInitialized && isAuthenticated,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 2 * 60 * 1000, // 5 minutes
   });
 
   return {
@@ -158,10 +150,10 @@ export function useRecruitVisit(visitId: string | null) {
   const { isAuthenticated, isInitialized } = useAuth();
 
   const query = useQuery({
-    queryKey: recruitVisitKeys.detail(visitId!),
+    queryKey: queryKeys.recruitVisit.detail(visitId!),
     queryFn: () => fetchRecruitVisit(visitId!),
     enabled: isInitialized && isAuthenticated && !!visitId,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 2 * 60 * 1000, // 5 minutes
   });
 
   return {
@@ -185,10 +177,10 @@ export function useUpcomingRecruitVisits() {
   };
 
   const query = useQuery({
-    queryKey: recruitVisitKeys.upcoming(),
+    queryKey: queryKeys.recruitVisit.upcoming(),
     queryFn: () => fetchRecruitVisits(filters),
     enabled: isInitialized && isAuthenticated,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 2 * 60 * 1000,
   });
 
   return {
@@ -211,10 +203,10 @@ export function useHostAthleteVisits(athleteId: string | null) {
   };
 
   const query = useQuery({
-    queryKey: recruitVisitKeys.byHost(athleteId!),
+    queryKey: queryKeys.recruitVisit.byHost(athleteId!),
     queryFn: () => fetchRecruitVisits(filters),
     enabled: isInitialized && isAuthenticated && !!athleteId,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 2 * 60 * 1000,
   });
 
   return {
@@ -239,7 +231,7 @@ export function useCreateRecruitVisit() {
   const mutation = useMutation({
     mutationFn: createRecruitVisit,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: recruitVisitKeys.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.recruitVisit.all });
     },
   });
 
@@ -260,8 +252,8 @@ export function useUpdateRecruitVisit() {
   const mutation = useMutation({
     mutationFn: updateRecruitVisit,
     onSuccess: (updatedVisit) => {
-      queryClient.invalidateQueries({ queryKey: recruitVisitKeys.all });
-      queryClient.setQueryData(recruitVisitKeys.detail(updatedVisit.id), updatedVisit);
+      queryClient.invalidateQueries({ queryKey: queryKeys.recruitVisit.all });
+      queryClient.setQueryData(queryKeys.recruitVisit.detail(updatedVisit.id), updatedVisit);
     },
   });
 
@@ -282,7 +274,7 @@ export function useDeleteRecruitVisit() {
   const mutation = useMutation({
     mutationFn: deleteRecruitVisit,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: recruitVisitKeys.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.recruitVisit.all });
     },
   });
 
@@ -304,7 +296,7 @@ export function useGenerateShareToken() {
     mutationFn: generateShareToken,
     onSuccess: (shareToken, visitId) => {
       // Update the visit detail cache with new share token
-      queryClient.invalidateQueries({ queryKey: recruitVisitKeys.detail(visitId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.recruitVisit.detail(visitId) });
     },
   });
 
