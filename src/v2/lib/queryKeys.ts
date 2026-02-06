@@ -172,6 +172,8 @@ export const queryKeys = {
     activityFeed: () => [...queryKeys.dashboard.all, 'activityFeed'] as const,
     layout: (userId: string) => [...queryKeys.dashboard.all, 'layout', userId] as const,
     exceptions: (teamId: string) => [...queryKeys.dashboard.all, 'exceptions', teamId] as const,
+    teamData: (teamId: string, athleteId: string) =>
+      [...queryKeys.dashboard.all, 'teamData', teamId, athleteId] as const,
   },
 
   // Settings
