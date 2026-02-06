@@ -10,6 +10,13 @@ export interface Lineup {
   id: string;
   name: string;
   notes?: string;
+  status?: 'draft' | 'published';
+  draftedBy?: string | null;
+  draftedByUser?: {
+    id: string;
+    name: string;
+  };
+  publishedAt?: string | null;
   assignments: LineupAssignment[];
   createdAt: string;
   updatedAt: string;
