@@ -40,8 +40,7 @@ export const EmptyPracticeState: React.FC = () => {
   return React.createElement(EmptyStateAnimated, {
     animationType: 'practice',
     title: 'No Sessions Scheduled',
-    description:
-      'Create your first practice session to start tracking attendance and performance.',
+    description: 'Create your first practice session to start tracking attendance and performance.',
     action: {
       label: 'Schedule Practice',
       to: '/app/sessions/new',
@@ -56,8 +55,7 @@ export const EmptyErgState: React.FC = () => {
   return React.createElement(EmptyStateAnimated, {
     animationType: 'erg',
     title: 'No Erg Data',
-    description:
-      'Log erg test results to track athlete progress and performance over time.',
+    description: 'Log erg test results to track athlete progress and performance over time.',
     action: {
       label: 'Log Erg Test',
       to: '/app/erg/new',
@@ -105,7 +103,7 @@ export const EmptyDashboardState: React.FC = () => {
     animationType: 'onboarding',
     title: 'Welcome to RowLab',
     description:
-      'Your rowing management platform is ready. Let's get started by setting up your team.',
+      "Your rowing management platform is ready. Let's get started by setting up your team.",
     action: {
       label: 'Get Started',
       to: '/app/onboarding',
