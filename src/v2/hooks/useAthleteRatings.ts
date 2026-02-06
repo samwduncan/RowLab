@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../utils/api';
 import { useAuth } from '../contexts/AuthContext';
+import { queryKeys } from '../lib/queryKeys';
 import type { RatingWithAthlete, Side, ApiResponse } from '../types/seatRacing';
 
 /**
@@ -115,16 +116,10 @@ export function useAthleteRatings(options?: RatingsOptions) {
   const { isAuthenticated, isInitialized, activeTeamId } = useAuth();
 
   const query = useQuery({
-    queryKey: [
-      'athleteRatings',
-      activeTeamId,
-      options?.ratingType,
-      options?.minRaces,
-      options?.side,
-    ],
+    queryKey: queryKeys.ratings.rankings(options?.side),
     queryFn: () => fetchAthleteRatings(activeTeamId!, options),
     enabled: isInitialized && isAuthenticated && !!activeTeamId,
-    staleTime: 2 * 60 * 1000, // 2 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   return {
@@ -147,10 +142,10 @@ export function useAthleteRatingHistory(athleteId: string | null) {
   const { isAuthenticated, isInitialized } = useAuth();
 
   const query = useQuery({
-    queryKey: ['athleteRatingHistory', athleteId],
+    queryKey: queryKeys.ratings.athlete(athleteId || ''),
     queryFn: () => fetchAthleteRatingHistory(athleteId!),
     enabled: isInitialized && isAuthenticated && !!athleteId,
-    staleTime: 2 * 60 * 1000, // 2 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   return {
@@ -188,8 +183,8 @@ export function useRecalculateRatings() {
     mutationFn: recalculateRatings,
     onSuccess: () => {
       // Invalidate all rating queries to refetch with updated values
-      queryClient.invalidateQueries({ queryKey: ['athleteRatings'] });
-      queryClient.invalidateQueries({ queryKey: ['athleteRatingHistory'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.ratings.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.ratings.all });
     },
   });
 

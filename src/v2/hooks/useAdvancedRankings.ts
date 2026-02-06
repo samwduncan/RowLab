@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import api from '../utils/api';
 import { useAuth } from '../contexts/AuthContext';
+import { queryKeys } from '../lib/queryKeys';
 import type { BradleyTerryModel, ProbabilityPair, ComparisonGraph } from '../types/advancedRanking';
 import type { ApiResponse } from '../types/dashboard';
 

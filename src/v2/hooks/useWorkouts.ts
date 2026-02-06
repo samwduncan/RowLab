@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../utils/api';
 import { useAuth } from '../contexts/AuthContext';
+import { queryKeys } from '../lib/queryKeys';
 
 // ============================================
 // TYPES
@@ -148,9 +149,8 @@ async function fetchWorkouts(options: WorkoutListOptions = {}): Promise<PlannedW
   }
 
   // For calendar view (all workouts across plans), fetch all plans and aggregate
-  const plansResponse = await api.get<TrainingApiResponse<{ plans: TrainingPlan[] }>>(
-    '/api/v1/training-plans'
-  );
+  const plansResponse =
+    await api.get<TrainingApiResponse<{ plans: TrainingPlan[] }>>('/api/v1/training-plans');
 
   if (!plansResponse.data.success || !plansResponse.data.data) {
     throw new Error('Failed to fetch workouts');

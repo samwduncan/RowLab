@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../utils/api';
 import { useAuth } from '../contexts/AuthContext';
+import { queryKeys } from '../lib/queryKeys';
 
 // ============================================
 // TYPES
@@ -137,10 +138,10 @@ export function useTrainingPlans(options?: PlanListOptions) {
   const { isAuthenticated, isInitialized } = useAuth();
 
   const query = useQuery({
-    queryKey: ['trainingPlans', options],
+    queryKey: queryKeys.trainingPlans.list(options),
     queryFn: () => fetchTrainingPlans(options),
     enabled: isInitialized && isAuthenticated,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 2 * 60 * 1000, // 2 minutes
   });
 
   return {
@@ -158,10 +159,10 @@ export function useTrainingPlan(planId: string | null) {
   const { isAuthenticated, isInitialized } = useAuth();
 
   const query = useQuery({
-    queryKey: ['trainingPlan', planId],
+    queryKey: queryKeys.trainingPlans.detail(planId || ''),
     queryFn: () => fetchTrainingPlan(planId!),
     enabled: isInitialized && isAuthenticated && !!planId,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 2 * 60 * 1000,
   });
 
   return {
@@ -182,7 +183,7 @@ export function useCreatePlan() {
   const mutation = useMutation({
     mutationFn: createPlan,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trainingPlans'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.trainingPlans.all });
     },
   });
 
@@ -200,8 +201,8 @@ export function useUpdatePlan() {
   const mutation = useMutation({
     mutationFn: updatePlan,
     onSuccess: (updatedPlan) => {
-      queryClient.invalidateQueries({ queryKey: ['trainingPlans'] });
-      queryClient.invalidateQueries({ queryKey: ['trainingPlan', updatedPlan.id] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.trainingPlans.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.trainingPlans.detail(updatedPlan.id) });
     },
   });
 
@@ -219,7 +220,7 @@ export function useDeletePlan() {
   const mutation = useMutation({
     mutationFn: deletePlan,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trainingPlans'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.trainingPlans.all });
     },
   });
 
@@ -237,7 +238,7 @@ export function useDuplicatePlan() {
   const mutation = useMutation({
     mutationFn: duplicatePlan,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['trainingPlans'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.trainingPlans.all });
     },
   });
 

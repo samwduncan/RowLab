@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../utils/api';
 import { useAuth } from '../contexts/AuthContext';
+import { queryKeys } from '../lib/queryKeys';
 import type {
   SeatRaceSession,
   SessionWithDetails,
@@ -241,10 +242,10 @@ export function useSeatRaceSessions(options?: SessionListOptions) {
   const { isAuthenticated, isInitialized } = useAuth();
 
   const query = useQuery({
-    queryKey: ['seatRaceSessions', options],
+    queryKey: queryKeys.seatRaces.list(options),
     queryFn: () => fetchSeatRaceSessions(options),
     enabled: isInitialized && isAuthenticated,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 2 * 60 * 1000, // 2 minutes
   });
 
   return {
@@ -262,10 +263,10 @@ export function useSeatRaceSession(sessionId: string | null) {
   const { isAuthenticated, isInitialized } = useAuth();
 
   const query = useQuery({
-    queryKey: ['seatRaceSession', sessionId],
+    queryKey: queryKeys.seatRaces.detail(sessionId || ''),
     queryFn: () => fetchSeatRaceSession(sessionId!),
     enabled: isInitialized && isAuthenticated && !!sessionId,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 2 * 60 * 1000, // 2 minutes
   });
 
   return {
@@ -289,7 +290,7 @@ export function useCreateSession() {
   const mutation = useMutation({
     mutationFn: createSession,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['seatRaceSessions'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.seatRaces.all });
     },
   });
 
@@ -310,8 +311,8 @@ export function useUpdateSession() {
   const mutation = useMutation({
     mutationFn: updateSession,
     onSuccess: (updatedSession) => {
-      queryClient.invalidateQueries({ queryKey: ['seatRaceSessions'] });
-      queryClient.invalidateQueries({ queryKey: ['seatRaceSession', updatedSession.id] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.seatRaces.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.seatRaces.detail(updatedSession.id) });
     },
   });
 
@@ -332,7 +333,7 @@ export function useDeleteSession() {
   const mutation = useMutation({
     mutationFn: deleteSession,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['seatRaceSessions'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.seatRaces.all });
     },
   });
 
@@ -353,7 +354,7 @@ export function useAddPiece() {
   const mutation = useMutation({
     mutationFn: addPiece,
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['seatRaceSession', variables.sessionId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.seatRaces.detail(variables.sessionId) });
     },
   });
 
@@ -374,7 +375,7 @@ export function useUpdatePiece() {
   const mutation = useMutation({
     mutationFn: updatePiece,
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['seatRaceSession', variables.sessionId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.seatRaces.detail(variables.sessionId) });
     },
   });
 
@@ -395,7 +396,7 @@ export function useDeletePiece() {
   const mutation = useMutation({
     mutationFn: deletePiece,
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['seatRaceSession', variables.sessionId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.seatRaces.detail(variables.sessionId) });
     },
   });
 
@@ -416,7 +417,7 @@ export function useAddBoat() {
   const mutation = useMutation({
     mutationFn: addBoat,
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['seatRaceSession', variables.sessionId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.seatRaces.detail(variables.sessionId) });
     },
   });
 
@@ -437,7 +438,7 @@ export function useUpdateBoat() {
   const mutation = useMutation({
     mutationFn: updateBoat,
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['seatRaceSession', variables.sessionId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.seatRaces.detail(variables.sessionId) });
     },
   });
 
@@ -458,7 +459,7 @@ export function useDeleteBoat() {
   const mutation = useMutation({
     mutationFn: deleteBoat,
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['seatRaceSession', variables.sessionId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.seatRaces.detail(variables.sessionId) });
     },
   });
 
@@ -479,7 +480,7 @@ export function useSetAssignments() {
   const mutation = useMutation({
     mutationFn: setAssignments,
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['seatRaceSession', variables.sessionId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.seatRaces.detail(variables.sessionId) });
     },
   });
 
@@ -500,7 +501,7 @@ export function useProcessSession() {
   const mutation = useMutation({
     mutationFn: processSession,
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['seatRaceSession', variables.sessionId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.seatRaces.detail(variables.sessionId) });
       queryClient.invalidateQueries({ queryKey: ['athleteRatings'] });
     },
   });

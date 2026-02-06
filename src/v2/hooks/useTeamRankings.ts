@@ -1,6 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../contexts/AuthContext';
-import type { TeamSpeedEstimate, HeadToHeadComparison, ExternalRanking, ExternalRankingFormData, ExternalTeam } from '../types/regatta';
+import { queryKeys as globalQueryKeys } from '../lib/queryKeys';
+import type {
+  TeamSpeedEstimate,
+  HeadToHeadComparison,
+  ExternalRanking,
+  ExternalRankingFormData,
+  ExternalTeam,
+} from '../types/regatta';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -176,7 +183,11 @@ export function useExternalTeams() {
 /**
  * Fetch external rankings with optional filters
  */
-export function useExternalRankings(filters?: { boatClass?: string; source?: string; season?: string }) {
+export function useExternalRankings(filters?: {
+  boatClass?: string;
+  source?: string;
+  season?: string;
+}) {
   const { accessToken } = useAuth();
 
   return useQuery({
@@ -195,8 +206,7 @@ export function useAddExternalRanking() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (ranking: ExternalRankingFormData) =>
-      addExternalRanking(accessToken!, ranking),
+    mutationFn: (ranking: ExternalRankingFormData) => addExternalRanking(accessToken!, ranking),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: rankingKeys.external() });
     },

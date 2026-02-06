@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import api from '../utils/api';
 import { useAuth } from '../contexts/AuthContext';
+import { queryKeys } from '../lib/queryKeys';
 import type {
   WorkoutAssignment,
   PlannedWorkout,
@@ -29,9 +30,9 @@ async function fetchAssignments(options: AssignmentListOptions = {}): Promise<Wo
 
   // If planId specified, get assignments for that plan
   if (options.planId) {
-    const response = await api.get<TrainingApiResponse<{ plan: { assignments: WorkoutAssignment[] } }>>(
-      `/api/v1/training-plans/${options.planId}`
-    );
+    const response = await api.get<
+      TrainingApiResponse<{ plan: { assignments: WorkoutAssignment[] } }>
+    >(`/api/v1/training-plans/${options.planId}`);
     if (!response.data.success || !response.data.data) {
       throw new Error('Failed to fetch assignments');
     }
@@ -39,9 +40,10 @@ async function fetchAssignments(options: AssignmentListOptions = {}): Promise<Wo
   }
 
   // Otherwise, fetch all plans and aggregate assignments
-  const response = await api.get<TrainingApiResponse<{ plans: { id: string; assignments: WorkoutAssignment[] }[] }>>(
-    '/api/v1/training-plans'
-  );
+  const response =
+    await api.get<
+      TrainingApiResponse<{ plans: { id: string; assignments: WorkoutAssignment[] }[] }>
+    >('/api/v1/training-plans');
   if (!response.data.success || !response.data.data) {
     throw new Error('Failed to fetch assignments');
   }
@@ -49,19 +51,23 @@ async function fetchAssignments(options: AssignmentListOptions = {}): Promise<Wo
   const allAssignments: WorkoutAssignment[] = [];
   for (const plan of response.data.data.plans) {
     if (plan.assignments) {
-      allAssignments.push(...plan.assignments.map(a => ({ ...a, planId: plan.id })));
+      allAssignments.push(...plan.assignments.map((a) => ({ ...a, planId: plan.id })));
     }
   }
 
   // Filter by athleteId if specified
   if (options.athleteId) {
-    return allAssignments.filter(a => a.athleteId === options.athleteId);
+    return allAssignments.filter((a) => a.athleteId === options.athleteId);
   }
 
   return allAssignments;
 }
 
-async function fetchAthleteWorkouts(athleteId: string, startDate?: Date, endDate?: Date): Promise<{
+async function fetchAthleteWorkouts(
+  athleteId: string,
+  startDate?: Date,
+  endDate?: Date
+): Promise<{
   assignments: WorkoutAssignment[];
   workouts: PlannedWorkout[];
   completions: WorkoutCompletion[];
@@ -72,13 +78,13 @@ async function fetchAthleteWorkouts(athleteId: string, startDate?: Date, endDate
   if (endDate) params.append('endDate', format(endDate, 'yyyy-MM-dd'));
 
   // Get athlete's load data which includes assignments
-  const loadResponse = await api.get<TrainingApiResponse<{
-    assignments: WorkoutAssignment[];
-    workouts: PlannedWorkout[];
-    completions: WorkoutCompletion[];
-  }>>(
-    `/api/v1/training-plans/athlete/${athleteId}/load?${params.toString()}`
-  );
+  const loadResponse = await api.get<
+    TrainingApiResponse<{
+      assignments: WorkoutAssignment[];
+      workouts: PlannedWorkout[];
+      completions: WorkoutCompletion[];
+    }>
+  >(`/api/v1/training-plans/athlete/${athleteId}/load?${params.toString()}`);
 
   if (!loadResponse.data.success || !loadResponse.data.data) {
     throw new Error('Failed to fetch athlete workouts');
