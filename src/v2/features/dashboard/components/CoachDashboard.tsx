@@ -3,8 +3,8 @@
  * Phase 27-03: Complete coach dashboard with bento grid, exception banner, and widgets
  */
 
-import React, { useMemo } from 'react';
-import { Responsive, WidthProvider, Layout as RGLLayout } from 'react-grid-layout';
+import React, { useMemo, useRef } from 'react';
+import { ResponsiveGridLayout, useContainerWidth, Layout as RGLLayout } from 'react-grid-layout';
 import { DotsSixVertical, X } from '@phosphor-icons/react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useDashboardLayout } from '../hooks/useDashboardLayout';
@@ -18,8 +18,6 @@ import type { WidgetInstance } from '../types';
 
 // Import CSS for react-grid-layout
 import 'react-grid-layout/css/styles.css';
-
-const ResponsiveGridLayout = WidthProvider(Responsive);
 
 /**
  * CoachDashboard - Complete coach dashboard layout
@@ -40,20 +38,9 @@ export const CoachDashboard: React.FC = () => {
 
   const { summary: exceptionSummary, widgetExceptions } = useExceptions(activeTeamId || '');
 
-  // Container width measurement
+  // Container width measurement using react-grid-layout v2 hook
   const containerRef = useRef<HTMLDivElement>(null);
-  const [containerWidth, setContainerWidth] = useState(1200);
-
-  useEffect(() => {
-    const measureWidth = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth);
-      }
-    };
-    measureWidth();
-    window.addEventListener('resize', measureWidth);
-    return () => window.removeEventListener('resize', measureWidth);
-  }, []);
+  const containerWidth = useContainerWidth(containerRef);
 
   // Auto-launch tour on first visit
   useTour('coach-dashboard', { autoStart: true, delay: 800 });
