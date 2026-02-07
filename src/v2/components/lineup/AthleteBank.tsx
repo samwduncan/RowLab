@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Search } from 'lucide-react';
-import useLineupStore from '@/store/lineupStore';
+import { useAthletes } from '../../hooks/useAthletes';
+import { useLineupDraft } from '../../hooks/useLineupDraft';
 import { DraggableAthleteCard } from './DraggableAthleteCard';
 import type { AthleteBankProps } from '@v2/types/lineup';
 
@@ -11,7 +12,8 @@ import type { AthleteBankProps } from '@v2/types/lineup';
  * Athletes shown here are NOT currently assigned to any boat seat.
  *
  * Features:
- * - Get available athletes from useLineupStore().getAvailableAthletes()
+ * - Get available athletes from useAthletes TanStack Query hook
+ * - Filter out assigned athletes based on draft.assignments
  * - Search filter by name
  * - Shows athlete avatar (uses AthleteAvatar pattern)
  * - Shows side preference badge (Port/Starboard/Both/Cox)
@@ -22,14 +24,23 @@ import type { AthleteBankProps } from '@v2/types/lineup';
  *
  * Athletes are draggable using DraggableAthleteCard with source='bank'
  */
-export function AthleteBank({ className = '' }: AthleteBankProps) {
+export function AthleteBank({
+  className = '',
+  lineupId,
+}: AthleteBankProps & { lineupId: string | null }) {
   const [searchQuery, setSearchQuery] = useState('');
-  const getAvailableAthletes = useLineupStore((state) => state.getAvailableAthletes);
 
-  // Get available athletes
+  // V3 hooks: TanStack Query for athletes and draft state
+  const { allAthletes } = useAthletes();
+  const { draft } = useLineupDraft(lineupId);
+
+  // Get available athletes (those not in any draft assignment)
   const availableAthletes = useMemo(() => {
-    return getAvailableAthletes();
-  }, [getAvailableAthletes]);
+    if (!draft) return allAthletes;
+
+    const assignedAthleteIds = new Set(draft.assignments.map((a) => a.athleteId));
+    return allAthletes.filter((athlete) => !assignedAthleteIds.has(athlete.id));
+  }, [allAthletes, draft]);
 
   // Filter athletes by search query
   const filteredAthletes = useMemo(() => {
@@ -55,9 +66,7 @@ export function AthleteBank({ className = '' }: AthleteBankProps) {
       {/* Header */}
       <div className="px-4 py-4 border-b border-bdr-subtle">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-txt-primary">
-            Available Athletes
-          </h2>
+          <h2 className="text-sm font-semibold text-txt-primary">Available Athletes</h2>
           <span className="text-xs font-medium text-txt-tertiary px-2 py-0.5 rounded-full bg-bg-active">
             {filteredAthletes.length}
           </span>
@@ -90,19 +99,13 @@ export function AthleteBank({ className = '' }: AthleteBankProps) {
         {filteredAthletes.length === 0 ? (
           <div className="px-4 py-8 text-center">
             <p className="text-sm text-txt-tertiary">
-              {searchQuery
-                ? 'No athletes match your search'
-                : 'All athletes are assigned to boats'}
+              {searchQuery ? 'No athletes match your search' : 'All athletes are assigned to boats'}
             </p>
           </div>
         ) : (
           <div className="p-2 space-y-1">
             {filteredAthletes.map((athlete) => (
-              <DraggableAthleteCard
-                key={athlete.id}
-                athlete={athlete}
-                source={{ type: 'bank' }}
-              />
+              <DraggableAthleteCard key={athlete.id} athlete={athlete} source={{ type: 'bank' }} />
             ))}
           </div>
         )}

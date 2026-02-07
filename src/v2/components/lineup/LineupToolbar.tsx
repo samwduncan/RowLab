@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Undo2, Redo2, Save } from 'lucide-react';
-import useLineupStore from '@/store/lineupStore';
+import { useLineupCommands } from '../../hooks/useLineupCommands';
+import { useLineupDraft } from '../../hooks/useLineupDraft';
 import { ExportPDFButton } from './ExportPDFButton';
 import { VersionHistory } from './VersionHistory';
 import { SaveLineupDialog } from './SaveLineupDialog';
@@ -11,6 +12,8 @@ import type { Lineup } from '../../hooks/useLineups';
  */
 interface LineupToolbarProps {
   className?: string;
+  lineupId: string | null;
+  cancelAutoSave?: () => void;
 }
 
 /**
@@ -35,23 +38,25 @@ interface LineupToolbarProps {
  * "Undo/redo covers every action - each drag, swap, removal is individually undoable"
  * "Version history accessed via dropdown menu - compact, keeps builder clean"
  */
-export function LineupToolbar({ className = '' }: LineupToolbarProps) {
+export function LineupToolbar({ className = '', lineupId, cancelAutoSave }: LineupToolbarProps) {
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
   const [lineupToUpdate, setLineupToUpdate] = useState<Lineup | null>(null);
 
-  const undo = useLineupStore((state) => state.undo);
-  const redo = useLineupStore((state) => state.redo);
-  const history = useLineupStore((state) => state._history);
-  const lineupName = useLineupStore((state) => state.lineupName);
+  // V3 hooks: command-based undo/redo and draft state
+  const { undo, redo, canUndo, canRedo, undoCount, redoCount } = useLineupCommands(
+    lineupId,
+    cancelAutoSave
+  );
+  const { draft } = useLineupDraft(lineupId);
 
   const handleUndo = () => {
-    if (history.canUndo) {
+    if (canUndo) {
       undo();
     }
   };
 
   const handleRedo = () => {
-    if (history.canRedo) {
+    if (canRedo) {
       redo();
     }
   };
@@ -81,11 +86,12 @@ export function LineupToolbar({ className = '' }: LineupToolbarProps) {
   };
 
   /**
-   * After successful save, update displayed name
+   * After successful save, handle success
+   * Note: The draft query will be invalidated by the save mutation,
+   * so the draft name will update automatically.
    */
-  const handleSaveSuccess = (lineup: Lineup) => {
-    useLineupStore.getState().setLineupName(lineup.name);
-    useLineupStore.getState().setCurrentLineupId(lineup.id);
+  const handleSaveSuccess = (_lineup: Lineup) => {
+    // No-op: TanStack Query will handle cache updates
   };
 
   return (
@@ -93,20 +99,20 @@ export function LineupToolbar({ className = '' }: LineupToolbarProps) {
       {/* Undo Button */}
       <button
         onClick={handleUndo}
-        disabled={!history.canUndo}
+        disabled={!canUndo}
         className={`
           inline-flex items-center gap-2 px-3 py-2 rounded-lg
           text-sm font-medium
           transition-all duration-150
           ${
-            history.canUndo
+            canUndo
               ? 'bg-bg-surface hover:bg-bg-hover text-txt-primary border border-bdr-default hover:border-bdr-hover'
               : 'bg-bg-surface text-txt-disabled border border-bdr-default cursor-not-allowed opacity-50'
           }
         `}
         title={
-          history.canUndo
-            ? `Undo (Ctrl+Z) - ${history.undoCount} ${history.undoCount === 1 ? 'change' : 'changes'}`
+          canUndo
+            ? `Undo (Ctrl+Z) - ${undoCount} ${undoCount === 1 ? 'change' : 'changes'}`
             : 'Undo (Ctrl+Z)'
         }
         aria-label="Undo"
@@ -118,20 +124,20 @@ export function LineupToolbar({ className = '' }: LineupToolbarProps) {
       {/* Redo Button */}
       <button
         onClick={handleRedo}
-        disabled={!history.canRedo}
+        disabled={!canRedo}
         className={`
           inline-flex items-center gap-2 px-3 py-2 rounded-lg
           text-sm font-medium
           transition-all duration-150
           ${
-            history.canRedo
+            canRedo
               ? 'bg-bg-surface hover:bg-bg-hover text-txt-primary border border-bdr-default hover:border-bdr-hover'
               : 'bg-bg-surface text-txt-disabled border border-bdr-default cursor-not-allowed opacity-50'
           }
         `}
         title={
-          history.canRedo
-            ? `Redo (Ctrl+Shift+Z) - ${history.redoCount} ${history.redoCount === 1 ? 'change' : 'changes'}`
+          canRedo
+            ? `Redo (Ctrl+Shift+Z) - ${redoCount} ${redoCount === 1 ? 'change' : 'changes'}`
             : 'Redo (Ctrl+Shift+Z)'
         }
         aria-label="Redo"
@@ -150,10 +156,10 @@ export function LineupToolbar({ className = '' }: LineupToolbarProps) {
       <div className="w-px h-8 bg-bdr-default mx-1" />
 
       {/* Current lineup name */}
-      {lineupName && (
+      {draft?.name && (
         <div className="flex items-center gap-2 px-3 py-2 bg-bg-surface border border-bdr-default rounded-lg">
           <span className="text-sm font-medium text-txt-primary truncate max-w-xs">
-            {lineupName}
+            {draft.name}
           </span>
         </div>
       )}
