@@ -34,6 +34,7 @@ import type { AthleteSource } from './DraggableAthleteCard';
  * Props for LineupWorkspace
  */
 interface LineupWorkspaceProps {
+  lineupId: string | null;
   className?: string;
 }
 
@@ -63,9 +64,8 @@ interface LineupWorkspaceProps {
  * Per RESEARCH.md:
  * "Track source position BEFORE state change to properly swap"
  */
-export function LineupWorkspace({ className = '' }: LineupWorkspaceProps) {
-  // Get currentLineupId from V1 store (migration: will come from route/props later)
-  const currentLineupId = useLineupStore((state) => state.currentLineupId);
+export function LineupWorkspace({ lineupId, className = '' }: LineupWorkspaceProps) {
+  // lineupId now comes from props (passed from page via URL params)
   const activeBoats = useLineupStore((state) => state.activeBoats);
   const assignToSeat = useLineupStore((state) => state.assignToSeat);
   const assignToCoxswain = useLineupStore((state) => state.assignToCoxswain);
@@ -73,8 +73,8 @@ export function LineupWorkspace({ className = '' }: LineupWorkspaceProps) {
   const removeFromCoxswain = useLineupStore((state) => state.removeFromCoxswain);
 
   // V2 hooks for draft management and command-based undo
-  const { autoSave, cancelAutoSave } = useLineupDraft(currentLineupId);
-  const { executeCommand } = useLineupCommands(currentLineupId, cancelAutoSave);
+  const { autoSave, cancelAutoSave } = useLineupDraft(lineupId);
+  const { executeCommand } = useLineupCommands(lineupId, cancelAutoSave);
 
   const [, setActiveId] = useState<string | null>(null);
   const [activeAthlete, setActiveAthlete] = useState<Athlete | null>(null);
@@ -91,7 +91,7 @@ export function LineupWorkspace({ className = '' }: LineupWorkspaceProps) {
   }, []);
 
   // Enable keyboard shortcuts (Ctrl+Z, Ctrl+Shift+Z) with command-based undo
-  useLineupKeyboard(currentLineupId, cancelAutoSave);
+  useLineupKeyboard(lineupId, cancelAutoSave);
 
   // Configure drag sensors
   const sensors = useSensors(
@@ -181,7 +181,7 @@ export function LineupWorkspace({ className = '' }: LineupWorkspaceProps) {
       }
 
       // Create swap command for undo/redo if both are seats (not bank)
-      if (sourcePosition.type !== 'bank' && currentLineupId) {
+      if (sourcePosition.type !== 'bank' && lineupId) {
         const assignment1: LineupAssignment = {
           athleteId: draggedAthlete.id,
           boatClass: targetData.boatClass || '8+', // TODO: get from boat config
@@ -199,7 +199,7 @@ export function LineupWorkspace({ className = '' }: LineupWorkspaceProps) {
           isCoxswain: sourcePosition.type === 'coxswain',
         };
         const swapCmd = createSwapCommand(
-          currentLineupId,
+          lineupId,
           assignment1,
           assignment2,
           async ({ assignment1: a1, assignment2: a2 }) => {
@@ -228,11 +228,11 @@ export function LineupWorkspace({ className = '' }: LineupWorkspaceProps) {
       }
 
       // Create assign/remove command for undo/redo
-      if (currentLineupId) {
+      if (lineupId) {
         if (sourcePosition.type === 'bank') {
           // Bank to seat: assign command
           const assignCmd = createAssignCommand(
-            currentLineupId,
+            lineupId,
             draggedAthlete.id,
             targetIsCoxswain ? 0 : targetSeat?.seatNumber || 0,
             targetBoatId,
@@ -259,7 +259,7 @@ export function LineupWorkspace({ className = '' }: LineupWorkspaceProps) {
           // Seat to seat move: create compound command
           // For now, treat as assign to new + remove from old
           const assignCmd = createAssignCommand(
-            currentLineupId,
+            lineupId,
             draggedAthlete.id,
             targetIsCoxswain ? 0 : targetSeat?.seatNumber || 0,
             targetBoatId,
@@ -289,7 +289,20 @@ export function LineupWorkspace({ className = '' }: LineupWorkspaceProps) {
   if (isMobile) {
     return (
       <div className={`h-full ${className}`}>
-        <MobileLineupBuilder />
+        <MobileLineupBuilder
+          boats={activeBoats}
+          athletes={[]} // TODO: get from useAthletes hook in parent
+          lineupId={lineupId}
+          onAssignAthlete={async ({ boatId, seatNumber, athleteId, isCoxswain }) => {
+            // Simplified mutation for mobile - full implementation needs to build complete assignments
+            autoSave({ assignments: [] });
+          }}
+          onRemoveAthlete={async ({ boatId, seatNumber, isCoxswain }) => {
+            // Simplified mutation for mobile
+            autoSave({ assignments: [] });
+          }}
+          cancelAutoSave={cancelAutoSave}
+        />
       </div>
     );
   }
@@ -335,13 +348,13 @@ export function LineupWorkspace({ className = '' }: LineupWorkspaceProps) {
         <div className="flex-1 overflow-y-auto p-6 bg-bg-base">
           {/* Toolbar with undo/redo and future action buttons */}
           <div className="mb-4">
-            <LineupToolbar />
+            <LineupToolbar lineupId={lineupId} cancelAutoSave={cancelAutoSave} />
           </div>
 
           {/* Biometrics Panel - Live stats for current lineup */}
           {activeBoats.length > 0 && (
             <div className="mb-4">
-              <BiometricsPanel />
+              <BiometricsPanel boats={activeBoats} />
             </div>
           )}
 

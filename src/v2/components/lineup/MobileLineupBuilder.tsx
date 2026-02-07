@@ -1,10 +1,32 @@
 import { useState, useMemo } from 'react';
 import { Undo, Redo } from 'lucide-react';
-import useLineupStore from '@/store/lineupStore';
 import { MobileSeatSlot } from './MobileSeatSlot';
 import { MobileAthleteSelector } from './MobileAthleteSelector';
 import { AddBoatButton } from './AddBoatButton';
-import type { Athlete, SeatSlotData } from '@v2/types/lineup';
+import {
+  useLineupCommands,
+  createAssignCommand,
+  createRemoveCommand,
+} from '@v2/hooks/useLineupCommands';
+import type { Athlete } from '@v2/types/lineup';
+import type { ActiveBoat } from '@/types';
+
+/**
+ * Props for MobileLineupBuilder
+ */
+interface MobileLineupBuilderProps {
+  boats: ActiveBoat[];
+  athletes: Athlete[];
+  lineupId: string | null;
+  onAssignAthlete: (
+    boatId: string,
+    seatNumber: number,
+    athleteId: string,
+    isCoxswain: boolean
+  ) => Promise<void>;
+  onRemoveAthlete: (boatId: string, seatNumber: number, isCoxswain: boolean) => Promise<void>;
+  cancelAutoSave?: () => void;
+}
 
 /**
  * Selected seat state for tap-to-select workflow
@@ -27,47 +49,54 @@ interface SelectedSeat {
  *   2. Seat becomes "selected" (highlighted)
  *   3. MobileAthleteSelector opens
  *   4. User taps athlete
- *   5. Athlete assigned to selected seat
+ *   5. Athlete assigned to selected seat via command pattern
  *   6. Selector closes
  *
  * Alternative for occupied seats:
  * - Tap occupied seat opens selector for swap
- * - Remove button returns athlete to bank
+ * - Remove button returns athlete to bank (via command pattern)
  *
  * Per CONTEXT.md:
  * - "Full redesign for mobile - different UI entirely for small screens"
  * - "Touch devices use tap-to-select, tap-to-place workflow"
  */
-export function MobileLineupBuilder() {
-  const activeBoats = useLineupStore((state) => state.activeBoats);
-  const assignToSeat = useLineupStore((state) => state.assignToSeat);
-  const assignToCoxswain = useLineupStore((state) => state.assignToCoxswain);
-  const removeFromSeat = useLineupStore((state) => state.removeFromSeat);
-  const removeFromCoxswain = useLineupStore((state) => state.removeFromCoxswain);
-  const undo = useLineupStore((state) => state.undo);
-  const redo = useLineupStore((state) => state.redo);
-  const history = useLineupStore((state) => state._history);
-  const getAvailableAthletes = useLineupStore((state) => state.getAvailableAthletes);
+export function MobileLineupBuilder({
+  boats,
+  athletes,
+  lineupId,
+  onAssignAthlete,
+  onRemoveAthlete,
+  cancelAutoSave,
+}: MobileLineupBuilderProps) {
+  const { executeCommand, undo, redo, canUndo, canRedo } = useLineupCommands(
+    lineupId,
+    cancelAutoSave
+  );
 
   const [selectedSeat, setSelectedSeat] = useState<SelectedSeat | null>(null);
   const [selectorOpen, setSelectorOpen] = useState(false);
 
-  // Get available athletes
+  // Get available athletes (not assigned to any seat)
   const availableAthletes = useMemo(() => {
-    return getAvailableAthletes();
-  }, [getAvailableAthletes]);
+    const assignedIds = new Set<string>();
+    boats.forEach((boat) => {
+      boat.seats.forEach((seat) => {
+        if (seat.athlete) assignedIds.add(seat.athlete.id);
+      });
+    });
+    return athletes.filter((a) => !assignedIds.has(a.id));
+  }, [athletes, boats]);
 
   // Get assigned athlete IDs for selector
   const assignedAthleteIds = useMemo(() => {
     const ids = new Set<string>();
-    activeBoats.forEach((boat) => {
+    boats.forEach((boat) => {
       boat.seats.forEach((seat) => {
         if (seat.athlete) ids.add(seat.athlete.id);
       });
-      if (boat.coxswain) ids.add(boat.coxswain.id);
     });
     return ids;
-  }, [activeBoats]);
+  }, [boats]);
 
   // Handle seat tap
   function handleSeatTap(boatId: string, seatNumber?: number, isCoxswain = false) {
@@ -75,29 +104,51 @@ export function MobileLineupBuilder() {
     setSelectorOpen(true);
   }
 
-  // Handle athlete selection
+  // Handle athlete selection - use command pattern for undo/redo
   function handleAthleteSelect(athlete: Athlete) {
     if (!selectedSeat) return;
 
     const { boatId, seatNumber, isCoxswain } = selectedSeat;
+    const seatNum = isCoxswain ? 0 : seatNumber!;
 
-    if (isCoxswain) {
-      assignToCoxswain(boatId, athlete);
-    } else if (seatNumber !== undefined) {
-      assignToSeat(boatId, seatNumber, athlete);
-    }
+    // Create and execute assign command
+    const command = createAssignCommand(
+      lineupId || '',
+      athlete.id,
+      seatNum,
+      boatId,
+      isCoxswain,
+      onAssignAthlete,
+      onRemoveAthlete
+    );
+
+    executeCommand(command);
 
     setSelectedSeat(null);
     setSelectorOpen(false);
   }
 
-  // Handle remove athlete
-  function handleRemoveAthlete(boatId: string, seatNumber?: number, isCoxswain = false) {
-    if (isCoxswain) {
-      removeFromCoxswain(boatId);
-    } else if (seatNumber !== undefined) {
-      removeFromSeat(boatId, seatNumber);
-    }
+  // Handle remove athlete - use command pattern for undo/redo
+  function handleRemoveAthlete(
+    boatId: string,
+    athleteId: string,
+    seatNumber?: number,
+    isCoxswain = false
+  ) {
+    const seatNum = isCoxswain ? 0 : seatNumber!;
+
+    // Create and execute remove command
+    const command = createRemoveCommand(
+      lineupId || '',
+      athleteId,
+      seatNum,
+      boatId,
+      isCoxswain,
+      onAssignAthlete,
+      onRemoveAthlete
+    );
+
+    executeCommand(command);
   }
 
   return (
@@ -110,7 +161,7 @@ export function MobileLineupBuilder() {
         </div>
 
         {/* Empty State */}
-        {activeBoats.length === 0 && (
+        {boats.length === 0 && (
           <div className="flex items-center justify-center h-64">
             <div className="text-center px-4">
               <p className="text-base font-medium text-txt-secondary mb-2">No boats in workspace</p>
@@ -123,7 +174,7 @@ export function MobileLineupBuilder() {
 
         {/* Boats */}
         <div className="space-y-6">
-          {activeBoats.map((boat) => {
+          {boats.map((boat) => {
             // Reverse seats array so bow (seat 1) is at top
             const seatsTopToBottom = [...boat.seats].reverse();
 
@@ -131,7 +182,7 @@ export function MobileLineupBuilder() {
               <div key={boat.id} className="flex flex-col gap-3">
                 {/* Boat Header */}
                 <div className="px-4 py-3 rounded-lg bg-bg-surface border border-bdr-default">
-                  <h3 className="text-lg font-semibold text-txt-primary">{boat.name}</h3>
+                  <h3 className="text-lg font-semibold text-txt-primary">{boat.boatConfig.name}</h3>
                   {boat.shellName && (
                     <p className="text-sm text-txt-tertiary mt-0.5">Shell: {boat.shellName}</p>
                   )}
@@ -161,7 +212,8 @@ export function MobileLineupBuilder() {
                       onTap={() => handleSeatTap(boat.id, seat.seatNumber, false)}
                       onRemoveAthlete={
                         seat.athlete
-                          ? () => handleRemoveAthlete(boat.id, seat.seatNumber, false)
+                          ? () =>
+                              handleRemoveAthlete(boat.id, seat.athlete!.id, seat.seatNumber, false)
                           : undefined
                       }
                     />
@@ -176,26 +228,33 @@ export function MobileLineupBuilder() {
                 </div>
 
                 {/* Coxswain (if boat has coxswain) */}
-                {boat.hasCoxswain && (
-                  <div className="pt-2 border-t border-bdr-subtle">
-                    <MobileSeatSlot
-                      boatId={boat.id}
-                      seat={{
-                        seatNumber: 0,
-                        side: 'Port',
-                        athlete: boat.coxswain,
-                      }}
-                      isCoxswain={true}
-                      isSelected={
-                        selectedSeat?.boatId === boat.id && selectedSeat?.isCoxswain === true
-                      }
-                      onTap={() => handleSeatTap(boat.id, undefined, true)}
-                      onRemoveAthlete={
-                        boat.coxswain ? () => handleRemoveAthlete(boat.id, undefined, true) : undefined
-                      }
-                    />
-                  </div>
-                )}
+                {boat.boatConfig.hasCoxswain &&
+                  (() => {
+                    const coxseat = boat.seats.find((s) => s.isCoxswain);
+                    return (
+                      <div className="pt-2 border-t border-bdr-subtle">
+                        <MobileSeatSlot
+                          boatId={boat.id}
+                          seat={{
+                            seatNumber: 0,
+                            side: 'Port',
+                            athlete: coxseat?.athlete || null,
+                          }}
+                          isCoxswain={true}
+                          isSelected={
+                            selectedSeat?.boatId === boat.id && selectedSeat?.isCoxswain === true
+                          }
+                          onTap={() => handleSeatTap(boat.id, undefined, true)}
+                          onRemoveAthlete={
+                            coxseat?.athlete
+                              ? () =>
+                                  handleRemoveAthlete(boat.id, coxseat.athlete!.id, undefined, true)
+                              : undefined
+                          }
+                        />
+                      </div>
+                    );
+                  })()}
               </div>
             );
           })}
@@ -209,7 +268,7 @@ export function MobileLineupBuilder() {
           <div className="flex items-center gap-2">
             <button
               onClick={undo}
-              disabled={!history?.canUndo}
+              disabled={!canUndo}
               className="
                 p-2 rounded-lg transition-colors
                 disabled:opacity-40 disabled:cursor-not-allowed
@@ -222,7 +281,7 @@ export function MobileLineupBuilder() {
             </button>
             <button
               onClick={redo}
-              disabled={!history?.canRedo}
+              disabled={!canRedo}
               className="
                 p-2 rounded-lg transition-colors
                 disabled:opacity-40 disabled:cursor-not-allowed
