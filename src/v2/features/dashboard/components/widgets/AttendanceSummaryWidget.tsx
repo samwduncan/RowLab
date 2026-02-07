@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Users, CheckCircle, XCircle } from '@phosphor-icons/react';
 import { useQuery } from '@tanstack/react-query';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+import { useAuth } from '../../../../contexts/AuthContext';
 
 interface AttendanceSummary {
   totalAthletes: number;
@@ -10,7 +10,7 @@ interface AttendanceSummary {
   attendanceRate: number;
 }
 
-export function AttendanceSummaryWidget() {
+export function AttendanceSummaryWidget(_props: import('../../types').WidgetProps) {
   const accessToken = useAuth().accessToken;
   const activeTeamId = useAuth().activeTeamId;
 
@@ -49,10 +49,7 @@ export function AttendanceSummaryWidget() {
           <Users className="w-5 h-5 text-accent-primary" />
           Today's Attendance
         </h3>
-        <Link
-          to="/app/athletes"
-          className="text-sm text-accent-primary hover:underline"
-        >
+        <Link to="/app/athletes" className="text-sm text-accent-primary hover:underline">
           View roster
         </Link>
       </div>

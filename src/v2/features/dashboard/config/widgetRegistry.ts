@@ -3,10 +3,24 @@
  * Phase 27-01: Defines all available dashboard widgets with size presets
  */
 
-import type { WidgetConfig, DashboardLayout, UserRole } from '../types';
+import { createElement } from 'react';
+import type { WidgetConfig, WidgetProps, DashboardLayout, UserRole } from '../types';
 
-// Placeholder component for widgets not yet built
-const PlaceholderWidget = () => null;
+// Real widget components
+import { TodaysPracticeSummary } from '../components/widgets/TodaysPracticeSummary';
+import { AttendanceSummaryWidget } from '../components/widgets/AttendanceSummaryWidget';
+import { UpcomingSessionsWidget } from '../components/widgets/UpcomingSessionsWidget';
+import { RecentActivityWidget } from '../components/widgets/RecentActivityWidget';
+import { PersonalStatsWidget } from '../components/widgets/PersonalStatsWidget';
+
+// Visible placeholder for widgets not yet built
+function PlaceholderWidget(_props: WidgetProps) {
+  return createElement(
+    'div',
+    { className: 'h-full flex items-center justify-center p-4 text-center' },
+    createElement('p', { className: 'text-sm text-[var(--color-text-tertiary)]' }, 'Coming soon')
+  );
+}
 
 /**
  * Widget Registry
@@ -27,8 +41,7 @@ export const WIDGET_REGISTRY: Record<string, WidgetConfig> = {
       expanded: { w: 8, h: 5 },
     },
     defaultSize: 'normal',
-    // TODO(phase-27-03): Replace with actual component
-    component: PlaceholderWidget,
+    component: TodaysPracticeSummary,
   },
 
   'attendance-summary': {
@@ -43,8 +56,7 @@ export const WIDGET_REGISTRY: Record<string, WidgetConfig> = {
       normal: { w: 4, h: 4 },
     },
     defaultSize: 'compact',
-    // TODO(phase-27-03): Replace with actual component
-    component: PlaceholderWidget,
+    component: AttendanceSummaryWidget,
   },
 
   'exception-alerts': {
@@ -59,7 +71,6 @@ export const WIDGET_REGISTRY: Record<string, WidgetConfig> = {
       normal: { w: 4, h: 4 },
     },
     defaultSize: 'compact',
-    // TODO(phase-27-03): Replace with actual component
     component: PlaceholderWidget,
   },
 
@@ -75,8 +86,7 @@ export const WIDGET_REGISTRY: Record<string, WidgetConfig> = {
       normal: { w: 6, h: 4 },
     },
     defaultSize: 'compact',
-    // TODO(phase-27-03): Replace with actual component
-    component: PlaceholderWidget,
+    component: UpcomingSessionsWidget,
   },
 
   'recent-activity': {
@@ -92,8 +102,7 @@ export const WIDGET_REGISTRY: Record<string, WidgetConfig> = {
       expanded: { w: 12, h: 5 },
     },
     defaultSize: 'compact',
-    // TODO(phase-27-04): Replace with actual component
-    component: PlaceholderWidget,
+    component: RecentActivityWidget,
   },
 
   'erg-leaderboard': {
@@ -108,7 +117,6 @@ export const WIDGET_REGISTRY: Record<string, WidgetConfig> = {
       normal: { w: 6, h: 4 },
     },
     defaultSize: 'compact',
-    // TODO(phase-27-03): Replace with actual component
     component: PlaceholderWidget,
   },
 
@@ -126,8 +134,7 @@ export const WIDGET_REGISTRY: Record<string, WidgetConfig> = {
       expanded: { w: 8, h: 5 },
     },
     defaultSize: 'normal',
-    // TODO(phase-27-04): Replace with actual component
-    component: PlaceholderWidget,
+    component: PersonalStatsWidget,
   },
 
   'prs-achievements': {
@@ -142,7 +149,6 @@ export const WIDGET_REGISTRY: Record<string, WidgetConfig> = {
       normal: { w: 4, h: 4 },
     },
     defaultSize: 'compact',
-    // TODO(phase-27-04): Replace with actual component
     component: PlaceholderWidget,
   },
 
@@ -158,7 +164,6 @@ export const WIDGET_REGISTRY: Record<string, WidgetConfig> = {
       normal: { w: 4, h: 4 },
     },
     defaultSize: 'compact',
-    // TODO(phase-27-04): Replace with actual component
     component: PlaceholderWidget,
   },
 
@@ -174,7 +179,6 @@ export const WIDGET_REGISTRY: Record<string, WidgetConfig> = {
       normal: { w: 6, h: 4 },
     },
     defaultSize: 'compact',
-    // TODO(phase-27-04): Replace with actual component
     component: PlaceholderWidget,
   },
 };

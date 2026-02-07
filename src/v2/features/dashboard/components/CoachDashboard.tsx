@@ -3,7 +3,7 @@
  * Phase 27-03: Complete coach dashboard with bento grid, exception banner, and widgets
  */
 
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo } from 'react';
 import { ResponsiveGridLayout, useContainerWidth, Layout as RGLLayout } from 'react-grid-layout';
 import { DotsSixVertical, X } from '@phosphor-icons/react';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -39,8 +39,7 @@ export const CoachDashboard: React.FC = () => {
   const { summary: exceptionSummary, widgetExceptions } = useExceptions(activeTeamId || '');
 
   // Container width measurement using react-grid-layout v2 hook
-  const containerRef = useRef<HTMLDivElement>(null);
-  const containerWidth = useContainerWidth(containerRef);
+  const { containerRef, width: containerWidth } = useContainerWidth();
 
   // Auto-launch tour on first visit
   useTour('coach-dashboard', { autoStart: true, delay: 800 });

@@ -26,9 +26,7 @@ export function PersonalStatsWidget({ widgetId, size, isEditing }: WidgetProps) 
   const { data: prs = [] } = usePersonalRecords();
 
   // Check if latest erg is a PR
-  const latestErgIsPR = prs.some(
-    (pr) => pr.testType === personalStats.latestErgTestType && pr.isPR
-  );
+  const latestErgIsPR = prs.some((pr) => pr.testType === personalStats.latestErgTestType);
 
   // Greeting based on time of day
   const hour = new Date().getHours();
@@ -112,7 +110,7 @@ export function PersonalStatsWidget({ widgetId, size, isEditing }: WidgetProps) 
       {/* Greeting header */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-txt-primary mb-1">
-          {greeting}, {user?.firstName || 'Athlete'}
+          {greeting}, {user?.name?.split(' ')[0] || 'Athlete'}
         </h2>
         <p className="text-sm text-txt-muted">Here's your progress at a glance</p>
       </div>
