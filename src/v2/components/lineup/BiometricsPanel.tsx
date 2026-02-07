@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import useLineupStore from '@/store/lineupStore';
 import {
   calculateBoatBiometrics,
   calculateTotalBiometrics,
@@ -8,12 +7,14 @@ import {
   formatHeight,
   type BiometricsStats,
 } from '@v2/utils/biometricsCalculations';
+import type { BoatInstance } from '@v2/types/lineup';
 
 /**
  * Props for BiometricsPanel
  */
 interface BiometricsPanelProps {
   className?: string;
+  boats: BoatInstance[];
 }
 
 /**
@@ -21,7 +22,7 @@ interface BiometricsPanelProps {
  *
  * Features:
  * - Shows average weight, height, and 2k split for assigned athletes
- * - Updates automatically when athletes are assigned/removed (subscribes to activeBoats)
+ * - Updates automatically when athletes are assigned/removed (boats prop)
  * - Displays per-boat stats (if multiple boats) and total stats
  * - Handles missing data gracefully (shows "--" for unavailable metrics)
  *
@@ -30,13 +31,15 @@ interface BiometricsPanelProps {
  *
  * Per LINE-12 requirement:
  * "System displays average biometrics as lineup is built"
+ *
+ * V3 Migration: Now prop-driven (boats data from parent) instead of reading
+ * from V1 lineupStore. Parent (LineupWorkspace) derives boat structure from
+ * TanStack Query draft and passes down.
  */
-export function BiometricsPanel({ className = '' }: BiometricsPanelProps) {
-  const activeBoats = useLineupStore((state) => state.activeBoats);
-
+export function BiometricsPanel({ className = '', boats }: BiometricsPanelProps) {
   // Calculate biometrics - useMemo prevents recalculation during drag
   const { perBoatStats, totalStats } = useMemo(() => {
-    const perBoatStats = activeBoats
+    const perBoatStats = boats
       .map((boat) => ({
         boatId: boat.id,
         boatName: boat.name,
@@ -45,10 +48,10 @@ export function BiometricsPanel({ className = '' }: BiometricsPanelProps) {
       }))
       .filter((b) => b.stats !== null);
 
-    const totalStats = calculateTotalBiometrics(activeBoats);
+    const totalStats = calculateTotalBiometrics(boats);
 
     return { perBoatStats, totalStats };
-  }, [activeBoats]);
+  }, [boats]);
 
   // Empty state
   if (!totalStats) {
@@ -170,9 +173,7 @@ function BiometricStat({ label, value, range, compact = false }: BiometricStatPr
       <div className={`${compact ? 'text-sm' : 'text-base'} font-medium text-txt-primary`}>
         {value}
       </div>
-      {range && !compact && (
-        <div className="text-xs text-txt-tertiary mt-0.5">Range: {range}</div>
-      )}
+      {range && !compact && <div className="text-xs text-txt-tertiary mt-0.5">Range: {range}</div>}
     </div>
   );
 }

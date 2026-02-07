@@ -1,6 +1,5 @@
 import { AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
-import useLineupStore from '@/store/lineupStore';
 import { SeatSlot } from './SeatSlot';
 import type { BoatViewProps } from '@v2/types/lineup';
 
@@ -22,12 +21,20 @@ import type { BoatViewProps } from '@v2/types/lineup';
  * Per CONTEXT.md: "Boat seats arranged vertically (bow at top, stern at bottom) - mirrors how lineups are written"
  *
  * Seats use SeatSlot component with drag-drop support
+ *
+ * V3 Migration: Now prop-driven (boat data + callbacks from parent) instead of
+ * reading from V1 lineupStore. Parent (LineupWorkspace) derives boat structure
+ * from TanStack Query draft and passes down.
  */
-export function BoatView({ boat, className = '' }: BoatViewProps) {
-  const removeFromSeat = useLineupStore((state) => state.removeFromSeat);
-  const removeFromCoxswain = useLineupStore((state) => state.removeFromCoxswain);
-  const removeBoat = useLineupStore((state) => state.removeBoat);
-
+export function BoatView({
+  boat,
+  className = '',
+  onRemoveAthlete,
+  onRemoveBoat,
+}: BoatViewProps & {
+  onRemoveAthlete?: (seatNumber: number, isCoxswain: boolean) => void;
+  onRemoveBoat?: () => void;
+}) {
   // Reverse seats array so bow (seat 1) is at top
   // In boatConfig, seats are generated high to low, but we want to display bow at top
   const seatsTopToBottom = [...boat.seats].reverse();
@@ -42,18 +49,20 @@ export function BoatView({ boat, className = '' }: BoatViewProps) {
             <p className="text-sm text-txt-tertiary mt-0.5">Shell: {boat.shellName}</p>
           )}
         </div>
-        <button
-          onClick={() => removeBoat(boat.id)}
-          className="
-            p-2 rounded-lg
-            hover:bg-bg-hover
-            text-txt-tertiary hover:text-txt-primary
-            transition-colors
-          "
-          title="Remove boat"
-        >
-          <X size={18} />
-        </button>
+        {onRemoveBoat && (
+          <button
+            onClick={onRemoveBoat}
+            className="
+              p-2 rounded-lg
+              hover:bg-bg-hover
+              text-txt-tertiary hover:text-txt-primary
+              transition-colors
+            "
+            title="Remove boat"
+          >
+            <X size={18} />
+          </button>
+        )}
       </div>
 
       {/* Seats - Bow at Top */}
@@ -74,7 +83,9 @@ export function BoatView({ boat, className = '' }: BoatViewProps) {
               seat={seat}
               isCoxswain={false}
               onRemoveAthlete={
-                seat.athlete ? () => removeFromSeat(boat.id, seat.seatNumber) : undefined
+                seat.athlete && onRemoveAthlete
+                  ? () => onRemoveAthlete(seat.seatNumber, false)
+                  : undefined
               }
             />
           ))}
@@ -95,7 +106,9 @@ export function BoatView({ boat, className = '' }: BoatViewProps) {
             boatId={boat.id}
             seat={{ seatNumber: 0, side: 'Port', athlete: boat.coxswain }}
             isCoxswain={true}
-            onRemoveAthlete={boat.coxswain ? () => removeFromCoxswain(boat.id) : undefined}
+            onRemoveAthlete={
+              boat.coxswain && onRemoveAthlete ? () => onRemoveAthlete(0, true) : undefined
+            }
           />
         </div>
       )}

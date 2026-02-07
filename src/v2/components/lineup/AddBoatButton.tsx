@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Plus, ChevronDown } from 'lucide-react';
-import useLineupStore from '@/store/lineupStore';
 import type { AddBoatButtonProps, BoatConfig } from '@v2/types/lineup';
 
 /**
@@ -10,21 +9,30 @@ import type { AddBoatButtonProps, BoatConfig } from '@v2/types/lineup';
  * from available boat classes (8+, 4+, 2x, etc.) with optional shell assignment.
  *
  * Features:
- * - Dropdown with boat class options from store
+ * - Dropdown with boat class options from props
  * - Displays boat class name and number of seats
- * - Calls useLineupStore().addBoat() on selection
+ * - Calls parent callback onAddBoat() on selection
  * - Optional shell selector (future enhancement)
  * - Closes automatically after selection
  *
  * Per CONTEXT.md: "Lineup builder allows boat class selection (8+, 4+, 2x, etc.)"
+ *
+ * V3 Migration: Now prop-driven (boat configs + callback from parent) instead of
+ * reading from V1 lineupStore. Parent (LineupWorkspace) handles creating boat
+ * and updating draft assignments.
  */
-export function AddBoatButton({ className = '' }: AddBoatButtonProps) {
+export function AddBoatButton({
+  className = '',
+  boatConfigs,
+  onAddBoat,
+}: AddBoatButtonProps & {
+  boatConfigs: BoatConfig[];
+  onAddBoat: (configId: string) => void;
+}) {
   const [isOpen, setIsOpen] = useState(false);
-  const boatConfigs = useLineupStore((state) => state.boatConfigs);
-  const addBoat = useLineupStore((state) => state.addBoat);
 
   const handleSelectBoat = (boatConfig: BoatConfig) => {
-    addBoat(boatConfig);
+    onAddBoat(boatConfig.name);
     setIsOpen(false);
   };
 
@@ -43,20 +51,14 @@ export function AddBoatButton({ className = '' }: AddBoatButtonProps) {
       >
         <Plus size={20} />
         <span>Add Boat</span>
-        <ChevronDown
-          size={16}
-          className={`transition-transform ${isOpen ? 'rotate-180' : ''}`}
-        />
+        <ChevronDown size={16} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {/* Dropdown Menu */}
       {isOpen && (
         <>
           {/* Backdrop */}
-          <div
-            className="fixed inset-0 z-10"
-            onClick={() => setIsOpen(false)}
-          />
+          <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
 
           {/* Dropdown Content */}
           <div
@@ -68,18 +70,14 @@ export function AddBoatButton({ className = '' }: AddBoatButtonProps) {
           >
             {/* Header */}
             <div className="px-4 py-3 border-b border-bdr-subtle">
-              <h3 className="text-sm font-semibold text-txt-primary">
-                Select Boat Class
-              </h3>
+              <h3 className="text-sm font-semibold text-txt-primary">Select Boat Class</h3>
             </div>
 
             {/* Boat Options */}
             <div className="max-h-80 overflow-y-auto">
               {boatConfigs.length === 0 ? (
                 <div className="px-4 py-8 text-center">
-                  <p className="text-sm text-txt-tertiary">
-                    No boat configurations available
-                  </p>
+                  <p className="text-sm text-txt-tertiary">No boat configurations available</p>
                   <p className="text-xs text-txt-tertiary mt-1">
                     Contact your admin to set up boat classes
                   </p>
@@ -99,9 +97,7 @@ export function AddBoatButton({ className = '' }: AddBoatButtonProps) {
                     >
                       <div className="flex items-center justify-between">
                         <div>
-                          <div className="font-medium text-txt-primary">
-                            {config.name}
-                          </div>
+                          <div className="font-medium text-txt-primary">{config.name}</div>
                           <div className="text-xs text-txt-tertiary mt-0.5">
                             {config.numSeats} seat{config.numSeats !== 1 ? 's' : ''}
                             {config.hasCoxswain && ' + coxswain'}
