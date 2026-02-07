@@ -11,7 +11,7 @@ import debounce from 'lodash.debounce';
 import { toast } from 'sonner';
 import { queryKeys } from '../../../lib/queryKeys';
 
-type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
+export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 interface AutoSaveFormConfig<T extends FieldValues> {
   athleteId: string;
