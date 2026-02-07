@@ -1,3 +1,5 @@
+/** @deprecated Use src/v2/features/athletes/components/import/ components instead. Will be removed in Phase 36. */
+
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import type { ValidationError, ValidatedAthleteData } from '@v2/utils/csvParser';
 
@@ -38,10 +40,7 @@ export function ImportPreview({
           <h4 className="text-sm font-medium text-txt-primary">Rows with errors:</h4>
           <div className="max-h-48 overflow-y-auto space-y-2">
             {invalidRows.slice(0, 20).map(({ row, errors }) => (
-              <div
-                key={row}
-                className="p-3 bg-red-500/5 border border-red-500/20 rounded-lg"
-              >
+              <div key={row} className="p-3 bg-red-500/5 border border-red-500/20 rounded-lg">
                 <div className="text-sm font-medium text-red-400">Row {row}</div>
                 <ul className="mt-1 space-y-1">
                   {errors.map((error, i) => (
@@ -86,16 +85,10 @@ export function ImportPreview({
                   <td className="px-3 py-2">
                     {row.firstName} {row.lastName}
                   </td>
-                  <td className="px-3 py-2 text-txt-secondary">
-                    {row.email || '—'}
-                  </td>
+                  <td className="px-3 py-2 text-txt-secondary">{row.email || '—'}</td>
                   <td className="px-3 py-2">{row.side || '—'}</td>
-                  <td className="px-3 py-2">
-                    {row.heightCm ? `${row.heightCm} cm` : '—'}
-                  </td>
-                  <td className="px-3 py-2">
-                    {row.weightKg ? `${row.weightKg} kg` : '—'}
-                  </td>
+                  <td className="px-3 py-2">{row.heightCm ? `${row.heightCm} cm` : '—'}</td>
+                  <td className="px-3 py-2">{row.weightKg ? `${row.weightKg} kg` : '—'}</td>
                 </tr>
               ))}
             </tbody>

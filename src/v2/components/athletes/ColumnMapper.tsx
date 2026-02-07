@@ -1,3 +1,5 @@
+/** @deprecated Use src/v2/features/athletes/components/import/ components instead. Will be removed in Phase 36. */
+
 import { ATHLETE_COLUMNS, type ColumnMapping } from '@v2/utils/csvParser';
 
 interface ColumnMapperProps {
@@ -51,7 +53,12 @@ export function ColumnMapper({ csvHeaders, mapping, onChange }: ColumnMapperProp
 
               <div className="flex items-center gap-2 text-txt-tertiary">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
                 </svg>
               </div>
 
@@ -77,9 +84,7 @@ export function ColumnMapper({ csvHeaders, mapping, onChange }: ColumnMapperProp
                 ))}
               </select>
 
-              {isMapped && (
-                <span className="text-status-success text-sm">Mapped</span>
-              )}
+              {isMapped && <span className="text-status-success text-sm">Mapped</span>}
             </div>
           );
         })}
@@ -89,11 +94,8 @@ export function ColumnMapper({ csvHeaders, mapping, onChange }: ColumnMapperProp
       {csvHeaders.length > Object.values(mapping).filter(Boolean).length && (
         <div className="mt-4 p-3 bg-bg-surface rounded-lg">
           <p className="text-xs text-txt-tertiary">
-            Unmapped columns from your CSV will be ignored:
-            {' '}
-            {csvHeaders
-              .filter((h) => !usedHeaders.has(h))
-              .join(', ')}
+            Unmapped columns from your CSV will be ignored:{' '}
+            {csvHeaders.filter((h) => !usedHeaders.has(h)).join(', ')}
           </p>
         </div>
       )}

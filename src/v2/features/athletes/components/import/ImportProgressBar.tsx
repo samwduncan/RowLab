@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Loader2, CheckCircle2, Search, Upload } from 'lucide-react';
+import { CheckCircle2, Search, Upload, FileText } from 'lucide-react';
 import { SPRING_CONFIG, usePrefersReducedMotion } from '@v2/utils/animations';
 
 type ImportStage = 'parsing' | 'validating' | 'importing' | 'complete';
@@ -10,10 +10,13 @@ interface ImportProgressBarProps {
   total: number;
 }
 
-const STAGE_CONFIG: Record<ImportStage, { label: string; icon: typeof Loader2; color: string }> = {
+const STAGE_CONFIG: Record<
+  ImportStage,
+  { label: string; icon: typeof CheckCircle2; color: string }
+> = {
   parsing: {
     label: 'Parsing CSV file...',
-    icon: Loader2,
+    icon: FileText,
     color: 'text-interactive-primary',
   },
   validating: {
@@ -56,7 +59,12 @@ export function ImportProgressBar({ stage, current, total }: ImportProgressBarPr
               <Icon size={24} className={config.color} />
             </motion.div>
           ) : (
-            <Icon size={24} className={`${config.color} animate-spin`} />
+            <motion.div
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+            >
+              <Icon size={24} className={config.color} />
+            </motion.div>
           )}
         </div>
 

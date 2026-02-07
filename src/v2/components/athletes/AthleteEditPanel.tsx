@@ -1,3 +1,5 @@
+/** @deprecated Use src/v2/features/athletes/components/edit/AthleteEditForm.tsx instead. Will be removed in Phase 36. */
+
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -95,25 +97,16 @@ export function AthleteEditPanel({
   return (
     <>
       {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-black/50 z-40 transition-opacity"
-        onClick={handleClose}
-      />
+      <div className="fixed inset-0 bg-black/50 z-40 transition-opacity" onClick={handleClose} />
 
       {/* Panel */}
       <div className="fixed inset-y-0 right-0 w-full max-w-md bg-bg-surface shadow-2xl z-50 flex flex-col">
         {/* Header */}
         <div className="flex items-start justify-between p-6 border-b border-bdr-default">
           <div className="flex items-center gap-4">
-            <AthleteAvatar
-              firstName={athlete.firstName}
-              lastName={athlete.lastName}
-              size="lg"
-            />
+            <AthleteAvatar firstName={athlete.firstName} lastName={athlete.lastName} size="lg" />
             <div>
-              <h2 className="text-xl font-semibold text-txt-primary">
-                Edit Athlete
-              </h2>
+              <h2 className="text-xl font-semibold text-txt-primary">Edit Athlete</h2>
               <p className="text-sm text-txt-tertiary">
                 {athlete.firstName} {athlete.lastName}
               </p>
@@ -141,7 +134,10 @@ export function AthleteEditPanel({
             {/* Name Fields */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-txt-primary mb-2">
+                <label
+                  htmlFor="firstName"
+                  className="block text-sm font-medium text-txt-primary mb-2"
+                >
                   First Name *
                 </label>
                 <input
@@ -161,7 +157,10 @@ export function AthleteEditPanel({
               </div>
 
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-txt-primary mb-2">
+                <label
+                  htmlFor="lastName"
+                  className="block text-sm font-medium text-txt-primary mb-2"
+                >
                   Last Name *
                 </label>
                 <input
@@ -198,9 +197,7 @@ export function AthleteEditPanel({
                 `}
                 placeholder="athlete@example.com"
               />
-              {errors.email && (
-                <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>
-              )}
+              {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
             </div>
 
             {/* Side Preference */}
@@ -265,7 +262,10 @@ export function AthleteEditPanel({
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="weightKg" className="block text-sm font-medium text-txt-primary mb-2">
+                  <label
+                    htmlFor="weightKg"
+                    className="block text-sm font-medium text-txt-primary mb-2"
+                  >
                     Weight (kg)
                   </label>
                   <input
@@ -287,7 +287,10 @@ export function AthleteEditPanel({
                 </div>
 
                 <div>
-                  <label htmlFor="heightCm" className="block text-sm font-medium text-txt-primary mb-2">
+                  <label
+                    htmlFor="heightCm"
+                    className="block text-sm font-medium text-txt-primary mb-2"
+                  >
                     Height (cm)
                   </label>
                   <input

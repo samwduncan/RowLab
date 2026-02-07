@@ -1,3 +1,5 @@
+/** @deprecated Use src/v2/features/athletes/components/import/ components instead. Will be removed in Phase 36. */
+
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Upload, ArrowLeft, ArrowRight, Check, AlertCircle } from 'lucide-react';
@@ -148,9 +150,7 @@ export function CSVImportModal({ isOpen, onClose, onSuccess }: CSVImportModalPro
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-bdr-default">
-          <h2 className="text-lg font-semibold text-txt-primary">
-            Import Athletes from CSV
-          </h2>
+          <h2 className="text-lg font-semibold text-txt-primary">Import Athletes from CSV</h2>
           <button
             onClick={handleClose}
             className="p-2 text-txt-secondary hover:text-txt-primary hover:bg-bg-hover rounded-lg"
@@ -166,10 +166,13 @@ export function CSVImportModal({ isOpen, onClose, onSuccess }: CSVImportModalPro
               <div key={s} className="flex items-center">
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
-                    ${step === s ? 'bg-interactive-primary text-white' :
-                      ['map', 'preview', 'importing', 'complete'].indexOf(step) > i
-                        ? 'bg-green-500 text-white'
-                        : 'bg-bg-surface-elevated text-txt-secondary'}`}
+                    ${
+                      step === s
+                        ? 'bg-interactive-primary text-white'
+                        : ['map', 'preview', 'importing', 'complete'].indexOf(step) > i
+                          ? 'bg-green-500 text-white'
+                          : 'bg-bg-surface-elevated text-txt-secondary'
+                    }`}
                 >
                   {['map', 'preview', 'importing', 'complete'].indexOf(step) > i ? (
                     <Check size={16} />
@@ -216,15 +219,13 @@ export function CSVImportModal({ isOpen, onClose, onSuccess }: CSVImportModalPro
                 </p>
 
                 <label className="block">
-                  <div className="border-2 border-dashed border-bdr-default rounded-lg p-8 text-center
-                                  hover:border-interactive-primary hover:bg-bg-hover cursor-pointer transition-colors">
+                  <div
+                    className="border-2 border-dashed border-bdr-default rounded-lg p-8 text-center
+                                  hover:border-interactive-primary hover:bg-bg-hover cursor-pointer transition-colors"
+                  >
                     <Upload className="mx-auto mb-3 text-txt-tertiary" size={40} />
-                    <p className="text-txt-primary font-medium">
-                      Click to select CSV file
-                    </p>
-                    <p className="text-xs text-txt-tertiary mt-1">
-                      or drag and drop
-                    </p>
+                    <p className="text-txt-primary font-medium">Click to select CSV file</p>
+                    <p className="text-xs text-txt-tertiary mt-1">or drag and drop</p>
                   </div>
                   <input
                     type="file"
@@ -278,9 +279,7 @@ export function CSVImportModal({ isOpen, onClose, onSuccess }: CSVImportModalPro
                 className="py-12 text-center"
               >
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-interactive-primary mx-auto" />
-                <p className="mt-4 text-txt-secondary">
-                  Importing {validRows.length} athletes...
-                </p>
+                <p className="mt-4 text-txt-secondary">Importing {validRows.length} athletes...</p>
               </motion.div>
             )}
 
@@ -295,9 +294,7 @@ export function CSVImportModal({ isOpen, onClose, onSuccess }: CSVImportModalPro
                 <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto">
                   <Check className="text-green-500" size={32} />
                 </div>
-                <h3 className="mt-4 text-lg font-semibold text-txt-primary">
-                  Import Complete
-                </h3>
+                <h3 className="mt-4 text-lg font-semibold text-txt-primary">Import Complete</h3>
                 <p className="mt-2 text-txt-secondary">
                   Successfully imported {importCount} athletes
                 </p>

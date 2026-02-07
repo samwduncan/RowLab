@@ -1,3 +1,5 @@
+/** @deprecated Use src/v2/features/athletes/components/roster/ view toggle instead. Will be removed in Phase 36. */
+
 export type ViewMode = 'grid' | 'list';
 
 export interface ViewToggleProps {

@@ -1,3 +1,5 @@
+/** @deprecated Use src/v2/features/athletes/components/roster/ filter components instead. Will be removed in Phase 36. */
+
 import { type AthleteFilters as FilterState, type SidePreference } from '@v2/types/athletes';
 
 export interface AthleteFiltersProps {
@@ -77,8 +79,8 @@ export function AthleteFilters({ filters, onChange, className = '' }: AthleteFil
             filters.canScull === null || filters.canScull === undefined
               ? 'all'
               : filters.canScull
-              ? 'true'
-              : 'false'
+                ? 'true'
+                : 'false'
           }
           onChange={(e) => {
             const value = e.target.value;
@@ -105,8 +107,8 @@ export function AthleteFilters({ filters, onChange, className = '' }: AthleteFil
             filters.canCox === null || filters.canCox === undefined
               ? 'all'
               : filters.canCox
-              ? 'true'
-              : 'false'
+                ? 'true'
+                : 'false'
           }
           onChange={(e) => {
             const value = e.target.value;
@@ -127,7 +129,10 @@ export function AthleteFilters({ filters, onChange, className = '' }: AthleteFil
       </div>
 
       {/* Clear Filters */}
-      {(filters.search || filters.side !== 'all' || filters.canScull !== null || filters.canCox !== null) && (
+      {(filters.search ||
+        filters.side !== 'all' ||
+        filters.canScull !== null ||
+        filters.canCox !== null) && (
         <button
           onClick={() => onChange({ search: '', side: 'all', canScull: null, canCox: null })}
           className="
