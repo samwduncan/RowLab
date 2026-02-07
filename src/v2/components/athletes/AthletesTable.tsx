@@ -1,3 +1,5 @@
+/** @deprecated Use src/v2/features/athletes/components/roster/ table components instead. Will be removed in Phase 36. */
+
 import { useMemo } from 'react';
 import { type ColumnDef } from '@tanstack/react-table';
 import { VirtualTable } from '@v2/components/common/VirtualTable';
@@ -35,9 +37,7 @@ function SideBadge({ side }: { side: Athlete['side'] }) {
   };
 
   return (
-    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${colors[side]}`}>
-      {side}
-    </span>
+    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${colors[side]}`}>{side}</span>
   );
 }
 
@@ -85,7 +85,9 @@ export function AthletesTable({
             />
             <div>
               <div className="font-medium text-txt-primary flex items-center gap-2">
-                <span>{row.original.firstName} {row.original.lastName}</span>
+                <span>
+                  {row.original.firstName} {row.original.lastName}
+                </span>
                 {row.original.country && (
                   <span title={row.original.country}>{getCountryFlag(row.original.country)}</span>
                 )}
@@ -119,9 +121,7 @@ export function AthletesTable({
         header: 'Weight',
         accessorKey: 'weightKg',
         cell: ({ row }) => (
-          <span className="text-txt-secondary">
-            {formatBiometric(row.original.weightKg, 'kg')}
-          </span>
+          <span className="text-txt-secondary">{formatBiometric(row.original.weightKg, 'kg')}</span>
         ),
         size: 100,
       },
@@ -130,9 +130,7 @@ export function AthletesTable({
         header: 'Height',
         accessorKey: 'heightCm',
         cell: ({ row }) => (
-          <span className="text-txt-secondary">
-            {formatBiometric(row.original.heightCm, 'cm')}
-          </span>
+          <span className="text-txt-secondary">{formatBiometric(row.original.heightCm, 'cm')}</span>
         ),
         size: 100,
       },

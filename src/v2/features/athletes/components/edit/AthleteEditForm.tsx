@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { z } from 'zod';
-import { Check, AlertCircle, Loader2 } from 'lucide-react';
+import { Check, AlertCircle } from 'lucide-react';
 import { useAutoSaveForm, type SaveStatus } from '../../hooks/useAutoSaveForm';
 import { useAthletes } from '@v2/hooks/useAthletes';
 import type { Athlete, SidePreference, AthleteStatus } from '@v2/types/athletes';
@@ -78,7 +78,7 @@ function SaveStatusIndicator({ status }: { status: SaveStatus }) {
     <span className="inline-flex items-center gap-1 text-xs ml-2 transition-opacity duration-300">
       {status === 'saving' && (
         <>
-          <Loader2 className="h-3 w-3 animate-spin text-txt-tertiary" />
+          <span className="h-3 w-3 rounded-full bg-txt-tertiary animate-pulse" />
           <span className="text-txt-tertiary">Saving...</span>
         </>
       )}
