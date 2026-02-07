@@ -6,13 +6,15 @@ import { CrudModal } from '../common/CrudModal';
 import { useSaveLineup, useUpdateLineup } from '../../hooks/useLineups';
 import type { Lineup, LineupAssignment } from '../../hooks/useLineups';
 import { Loader2 } from 'lucide-react';
-import useLineupStore from '../../../store/lineupStore';
 
 /**
  * Validation schema for lineup save form
  */
 const saveLineupSchema = z.object({
-  name: z.string().min(1, 'Lineup name is required').max(100, 'Name must be 100 characters or less'),
+  name: z
+    .string()
+    .min(1, 'Lineup name is required')
+    .max(100, 'Name must be 100 characters or less'),
   notes: z.string().max(500, 'Notes must be 500 characters or less').optional(),
 });
 
@@ -26,6 +28,8 @@ export interface SaveLineupDialogProps {
   onClose: () => void;
   existingLineup?: Lineup | null;
   onSuccess?: (lineup: Lineup) => void;
+  assignments: LineupAssignment[]; // From draft/workspace state
+  lineupId?: string | null;
 }
 
 /**
@@ -34,16 +38,21 @@ export interface SaveLineupDialogProps {
  * Features:
  * - Create new lineup or update existing
  * - Name and notes input with Zod validation
- * - Automatically extracts assignments from lineupStore
+ * - Reads assignments from prop (passed from workspace state/draft)
  * - Loading state during save
  * - Success callback for post-save actions
  *
  * Per CONTEXT.md: "Auto-save versions on each explicit save - system maintains version history automatically"
  */
-export function SaveLineupDialog({ isOpen, onClose, existingLineup, onSuccess }: SaveLineupDialogProps) {
+export function SaveLineupDialog({
+  isOpen,
+  onClose,
+  existingLineup,
+  onSuccess,
+  assignments,
+}: SaveLineupDialogProps) {
   const { saveLineupAsync, isSaving } = useSaveLineup();
   const { updateLineupAsync, isUpdating } = useUpdateLineup();
-  const activeBoats = useLineupStore((state) => state.activeBoats);
 
   const isUpdate = !!existingLineup;
   const isProcessing = isSaving || isUpdating;
@@ -72,49 +81,10 @@ export function SaveLineupDialog({ isOpen, onClose, existingLineup, onSuccess }:
   }, [isOpen, existingLineup, reset]);
 
   /**
-   * Convert activeBoats to assignment array
-   */
-  const buildAssignments = (): LineupAssignment[] => {
-    const assignments: LineupAssignment[] = [];
-
-    for (const boat of activeBoats) {
-      // Add seat assignments
-      for (const seat of boat.seats) {
-        if (seat.athlete) {
-          assignments.push({
-            athleteId: seat.athlete.id,
-            boatClass: boat.name,
-            shellName: boat.shellName,
-            seatNumber: seat.seatNumber,
-            side: seat.side,
-            isCoxswain: false,
-          });
-        }
-      }
-
-      // Add coxswain
-      if (boat.coxswain) {
-        assignments.push({
-          athleteId: boat.coxswain.id,
-          boatClass: boat.name,
-          shellName: boat.shellName,
-          seatNumber: 0,
-          side: 'Port',
-          isCoxswain: true,
-        });
-      }
-    }
-
-    return assignments;
-  };
-
-  /**
    * Handle form submission
    */
   const onSubmit = async (data: SaveLineupFormData) => {
     try {
-      const assignments = buildAssignments();
-
       let savedLineup: Lineup;
 
       if (isUpdate && existingLineup) {
@@ -148,11 +118,7 @@ export function SaveLineupDialog({ isOpen, onClose, existingLineup, onSuccess }:
   };
 
   return (
-    <CrudModal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={isUpdate ? 'Update Lineup' : 'Save Lineup'}
-    >
+    <CrudModal isOpen={isOpen} onClose={onClose} title={isUpdate ? 'Update Lineup' : 'Save Lineup'}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Name input */}
         <div>
@@ -167,9 +133,7 @@ export function SaveLineupDialog({ isOpen, onClose, existingLineup, onSuccess }:
             className="w-full px-3 py-2 bg-surface-primary border border-bdr-primary rounded-lg text-txt-primary placeholder-txt-tertiary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
             placeholder="e.g., 'Practice Lineup - Jan 24' or 'Race Day V8+'"
           />
-          {errors.name && (
-            <p className="mt-1 text-sm text-red-400">{errors.name.message}</p>
-          )}
+          {errors.name && <p className="mt-1 text-sm text-red-400">{errors.name.message}</p>}
         </div>
 
         {/* Notes textarea */}
@@ -185,9 +149,7 @@ export function SaveLineupDialog({ isOpen, onClose, existingLineup, onSuccess }:
             className="w-full px-3 py-2 bg-surface-primary border border-bdr-primary rounded-lg text-txt-primary placeholder-txt-tertiary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed resize-none"
             placeholder="Add any notes about this lineup..."
           />
-          {errors.notes && (
-            <p className="mt-1 text-sm text-red-400">{errors.notes.message}</p>
-          )}
+          {errors.notes && <p className="mt-1 text-sm text-red-400">{errors.notes.message}</p>}
         </div>
 
         {/* Action buttons */}

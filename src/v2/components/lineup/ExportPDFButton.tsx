@@ -1,14 +1,16 @@
 import { useState, useRef } from 'react';
 import { FileDown, Loader2 } from 'lucide-react';
 import { createPortal } from 'react-dom';
-import useLineupStore from '@/store/lineupStore';
 import { PrintableLineup } from './PrintableLineup';
 import { exportLineupToPdf } from '@v2/utils/lineupPdfExport';
+import type { ActiveBoat } from '@/types';
 
 /**
  * Props for ExportPDFButton
  */
 interface ExportPDFButtonProps {
+  boats: ActiveBoat[];
+  lineupName?: string;
   className?: string;
 }
 
@@ -33,15 +35,16 @@ interface ExportPDFButtonProps {
  * 5. Generate and download PDF
  * 6. Clean up (hidden container removed by React)
  */
-export function ExportPDFButton({ className = '' }: ExportPDFButtonProps) {
+export function ExportPDFButton({
+  boats,
+  lineupName = 'Lineup',
+  className = '',
+}: ExportPDFButtonProps) {
   const [isExporting, setIsExporting] = useState(false);
   const [showPrintable, setShowPrintable] = useState(false);
   const printRef = useRef<HTMLDivElement>(null);
 
-  const activeBoats = useLineupStore((state) => state.activeBoats);
-  const lineupName = useLineupStore((state) => state.lineupName || 'Lineup');
-
-  const hasBoats = activeBoats.length > 0;
+  const hasBoats = boats.length > 0;
 
   const handleExport = async () => {
     if (!hasBoats || isExporting) return;
@@ -99,16 +102,14 @@ export function ExportPDFButton({ className = '' }: ExportPDFButtonProps) {
         ) : (
           <FileDown className="w-4 h-4" />
         )}
-        <span className="hidden md:inline">
-          {isExporting ? 'Exporting...' : 'Export PDF'}
-        </span>
+        <span className="hidden md:inline">{isExporting ? 'Exporting...' : 'Export PDF'}</span>
       </button>
 
       {/* Hidden PrintableLineup container (portal to document.body) */}
       {showPrintable &&
         createPortal(
           <div ref={printRef}>
-            <PrintableLineup boats={activeBoats} lineupName={lineupName} />
+            <PrintableLineup boats={boats} lineupName={lineupName} />
           </div>,
           document.body
         )}

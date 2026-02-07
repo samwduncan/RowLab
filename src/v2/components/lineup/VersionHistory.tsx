@@ -3,13 +3,14 @@ import { Menu, Transition } from '@headlessui/react';
 import { ChevronDown, Clock, Copy, Trash2, Loader2 } from 'lucide-react';
 import { useLineups, useDuplicateLineup, useDeleteLineup } from '../../hooks/useLineups';
 import type { Lineup } from '../../hooks/useLineups';
-import useLineupStore from '../../../store/lineupStore';
 
 /**
  * Props for VersionHistory dropdown component
  */
 export interface VersionHistoryProps {
   onSaveDialogOpen: (lineup?: Lineup) => void;
+  onLoadLineup: (lineupId: string) => void;
+  currentLineupId?: string | null;
   className?: string;
 }
 
@@ -26,27 +27,28 @@ interface ConfirmDeleteState {
  *
  * Features:
  * - Shows all saved lineups sorted by date (newest first)
- * - Load button: loads lineup into workspace via loadLineupFromData
- * - Duplicate button: opens save dialog with "(Copy)" suffix
+ * - Load button: loads lineup via callback (parent updates lineupId state)
+ * - Duplicate button: creates copy and loads it
  * - Delete button: removes lineup with confirmation
  * - Empty state when no lineups saved
  *
  * Per CONTEXT.md: "Version history accessed via dropdown menu - compact, keeps builder clean"
  */
-export function VersionHistory({ onSaveDialogOpen, className = '' }: VersionHistoryProps) {
+export function VersionHistory({
+  onSaveDialogOpen,
+  onLoadLineup,
+  currentLineupId,
+  className = '',
+}: VersionHistoryProps) {
   const { lineups, isLoading } = useLineups();
   const { duplicateLineupAsync, isDuplicating } = useDuplicateLineup();
   const { deleteLineupAsync, isDeleting } = useDeleteLineup();
-  const [confirmDelete, setConfirmDelete] = useState<ConfirmDeleteState>({ isOpen: false, lineup: null });
+  const [confirmDelete, setConfirmDelete] = useState<ConfirmDeleteState>({
+    isOpen: false,
+    lineup: null,
+  });
   const [loadingLineupId, setLoadingLineupId] = useState<string | null>(null);
   const [duplicatingLineupId, setDuplicatingLineupId] = useState<string | null>(null);
-
-  const loadLineupFromData = useLineupStore((state) => state.loadLineupFromData);
-  const athletes = useLineupStore((state) => state.athletes);
-  const boatConfigs = useLineupStore((state) => state.boatConfigs);
-  const shells = useLineupStore((state) => state.shells);
-  const setCurrentLineupId = useLineupStore((state) => state.setCurrentLineupId);
-  const setLineupName = useLineupStore((state) => state.setLineupName);
 
   // Sort lineups by date (newest first)
   const sortedLineups = [...lineups].sort(
@@ -54,14 +56,12 @@ export function VersionHistory({ onSaveDialogOpen, className = '' }: VersionHist
   );
 
   /**
-   * Load lineup into workspace
+   * Load lineup via parent callback
    */
   const handleLoadLineup = (lineup: Lineup) => {
     setLoadingLineupId(lineup.id);
     try {
-      loadLineupFromData(lineup, athletes, boatConfigs, shells);
-      setCurrentLineupId(lineup.id);
-      setLineupName(lineup.name);
+      onLoadLineup(lineup.id);
     } catch (error) {
       console.error('Failed to load lineup:', error);
     } finally {
@@ -70,7 +70,7 @@ export function VersionHistory({ onSaveDialogOpen, className = '' }: VersionHist
   };
 
   /**
-   * Duplicate lineup and open in workspace
+   * Duplicate lineup and load it
    */
   const handleDuplicateLineup = async (lineup: Lineup) => {
     setDuplicatingLineupId(lineup.id);
@@ -79,9 +79,7 @@ export function VersionHistory({ onSaveDialogOpen, className = '' }: VersionHist
       const duplicated = await duplicateLineupAsync({ id: lineup.id, name: newName });
 
       // Load the duplicated lineup
-      loadLineupFromData(duplicated, athletes, boatConfigs, shells);
-      setCurrentLineupId(duplicated.id);
-      setLineupName(duplicated.name);
+      onLoadLineup(duplicated.id);
     } catch (error) {
       console.error('Failed to duplicate lineup:', error);
     } finally {
@@ -123,7 +121,7 @@ export function VersionHistory({ onSaveDialogOpen, className = '' }: VersionHist
    * Count boats in lineup
    */
   const getBoatCount = (lineup: Lineup): number => {
-    const boatClasses = new Set(lineup.assignments.map(a => a.boatClass));
+    const boatClasses = new Set(lineup.assignments.map((a) => a.boatClass));
     return boatClasses.size;
   };
 
@@ -165,21 +163,31 @@ export function VersionHistory({ onSaveDialogOpen, className = '' }: VersionHist
                     const isLoadingThis = loadingLineupId === lineup.id;
                     const isDuplicatingThis = duplicatingLineupId === lineup.id;
                     const boatCount = getBoatCount(lineup);
+                    const isCurrent = currentLineupId === lineup.id;
 
                     return (
                       <div
                         key={lineup.id}
-                        className="p-3 bg-surface-primary hover:bg-surface-hover border border-bdr-primary rounded-lg transition-colors"
+                        className={`p-3 rounded-lg transition-colors ${
+                          isCurrent
+                            ? 'bg-accent-primary/10 border border-accent-primary'
+                            : 'bg-surface-primary hover:bg-surface-hover border border-bdr-primary'
+                        }`}
                       >
                         {/* Lineup info */}
                         <div className="mb-2">
                           <h4 className="text-sm font-medium text-txt-primary truncate">
                             {lineup.name}
+                            {isCurrent && (
+                              <span className="ml-2 text-xs text-accent-primary">(Current)</span>
+                            )}
                           </h4>
                           <div className="flex items-center gap-2 text-xs text-txt-tertiary mt-1">
                             <span>{formatDate(lineup.updatedAt)}</span>
                             <span>•</span>
-                            <span>{boatCount} boat{boatCount !== 1 ? 's' : ''}</span>
+                            <span>
+                              {boatCount} boat{boatCount !== 1 ? 's' : ''}
+                            </span>
                           </div>
                         </div>
 
@@ -187,10 +195,10 @@ export function VersionHistory({ onSaveDialogOpen, className = '' }: VersionHist
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleLoadLineup(lineup)}
-                            disabled={isLoadingThis}
+                            disabled={isLoadingThis || isCurrent}
                             className="flex-1 px-2 py-1.5 text-xs font-medium text-txt-primary bg-surface-secondary hover:bg-accent-primary hover:text-white border border-bdr-primary rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                           >
-                            {isLoadingThis ? 'Loading...' : 'Load'}
+                            {isLoadingThis ? 'Loading...' : isCurrent ? 'Loaded' : 'Load'}
                           </button>
                           <button
                             onClick={() => handleDuplicateLineup(lineup)}
@@ -198,7 +206,11 @@ export function VersionHistory({ onSaveDialogOpen, className = '' }: VersionHist
                             className="px-2 py-1.5 text-xs font-medium text-txt-secondary hover:text-txt-primary bg-surface-secondary hover:bg-surface-hover border border-bdr-primary rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             title="Duplicate lineup"
                           >
-                            {isDuplicatingThis ? <Loader2 size={14} className="animate-spin" /> : <Copy size={14} />}
+                            {isDuplicatingThis ? (
+                              <Loader2 size={14} className="animate-spin" />
+                            ) : (
+                              <Copy size={14} />
+                            )}
                           </button>
                           <button
                             onClick={() => setConfirmDelete({ isOpen: true, lineup })}
@@ -225,7 +237,8 @@ export function VersionHistory({ onSaveDialogOpen, className = '' }: VersionHist
           <div className="bg-card-bg border border-bdr-primary rounded-xl p-6 max-w-md w-full">
             <h3 className="text-lg font-semibold text-txt-primary mb-2">Delete Lineup?</h3>
             <p className="text-sm text-txt-secondary mb-4">
-              Are you sure you want to delete "{confirmDelete.lineup.name}"? This action cannot be undone.
+              Are you sure you want to delete "{confirmDelete.lineup.name}"? This action cannot be
+              undone.
             </p>
             <div className="flex justify-end gap-3">
               <button
