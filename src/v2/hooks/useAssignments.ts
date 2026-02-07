@@ -4,7 +4,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import api from '../utils/api';
 import { useAuth } from '../contexts/AuthContext';
-import { queryKeys } from '../lib/queryKeys';
 import type {
   WorkoutAssignment,
   PlannedWorkout,

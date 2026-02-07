@@ -116,7 +116,11 @@ export function useAthleteRatings(options?: RatingsOptions) {
   const { isAuthenticated, isInitialized, activeTeamId } = useAuth();
 
   const query = useQuery({
-    queryKey: queryKeys.ratings.rankings(options?.side),
+    queryKey: [
+      ...queryKeys.ratings.rankings(options?.side),
+      options?.ratingType,
+      options?.minRaces,
+    ],
     queryFn: () => fetchAthleteRatings(activeTeamId!, options),
     enabled: isInitialized && isAuthenticated && !!activeTeamId,
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -183,7 +187,6 @@ export function useRecalculateRatings() {
     mutationFn: recalculateRatings,
     onSuccess: () => {
       // Invalidate all rating queries to refetch with updated values
-      queryClient.invalidateQueries({ queryKey: queryKeys.ratings.all });
       queryClient.invalidateQueries({ queryKey: queryKeys.ratings.all });
     },
   });

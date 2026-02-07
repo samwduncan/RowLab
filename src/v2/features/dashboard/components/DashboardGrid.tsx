@@ -64,7 +64,16 @@ export function DashboardGrid({ role, children }: DashboardGridProps) {
     return () => window.removeEventListener('resize', measureWidth);
   }, []);
 
-  // Convert layout to react-grid-layout format
+  // Scale widget position from one column count to another so widgets don't overflow
+  const scalePosition = (pos: { x: number; w: number }, fromCols: number, toCols: number) => ({
+    x: Math.min(
+      Math.floor((pos.x / fromCols) * toCols),
+      Math.max(0, toCols - Math.min(pos.w, toCols))
+    ),
+    w: Math.min(pos.w, toCols),
+  });
+
+  // Convert layout to react-grid-layout format with scaled positions per breakpoint
   const gridLayouts = {
     lg: layout.widgets.map((w) => ({
       i: w.id,
@@ -75,24 +84,30 @@ export function DashboardGrid({ role, children }: DashboardGridProps) {
       minW: 2,
       minH: 2,
     })),
-    md: layout.widgets.map((w) => ({
-      i: w.id,
-      x: w.position.x,
-      y: w.position.y,
-      w: w.position.w,
-      h: w.position.h,
-      minW: 2,
-      minH: 2,
-    })),
-    sm: layout.widgets.map((w) => ({
-      i: w.id,
-      x: w.position.x,
-      y: w.position.y,
-      w: w.position.w,
-      h: w.position.h,
-      minW: 2,
-      minH: 2,
-    })),
+    md: layout.widgets.map((w) => {
+      const scaled = scalePosition(w.position, 12, 10);
+      return {
+        i: w.id,
+        x: scaled.x,
+        y: w.position.y,
+        w: scaled.w,
+        h: w.position.h,
+        minW: 2,
+        minH: 2,
+      };
+    }),
+    sm: layout.widgets.map((w) => {
+      const scaled = scalePosition(w.position, 12, 6);
+      return {
+        i: w.id,
+        x: scaled.x,
+        y: w.position.y,
+        w: scaled.w,
+        h: w.position.h,
+        minW: 2,
+        minH: 2,
+      };
+    }),
   };
 
   // Handle layout change from drag
@@ -148,40 +163,42 @@ export function DashboardGrid({ role, children }: DashboardGridProps) {
       {children}
 
       {/* Edit mode toolbar */}
-      {isEditing && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={SPRING_CONFIG}
-          className="flex items-center gap-3 p-4 bg-surface-elevated border border-bdr-default rounded-lg"
-        >
-          <button
-            onClick={() => setCatalogOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-accent-primary text-white rounded-lg hover:bg-accent-hover transition-colors font-medium"
+      <AnimatePresence>
+        {isEditing && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={SPRING_CONFIG}
+            className="flex items-center gap-3 p-4 bg-surface-elevated border border-bdr-default rounded-lg"
           >
-            <Plus className="w-4 h-4" />
-            Add Widget
-          </button>
+            <button
+              onClick={() => setCatalogOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-accent-primary text-white rounded-lg hover:bg-accent-hover transition-colors font-medium"
+            >
+              <Plus className="w-4 h-4" />
+              Add Widget
+            </button>
 
-          <button
-            onClick={resetLayout}
-            className="flex items-center gap-2 px-4 py-2 border border-bdr-default text-txt-secondary hover:text-txt-primary hover:border-bdr-focus rounded-lg transition-colors"
-          >
-            <ArrowCounterClockwise className="w-4 h-4" />
-            Reset Layout
-          </button>
+            <button
+              onClick={resetLayout}
+              className="flex items-center gap-2 px-4 py-2 border border-bdr-default text-txt-secondary hover:text-txt-primary hover:border-bdr-focus rounded-lg transition-colors"
+            >
+              <ArrowCounterClockwise className="w-4 h-4" />
+              Reset Layout
+            </button>
 
-          <div className="flex-1" />
+            <div className="flex-1" />
 
-          <button
-            onClick={() => setIsEditing(false)}
-            className="px-4 py-2 bg-accent-primary text-white rounded-lg hover:bg-accent-hover transition-colors font-medium"
-          >
-            Done
-          </button>
-        </motion.div>
-      )}
+            <button
+              onClick={() => setIsEditing(false)}
+              className="px-4 py-2 bg-accent-primary text-white rounded-lg hover:bg-accent-hover transition-colors font-medium"
+            >
+              Done
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Toggle edit mode when not editing */}
       {!isEditing && (
@@ -223,19 +240,21 @@ export function DashboardGrid({ role, children }: DashboardGridProps) {
       </ResponsiveGridLayout>
 
       {/* Edit mode instruction */}
-      {isEditing && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-surface-elevated border border-bdr-default rounded-lg shadow-xl"
-        >
-          <p className="text-sm text-txt-secondary">
-            <strong className="text-txt-primary">Drag</strong> widgets to rearrange.{' '}
-            <strong className="text-txt-primary">Click size</strong> to resize.
-          </p>
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {isEditing && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-surface-elevated border border-bdr-default rounded-lg shadow-xl"
+          >
+            <p className="text-sm text-txt-secondary">
+              <strong className="text-txt-primary">Drag</strong> widgets to rearrange.{' '}
+              <strong className="text-txt-primary">Click size</strong> to resize.
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Widget Catalog Modal */}
       <WidgetCatalog

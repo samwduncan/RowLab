@@ -248,6 +248,7 @@ function WidgetCard({ widget, isActive, onAdd, onRemove }: WidgetCardProps) {
       {/* Action button */}
       <button
         onClick={isActive ? onRemove : onAdd}
+        aria-label={isActive ? 'Remove widget' : 'Add widget'}
         className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
           isActive
             ? 'bg-surface-default border border-bdr-default text-txt-secondary hover:bg-surface-elevated hover:text-txt-primary'

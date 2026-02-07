@@ -34,12 +34,13 @@ interface ShareTokenResponse {
 // QUERY KEYS
 // ============================================
 
-
 // ============================================
 // API FUNCTIONS
 // ============================================
 
-async function fetchRecruitVisits(filters: RecruitVisitFilters = {}): Promise<RecruitVisitsResponse> {
+async function fetchRecruitVisits(
+  filters: RecruitVisitFilters = {}
+): Promise<RecruitVisitsResponse> {
   const params = new URLSearchParams();
   if (filters.status) params.set('status', filters.status);
   if (filters.hostAthleteId) params.set('hostAthleteId', filters.hostAthleteId);
@@ -81,9 +82,10 @@ async function createRecruitVisit(input: CreateRecruitVisitInput): Promise<Recru
   return response.data.data.visit;
 }
 
-async function updateRecruitVisit(
-  data: { visitId: string; input: UpdateRecruitVisitInput }
-): Promise<RecruitVisit> {
+async function updateRecruitVisit(data: {
+  visitId: string;
+  input: UpdateRecruitVisitInput;
+}): Promise<RecruitVisit> {
   const { visitId, input } = data;
   const response = await api.patch<ApiResponse<{ visit: RecruitVisit }>>(
     `/api/v1/recruit-visits/${visitId}`,
@@ -131,7 +133,7 @@ export function useRecruitVisits(filters: RecruitVisitFilters = {}) {
     queryKey: queryKeys.recruitVisit.list(filters),
     queryFn: () => fetchRecruitVisits(filters),
     enabled: isInitialized && isAuthenticated,
-    staleTime: 2 * 60 * 1000, // 5 minutes
+    staleTime: 2 * 60 * 1000, // 2 minutes
   });
 
   return {
@@ -153,7 +155,7 @@ export function useRecruitVisit(visitId: string | null) {
     queryKey: queryKeys.recruitVisit.detail(visitId!),
     queryFn: () => fetchRecruitVisit(visitId!),
     enabled: isInitialized && isAuthenticated && !!visitId,
-    staleTime: 2 * 60 * 1000, // 5 minutes
+    staleTime: 2 * 60 * 1000, // 2 minutes
   });
 
   return {

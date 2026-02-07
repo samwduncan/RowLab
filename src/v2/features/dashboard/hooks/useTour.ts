@@ -39,8 +39,12 @@ export function useTour(tourId: string, options: UseTourOptions = {}): UseTourRe
   const driverRef = useRef<Driver | null>(null);
   const [hasSeenTour, setHasSeenTour] = useState<boolean>(() => {
     if (typeof window === 'undefined') return true;
-    const key = `rowlab_tour_${tourId}_seen`;
-    return localStorage.getItem(key) === 'true';
+    try {
+      const key = `rowlab_tour_${tourId}_seen`;
+      return localStorage.getItem(key) === 'true';
+    } catch {
+      return false;
+    }
   });
 
   /**
@@ -112,8 +116,12 @@ export function useTour(tourId: string, options: UseTourOptions = {}): UseTourRe
       steps: availableSteps,
       onDestroyed: () => {
         // Mark tour as seen when completed or dismissed
-        const key = `rowlab_tour_${tourId}_seen`;
-        localStorage.setItem(key, 'true');
+        try {
+          const key = `rowlab_tour_${tourId}_seen`;
+          localStorage.setItem(key, 'true');
+        } catch {
+          // localStorage may be unavailable (private browsing, quota exceeded)
+        }
         setHasSeenTour(true);
       },
     });
@@ -126,8 +134,12 @@ export function useTour(tourId: string, options: UseTourOptions = {}): UseTourRe
    * Reset tour seen state (for testing or "Show me again")
    */
   const resetTour = () => {
-    const key = `rowlab_tour_${tourId}_seen`;
-    localStorage.removeItem(key);
+    try {
+      const key = `rowlab_tour_${tourId}_seen`;
+      localStorage.removeItem(key);
+    } catch {
+      // localStorage may be unavailable
+    }
     setHasSeenTour(false);
   };
 
@@ -141,7 +153,7 @@ export function useTour(tourId: string, options: UseTourOptions = {}): UseTourRe
 
     return () => clearTimeout(timeoutId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoStart, hasSeenTour, delay]);
+  }, [autoStart, hasSeenTour, delay, tourId]);
 
   // Cleanup driver on unmount
   useEffect(() => {

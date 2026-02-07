@@ -95,8 +95,11 @@ async function publishLineupMutation(
   if (!response.data.success || !response.data.data) {
     // Check for conflict error (409)
     if (response.status === 409 && response.data.error?.code === 'CONFLICT') {
-      const currentLineup = (response.data.error as any).currentLineup;
-      throw new ConflictError(currentLineup, currentLineup);
+      const serverLineup = (response.data.error as any).currentLineup;
+      const error = new Error('Lineup was modified by another user') as any;
+      error.code = 'CONFLICT';
+      error.serverLineup = serverLineup;
+      throw error;
     }
     throw new Error(response.data.error?.message || 'Failed to publish lineup');
   }
@@ -149,7 +152,6 @@ export function useLineupDraft(lineupId: string | null) {
         queryClient.setQueryData<LineupDraft>(queryKeys.lineups.draft(data.id), {
           ...previousDraft,
           ...data,
-          updatedAt: new Date().toISOString(),
         });
       }
 

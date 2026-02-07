@@ -128,12 +128,11 @@ export function useAthletes(filters?: AthleteFilters) {
   const createMutation = useMutation({
     mutationFn: createAthlete,
     onMutate: async (newAthlete) => {
+      const queryKey = queryKeys.athletes.list(filters);
       await queryClient.cancelQueries({ queryKey: queryKeys.athletes.all });
-      const previousAthletes = queryClient.getQueryData<Athlete[]>(
-        queryKeys.athletes.list(filters)
-      );
+      const previousAthletes = queryClient.getQueryData<Athlete[]>(queryKey);
 
-      queryClient.setQueryData<Athlete[]>(queryKeys.athletes.list(filters), (old = []) => [
+      queryClient.setQueryData<Athlete[]>(queryKey, (old = []) => [
         ...old,
         {
           ...newAthlete,
@@ -144,11 +143,11 @@ export function useAthletes(filters?: AthleteFilters) {
         } as Athlete,
       ]);
 
-      return { previousAthletes };
+      return { previousAthletes, queryKey };
     },
     onError: (_err, _newAthlete, context) => {
-      if (context?.previousAthletes) {
-        queryClient.setQueryData(queryKeys.athletes.list(filters), context.previousAthletes);
+      if (context?.previousAthletes && context?.queryKey) {
+        queryClient.setQueryData(context.queryKey, context.previousAthletes);
       }
     },
     onSettled: () => {
@@ -159,12 +158,11 @@ export function useAthletes(filters?: AthleteFilters) {
   const updateMutation = useMutation({
     mutationFn: updateAthlete,
     onMutate: async (updatedAthlete) => {
+      const queryKey = queryKeys.athletes.list(filters);
       await queryClient.cancelQueries({ queryKey: queryKeys.athletes.all });
-      const previousAthletes = queryClient.getQueryData<Athlete[]>(
-        queryKeys.athletes.list(filters)
-      );
+      const previousAthletes = queryClient.getQueryData<Athlete[]>(queryKey);
 
-      queryClient.setQueryData<Athlete[]>(queryKeys.athletes.list(filters), (old = []) =>
+      queryClient.setQueryData<Athlete[]>(queryKey, (old = []) =>
         old.map((athlete) =>
           athlete.id === updatedAthlete.id
             ? { ...athlete, ...updatedAthlete, updatedAt: new Date().toISOString() }
@@ -172,11 +170,11 @@ export function useAthletes(filters?: AthleteFilters) {
         )
       );
 
-      return { previousAthletes };
+      return { previousAthletes, queryKey };
     },
     onError: (_err, _updatedAthlete, context) => {
-      if (context?.previousAthletes) {
-        queryClient.setQueryData(queryKeys.athletes.list(filters), context.previousAthletes);
+      if (context?.previousAthletes && context?.queryKey) {
+        queryClient.setQueryData(context.queryKey, context.previousAthletes);
       }
     },
     onSettled: () => {
@@ -187,20 +185,19 @@ export function useAthletes(filters?: AthleteFilters) {
   const deleteMutation = useMutation({
     mutationFn: deleteAthlete,
     onMutate: async (deletedId) => {
+      const queryKey = queryKeys.athletes.list(filters);
       await queryClient.cancelQueries({ queryKey: queryKeys.athletes.all });
-      const previousAthletes = queryClient.getQueryData<Athlete[]>(
-        queryKeys.athletes.list(filters)
-      );
+      const previousAthletes = queryClient.getQueryData<Athlete[]>(queryKey);
 
-      queryClient.setQueryData<Athlete[]>(queryKeys.athletes.list(filters), (old = []) =>
+      queryClient.setQueryData<Athlete[]>(queryKey, (old = []) =>
         old.filter((athlete) => athlete.id !== deletedId)
       );
 
-      return { previousAthletes };
+      return { previousAthletes, queryKey };
     },
     onError: (_err, _deletedId, context) => {
-      if (context?.previousAthletes) {
-        queryClient.setQueryData(queryKeys.athletes.list(filters), context.previousAthletes);
+      if (context?.previousAthletes && context?.queryKey) {
+        queryClient.setQueryData(context.queryKey, context.previousAthletes);
       }
     },
     onSettled: () => {

@@ -42,7 +42,7 @@ export const TodaysPracticeSummary: React.FC<TodaysPracticeSummaryProps> = ({
   const navigate = useNavigate();
 
   // Get today's date in YYYY-MM-DD format
-  const today = useMemo(() => new Date().toISOString().split('T')[0], []);
+  const today = new Date().toISOString().split('T')[0];
 
   // Query today's sessions
   const { sessions, isLoading } = useSessions({
@@ -79,7 +79,7 @@ export const TodaysPracticeSummary: React.FC<TodaysPracticeSummaryProps> = ({
   if (isLoading) {
     return (
       <div className="h-full flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
+        <div className="flex flex-col items-center gap-3" role="status" aria-label="Loading">
           <div className="w-8 h-8 border-2 border-[var(--color-interactive-primary)] border-t-transparent rounded-full animate-spin" />
           <p className="text-sm text-[var(--color-text-secondary)]">Loading today's practice...</p>
         </div>

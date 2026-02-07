@@ -39,9 +39,10 @@ async function saveLayoutToDb(userId: string, layout: DashboardLayout): Promise<
  */
 export function useDashboardLayout(role: 'coach' | 'athlete'): UseDashboardLayoutReturn {
   const { user } = useAuth();
+  const storageKey = `${STORAGE_KEY}_${user?.id || 'anon'}_${role}`;
   const [layout, setLayout] = useState<DashboardLayout>(() => {
     // Read from localStorage on mount for instant load
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(storageKey);
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
@@ -83,11 +84,11 @@ export function useDashboardLayout(role: 'coach' | 'athlete'): UseDashboardLayou
     (newLayout: DashboardLayout) => {
       setLayout(newLayout);
       // Save to localStorage immediately
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newLayout));
+      localStorage.setItem(storageKey, JSON.stringify(newLayout));
       // Debounced DB sync for cross-device
       debouncedSync(newLayout);
     },
-    [debouncedSync]
+    [storageKey, debouncedSync]
   );
 
   // Add widget to layout

@@ -480,25 +480,27 @@ export async function updateDraft(teamId, lineupId, userId, data) {
 
   const { name, notes, assignments } = data;
 
-  // Replace assignments if provided
+  // Replace assignments if provided (wrapped in transaction for atomicity)
   if (assignments !== undefined) {
-    await prisma.lineupAssignment.deleteMany({
-      where: { lineupId },
-    });
-
-    if (assignments.length > 0) {
-      await prisma.lineupAssignment.createMany({
-        data: assignments.map((a) => ({
-          lineupId,
-          athleteId: a.athleteId,
-          boatClass: a.boatClass,
-          shellName: a.shellName || null,
-          seatNumber: a.seatNumber,
-          side: a.side,
-          isCoxswain: a.isCoxswain || false,
-        })),
+    await prisma.$transaction(async (tx) => {
+      await tx.lineupAssignment.deleteMany({
+        where: { lineupId },
       });
-    }
+
+      if (assignments.length > 0) {
+        await tx.lineupAssignment.createMany({
+          data: assignments.map((a) => ({
+            lineupId,
+            athleteId: a.athleteId,
+            boatClass: a.boatClass,
+            shellName: a.shellName || null,
+            seatNumber: a.seatNumber,
+            side: a.side,
+            isCoxswain: a.isCoxswain || false,
+          })),
+        });
+      }
+    });
   }
 
   const lineup = await prisma.lineup.update({
@@ -531,43 +533,48 @@ export async function updateDraft(teamId, lineupId, userId, data) {
  * Validates no conflicts and sets status to published
  */
 export async function publishLineup(teamId, lineupId, lastKnownUpdatedAt) {
-  const existing = await prisma.lineup.findFirst({
-    where: { id: lineupId, teamId },
-  });
+  const result = await prisma.$transaction(async (tx) => {
+    // Atomic conditional update: check existence + conflict in one query
+    const whereClause = { id: lineupId, teamId };
+    if (lastKnownUpdatedAt) {
+      whereClause.updatedAt = { lte: new Date(lastKnownUpdatedAt) };
+    }
 
-  if (!existing) {
-    throw new Error('Lineup not found');
-  }
+    const updateResult = await tx.lineup.updateMany({
+      where: whereClause,
+      data: { status: 'published', publishedAt: new Date() },
+    });
 
-  // Conflict detection: check if updatedAt has changed
-  if (lastKnownUpdatedAt) {
-    const knownDate = new Date(lastKnownUpdatedAt);
-    if (existing.updatedAt > knownDate) {
+    if (updateResult.count === 0) {
+      // Determine why: not found vs conflict
+      const existing = await tx.lineup.findFirst({
+        where: { id: lineupId, teamId },
+      });
+      if (!existing) {
+        throw new Error('Lineup not found');
+      }
       const error = new Error('Lineup was modified by another user');
       error.code = 'CONFLICT';
       error.currentLineup = existing;
       throw error;
     }
-  }
 
-  const lineup = await prisma.lineup.update({
-    where: { id: lineupId },
-    data: {
-      status: 'published',
-      publishedAt: new Date(),
-    },
-    include: {
-      assignments: {
-        include: {
-          athlete: {
-            select: { id: true, firstName: true, lastName: true, side: true },
+    // Fetch the updated lineup with full includes
+    return await tx.lineup.findFirst({
+      where: { id: lineupId },
+      include: {
+        assignments: {
+          include: {
+            athlete: {
+              select: { id: true, firstName: true, lastName: true, side: true },
+            },
           },
         },
       },
-    },
+    });
   });
 
-  return formatLineup(lineup, true);
+  return formatLineup(result, true);
 }
 
 /**

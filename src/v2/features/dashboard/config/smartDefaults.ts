@@ -77,7 +77,22 @@ export function getDefaultTeamSettings(): {
 } {
   // Detect if US timezone (NCAA programs are US-based)
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const isUSTimezone = timezone.includes('America/');
+  const usTimezones = [
+    'America/New_York',
+    'America/Chicago',
+    'America/Denver',
+    'America/Los_Angeles',
+    'America/Phoenix',
+    'America/Anchorage',
+    'Pacific/Honolulu',
+    'America/Detroit',
+    'America/Indiana',
+    'America/Kentucky',
+    'America/Boise',
+    'America/Juneau',
+    'America/Adak',
+  ];
+  const isUSTimezone = usTimezones.some((tz) => timezone === tz || timezone.startsWith(tz + '/'));
 
   return {
     ncaaComplianceEnabled: isUSTimezone,

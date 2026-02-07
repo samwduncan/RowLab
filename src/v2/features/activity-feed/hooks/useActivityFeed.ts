@@ -60,7 +60,7 @@ export function useUnifiedActivityFeed(athleteId?: string) {
   const { isAuthenticated, isInitialized, activeTeamId } = useAuth();
 
   return useInfiniteQuery({
-    queryKey: queryKeys.dashboard.activityFeed(),
+    queryKey: [...queryKeys.dashboard.activityFeed(), athleteId],
     queryFn: ({ pageParam }) => fetchActivityFeed(athleteId, pageParam),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => lastPage.nextCursor,

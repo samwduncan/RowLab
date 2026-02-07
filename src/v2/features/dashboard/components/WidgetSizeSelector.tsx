@@ -57,6 +57,7 @@ export function WidgetSizeSelector({
 
         return (
           <button
+            type="button"
             key={size}
             onClick={() => onSizeChange(size)}
             className={`px-2 py-1 text-xs font-medium rounded transition-all ${

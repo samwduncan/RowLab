@@ -147,7 +147,7 @@ export function useSessions(filters: SessionFilters = {}) {
     queryKey: queryKeys.sessions.list(filters),
     queryFn: () => fetchSessions(filters),
     enabled: isInitialized && isAuthenticated,
-    staleTime: 1 * 60 * 1000, // 1 minute // 5 minutes
+    staleTime: 1 * 60 * 1000, // 1 minute
   });
 
   return {
@@ -169,7 +169,7 @@ export function useSession(sessionId: string | null) {
     queryKey: queryKeys.sessions.detail(sessionId!),
     queryFn: () => fetchSession(sessionId!),
     enabled: isInitialized && isAuthenticated && !!sessionId,
-    staleTime: 1 * 60 * 1000, // 1 minute // 5 minutes
+    staleTime: 1 * 60 * 1000, // 1 minute
   });
 
   return {

@@ -13,11 +13,16 @@ import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimen
 import { queryClient } from '../queryClient';
 import type { Query } from '@tanstack/react-query';
 
+let initialized = false;
+
 /**
  * Initialize multi-tab cache synchronization.
  * Must be called once at app initialization.
  */
 export function initBroadcastSync() {
+  if (initialized) return;
+  initialized = true;
+
   broadcastQueryClient({
     queryClient,
     broadcastChannel: 'rowlab-v3',

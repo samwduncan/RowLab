@@ -79,8 +79,7 @@ async function fetchComparisonGraph(teamId: string): Promise<ComparisonGraph> {
  * // Each athlete has: strength, stdError, confidenceInterval
  */
 export function useBradleyTerryRankings() {
-  const { isAuthenticated, isInitialized } = useAuth();
-  const { activeTeamId } = useAuth();
+  const { isAuthenticated, isInitialized, activeTeamId } = useAuth();
 
   const query = useQuery({
     queryKey: advancedRankingKeys.bradleyTerry(activeTeamId || ''),
@@ -112,8 +111,7 @@ export function useBradleyTerryRankings() {
  * // matrix[i][j] = P(athletes[i] beats athletes[j])
  */
 export function useProbabilityMatrix() {
-  const { isAuthenticated, isInitialized } = useAuth();
-  const { activeTeamId } = useAuth();
+  const { isAuthenticated, isInitialized, activeTeamId } = useAuth();
 
   const query = useQuery({
     queryKey: advancedRankingKeys.probabilityMatrix(activeTeamId || ''),
@@ -141,8 +139,7 @@ export function useProbabilityMatrix() {
  * // gaps array shows which athlete pairs need more comparisons
  */
 export function useComparisonGraph() {
-  const { isAuthenticated, isInitialized } = useAuth();
-  const { activeTeamId } = useAuth();
+  const { isAuthenticated, isInitialized, activeTeamId } = useAuth();
 
   const query = useQuery({
     queryKey: advancedRankingKeys.comparisonGraph(activeTeamId || ''),

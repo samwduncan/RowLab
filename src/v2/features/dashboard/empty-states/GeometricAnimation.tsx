@@ -30,7 +30,8 @@ export const GeometricAnimation: React.FC<GeometricAnimationProps> = ({
 
   // Pause animation when offscreen for performance
   useEffect(() => {
-    if (!svgRef.current) return;
+    const node = svgRef.current;
+    if (!node) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -41,12 +42,10 @@ export const GeometricAnimation: React.FC<GeometricAnimationProps> = ({
       { threshold: 0.1 }
     );
 
-    observer.observe(svgRef.current);
+    observer.observe(node);
 
     return () => {
-      if (svgRef.current) {
-        observer.unobserve(svgRef.current);
-      }
+      observer.unobserve(node);
     };
   }, []);
 

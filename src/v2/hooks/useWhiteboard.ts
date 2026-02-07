@@ -69,8 +69,12 @@ export function useWhiteboard() {
       await queryClient.cancelQueries({ queryKey: queryKeys.whiteboard.all });
       const previous = queryClient.getQueryData(queryKeys.whiteboard.latest());
 
-      // Optimistic update
-      queryClient.setQueryData(queryKeys.whiteboard.latest(), newData);
+      // Optimistic update — merge with existing data to preserve fields like id
+      if (previous) {
+        queryClient.setQueryData(queryKeys.whiteboard.latest(), { ...previous, ...newData });
+      } else {
+        queryClient.setQueryData(queryKeys.whiteboard.latest(), newData);
+      }
 
       return { previous };
     },

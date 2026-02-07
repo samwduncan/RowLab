@@ -118,6 +118,7 @@ export default function LoginPage() {
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
         });
+        if (!res.ok) return;
         const data = await res.json();
         if (data.success) {
           const store = (await import('../../store/authStore')).default;

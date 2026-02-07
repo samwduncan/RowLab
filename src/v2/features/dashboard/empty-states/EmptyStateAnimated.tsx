@@ -74,6 +74,7 @@ export const EmptyStateAnimated: React.FC<EmptyStateAnimatedProps> = ({
         <div className="flex items-center gap-3">
           {action && (
             <button
+              type="button"
               onClick={() => handleActionClick(action)}
               className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--color-interactive-primary)] text-white rounded-lg hover:bg-[var(--color-interactive-hover)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-interactive-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-base)]"
             >
@@ -83,6 +84,7 @@ export const EmptyStateAnimated: React.FC<EmptyStateAnimatedProps> = ({
           )}
           {secondaryAction && (
             <button
+              type="button"
               onClick={() => handleActionClick(secondaryAction)}
               className="inline-flex items-center gap-2 px-4 py-2 border border-[var(--color-border-default)] text-[var(--color-text-primary)] rounded-lg hover:bg-[var(--color-bg-surface-elevated)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-interactive-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-base)]"
             >

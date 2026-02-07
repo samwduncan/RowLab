@@ -502,7 +502,7 @@ export function useProcessSession() {
     mutationFn: processSession,
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.seatRaces.detail(variables.sessionId) });
-      queryClient.invalidateQueries({ queryKey: ['athleteRatings'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.ratings.all });
     },
   });
 

@@ -181,6 +181,7 @@ const ImportAthletesStep: React.FC<{
             <input
               type="text"
               placeholder="Athlete name"
+              aria-label="Athlete name"
               value={manualName}
               onChange={(e) => setManualName(e.target.value)}
               className="w-full px-3 py-2 bg-surface-base border border-bdr-default rounded-lg text-txt-primary placeholder:text-txt-tertiary focus:outline-none focus:ring-2 focus:ring-interactive-primary"

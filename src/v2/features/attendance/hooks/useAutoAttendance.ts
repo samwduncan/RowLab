@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { queryKeys } from '../../../lib/queryKeys';
+import { useAuth } from '../../../contexts/AuthContext';
 
 // Attendance statuses
 export type AttendanceStatus = 'Present' | 'Late' | 'Partial' | 'Absent' | 'Injured' | 'Class';

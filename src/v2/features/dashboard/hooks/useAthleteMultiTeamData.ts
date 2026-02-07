@@ -86,28 +86,18 @@ export function useAthleteMultiTeamData(athleteId: string): UseAthleteMultiTeamD
       queryKey: queryKeys.dashboard.teamData(team.id, athleteId),
       queryFn: async () => {
         try {
-          // Fetch next workout for this team
-          const workoutResponse = await api.get(
-            `/api/v1/sessions?teamId=${team.id}&status=PLANNED&limit=1`
-          );
+          // Fetch all team data in parallel
+          const [workoutResponse, rankingResponse, activityResponse, attendanceResponse] =
+            await Promise.all([
+              api.get(`/api/v1/sessions?teamId=${team.id}&status=PLANNED&limit=1`),
+              api.get(`/api/v1/teams/${team.id}/rankings?athleteId=${athleteId}`),
+              api.get(`/api/v1/activity?teamId=${team.id}&athleteId=${athleteId}&limit=5`),
+              api.get(`/api/v1/attendance/rate?teamId=${team.id}&athleteId=${athleteId}&days=30`),
+            ]);
+
           const nextWorkout = workoutResponse.data?.data?.sessions?.[0];
-
-          // Fetch athlete ranking for this team
-          const rankingResponse = await api.get(
-            `/api/v1/teams/${team.id}/rankings?athleteId=${athleteId}`
-          );
           const ranking = rankingResponse.data?.data?.ranking;
-
-          // Fetch recent activity for this team
-          const activityResponse = await api.get(
-            `/api/v1/activity?teamId=${team.id}&athleteId=${athleteId}&limit=5`
-          );
           const recentActivity = activityResponse.data?.data?.activities || [];
-
-          // Fetch attendance rate for this team
-          const attendanceResponse = await api.get(
-            `/api/v1/attendance/rate?teamId=${team.id}&athleteId=${athleteId}&days=30`
-          );
           const attendanceRate = attendanceResponse.data?.data?.rate;
 
           return {

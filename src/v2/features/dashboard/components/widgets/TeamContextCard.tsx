@@ -55,10 +55,7 @@ export function TeamContextCard({
       <div className="mb-4">
         <Link
           to={`/app/teams/${teamId}`}
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border
-            transition-all hover:scale-105 group"
-          style={{ borderColor: 'inherit' }}
-          className={`${badgeColor}`}
+          className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all hover:scale-105 group ${badgeColor}`}
         >
           <span className="text-sm font-semibold">{teamName}</span>
           <CaretRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />

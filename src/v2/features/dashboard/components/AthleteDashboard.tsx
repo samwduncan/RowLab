@@ -20,9 +20,6 @@ import { TourLauncher } from './TourLauncher';
 import { EmptyDashboardState } from '../empty-states';
 import { SPRING_CONFIG } from '../../../utils/animations';
 
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
-
 /**
  * Athlete dashboard page component
  * Adapts layout based on team count (0, 1, or N teams)
@@ -31,7 +28,7 @@ export function AthleteDashboard() {
   const { user } = useAuth();
   const athleteId = user?.id || '';
 
-  const { layout, isEditing, setIsEditing, updateLayout } = useDashboardLayout('athlete');
+  const { isEditing, setIsEditing } = useDashboardLayout('athlete');
   const { teams, teamData, personalStats, isLoading } = useAthleteMultiTeamData(athleteId);
 
   // Auto-launch tour on first visit
@@ -75,18 +72,6 @@ export function AthleteDashboard() {
    * - N teams: Personal stats hero + team cards side-by-side
    */
   const teamCount = teams.length;
-
-  // Handle layout change
-  const handleLayoutChange = (newLayout: any) => {
-    // Update layout state (will trigger localStorage + debounced DB sync)
-    updateLayout({
-      ...layout,
-      widgets: layout.widgets.map((w, i) => ({
-        ...w,
-        position: newLayout[i] || w.position,
-      })),
-    });
-  };
 
   return (
     <div className="min-h-screen bg-surface-base p-6">
@@ -235,7 +220,7 @@ export function AthleteDashboard() {
               bg-surface-elevated border border-bdr-default shadow-xl"
           >
             <p className="text-sm text-txt-secondary">
-              Drag widgets to rearrange. Click "Done Editing" to save.
+              Customize your dashboard. Click "Done Editing" to save.
             </p>
           </motion.div>
         )}

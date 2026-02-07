@@ -49,10 +49,14 @@ api.interceptors.response.use(
           // Update the request header with new token and retry
           originalRequest.headers.Authorization = `Bearer ${newToken}`;
           return api(originalRequest);
+        } else {
+          console.error('Token refresh succeeded but response missing accessToken');
+          delete (window as any).__rowlab_access_token;
         }
       } catch (refreshError) {
-        // Refresh failed, clear token and let error propagate
+        // Refresh failed, clear token and notify AuthProvider
         delete (window as any).__rowlab_access_token;
+        window.dispatchEvent(new CustomEvent('rowlab:auth:expired'));
         return Promise.reject(refreshError);
       }
     }

@@ -25,9 +25,6 @@ export function PersonalStatsWidget({ widgetId, size, isEditing }: WidgetProps) 
   const { personalStats, isLoading } = useAthleteMultiTeamData(athleteId);
   const { data: prs = [] } = usePersonalRecords();
 
-  // Check if latest erg is a PR
-  const latestErgIsPR = prs.some((pr) => pr.testType === personalStats.latestErgTestType);
-
   // Greeting based on time of day
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
@@ -49,11 +46,15 @@ export function PersonalStatsWidget({ widgetId, size, isEditing }: WidgetProps) 
     );
   }
 
+  // Check if latest erg is a PR (after loading guard so personalStats is populated)
+  const latestErgIsPR = prs.some((pr) => pr.testType === personalStats.latestErgTestType);
+
   // Empty state
   if (
     !personalStats.latestErgTime &&
     personalStats.attendanceStreak === 0 &&
-    personalStats.totalPRs === 0
+    personalStats.totalPRs === 0 &&
+    !personalStats.overallRanking
   ) {
     return <EmptyDashboardState />;
   }

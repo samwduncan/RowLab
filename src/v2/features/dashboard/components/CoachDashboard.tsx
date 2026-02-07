@@ -44,9 +44,18 @@ export const CoachDashboard: React.FC = () => {
   // Auto-launch tour on first visit
   useTour('coach-dashboard', { autoStart: true, delay: 800 });
 
-  // Convert layout to react-grid-layout format
-  const gridLayout = useMemo((): RGLLayout[] => {
-    return layout.widgets.map((widget) => ({
+  // Scale widget position from one column count to another so widgets don't overflow
+  const scalePosition = (pos: { x: number; w: number }, fromCols: number, toCols: number) => ({
+    x: Math.min(
+      Math.floor((pos.x / fromCols) * toCols),
+      Math.max(0, toCols - Math.min(pos.w, toCols))
+    ),
+    w: Math.min(pos.w, toCols),
+  });
+
+  // Convert layout to react-grid-layout format with scaled positions per breakpoint
+  const gridLayouts = useMemo((): { lg: RGLLayout[]; md: RGLLayout[]; sm: RGLLayout[] } => {
+    const lg = layout.widgets.map((widget) => ({
       i: widget.id,
       x: widget.position.x,
       y: widget.position.y,
@@ -57,6 +66,38 @@ export const CoachDashboard: React.FC = () => {
       maxW: 12,
       maxH: 8,
     }));
+
+    const md = layout.widgets.map((widget) => {
+      const scaled = scalePosition(widget.position, 12, 10);
+      return {
+        i: widget.id,
+        x: scaled.x,
+        y: widget.position.y,
+        w: scaled.w,
+        h: widget.position.h,
+        minW: 2,
+        minH: 2,
+        maxW: 10,
+        maxH: 8,
+      };
+    });
+
+    const sm = layout.widgets.map((widget) => {
+      const scaled = scalePosition(widget.position, 12, 6);
+      return {
+        i: widget.id,
+        x: scaled.x,
+        y: widget.position.y,
+        w: scaled.w,
+        h: widget.position.h,
+        minW: 2,
+        minH: 2,
+        maxW: 6,
+        maxH: 8,
+      };
+    });
+
+    return { lg, md, sm };
   }, [layout.widgets]);
 
   // Handle layout change from drag/drop
@@ -150,7 +191,7 @@ export const CoachDashboard: React.FC = () => {
       {/* Bento Grid */}
       <ResponsiveGridLayout
         className="dashboard-grid"
-        layouts={{ lg: gridLayout, md: gridLayout, sm: gridLayout }}
+        layouts={gridLayouts}
         breakpoints={{ lg: 1200, md: 996, sm: 768 }}
         cols={{ lg: 12, md: 10, sm: 6 }}
         rowHeight={60}

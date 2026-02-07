@@ -1,6 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import api from '../../utils/api';
+import { useAuth } from '../../contexts/AuthContext';
 import type { ApiResponse } from '../../types/seatRacing';
 
 /**
@@ -61,7 +62,11 @@ function ParameterRow({ label, value, description }: ParameterRowProps) {
 export function ParametersPanel() {
   const { isAuthenticated, isInitialized } = useAuth();
 
-  const { data: parameters, isLoading, error } = useQuery({
+  const {
+    data: parameters,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['ratingParameters'],
     queryFn: fetchRatingParameters,
     enabled: isInitialized && isAuthenticated,

@@ -54,7 +54,11 @@ export function useAthleteAvailability(
   const { isAuthenticated, isInitialized } = useAuth();
 
   return useQuery({
-    queryKey: queryKeys.availability.athlete(athleteId || ''),
+    queryKey: [
+      ...queryKeys.availability.athlete(athleteId || ''),
+      startDate?.toISOString(),
+      endDate?.toISOString(),
+    ],
     queryFn: async () => {
       if (!athleteId) return [];
       const response = await api.get<ApiResponse<{ availability: AvailabilityDay[] }>>(
@@ -101,7 +105,6 @@ export function useUpdateAvailability() {
     },
     onMutate: async (variables) => {
       await queryClient.cancelQueries({ queryKey: queryKeys.availability.all });
-      const previousTeam = queryClient.getQueryData(queryKeys.availability.team({}));
       const previousAthlete = queryClient.getQueryData(
         queryKeys.availability.athlete(variables.athleteId)
       );
@@ -112,7 +115,7 @@ export function useUpdateAvailability() {
         variables.availability
       );
 
-      return { previousTeam, previousAthlete };
+      return { previousAthlete };
     },
     onError: (_err, variables, context) => {
       if (context?.previousAthlete !== undefined) {
@@ -120,9 +123,6 @@ export function useUpdateAvailability() {
           queryKeys.availability.athlete(variables.athleteId),
           context.previousAthlete
         );
-      }
-      if (context?.previousTeam !== undefined) {
-        queryClient.setQueryData(queryKeys.availability.team({}), context.previousTeam);
       }
     },
     onSettled: () => {

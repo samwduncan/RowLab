@@ -139,6 +139,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Initialize auth on mount - use existing token if available, otherwise try refresh
   useEffect(() => {
+    let mounted = true;
+
     async function initialize() {
       try {
         // Check if a valid access token already exists (e.g. set by dev-login or V1 login).
@@ -146,7 +148,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         // rotate the refresh token and race with the token the login flow just set.
         const existingToken = (window as any).__rowlab_access_token;
         if (existingToken) {
-          setAccessToken(existingToken);
+          if (mounted) setAccessToken(existingToken);
           // Token is already on window, so the api interceptor will attach it.
           // Fetch user data to populate the context.
           await queryClient.fetchQuery({
@@ -158,7 +160,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           const refreshResponse = await api.post('/api/v1/auth/refresh');
           if (refreshResponse.data?.data?.accessToken) {
             const token = refreshResponse.data.data.accessToken;
-            setAccessToken(token);
+            if (mounted) setAccessToken(token);
             // Now fetch user data
             await queryClient.fetchQuery({
               queryKey: queryKeys.auth.user(),
@@ -170,11 +172,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         // No valid session, that's ok
         console.debug('No active session on init');
       } finally {
-        setIsInitialized(true);
+        if (mounted) setIsInitialized(true);
       }
     }
 
     initialize();
+    return () => {
+      mounted = false;
+    };
   }, [queryClient]);
 
   // Login mutation

@@ -184,8 +184,10 @@ export function useCreateEvent() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ regattaId, event }: { regattaId: string; event: EventFormData }) =>
-      createEvent(accessToken!, regattaId, event),
+    mutationFn: ({ regattaId, event }: { regattaId: string; event: EventFormData }) => {
+      if (!accessToken) throw new Error('Authentication required');
+      return createEvent(accessToken, regattaId, event);
+    },
     onSuccess: (_, { regattaId }) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.regattas.detail(regattaId) });
     },
