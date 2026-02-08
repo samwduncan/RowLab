@@ -4,9 +4,9 @@
 
 **Milestone:** v3.0 — App Redesign
 **Phase:** 33 (Regattas & Rankings Migration) — In Progress
-**Plan:** 1/6 complete
-**Status:** Phase 33 in progress. Plan 33-01 complete: All 10 regatta components migrated to V3 design tokens (ink-*, txt-*, data-*) with glass morphism, zero V1/V2 color classes remain.
-**Last activity:** 2026-02-08 — Completed 33-01-PLAN.md (regatta components V3 token migration)
+**Plan:** 2/6 complete
+**Status:** Phase 33 in progress. Plan 33-02 complete: All rankings components and regatta/rankings pages migrated to V3 design tokens. Combined with Plan 01, entire regattas/rankings domain (13 files) is V3-compliant.
+**Last activity:** 2026-02-08 — Completed 33-02-PLAN.md (rankings components and pages V3 token migration)
 
 ## Project Reference
 
@@ -94,7 +94,7 @@ v3.1 Progress: ░░░░░░░░░░░░░░ (0 phases complete)
 | 30 | Erg Data Migration | Complete ✅ | 4/4 |
 | 31 | Seat Racing Migration | Complete ✅ | 6/6 |
 | 32 | Training & Attendance Migration | Complete ✅ | 6/6 |
-| 33 | Regattas & Rankings Migration | In Progress | 1/6 |
+| 33 | Regattas & Rankings Migration | In Progress | 2/6 |
 | 33-36 | Feature Modules | Planned | TBD |
 
 v3.0 Progress: ████████████████████░ (9 phases complete, 1 in progress, 3 remaining)
@@ -494,9 +494,9 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-02-08
-**Stopped at:** Phase 33, Plan 01 complete. Continuing Phase 33 execution.
+**Stopped at:** Phase 33, Plan 02 complete. Continuing Phase 33 execution.
 **Resume file:** None
-**Resume with:** Continue executing remaining Phase 33 plans (33-02 through 33-06)
+**Resume with:** Continue executing remaining Phase 33 plans (33-03 through 33-06)
 
 ## Roadmap Evolution
 
