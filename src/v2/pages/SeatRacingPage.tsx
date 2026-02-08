@@ -51,17 +51,17 @@ function FeatureCard({ to, icon: Icon, title, description }: FeatureCardProps) {
   return (
     <Link
       to={to}
-      className="block p-4 bg-bg-surface rounded-lg border border-bdr-default hover:border-interactive-primary hover:shadow-md transition-all group"
+      className="block p-4 bg-ink-raised rounded-lg border border-ink-border hover:border-accent-copper hover:shadow-glow-copper transition-all group"
     >
       <div className="flex items-start gap-3">
-        <div className="p-2 bg-interactive-primary/10 rounded-lg group-hover:bg-interactive-primary/20 transition-colors">
-          <Icon className="w-5 h-5 text-interactive-primary" />
+        <div className="p-2 bg-accent-copper/10 rounded-lg group-hover:bg-accent-copper/20 transition-colors">
+          <Icon className="w-5 h-5 text-accent-copper" />
         </div>
         <div>
-          <h3 className="font-medium text-txt-primary group-hover:text-interactive-primary transition-colors">
+          <h3 className="font-medium text-ink-bright group-hover:text-accent-copper transition-colors">
             {title}
           </h3>
-          <p className="text-sm text-txt-secondary mt-1">{description}</p>
+          <p className="text-sm text-ink-secondary mt-1">{description}</p>
         </div>
       </div>
     </Link>
@@ -90,39 +90,39 @@ function KeyboardShortcutsHelp({ isOpen, onClose }: { isOpen: boolean; onClose: 
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={SPRING_CONFIG}
-            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-bg-surface rounded-xl border border-bdr-default shadow-2xl p-6 z-50 w-96"
+            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-ink-surface rounded-xl border border-ink-border shadow-2xl p-6 z-50 w-96"
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-txt-primary">Keyboard Shortcuts</h3>
+              <h3 className="text-lg font-semibold text-ink-bright">Keyboard Shortcuts</h3>
               <button
                 onClick={onClose}
-                className="p-1 text-txt-secondary hover:text-txt-primary rounded transition-colors"
+                className="p-1 text-ink-secondary hover:text-ink-bright rounded transition-colors"
               >
                 <X size={20} />
               </button>
             </div>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-txt-secondary">New Session</span>
-                <kbd className="px-2 py-1 text-xs font-mono bg-bg-raised border border-bdr-default rounded">
+                <span className="text-sm text-ink-secondary">New Session</span>
+                <kbd className="px-2 py-1 text-xs font-mono bg-ink-raised border border-ink-border rounded">
                   N
                 </kbd>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-txt-secondary">Recalculate Rankings</span>
-                <kbd className="px-2 py-1 text-xs font-mono bg-bg-raised border border-bdr-default rounded">
+                <span className="text-sm text-ink-secondary">Recalculate Rankings</span>
+                <kbd className="px-2 py-1 text-xs font-mono bg-ink-raised border border-ink-border rounded">
                   R
                 </kbd>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-txt-secondary">Show Shortcuts</span>
-                <kbd className="px-2 py-1 text-xs font-mono bg-bg-raised border border-bdr-default rounded">
+                <span className="text-sm text-ink-secondary">Show Shortcuts</span>
+                <kbd className="px-2 py-1 text-xs font-mono bg-ink-raised border border-ink-border rounded">
                   ?
                 </kbd>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-txt-secondary">Close</span>
-                <kbd className="px-2 py-1 text-xs font-mono bg-bg-raised border border-bdr-default rounded">
+                <span className="text-sm text-ink-secondary">Close</span>
+                <kbd className="px-2 py-1 text-xs font-mono bg-ink-raised border border-ink-border rounded">
                   Escape
                 </kbd>
               </div>
@@ -267,45 +267,54 @@ export function SeatRacingPage() {
   // Show loading while checking auth
   if (isAuthLoading) {
     return (
-      <div className="flex items-center justify-center h-full bg-bg-default">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-interactive-primary" />
+      <div className="flex items-center justify-center h-full bg-ink-default">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-copper" />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-full bg-bg-default">
-      {/* Header */}
-      <div className="flex-shrink-0 px-6 py-4 border-b border-bdr-default bg-bg-surface">
-        <div className="flex items-center justify-between mb-4">
+    <div className="flex flex-col h-full bg-ink-default">
+      {/* Hero Header */}
+      <div className="relative px-6 pt-8 pb-6 mb-2 overflow-hidden bg-ink-surface border-b border-ink-border">
+        <div className="absolute inset-0 bg-gradient-to-b from-accent-copper/[0.06] via-accent-copper/[0.02] to-transparent pointer-events-none" />
+        <div className="absolute bottom-0 inset-x-6 h-px bg-gradient-to-r from-transparent via-accent-copper/30 to-transparent" />
+        <div className="relative flex items-end justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-txt-primary">Seat Racing</h1>
-            <p className="text-sm text-txt-tertiary mt-1">ELO rankings and session history</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent-copper mb-2">
+              ATHLETE EVALUATION
+            </p>
+            <h1 className="text-4xl font-display font-bold text-ink-bright tracking-tight">
+              Seat Racing
+            </h1>
+            <p className="text-sm text-ink-secondary mt-2">
+              Compare athletes with data-driven rankings
+            </p>
           </div>
 
           <div className="flex items-center gap-3">
             <button
               onClick={() => setShowShortcutsHelp(true)}
-              className="p-2 text-txt-secondary hover:text-txt-primary hover:bg-bg-hover rounded-lg transition-colors"
+              className="p-2 text-ink-secondary hover:text-ink-bright hover:bg-ink-hover rounded-lg transition-colors"
               title="Keyboard shortcuts (?)"
             >
               <HelpCircle size={18} />
             </button>
             <a
               href="/app/coach/seat-racing/advanced-rankings"
-              className="px-4 py-2 bg-bg-subtle text-txt-primary rounded-md hover:bg-bg-hover transition-colors text-sm font-medium"
+              className="px-4 py-2 bg-ink-raised text-ink-bright rounded-xl border border-ink-border hover:border-accent-copper/30 transition-colors text-sm font-medium"
             >
               Advanced Rankings
             </a>
             <a
               href="/app/coach/seat-racing/matrix-planner"
-              className="px-4 py-2 bg-bg-subtle text-txt-primary rounded-md hover:bg-bg-hover transition-colors text-sm font-medium"
+              className="px-4 py-2 bg-ink-raised text-ink-bright rounded-xl border border-ink-border hover:border-accent-copper/30 transition-colors text-sm font-medium"
             >
               Matrix Planner
             </a>
             <button
               onClick={handleOpenWizard}
-              className="flex items-center gap-2 px-4 py-2 bg-interactive-primary text-button-primary-text rounded-md hover:bg-interactive-primary-hover transition-colors"
+              className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-gradient-to-b from-accent-copper to-accent-copper-hover text-white rounded-xl shadow-glow-copper hover:shadow-glow-copper-lg hover:-translate-y-px active:translate-y-0 transition-all duration-150"
             >
               <Plus size={18} />
               New Session
@@ -318,7 +327,7 @@ export function SeatRacingPage() {
       <div className="flex-1 flex flex-col overflow-hidden">
         <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
           {/* Tab list */}
-          <div className="flex-shrink-0 border-b border-bdr-default bg-bg-surface px-6">
+          <div className="flex-shrink-0 border-b border-ink-border bg-ink-surface px-6">
             <Tab.List className="flex gap-6">
               <Tab as={Fragment}>
                 {({ selected }) => (
@@ -327,8 +336,8 @@ export function SeatRacingPage() {
                       px-1 py-3 text-sm font-medium border-b-2 transition-colors
                       ${
                         selected
-                          ? 'border-interactive-primary text-interactive-primary'
-                          : 'border-transparent text-txt-secondary hover:text-txt-primary'
+                          ? 'border-accent-copper text-ink-bright'
+                          : 'border-transparent text-ink-secondary hover:text-ink-bright'
                       }
                     `}
                   >
@@ -343,8 +352,8 @@ export function SeatRacingPage() {
                       px-1 py-3 text-sm font-medium border-b-2 transition-colors
                       ${
                         selected
-                          ? 'border-interactive-primary text-interactive-primary'
-                          : 'border-transparent text-txt-secondary hover:text-txt-primary'
+                          ? 'border-accent-copper text-ink-bright'
+                          : 'border-transparent text-ink-secondary hover:text-ink-bright'
                       }
                     `}
                   >
@@ -359,18 +368,18 @@ export function SeatRacingPage() {
           <Tab.Panels className="flex-1 overflow-hidden">
             {/* Rankings tab */}
             <Tab.Panel className="h-full flex flex-col overflow-hidden">
-              <div className="flex-shrink-0 px-6 py-4 border-b border-bdr-default bg-bg-surface">
+              <div className="flex-shrink-0 px-6 py-4 border-b border-ink-border bg-ink-surface">
                 {/* Side filter buttons */}
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-txt-secondary mr-2">Filter:</span>
+                  <span className="text-sm font-medium text-ink-secondary mr-2">Filter:</span>
                   <button
                     onClick={() => setSideFilter('all')}
                     className={`
                       px-3 py-1.5 text-sm font-medium rounded-md transition-colors
                       ${
                         sideFilter === 'all'
-                          ? 'bg-interactive-primary text-button-primary-text'
-                          : 'bg-bg-subtle text-txt-secondary hover:bg-bg-hover'
+                          ? 'bg-gradient-to-b from-accent-copper to-accent-copper-hover text-white'
+                          : 'bg-ink-raised text-ink-secondary hover:bg-ink-hover border border-ink-border'
                       }
                     `}
                   >
@@ -383,7 +392,7 @@ export function SeatRacingPage() {
                       ${
                         sideFilter === 'Port'
                           ? 'bg-data-poor text-white'
-                          : 'bg-bg-subtle text-txt-secondary hover:bg-data-poor/10'
+                          : 'bg-ink-raised text-ink-secondary hover:bg-data-poor/10 border border-ink-border'
                       }
                     `}
                   >
@@ -396,7 +405,7 @@ export function SeatRacingPage() {
                       ${
                         sideFilter === 'Starboard'
                           ? 'bg-data-excellent text-white'
-                          : 'bg-bg-subtle text-txt-secondary hover:bg-data-excellent/10'
+                          : 'bg-ink-raised text-ink-secondary hover:bg-data-excellent/10 border border-ink-border'
                       }
                     `}
                   >
@@ -419,15 +428,15 @@ export function SeatRacingPage() {
                     className="max-w-6xl mx-auto space-y-6"
                   >
                     {/* Chart */}
-                    <div className="bg-bg-surface border border-bdr-default rounded-lg p-6">
-                      <h2 className="text-lg font-semibold text-txt-primary mb-4">
+                    <div className="bg-ink-raised border border-ink-border rounded-lg p-6">
+                      <h2 className="text-lg font-semibold text-ink-bright mb-4">
                         ELO Rating Distribution
                       </h2>
                       <RankingsChart ratings={ratings} />
                     </div>
 
                     {/* Table */}
-                    <div className="bg-bg-surface border border-bdr-default rounded-lg overflow-hidden">
+                    <div className="bg-ink-raised border border-ink-border rounded-lg overflow-hidden">
                       <RankingsTable
                         ratings={ratings}
                         isLoading={false}
@@ -438,9 +447,13 @@ export function SeatRacingPage() {
 
                     {/* Advanced Analytics Section */}
                     <div className="mt-8">
-                      <h2 className="text-lg font-semibold text-txt-primary mb-4">
-                        Advanced Analytics
-                      </h2>
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-1.5 h-1.5 rounded-full bg-accent-copper" />
+                        <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-accent-copper">
+                          Advanced Analytics
+                        </span>
+                        <div className="flex-1 h-px bg-gradient-to-r from-accent-copper/20 to-transparent" />
+                      </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <FeatureCard
                           to="/app/coach/seat-racing/advanced-rankings"
@@ -525,15 +538,15 @@ export function SeatRacingPage() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-xl bg-card-bg border border-bdr-primary shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-xl bg-ink-surface border border-ink-border shadow-xl transition-all">
                   {/* Close button */}
                   <div className="absolute top-4 right-4 z-10">
                     <button
                       onClick={handleCloseWizard}
-                      className="p-2 rounded-lg hover:bg-bg-hover transition-colors"
+                      className="p-2 rounded-lg hover:bg-ink-hover transition-colors"
                       aria-label="Close"
                     >
-                      <X size={20} className="text-txt-secondary" />
+                      <X size={20} className="text-ink-secondary" />
                     </button>
                   </div>
 
@@ -576,7 +589,7 @@ export function SeatRacingPage() {
                   leaveTo="translate-x-full"
                 >
                   <Dialog.Panel className="pointer-events-auto w-screen max-w-2xl">
-                    <div className="flex h-full flex-col bg-bg-surface border-l border-bdr-default shadow-xl">
+                    <div className="flex h-full flex-col bg-ink-surface border-l border-ink-border shadow-xl">
                       {selectedSessionId && (
                         <SessionDetail
                           sessionId={selectedSessionId}
