@@ -70,7 +70,6 @@ export function RegattaDetail({ regatta, onEdit }: RegattaDetailProps) {
     });
   };
 
-  // Get winner time for margin calculations
   const getWinnerTime = (results: RaceResult[]) => {
     const winner = results.find((r) => r.place === 1);
     return winner?.finishTimeSeconds || null;
@@ -78,70 +77,84 @@ export function RegattaDetail({ regatta, onEdit }: RegattaDetailProps) {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="glass-card rounded-lg p-6 border border-ink-border">
-        <div className="flex items-start justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold text-txt-primary">{regatta.name}</h2>
-            <div className="flex items-center gap-4 mt-2 text-sm text-txt-secondary">
-              <span className="flex items-center gap-1">
-                <Calendar className="w-4 h-4" />
-                {format(parseISO(regatta.date), 'MMMM d, yyyy')}
-                {isMultiDay && ` - ${format(parseISO(regatta.endDate!), 'MMMM d, yyyy')}`}
-              </span>
-              {regatta.location && (
-                <span className="flex items-center gap-1">
-                  <MapPin className="w-4 h-4" />
-                  {regatta.location}
+      {/* Header card */}
+      <div className="relative rounded-2xl p-px bg-gradient-to-b from-white/[0.12] to-white/[0.02]">
+        <div className="relative rounded-[15px] bg-ink-raised overflow-hidden shadow-card p-6">
+          {/* Top highlight */}
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.12] to-transparent" />
+
+          <div className="flex items-start justify-between">
+            <div>
+              <h2 className="text-2xl font-display font-bold text-ink-bright">{regatta.name}</h2>
+              <div className="flex items-center gap-4 mt-2.5 text-sm text-ink-secondary">
+                <span className="flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4 text-ink-tertiary" />
+                  {format(parseISO(regatta.date), 'MMMM d, yyyy')}
+                  {isMultiDay && ` — ${format(parseISO(regatta.endDate!), 'MMMM d, yyyy')}`}
                 </span>
+                {regatta.location && (
+                  <span className="flex items-center gap-1.5">
+                    <MapPin className="w-4 h-4 text-ink-tertiary" />
+                    {regatta.location}
+                  </span>
+                )}
+                {regatta.courseType && (
+                  <span className="flex items-center gap-1.5">
+                    <Flag className="w-4 h-4 text-ink-tertiary" />
+                    {regatta.courseType}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <ConnectionIndicator status={status} retryCount={retryCount} />
+              {regatta.externalUrl && (
+                <a
+                  href={regatta.externalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-xl hover:bg-white/[0.05] transition-colors text-ink-secondary"
+                >
+                  <ExternalLink className="w-5 h-5" />
+                </a>
               )}
-              {regatta.courseType && (
-                <span className="flex items-center gap-1">
-                  <Flag className="w-4 h-4" />
-                  {regatta.courseType}
-                </span>
-              )}
+              <button
+                onClick={onEdit}
+                className="p-2 rounded-xl hover:bg-white/[0.05] transition-colors text-ink-secondary"
+              >
+                <Edit className="w-5 h-5" />
+              </button>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            {/* Connection Status Indicator for active regattas */}
-            <ConnectionIndicator status={status} retryCount={retryCount} />
 
-            {regatta.externalUrl && (
-              <a
-                href={regatta.externalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-lg hover:bg-ink-hover transition-colors text-txt-secondary"
-              >
-                <ExternalLink className="w-5 h-5" />
-              </a>
-            )}
-            <button
-              onClick={onEdit}
-              className="p-2 rounded-lg hover:bg-ink-hover transition-colors text-txt-secondary"
-            >
-              <Edit className="w-5 h-5" />
-            </button>
-          </div>
+          {regatta.teamGoals && (
+            <div className="mt-5 p-4 rounded-xl bg-data-good/[0.06] border border-data-good/[0.12]">
+              <p className="text-xs font-semibold uppercase tracking-[0.1em] text-data-good mb-1">
+                Team Goals
+              </p>
+              <p className="text-sm text-ink-body">{regatta.teamGoals}</p>
+            </div>
+          )}
         </div>
-
-        {regatta.teamGoals && (
-          <div className="mt-4 p-3 bg-data-good/10 rounded-lg border border-data-good/20">
-            <p className="text-sm font-medium text-data-good">Team Goals</p>
-            <p className="text-sm text-txt-primary mt-1">{regatta.teamGoals}</p>
-          </div>
-        )}
       </div>
 
       {/* Events */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-medium text-txt-primary">Events</h3>
+          <div className="flex items-center gap-3">
+            <h3 className="text-xs font-semibold text-ink-secondary uppercase tracking-[0.15em]">
+              Events
+            </h3>
+            <div className="flex-1 h-px bg-gradient-to-r from-ink-border to-transparent w-20" />
+          </div>
           <button
             onClick={() => setModalContent({ type: 'event' })}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium
-                     bg-accent-primary text-white rounded-lg hover:bg-accent-primary-hover transition-colors"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium
+                     bg-gradient-to-b from-accent-primary to-accent-primary/90
+                     text-white rounded-xl
+                     shadow-glow-blue hover:shadow-glow-blue-lg
+                     hover:-translate-y-px active:translate-y-0
+                     transition-all duration-150"
           >
             <Plus className="w-4 h-4" />
             Add Event
@@ -149,9 +162,13 @@ export function RegattaDetail({ regatta, onEdit }: RegattaDetailProps) {
         </div>
 
         {!regatta.events || regatta.events.length === 0 ? (
-          <div className="text-center py-8 text-txt-secondary">
-            <Flag className="w-10 h-10 mx-auto mb-2 opacity-40" />
-            <p>No events yet. Add events to start building your race schedule.</p>
+          <div className="relative text-center py-16 rounded-2xl border border-white/[0.06] bg-white/[0.01] overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-accent-primary/[0.02] to-transparent pointer-events-none" />
+            <Flag className="w-12 h-12 mx-auto mb-3 text-ink-muted" strokeWidth={1} />
+            <p className="text-ink-body font-medium">No events yet</p>
+            <p className="text-sm text-ink-tertiary mt-1">
+              Add events to start building your race schedule
+            </p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -174,10 +191,13 @@ export function RegattaDetail({ regatta, onEdit }: RegattaDetailProps) {
 
       {/* Modal for forms */}
       <Dialog open={!!modalContent} onClose={() => setModalContent(null)} className="relative z-50">
-        <div className="fixed inset-0 bg-ink-deep/50 backdrop-blur-sm" aria-hidden="true" />
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="w-full max-w-lg glass-card rounded-xl shadow-xl p-6">
-            <Dialog.Title className="text-lg font-semibold text-txt-primary mb-4">
+          <Dialog.Panel
+            className="w-full max-w-lg rounded-2xl shadow-2xl p-6
+                                   bg-ink-raised border border-white/[0.08]"
+          >
+            <Dialog.Title className="text-lg font-display font-semibold text-ink-bright mb-4">
               {modalContent?.type === 'event' && 'Add Event'}
               {modalContent?.type === 'race' && 'Add Race'}
               {modalContent?.type === 'results' && `Enter Results: ${modalContent.race?.eventName}`}
@@ -226,7 +246,6 @@ export function RegattaDetail({ regatta, onEdit }: RegattaDetailProps) {
   );
 }
 
-// Sub-components
 function EventCard({
   event,
   isExpanded,
@@ -249,66 +268,70 @@ function EventCard({
   const raceCount = event.races?.length || 0;
 
   return (
-    <div className="glass-card rounded-lg border border-ink-border overflow-hidden">
-      {/* Event header */}
-      <div
-        className="flex items-center justify-between p-4 cursor-pointer hover:bg-ink-hover transition-colors"
-        onClick={onToggle}
-      >
-        <div className="flex items-center gap-3">
-          {isExpanded ? (
-            <ChevronDown className="w-5 h-5 text-txt-tertiary" />
-          ) : (
-            <ChevronRight className="w-5 h-5 text-txt-tertiary" />
-          )}
-          <div>
-            <h4 className="font-medium text-txt-primary">{event.name}</h4>
-            <p className="text-sm text-txt-secondary">
-              {raceCount} {raceCount === 1 ? 'race' : 'races'}
-              {event.scheduledDay && ` • Day ${event.scheduledDay}`}
-            </p>
+    <div className="relative rounded-2xl p-px bg-gradient-to-b from-white/[0.10] to-white/[0.02]">
+      <div className="rounded-[15px] bg-ink-raised overflow-hidden shadow-card">
+        {/* Event header */}
+        <div
+          className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/[0.02] transition-colors"
+          onClick={onToggle}
+        >
+          <div className="flex items-center gap-3">
+            {isExpanded ? (
+              <ChevronDown className="w-4 h-4 text-ink-muted" />
+            ) : (
+              <ChevronRight className="w-4 h-4 text-ink-muted" />
+            )}
+            <div>
+              <h4 className="font-semibold text-ink-bright text-sm">{event.name}</h4>
+              <p className="text-xs text-ink-secondary mt-0.5">
+                {raceCount} {raceCount === 1 ? 'race' : 'races'}
+                {event.scheduledDay && (
+                  <span className="ml-2 text-ink-tertiary">Day {event.scheduledDay}</span>
+                )}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+            <button
+              onClick={onAddRace}
+              className="p-1.5 rounded-lg hover:bg-white/[0.05] text-ink-muted hover:text-ink-primary transition-colors"
+              title="Add race"
+            >
+              <Plus className="w-4 h-4" />
+            </button>
+            <button
+              onClick={onDeleteEvent}
+              className="p-1.5 rounded-lg hover:bg-data-poor/[0.08] text-ink-muted hover:text-data-poor transition-colors"
+              title="Delete event"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
-        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-          <button
-            onClick={onAddRace}
-            className="p-1.5 rounded hover:bg-ink-base text-txt-tertiary hover:text-txt-primary transition-colors"
-            title="Add race"
-          >
-            <Plus className="w-4 h-4" />
-          </button>
-          <button
-            onClick={onDeleteEvent}
-            className="p-1.5 rounded hover:bg-ink-base text-txt-tertiary hover:text-data-poor transition-colors"
-            title="Delete event"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
-        </div>
+        {/* Races */}
+        <AnimatePresence>
+          {isExpanded && event.races && event.races.length > 0 && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="border-t border-white/[0.04]"
+            >
+              {event.races.map((race) => (
+                <RaceRow
+                  key={race.id}
+                  race={race}
+                  onAddResults={() => onAddResults(race)}
+                  onDelete={() => onDeleteRace(race.id)}
+                  winnerTime={getWinnerTime(race.results || [])}
+                />
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-
-      {/* Races */}
-      <AnimatePresence>
-        {isExpanded && event.races && event.races.length > 0 && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="border-t border-ink-border"
-          >
-            {event.races.map((race) => (
-              <RaceRow
-                key={race.id}
-                race={race}
-                onAddResults={() => onAddResults(race)}
-                onDelete={() => onDeleteRace(race.id)}
-                winnerTime={getWinnerTime(race.results || [])}
-              />
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
@@ -328,17 +351,19 @@ function RaceRow({
   const ownResult = race.results?.find((r) => r.isOwnTeam);
 
   return (
-    <div className="px-4 py-3 border-b border-ink-border last:border-b-0 hover:bg-ink-hover/50">
+    <div className="px-5 py-3.5 border-b border-white/[0.03] last:border-b-0 hover:bg-white/[0.015] transition-colors">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div>
-            <p className="font-medium text-txt-primary text-sm">{race.eventName}</p>
-            <p className="text-xs text-txt-tertiary">
-              {race.boatClass} • {race.distanceMeters}m
+            <p className="font-medium text-ink-bright text-sm">{race.eventName}</p>
+            <p className="text-xs text-ink-tertiary mt-0.5">
+              <span className="font-mono">{race.boatClass}</span>
+              <span className="mx-1.5 text-ink-muted">/</span>
+              <span className="font-mono">{race.distanceMeters}m</span>
               {race.scheduledTime && (
                 <>
-                  {' '}
-                  • <Clock className="w-3 h-3 inline" />{' '}
+                  <span className="mx-1.5 text-ink-muted">/</span>
+                  <Clock className="w-3 h-3 inline -mt-px" />{' '}
                   {format(parseISO(race.scheduledTime), 'h:mm a')}
                 </>
               )}
@@ -349,7 +374,7 @@ function RaceRow({
           {ownResult && (
             <div className="flex items-center gap-2">
               {ownResult.place === 1 && <Trophy className="w-4 h-4 text-data-warning" />}
-              <span className="text-sm font-medium text-txt-primary">
+              <span className="text-sm font-mono font-semibold text-ink-bright tabular-nums">
                 {ownResult.place ? `${ownResult.place}${getOrdinal(ownResult.place)}` : '—'}
               </span>
               {ownResult.finishTimeSeconds && winnerTime && (
@@ -367,15 +392,18 @@ function RaceRow({
         <div className="flex items-center gap-2">
           <button
             onClick={onAddResults}
-            className="px-2 py-1 text-xs font-medium rounded
-                     bg-ink-base text-txt-secondary hover:bg-data-good hover:text-white
-                     transition-colors"
+            className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-150
+              ${
+                hasResults
+                  ? 'bg-white/[0.04] text-ink-secondary border border-white/[0.06] hover:bg-white/[0.08]'
+                  : 'bg-data-good/[0.10] text-data-good border border-data-good/[0.15] hover:bg-data-good/[0.15]'
+              }`}
           >
             {hasResults ? 'Edit Results' : 'Add Results'}
           </button>
           <button
             onClick={onDelete}
-            className="p-1 rounded hover:bg-ink-base text-txt-tertiary hover:text-data-poor transition-colors"
+            className="p-1.5 rounded-lg hover:bg-data-poor/[0.08] text-ink-muted hover:text-data-poor transition-colors"
           >
             <Trash2 className="w-3.5 h-3.5" />
           </button>
@@ -388,5 +416,5 @@ function RaceRow({
 function getOrdinal(n: number): string {
   const s = ['th', 'st', 'nd', 'rd'];
   const v = n % 100;
-  return s[(v - 20) % 10] || s[v] || s[0];
+  return s[(v - 20) % 10] ?? s[v] ?? 'th';
 }

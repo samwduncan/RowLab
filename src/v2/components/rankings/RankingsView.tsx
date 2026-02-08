@@ -16,7 +16,7 @@ const SOURCE_BADGES: Record<RankingSource, { label: string; color: string }> = {
   row2k: { label: 'Row2k', color: 'bg-data-good/10 text-data-good' },
   usrowing: { label: 'USRowing', color: 'bg-data-poor/10 text-data-poor' },
   regattacentral: { label: 'RegattaCentral', color: 'bg-chart-2/10 text-chart-2' },
-  manual: { label: 'Manual', color: 'bg-ink-muted/10 text-txt-tertiary' },
+  manual: { label: 'Manual', color: 'bg-ink-muted/10 text-ink-tertiary' },
 };
 
 export function RankingsView({ onSelectTeam }: RankingsViewProps) {
@@ -29,14 +29,14 @@ export function RankingsView({ onSelectTeam }: RankingsViewProps) {
   // Find our team in rankings
   const ourRanking = useMemo(() => {
     if (!rankings) return null;
-    return rankings.find((r) => r.teamName === 'Our Team'); // Replace with actual team name lookup
+    return rankings.find((r) => r.teamName === 'Our Team');
   }, [rankings]);
 
   return (
     <div className="space-y-6">
       {/* Boat class selector */}
       <div>
-        <label className="block text-sm font-medium text-txt-secondary mb-2">
+        <label className="block text-xs font-semibold text-ink-secondary uppercase tracking-[0.1em] mb-3">
           Select Boat Class
         </label>
         <div className="flex flex-wrap gap-2">
@@ -44,10 +44,10 @@ export function RankingsView({ onSelectTeam }: RankingsViewProps) {
             <button
               key={bc.value}
               onClick={() => setSelectedBoatClass(bc.value)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-150 ${
                 selectedBoatClass === bc.value
-                  ? 'bg-accent-primary text-white'
-                  : 'bg-surface-elevated text-txt-secondary hover:bg-surface-hover'
+                  ? 'bg-gradient-to-b from-accent-primary to-accent-primary/90 text-white shadow-glow-blue'
+                  : 'bg-white/[0.03] text-ink-secondary border border-white/[0.06] hover:bg-white/[0.06] hover:text-ink-primary hover:border-white/[0.10]'
               }`}
             >
               {bc.label}
@@ -58,73 +58,86 @@ export function RankingsView({ onSelectTeam }: RankingsViewProps) {
 
       {/* Rankings table */}
       {selectedBoatClass && (
-        <div className="bg-surface-elevated rounded-xl border border-bdr-default overflow-hidden">
-          {/* Header */}
-          <div className="px-4 py-3 border-b border-bdr-default flex items-center justify-between">
-            <h3 className="font-semibold text-txt-primary">
-              {boatClasses.find((bc) => bc.value === selectedBoatClass)?.label} Rankings
-            </h3>
-            {ourRanking && (
-              <div className="flex items-center gap-2">
-                <Medal className="w-4 h-4 text-accent-primary" />
-                <span className="text-sm font-medium text-txt-primary">
-                  Ranked #{ourRanking.rank}
-                </span>
+        <div className="relative rounded-2xl p-px bg-gradient-to-b from-white/[0.12] to-white/[0.02]">
+          <div className="rounded-[15px] bg-ink-raised overflow-hidden shadow-card">
+            {/* Header */}
+            <div className="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
+              <h3 className="font-display font-semibold text-ink-bright text-lg">
+                {boatClasses.find((bc) => bc.value === selectedBoatClass)?.label} Rankings
+              </h3>
+              {ourRanking && (
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-accent-copper/[0.08] ring-1 ring-accent-copper/20">
+                  <Medal className="w-4 h-4 text-accent-copper" />
+                  <span className="text-sm font-semibold text-accent-copper tabular-nums">
+                    Ranked #{ourRanking.rank}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Table header row */}
+            <div className="flex items-center gap-4 px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-ink-muted border-b border-white/[0.04]">
+              <div className="w-10 text-center">#</div>
+              <div className="w-14">Trend</div>
+              <div className="flex-1">Team</div>
+              <div className="text-right w-24">Speed</div>
+              <div className="w-20 text-center">Conf.</div>
+              <div className="w-24 text-right">Updated</div>
+            </div>
+
+            {loadingRankings ? (
+              <div className="p-4">
+                <RankingsSkeleton />
+              </div>
+            ) : rankings && rankings.length > 0 ? (
+              <LayoutGroup>
+                <AnimatePresence initial={false}>
+                  <div>
+                    {rankings.map((team, index) => (
+                      <RankingRow
+                        key={team.teamId || `${team.teamName}-${team.boatClass}`}
+                        rank={team.rank || index + 1}
+                        teamName={team.teamName || 'Unknown'}
+                        speed={team.adjustedSpeed}
+                        boatClass={selectedBoatClass}
+                        previousRank={(team as any).previousRank}
+                        sampleCount={team.sampleCount}
+                        lastUpdated={team.lastCalculatedAt}
+                        isOwnTeam={team.teamName === 'Our Team'}
+                        onClick={() => onSelectTeam?.(team.teamName || '', selectedBoatClass!)}
+                        {...(index < 20 ? {} : { layout: false })}
+                      />
+                    ))}
+                  </div>
+                </AnimatePresence>
+              </LayoutGroup>
+            ) : (
+              <div className="relative py-16 text-center overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-accent-primary/[0.02] to-transparent pointer-events-none" />
+                <TrendingUp className="w-12 h-12 mx-auto mb-3 text-ink-muted" strokeWidth={1} />
+                <p className="text-ink-body font-medium">No rankings data for this boat class</p>
+                <p className="text-sm text-ink-tertiary mt-1">
+                  Add race results to generate rankings
+                </p>
               </div>
             )}
           </div>
-
-          {loadingRankings ? (
-            <div className="p-4">
-              <RankingsSkeleton />
-            </div>
-          ) : rankings && rankings.length > 0 ? (
-            <LayoutGroup>
-              <AnimatePresence initial={false}>
-                <div>
-                  {rankings.map((team, index) => (
-                    <RankingRow
-                      key={team.teamId || `${team.teamName}-${team.boatClass}`}
-                      rank={team.rank || index + 1}
-                      teamName={team.teamName || 'Unknown'}
-                      speed={team.adjustedSpeed}
-                      boatClass={selectedBoatClass}
-                      previousRank={team.previousRank}
-                      sampleCount={team.sampleCount}
-                      lastUpdated={team.lastCalculatedAt}
-                      isOwnTeam={team.teamName === 'Our Team'} // Replace with actual check
-                      onClick={() => onSelectTeam?.(team.teamName || '', selectedBoatClass!)}
-                      {...(index < 20 ? {} : { layout: false })} // Performance optimization: only animate top 20
-                    />
-                  ))}
-                </div>
-              </AnimatePresence>
-            </LayoutGroup>
-          ) : (
-            <div className="p-8 text-center text-txt-secondary">
-              <TrendingUp className="w-10 h-10 mx-auto mb-2 opacity-40" />
-              <p>No rankings data for this boat class</p>
-              <p className="text-sm text-txt-tertiary mt-1">
-                Add race results to generate rankings
-              </p>
-            </div>
-          )}
         </div>
       )}
 
       {/* Confidence legend */}
       {selectedBoatClass && rankings && rankings.length > 0 && (
-        <div className="flex items-center gap-6 text-xs text-txt-tertiary">
-          <span className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-data-excellent" />
+        <div className="flex items-center gap-6 text-xs text-ink-tertiary px-1">
+          <span className="flex items-center gap-2">
+            <div className="w-2.5 h-2.5 rounded-full bg-data-excellent shadow-[0_0_6px_rgba(34,197,94,0.4)]" />
             High confidence (10+ races)
           </span>
-          <span className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-data-warning" />
+          <span className="flex items-center gap-2">
+            <div className="w-2.5 h-2.5 rounded-full bg-data-warning shadow-[0_0_6px_rgba(245,158,11,0.4)]" />
             Medium (5-9 races)
           </span>
-          <span className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-data-poor" />
+          <span className="flex items-center gap-2">
+            <div className="w-2.5 h-2.5 rounded-full bg-data-poor shadow-[0_0_6px_rgba(239,68,68,0.4)]" />
             Low (&lt;5 races)
           </span>
         </div>
@@ -132,8 +145,6 @@ export function RankingsView({ onSelectTeam }: RankingsViewProps) {
     </div>
   );
 }
-
-// RankingRow component now imported from ./RankingRow.tsx
 
 // Source badge component for external rankings
 export function SourceBadge({ source }: { source: RankingSource }) {
@@ -149,7 +160,7 @@ export function SourceBadge({ source }: { source: RankingSource }) {
 export function AgeIndicator({ date }: { date: string }) {
   const age = formatDistanceToNow(parseISO(date), { addSuffix: false });
   return (
-    <span className="text-xs text-txt-tertiary" title={format(parseISO(date), 'PPp')}>
+    <span className="text-xs text-ink-tertiary" title={format(parseISO(date), 'PPp')}>
       Updated {age} ago
     </span>
   );

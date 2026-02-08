@@ -113,12 +113,12 @@ export function RegattasPage() {
   if (regattaId) {
     return (
       <div className="p-6 max-w-5xl mx-auto">
-        {/* Back button */}
         <button
           onClick={handleBack}
-          className="flex items-center gap-2 text-sm text-txt-secondary hover:text-txt-primary mb-6"
+          className="flex items-center gap-2 text-sm text-ink-secondary hover:text-ink-bright
+                     transition-colors mb-6 group"
         >
-          <ChevronLeft className="w-4 h-4" />
+          <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
           All Regattas
         </button>
 
@@ -130,7 +130,7 @@ export function RegattasPage() {
             onEdit={() => setEditingRegatta(selectedRegatta)}
           />
         ) : (
-          <div className="text-center py-12 text-txt-secondary">Regatta not found</div>
+          <div className="text-center py-12 text-ink-secondary">Regatta not found</div>
         )}
       </div>
     );
@@ -140,23 +140,25 @@ export function RegattasPage() {
   return (
     <div className="p-6 max-w-5xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-txt-primary">Regattas</h1>
-          <p className="text-sm text-txt-secondary mt-1">
+          <h1 className="text-3xl font-display font-bold bg-gradient-to-b from-ink-bright to-ink-body bg-clip-text text-transparent">
+            Regattas
+          </h1>
+          <p className="text-sm text-ink-secondary mt-1.5">
             Manage races, results, and team rankings
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           {/* View toggle */}
-          <div className="flex bg-surface-elevated rounded-lg p-1">
+          <div className="flex rounded-xl p-1 bg-ink-deep/50 border border-white/[0.06]">
             <button
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded-md transition-colors ${
+              className={`p-2 rounded-lg transition-all duration-150 ${
                 viewMode === 'list'
-                  ? 'bg-surface-default text-txt-primary shadow-sm'
-                  : 'text-txt-tertiary hover:text-txt-secondary'
+                  ? 'bg-white/[0.08] text-ink-bright shadow-sm'
+                  : 'text-ink-muted hover:text-ink-secondary'
               }`}
               title="List view"
             >
@@ -164,10 +166,10 @@ export function RegattasPage() {
             </button>
             <button
               onClick={() => setViewMode('calendar')}
-              className={`p-2 rounded-md transition-colors ${
+              className={`p-2 rounded-lg transition-all duration-150 ${
                 viewMode === 'calendar'
-                  ? 'bg-surface-default text-txt-primary shadow-sm'
-                  : 'text-txt-tertiary hover:text-txt-secondary'
+                  ? 'bg-white/[0.08] text-ink-bright shadow-sm'
+                  : 'text-ink-muted hover:text-ink-secondary'
               }`}
               title="Calendar view"
             >
@@ -175,12 +177,15 @@ export function RegattasPage() {
             </button>
           </div>
 
-          {/* Create button */}
+          {/* Create button with glow */}
           <button
             onClick={() => setIsFormOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium
-                     bg-accent-primary text-white rounded-lg hover:bg-accent-primary-hover
-                     transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium
+                     bg-gradient-to-b from-accent-primary to-accent-primary/90
+                     text-white rounded-xl
+                     shadow-glow-blue hover:shadow-glow-blue-lg
+                     hover:-translate-y-px active:translate-y-0
+                     transition-all duration-150"
           >
             <Plus className="w-4 h-4" />
             New Regatta
@@ -196,6 +201,7 @@ export function RegattasPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
           >
             {loadingRegattas ? (
               <RegattaListSkeleton />
@@ -216,13 +222,13 @@ export function RegattasPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
           >
             <RegattaCalendar
               regattas={regattas || []}
               onSelectRegatta={handleSelectRegatta}
               onSelectDate={() => {
                 setIsFormOpen(true);
-                // Could pre-fill date in form
               }}
             />
           </motion.div>
@@ -238,10 +244,13 @@ export function RegattasPage() {
         }}
         className="relative z-50"
       >
-        <div className="fixed inset-0 bg-ink-deep/80 backdrop-blur-sm" aria-hidden="true" />
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="w-full max-w-lg bg-surface-default rounded-xl shadow-xl p-6 max-h-[90vh] overflow-y-auto">
-            <Dialog.Title className="text-lg font-semibold text-txt-primary mb-4">
+          <Dialog.Panel
+            className="w-full max-w-lg rounded-2xl shadow-2xl p-6 max-h-[90vh] overflow-y-auto
+                                   bg-ink-raised border border-white/[0.08]"
+          >
+            <Dialog.Title className="text-lg font-display font-semibold text-ink-bright mb-4">
               {editingRegatta ? 'Edit Regatta' : 'New Regatta'}
             </Dialog.Title>
             <RegattaForm
@@ -263,21 +272,25 @@ export function RegattasPage() {
         onClose={() => setDeleteConfirm(null)}
         className="relative z-50"
       >
-        <div className="fixed inset-0 bg-ink-deep/80 backdrop-blur-sm" aria-hidden="true" />
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="w-full max-w-sm bg-surface-default rounded-xl shadow-xl p-6">
-            <Dialog.Title className="text-lg font-semibold text-txt-primary">
+          <Dialog.Panel
+            className="w-full max-w-sm rounded-2xl shadow-2xl p-6
+                                   bg-ink-raised border border-white/[0.08]"
+          >
+            <Dialog.Title className="text-lg font-display font-semibold text-ink-bright">
               Delete Regatta
             </Dialog.Title>
-            <p className="mt-2 text-sm text-txt-secondary">
+            <p className="mt-2 text-sm text-ink-secondary">
               Are you sure you want to delete "{deleteConfirm?.name}"? This will also delete all
               events, races, and results. This action cannot be undone.
             </p>
             <div className="mt-6 flex justify-end gap-3">
               <button
                 onClick={() => setDeleteConfirm(null)}
-                className="px-4 py-2 text-sm font-medium text-txt-secondary
-                         bg-surface-elevated rounded-lg hover:bg-surface-hover"
+                className="px-4 py-2 text-sm font-medium text-ink-secondary
+                         rounded-xl border border-white/[0.08] hover:bg-white/[0.04]
+                         transition-colors"
               >
                 Cancel
               </button>
@@ -285,7 +298,9 @@ export function RegattasPage() {
                 onClick={handleDelete}
                 disabled={deleteRegatta.isPending}
                 className="px-4 py-2 text-sm font-medium text-white
-                         bg-data-poor rounded-lg hover:bg-data-poor/90 disabled:opacity-50"
+                         bg-data-poor rounded-xl hover:bg-data-poor/90
+                         shadow-[0_0_15px_-3px_rgba(239,68,68,0.4)]
+                         disabled:opacity-50 transition-all"
               >
                 {deleteRegatta.isPending ? 'Deleting...' : 'Delete'}
               </button>
@@ -296,16 +311,19 @@ export function RegattasPage() {
 
       {/* Keyboard Shortcuts Help */}
       <Dialog open={showHelp} onClose={() => setShowHelp(false)} className="relative z-50">
-        <div className="fixed inset-0 bg-ink-deep/80 backdrop-blur-sm" aria-hidden="true" />
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="w-full max-w-md bg-ink-well rounded-xl shadow-xl p-6">
+          <Dialog.Panel
+            className="w-full max-w-md rounded-2xl shadow-2xl p-6
+                                   bg-ink-raised border border-white/[0.08]"
+          >
             <div className="flex items-center gap-2 mb-4">
-              <HelpCircle className="w-5 h-5 text-txt-secondary" />
-              <Dialog.Title className="text-lg font-semibold text-txt-primary">
+              <HelpCircle className="w-5 h-5 text-ink-secondary" />
+              <Dialog.Title className="text-lg font-display font-semibold text-ink-bright">
                 Keyboard Shortcuts
               </Dialog.Title>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1">
               {getRegattaShortcuts({
                 hasNewRegatta: true,
                 hasRefresh: true,
@@ -313,9 +331,12 @@ export function RegattasPage() {
               })
                 .filter((s) => s.available)
                 .map((shortcut) => (
-                  <div key={shortcut.key} className="flex items-center justify-between py-2">
-                    <span className="text-sm text-txt-secondary">{shortcut.description}</span>
-                    <kbd className="px-2 py-1 text-xs font-mono bg-ink-raised text-txt-primary rounded border border-bdr-default">
+                  <div
+                    key={shortcut.key}
+                    className="flex items-center justify-between py-2.5 border-b border-white/[0.04] last:border-0"
+                  >
+                    <span className="text-sm text-ink-body">{shortcut.description}</span>
+                    <kbd className="px-2.5 py-1 text-xs font-mono bg-ink-deep text-ink-primary rounded-lg border border-white/[0.08]">
                       {shortcut.key}
                     </kbd>
                   </div>
@@ -323,9 +344,10 @@ export function RegattasPage() {
             </div>
             <button
               onClick={() => setShowHelp(false)}
-              className="mt-6 w-full px-4 py-2 text-sm font-medium
-                       bg-accent-primary text-white rounded-lg
-                       hover:bg-accent-primary-hover transition-colors"
+              className="mt-6 w-full px-4 py-2.5 text-sm font-medium
+                       bg-gradient-to-b from-accent-primary to-accent-primary/90
+                       text-white rounded-xl shadow-glow-blue
+                       hover:shadow-glow-blue-lg transition-all duration-150"
             >
               Got it
             </button>
