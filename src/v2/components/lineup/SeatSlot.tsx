@@ -99,11 +99,11 @@ export function SeatSlot({ boatId, seat, isCoxswain = false, onRemoveAthlete }: 
         ${
           isOver
             ? hasWarnings
-              ? 'border-amber-500 bg-amber-500/5 ring-2 ring-amber-500/20'
-              : 'border-green-500 bg-green-500/5 ring-2 ring-green-500/20'
+              ? 'border-data-warning bg-data-warning/5 ring-2 ring-data-warning/20'
+              : 'border-data-excellent bg-data-excellent/5 ring-2 ring-data-excellent/20'
             : ''
         }
-        ${!isEmpty && !isOver && hasWarnings ? 'hover:border-amber-500/50' : ''}
+        ${!isEmpty && !isOver && hasWarnings ? 'hover:border-data-warning/50' : ''}
         ${!isEmpty && !isOver && !hasWarnings ? 'hover:border-interactive-primary/50' : ''}
       `}
     >

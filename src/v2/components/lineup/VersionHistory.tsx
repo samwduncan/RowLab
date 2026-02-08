@@ -252,7 +252,7 @@ export function VersionHistory({
               <button
                 onClick={handleDeleteLineup}
                 disabled={isDeleting}
-                className="px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-4 py-2 text-sm font-medium text-white bg-status-error hover:bg-status-error/90 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {isDeleting && <Loader2 size={16} className="animate-spin" />}
                 {isDeleting ? 'Deleting...' : 'Delete'}

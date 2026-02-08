@@ -261,6 +261,7 @@ export function useAthletes(filters?: AthleteFilters) {
     athletes: filteredAthletes,
     allAthletes: query.data || [],
     isLoading: query.isLoading,
+    isFetched: query.isFetched,
     error: query.error,
     refetch: query.refetch,
 

@@ -128,7 +128,7 @@ export function MobileSeatSlot({
           <span
             className={`
               text-xs font-medium px-2 py-1 rounded-full
-              ${seat.side === 'Port' ? 'bg-red-500/10 text-red-600' : 'bg-green-500/10 text-green-600'}
+              ${seat.side === 'Port' ? 'bg-data-poor/10 text-data-poor' : 'bg-data-excellent/10 text-data-excellent'}
             `}
           >
             {seat.side}
