@@ -71,7 +71,11 @@ async function fetchLineups(): Promise<Lineup[]> {
     throw new Error(response.data.error?.message || 'Failed to fetch lineups');
   }
 
-  return response.data.data.lineups;
+  // Normalize: ensure assignments is always an array (API may return null)
+  return response.data.data.lineups.map((l) => ({
+    ...l,
+    assignments: l.assignments || [],
+  }));
 }
 
 /**
@@ -84,7 +88,8 @@ async function fetchLineup(lineupId: string): Promise<Lineup> {
     throw new Error(response.data.error?.message || 'Failed to fetch lineup');
   }
 
-  return response.data.data.lineup;
+  const lineup = response.data.data.lineup;
+  return { ...lineup, assignments: lineup.assignments || [] };
 }
 
 /**
@@ -345,7 +350,7 @@ export function useDuplicateLineup() {
           id: `temp-duplicate-${Date.now()}`,
           name,
           notes: sourceLineup.notes,
-          assignments: [...sourceLineup.assignments],
+          assignments: [...(sourceLineup.assignments || [])],
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           teamId: sourceLineup.teamId,

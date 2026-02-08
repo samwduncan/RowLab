@@ -6,11 +6,7 @@
  */
 
 import Fuse from 'fuse.js';
-import type {
-  SearchResult,
-  SearchResultType,
-  SearchGroup,
-} from '@v2/types/search';
+import type { SearchResult, SearchResultType, SearchGroup } from '@v2/types/search';
 import {
   SEARCH_TYPE_LABELS,
   SEARCH_TYPE_ORDER,
@@ -36,19 +32,13 @@ export function athletesToSearchResults(athletes: Athlete[]): SearchResult[] {
     id: athlete.id,
     type: 'athlete' as SearchResultType,
     title: `${athlete.firstName} ${athlete.lastName}`,
-    subtitle: [
-      athlete.side,
-      athlete.canCox && 'Cox',
-      athlete.canScull && 'Sculler',
-    ]
-      .filter(Boolean)
-      .join(' | ') || undefined,
+    subtitle:
+      [athlete.side, athlete.canCox && 'Cox', athlete.canScull && 'Sculler']
+        .filter(Boolean)
+        .join(' | ') || undefined,
     href: `/app/roster/${athlete.id}`,
     metadata: {
-      keywords: [
-        athlete.email || '',
-        athlete.side || '',
-      ].filter(Boolean),
+      keywords: [athlete.email || '', athlete.side || ''].filter(Boolean),
     },
   }));
 }
@@ -97,7 +87,7 @@ export function lineupsToSearchResults(lineups: Lineup[]): SearchResult[] {
     id: lineup.id,
     type: 'lineup' as SearchResultType,
     title: lineup.name,
-    subtitle: lineup.assignments.length > 0
+    subtitle: lineup.assignments?.length
       ? `${lineup.assignments.length} assignments`
       : 'Empty lineup',
     href: `/app/lineups/${lineup.id}`,
@@ -116,9 +106,7 @@ export function regattasToSearchResults(regattas: Regatta[]): SearchResult[] {
     id: regatta.id,
     type: 'regatta' as SearchResultType,
     title: regatta.name,
-    subtitle: [regatta.location, formatDate(regatta.date)]
-      .filter(Boolean)
-      .join(' | '),
+    subtitle: [regatta.location, formatDate(regatta.date)].filter(Boolean).join(' | '),
     href: `/app/regattas/${regatta.id}`,
     metadata: {
       date: regatta.date,
@@ -140,9 +128,7 @@ export function racesToSearchResults(races: Race[], regattas: Regatta[]): Search
       id: race.id,
       type: 'race' as SearchResultType,
       title: race.eventName,
-      subtitle: [race.boatClass, regatta?.name]
-        .filter(Boolean)
-        .join(' | '),
+      subtitle: [race.boatClass, regatta?.name].filter(Boolean).join(' | '),
       href: `/app/regattas/${race.regattaId}/races/${race.id}`,
       metadata: {
         keywords: [race.boatClass, race.eventName],
@@ -159,9 +145,7 @@ export function seatRacesToSearchResults(sessions: SeatRaceSession[]): SearchRes
     id: session.id,
     type: 'seat_race' as SearchResultType,
     title: `Seat Race - ${session.boatClass}`,
-    subtitle: [session.location, formatDate(session.date)]
-      .filter(Boolean)
-      .join(' | '),
+    subtitle: [session.location, formatDate(session.date)].filter(Boolean).join(' | '),
     href: `/app/seat-racing/${session.id}`,
     metadata: {
       date: session.date,
@@ -235,10 +219,7 @@ const fuseOptions = {
 /**
  * Search items using Fuse.js fuzzy matching
  */
-export function searchItems(
-  index: SearchResult[],
-  query: string
-): SearchResult[] {
+export function searchItems(index: SearchResult[], query: string): SearchResult[] {
   if (!query.trim()) {
     return [];
   }
@@ -270,13 +251,11 @@ export function groupSearchResults(results: SearchResult[]): SearchGroup[] {
   });
 
   // Convert to array, filtering out empty groups
-  return SEARCH_TYPE_ORDER
-    .filter((type) => (groups.get(type)?.length ?? 0) > 0)
-    .map((type) => ({
-      type,
-      label: SEARCH_TYPE_LABELS[type],
-      results: groups.get(type) || [],
-    }));
+  return SEARCH_TYPE_ORDER.filter((type) => (groups.get(type)?.length ?? 0) > 0).map((type) => ({
+    type,
+    label: SEARCH_TYPE_LABELS[type],
+    results: groups.get(type) || [],
+  }));
 }
 
 // ============================================
@@ -306,9 +285,7 @@ export function addRecentItem(item: SearchResult): void {
     const items = getRecentItems();
 
     // Remove duplicate if exists
-    const filtered = items.filter(
-      (i) => !(i.id === item.id && i.type === item.type)
-    );
+    const filtered = items.filter((i) => !(i.id === item.id && i.type === item.type));
 
     // Add to front, limit to max
     const updated = [item, ...filtered].slice(0, MAX_RECENT_ITEMS);
