@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { type ColumnDef } from '@tanstack/react-table';
 import { VirtualTable } from '@v2/components/common/VirtualTable';
 import { Pencil, Trash2 } from 'lucide-react';
+import { ErgTableSkeleton, ErgMobileListSkeleton } from '@v2/features/erg/components/ErgSkeleton';
 import type { ErgTest } from '@v2/types/ergTests';
 
 export interface ErgTestsTableProps {
@@ -10,6 +11,8 @@ export interface ErgTestsTableProps {
   onEdit: (test: ErgTest) => void;
   onDelete: (testId: string) => void;
   onRowClick?: (test: ErgTest) => void;
+  /** Index of the keyboard-selected row for visual highlight (-1 = none) */
+  selectedIndex?: number;
 }
 
 /**
@@ -37,14 +40,16 @@ function formatDate(dateStr: string): string {
  */
 function TestTypeBadge({ type }: { type: string }) {
   const colors = {
-    '2k': 'bg-red-500/10 text-red-600 dark:text-red-400',
-    '6k': 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
-    '30min': 'bg-green-500/10 text-green-600 dark:text-green-400',
-    '500m': 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400',
+    '2k': 'bg-data-poor/10 text-data-poor border border-data-poor/30',
+    '6k': 'bg-data-good/10 text-data-good border border-data-good/30',
+    '30min': 'bg-data-excellent/10 text-data-excellent border border-data-excellent/30',
+    '500m': 'bg-data-warning/10 text-data-warning border border-data-warning/30',
   };
 
   return (
-    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${colors[type as keyof typeof colors] || 'bg-gray-500/10 text-gray-600'}`}>
+    <span
+      className={`px-2 py-0.5 rounded-full text-xs font-medium ${colors[type as keyof typeof colors] || 'bg-bg-subtle text-txt-secondary'}`}
+    >
       {type}
     </span>
   );
@@ -120,7 +125,7 @@ function ErgTestCard({
             e.stopPropagation();
             onDelete(test.id);
           }}
-          className="flex-1 px-3 py-1.5 text-sm bg-red-500/10 text-red-600 rounded-md hover:bg-red-500/20 transition-colors"
+          className="flex-1 px-3 py-1.5 text-sm bg-status-error/10 text-status-error rounded-md hover:bg-status-error/20 transition-colors"
         >
           <Trash2 size={14} className="inline mr-1" />
           Delete
@@ -139,13 +144,15 @@ export function ErgTestsTable({
   onEdit,
   onDelete,
   onRowClick,
+  selectedIndex = -1,
 }: ErgTestsTableProps) {
   const columns = useMemo<ColumnDef<ErgTest, any>[]>(
     () => [
       {
         id: 'athlete',
         header: 'Athlete',
-        accessorFn: (row) => row.athlete ? `${row.athlete.firstName} ${row.athlete.lastName}` : 'Unknown',
+        accessorFn: (row) =>
+          row.athlete ? `${row.athlete.firstName} ${row.athlete.lastName}` : 'Unknown',
         cell: ({ row }) => (
           <div className="font-medium text-txt-primary">
             {row.original.athlete?.firstName} {row.original.athlete?.lastName}
@@ -238,10 +245,10 @@ export function ErgTestsTable({
                 e.stopPropagation();
                 onDelete(row.original.id);
               }}
-              className="p-1.5 rounded-md hover:bg-red-500/10 transition-colors"
+              className="p-1.5 rounded-md hover:bg-status-error/10 transition-colors"
               title="Delete test"
             >
-              <Trash2 size={16} className="text-red-600 hover:text-red-700" />
+              <Trash2 size={16} className="text-status-error hover:text-status-error" />
             </button>
           </div>
         ),
@@ -256,11 +263,7 @@ export function ErgTestsTable({
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-interactive-primary" />
-      </div>
-    );
+    return isMobile ? <ErgMobileListSkeleton /> : <ErgTableSkeleton />;
   }
 
   if (tests.length === 0) {
@@ -289,6 +292,10 @@ export function ErgTestsTable({
     );
   }
 
+  // Derive selectedId from selectedIndex for keyboard highlight
+  const selectedId =
+    selectedIndex >= 0 && selectedIndex < tests.length ? tests[selectedIndex]?.id : undefined;
+
   // Desktop table view
   return (
     <VirtualTable
@@ -297,6 +304,7 @@ export function ErgTestsTable({
       rowHeight={56}
       overscan={20}
       onRowClick={onRowClick}
+      selectedId={selectedId}
       emptyMessage="No erg tests found"
       className="h-full"
     />
