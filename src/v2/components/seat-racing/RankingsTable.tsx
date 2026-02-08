@@ -7,14 +7,19 @@ import {
   type ColumnDef,
   type SortingState,
 } from '@tanstack/react-table';
+import { motion } from 'framer-motion';
 import { ArrowUp, ArrowDown, RefreshCw } from 'lucide-react';
-import { ConfidenceBadge } from './ConfidenceBadge';
+import { ConfidenceRing } from './ConfidenceRing';
+import { ELOSparkline, type ELODataPoint } from './ELOSparkline';
+import { SegmentedControl, type SegmentedControlOption } from './SegmentedControl';
+import { SPRING_CONFIG } from '@v2/utils/animations';
 import type { RatingWithAthlete } from '@v2/types/seatRacing';
 
 export interface RankingsTableProps {
   ratings: RatingWithAthlete[];
   isLoading?: boolean;
   onRecalculate?: () => void;
+  onAthleteClick?: (athleteId: string) => void;
 }
 
 /**
@@ -54,17 +59,30 @@ function getRankColor(rank: number): string {
 }
 
 /**
- * Sortable rankings table using TanStack Table
+ * Sortable rankings table using TanStack Table with animated row reordering
  */
-export function RankingsTable({ ratings, isLoading = false, onRecalculate }: RankingsTableProps) {
+export function RankingsTable({
+  ratings,
+  isLoading = false,
+  onRecalculate,
+  onAthleteClick,
+}: RankingsTableProps) {
   const [sorting, setSorting] = useState<SortingState>([{ id: 'rating', desc: true }]);
   const [sideFilter, setSideFilter] = useState<string>('All');
+  const [highlightedRows, setHighlightedRows] = useState<Set<string>>(new Set());
 
   // Filter by side
   const filteredRatings = useMemo(() => {
     if (sideFilter === 'All') return ratings;
     return ratings.filter((r) => r.athlete.side === sideFilter);
   }, [ratings, sideFilter]);
+
+  // Side filter options for SegmentedControl
+  const sideOptions: SegmentedControlOption[] = [
+    { value: 'All', label: 'All Sides' },
+    { value: 'Port', label: 'Port' },
+    { value: 'Starboard', label: 'Starboard' },
+  ];
 
   const columns = useMemo<ColumnDef<RatingWithAthlete, any>[]>(
     () => [
@@ -111,10 +129,27 @@ export function RankingsTable({ ratings, isLoading = false, onRecalculate }: Ran
         enableSorting: true,
       },
       {
+        id: 'trend',
+        header: 'Trend',
+        cell: ({ row }) => {
+          // Generate mock ELO history data for sparkline
+          // TODO(31-02): Replace with actual rating history from API
+          const mockHistory: ELODataPoint[] = Array.from({ length: 5 }, (_, i) => ({
+            date: new Date(Date.now() - (4 - i) * 7 * 24 * 60 * 60 * 1000).toISOString(),
+            elo: row.original.ratingValue + (Math.random() - 0.5) * 100,
+          }));
+          return <ELOSparkline data={mockHistory} />;
+        },
+        size: 100,
+        enableSorting: false,
+      },
+      {
         id: 'pieces',
         header: 'Pieces',
         accessorKey: 'racesCount',
-        cell: ({ row }) => <span className="text-txt-secondary">{row.original.racesCount}</span>,
+        cell: ({ row }) => (
+          <span className="text-txt-secondary font-mono">{row.original.racesCount}</span>
+        ),
         size: 80,
         enableSorting: true,
       },
@@ -122,7 +157,10 @@ export function RankingsTable({ ratings, isLoading = false, onRecalculate }: Ran
         id: 'confidence',
         header: 'Confidence',
         accessorKey: 'confidenceScore',
-        cell: ({ row }) => <ConfidenceBadge confidence={row.original.confidenceScore} />,
+        cell: ({ row }) => {
+          const confidence = Math.round((row.original.confidenceScore || 0) * 100);
+          return <ConfidenceRing confidence={confidence} size={36} />;
+        },
         size: 120,
         enableSorting: true,
       },
@@ -177,16 +215,8 @@ export function RankingsTable({ ratings, isLoading = false, onRecalculate }: Ran
       <div className="flex items-center justify-between p-4 border-b border-bdr-default">
         <h2 className="text-xl font-semibold text-txt-primary">Athlete Rankings</h2>
         <div className="flex items-center gap-3">
-          {/* Side filter */}
-          <select
-            value={sideFilter}
-            onChange={(e) => setSideFilter(e.target.value)}
-            className="px-3 py-1.5 bg-bg-surface border border-bdr-default rounded-md text-sm text-txt-primary focus:outline-none focus:ring-2 focus:ring-interactive-primary"
-          >
-            <option value="All">All Sides</option>
-            <option value="Port">Port</option>
-            <option value="Starboard">Starboard</option>
-          </select>
+          {/* Side filter - SegmentedControl */}
+          <SegmentedControl options={sideOptions} value={sideFilter} onChange={setSideFilter} />
 
           {/* Recalculate button */}
           {onRecalculate && (
@@ -240,15 +270,33 @@ export function RankingsTable({ ratings, isLoading = false, onRecalculate }: Ran
             ))}
           </thead>
           <tbody className="bg-bg-surface divide-y divide-bdr-default">
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="hover:bg-bg-hover transition-colors">
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-4 py-3 text-sm">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {table.getRowModel().rows.map((row) => {
+              const athleteId = row.original.athlete.id;
+              const isHighlighted = highlightedRows.has(athleteId);
+
+              return (
+                <motion.tr
+                  key={row.id}
+                  layout
+                  transition={SPRING_CONFIG}
+                  initial={{ opacity: 0 }}
+                  animate={{
+                    opacity: 1,
+                    backgroundColor: isHighlighted
+                      ? 'rgba(245, 158, 11, 0.1)' // Warm highlight flash
+                      : 'transparent',
+                  }}
+                  onClick={() => onAthleteClick?.(athleteId)}
+                  className="hover:bg-bg-hover transition-colors cursor-pointer"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="px-4 py-3 text-sm">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
+                </motion.tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
