@@ -28,7 +28,7 @@ export function AthleteBank({ className = '' }: AthleteBankProps & { lineupId: s
   const [searchQuery, setSearchQuery] = useState('');
 
   // V3 hooks: TanStack Query for athletes
-  const { allAthletes } = useAthletes();
+  const { allAthletes, isLoading: isAthletesLoading } = useAthletes();
 
   // Read activeBoats from V1 store to track which athletes are assigned
   const activeBoats = useLineupStore((state: any) => state.activeBoats);
@@ -99,7 +99,13 @@ export function AthleteBank({ className = '' }: AthleteBankProps & { lineupId: s
 
       {/* Athletes List */}
       <div className="flex-1 overflow-y-auto">
-        {filteredAthletes.length === 0 ? (
+        {isAthletesLoading ? (
+          <div className="p-2 space-y-1">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="h-12 rounded-lg bg-bg-active animate-pulse" />
+            ))}
+          </div>
+        ) : filteredAthletes.length === 0 ? (
           <div className="px-4 py-8 text-center">
             <p className="text-sm text-txt-tertiary">
               {searchQuery ? 'No athletes match your search' : 'All athletes are assigned to boats'}
