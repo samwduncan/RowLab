@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useErgTests } from '@v2/hooks/useErgTests';
 import { useAthletes } from '@v2/hooks/useAthletes';
 import { useErgKeyboard } from '@v2/hooks/useErgKeyboard';
+import { usePRCelebration } from '@v2/hooks/usePersonalRecords';
 import { useRequireAuth } from '../../hooks/useAuth';
 import { CrudModal } from '@v2/components/common/CrudModal';
 import {
@@ -11,9 +12,12 @@ import {
   ErgTestsTable,
   TeamC2StatusList,
   ErgCSVImportModal,
+  ErgLeaderboard,
 } from '@v2/components/erg';
-import { Plus, Network, Upload, Keyboard } from 'lucide-react';
+import { PRCelebration } from '@v2/features/gamification/components/PRCelebration';
+import { Plus, Network, Upload, Keyboard, List, BarChart3, X } from 'lucide-react';
 import { ErgPageSkeleton } from '@v2/features/erg/components/ErgSkeleton';
+import { FADE_IN_VARIANTS, SPRING_GENTLE } from '@v2/utils/animations';
 import type {
   ErgTest,
   ErgTestFilters as FilterState,
@@ -21,10 +25,15 @@ import type {
   UpdateErgTestInput,
 } from '@v2/types/ergTests';
 
+type ViewTab = 'tests' | 'leaderboard';
+
 /**
- * Main Erg Tests page with table, filters, and CRUD operations
+ * Main Erg Tests page with table, filters, leaderboard, and CRUD operations
  */
 export function ErgTestsPage() {
+  // View tab state
+  const [activeView, setActiveView] = useState<ViewTab>('tests');
+
   // Filters state
   const [filters, setFilters] = useState<FilterState>({
     testType: 'all',
@@ -37,6 +46,11 @@ export function ErgTestsPage() {
 
   // C2 status panel state
   const [showC2Status, setShowC2Status] = useState(false);
+
+  // PR celebration state
+  const [lastCreatedTestId, setLastCreatedTestId] = useState<string | null>(null);
+  const [prTestIds, setPrTestIds] = useState<Set<string>>(new Set());
+  const [showPRBanner, setShowPRBanner] = useState(false);
 
   // Auth - redirects to login if not authenticated
   const { isLoading: isAuthLoading } = useRequireAuth();
@@ -55,6 +69,28 @@ export function ErgTestsPage() {
 
   // Fetch athletes for form dropdown
   const { athletes } = useAthletes();
+
+  // PR celebration detection for last created test
+  const { data: prData } = usePRCelebration(lastCreatedTestId || '');
+
+  // Show PR banner when PR is detected
+  useEffect(() => {
+    if (prData && prData.contexts?.some((c) => c.isPR) && lastCreatedTestId) {
+      setShowPRBanner(true);
+      setPrTestIds((prev) => new Set(prev).add(lastCreatedTestId));
+
+      // Auto-dismiss after 10 seconds
+      const timer = setTimeout(() => {
+        setShowPRBanner(false);
+      }, 10000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [prData, lastCreatedTestId]);
+
+  const handleDismissPR = useCallback(() => {
+    setShowPRBanner(false);
+  }, []);
 
   // Keyboard shortcuts for erg test navigation
   const { selectedIndex, setSelectedIndex, showHelp, setShowHelp } = useErgKeyboard({
@@ -78,7 +114,7 @@ export function ErgTestsPage() {
         deleteTest(testId);
       }
     },
-    enabled: !isModalOpen && !isImportModalOpen,
+    enabled: !isModalOpen && !isImportModalOpen && activeView === 'tests',
   });
 
   const handleOpenAddModal = () => {
@@ -118,9 +154,12 @@ export function ErgTestsPage() {
         },
       });
     } else {
-      // Create new test
+      // Create new test - track the created test ID for PR detection
       createTest(data as CreateErgTestInput, {
-        onSuccess: () => {
+        onSuccess: (createdTest) => {
+          if (createdTest?.id) {
+            setLastCreatedTestId(createdTest.id);
+          }
           handleCloseModal();
         },
       });
@@ -158,6 +197,31 @@ export function ErgTestsPage() {
 
   return (
     <div className="flex flex-col h-full bg-bg-default">
+      {/* PR Celebration Banner */}
+      <AnimatePresence>
+        {showPRBanner && prData && (
+          <motion.div
+            variants={FADE_IN_VARIANTS}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            transition={SPRING_GENTLE}
+            className="flex-shrink-0 px-6 py-3 border-b border-accent-gold/30 bg-accent-gold/5 relative"
+          >
+            <div className="max-w-2xl mx-auto">
+              <PRCelebration data={prData} compact />
+            </div>
+            <button
+              onClick={handleDismissPR}
+              className="absolute top-3 right-4 p-1 rounded-md text-txt-tertiary hover:text-txt-primary hover:bg-bg-active transition-colors"
+              title="Dismiss"
+            >
+              <X size={16} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Header */}
       <div className="flex-shrink-0 px-6 py-4 border-b border-bdr-default bg-bg-surface">
         <div className="flex items-center justify-between mb-4">
@@ -169,6 +233,40 @@ export function ErgTestsPage() {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* View toggle */}
+            <div className="flex gap-0.5 p-0.5 bg-bg-subtle rounded-md">
+              <button
+                onClick={() => setActiveView('tests')}
+                className={`
+                  flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded transition-colors
+                  ${
+                    activeView === 'tests'
+                      ? 'bg-interactive-primary text-white shadow-sm'
+                      : 'text-txt-secondary hover:text-txt-primary'
+                  }
+                `}
+                title="Tests view"
+              >
+                <List size={16} />
+                Tests
+              </button>
+              <button
+                onClick={() => setActiveView('leaderboard')}
+                className={`
+                  flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded transition-colors
+                  ${
+                    activeView === 'leaderboard'
+                      ? 'bg-interactive-primary text-white shadow-sm'
+                      : 'text-txt-secondary hover:text-txt-primary'
+                  }
+                `}
+                title="Leaderboard view"
+              >
+                <BarChart3 size={16} />
+                Leaderboard
+              </button>
+            </div>
+
             <button
               onClick={() => setShowC2Status(!showC2Status)}
               className={`
@@ -203,22 +301,49 @@ export function ErgTestsPage() {
           </div>
         </div>
 
-        {/* Filters */}
-        <ErgTestFilters filters={filters} onFilterChange={setFilters} />
+        {/* Filters - only show in tests view */}
+        {activeView === 'tests' && <ErgTestFilters filters={filters} onFilterChange={setFilters} />}
       </div>
 
       {/* Content */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Main content - Erg tests table */}
+        {/* Main content area */}
         <div className={`flex-1 overflow-hidden transition-all ${showC2Status ? 'mr-96' : ''}`}>
-          <ErgTestsTable
-            tests={tests}
-            isLoading={isLoading}
-            onEdit={handleOpenEditModal}
-            onDelete={handleDelete}
-            onRowClick={handleRowClick}
-            selectedIndex={selectedIndex}
-          />
+          <AnimatePresence mode="wait">
+            {activeView === 'tests' ? (
+              <motion.div
+                key="tests"
+                variants={FADE_IN_VARIANTS}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={SPRING_GENTLE}
+                className="h-full"
+              >
+                <ErgTestsTable
+                  tests={tests}
+                  isLoading={isLoading}
+                  onEdit={handleOpenEditModal}
+                  onDelete={handleDelete}
+                  onRowClick={handleRowClick}
+                  selectedIndex={selectedIndex}
+                  prTestIds={prTestIds}
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="leaderboard"
+                variants={FADE_IN_VARIANTS}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={SPRING_GENTLE}
+                className="h-full overflow-auto p-6"
+              >
+                <ErgLeaderboard className="max-w-2xl mx-auto" />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* C2 Status panel - slide-out from right */}

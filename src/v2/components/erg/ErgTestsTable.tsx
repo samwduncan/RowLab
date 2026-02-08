@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { type ColumnDef } from '@tanstack/react-table';
 import { VirtualTable } from '@v2/components/common/VirtualTable';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, Trophy } from 'lucide-react';
 import { ErgTableSkeleton, ErgMobileListSkeleton } from '@v2/features/erg/components/ErgSkeleton';
 import type { ErgTest } from '@v2/types/ergTests';
 
@@ -13,6 +13,8 @@ export interface ErgTestsTableProps {
   onRowClick?: (test: ErgTest) => void;
   /** Index of the keyboard-selected row for visual highlight (-1 = none) */
   selectedIndex?: number;
+  /** Set of test IDs that are personal records - shows trophy icon */
+  prTestIds?: Set<string>;
 }
 
 /**
@@ -145,6 +147,7 @@ export function ErgTestsTable({
   onDelete,
   onRowClick,
   selectedIndex = -1,
+  prTestIds,
 }: ErgTestsTableProps) {
   const columns = useMemo<ColumnDef<ErgTest, any>[]>(
     () => [
@@ -154,8 +157,15 @@ export function ErgTestsTable({
         accessorFn: (row) =>
           row.athlete ? `${row.athlete.firstName} ${row.athlete.lastName}` : 'Unknown',
         cell: ({ row }) => (
-          <div className="font-medium text-txt-primary">
-            {row.original.athlete?.firstName} {row.original.athlete?.lastName}
+          <div className="flex items-center gap-1.5 font-medium text-txt-primary">
+            <span>
+              {row.original.athlete?.firstName} {row.original.athlete?.lastName}
+            </span>
+            {prTestIds?.has(row.original.id) && (
+              <span title="Personal Record">
+                <Trophy size={14} className="text-accent-gold" />
+              </span>
+            )}
           </div>
         ),
         size: 180,
@@ -256,7 +266,7 @@ export function ErgTestsTable({
         enableSorting: false,
       },
     ],
-    [onEdit, onDelete]
+    [onEdit, onDelete, prTestIds]
   );
 
   // Mobile view detection
