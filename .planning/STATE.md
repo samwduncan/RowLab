@@ -3,10 +3,10 @@
 ## Current Status
 
 **Milestone:** v3.0 — App Redesign
-**Phase:** 30 (Erg Data Migration) — In Progress
-**Plan:** 3/4 complete (30-01, 30-02, 30-03 done)
-**Status:** Color migration, skeleton loaders, keyboard shortcuts, leaderboard UX, PR celebrations complete. Ready for 30-04.
-**Last activity:** 2026-02-08 — Completed 30-03-PLAN.md
+**Phase:** 31 (Seat Racing Migration) — In Progress
+**Plan:** 1/6 complete (31-01 done, 31-02 done)
+**Status:** Phase 31 in progress. Core seat racing components (RankingsTable, ELO charts) migrated to V3. Data visualizations (Bradley-Terry, ProbabilityMatrix, ComparisonGraph) upgraded with gradient confidence bands and click-to-expand panels. Remaining: session wizard flow.
+**Last activity:** 2026-02-08 — Completed 31-02-PLAN.md
 
 ## Project Reference
 
@@ -91,10 +91,11 @@ v3.1 Progress: ░░░░░░░░░░░░░░ (0 phases complete)
 | 27 | Dashboard Rebuild | Complete ✅ | 7/7 |
 | 28 | Athletes Feature Migration | Complete ✅ | 8/8 |
 | 29 | Lineup Builder Migration | Complete ✅ | 5/5 |
-| 30 | Erg Data Migration | In Progress | 3/4 |
-| 31-36 | Feature Modules | Planned | TBD |
+| 30 | Erg Data Migration | Complete ✅ | 4/4 |
+| 31 | Seat Racing Migration | In Progress | 2/6 |
+| 32-36 | Feature Modules | Planned | TBD |
 
-v3.0 Progress: ████████████████░ (6 phases complete, 7 remaining)
+v3.0 Progress: █████████████████░░ (7 phases complete, 1 in progress, 5 remaining)
 
 ## Quick Context
 
@@ -491,9 +492,9 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-02-08
-**Stopped at:** Completed 30-03-PLAN.md (leaderboard UX, PR celebrations, gamification badges)
+**Stopped at:** Completed 30-04-PLAN.md (V1 legacy cleanup, human verification — Phase 30 complete)
 **Resume file:** None
-**Resume with:** `/gsd:execute-phase 30` to continue with 30-04
+**Resume with:** `/gsd:execute-phase 31` to begin Seat Racing Migration
 
 ## Roadmap Evolution
 
@@ -512,12 +513,13 @@ Key architectural decisions carrying forward:
 ## Known Limitations
 
 - **GitHub #2**: PDF export fails — `PrintableLineup` expects V2 `BoatInstance[]` but receives V1 `ActiveBoat[]` (data shape mismatch)
+- **GitHub #3**: Erg test form UX improvements — Add Test form unintuitive, requires weight, no auto-calculate for watts/split
 
 ## Next Action
 
 **v3.0 — App Redesign** (In Progress)
 
-Phase 30 (Erg Data Migration) in progress. Plan 03 of 4 complete, ready for 30-04.
+Phase 30 (Erg Data Migration) complete. Ready for Phase 31 (Seat Racing Migration).
 
 **v3.0 Progress:**
 - Phase 24: Foundation & Design System ✅
@@ -526,10 +528,10 @@ Phase 30 (Erg Data Migration) in progress. Plan 03 of 4 complete, ready for 30-0
 - Phase 27: Dashboard Rebuild ✅
 - Phase 28: Athletes Feature Migration ✅
 - Phase 29: Lineup Builder Migration ✅
-- Phase 30: Erg Data Migration (3/4 plans)
+- Phase 30: Erg Data Migration ✅
 - Phases 31-36: Planned
 
-To continue, run `/gsd:execute-phase 30` to execute 30-04.
+To continue, run `/gsd:execute-phase 31` to begin Seat Racing Migration.
 
 Phase 13 delivered the cross-feature integration layer:
 

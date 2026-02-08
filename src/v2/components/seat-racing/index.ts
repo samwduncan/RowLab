@@ -5,6 +5,9 @@
  */
 
 export { ConfidenceBadge } from './ConfidenceBadge';
+export { ConfidenceRing } from './ConfidenceRing';
+export { ELOSparkline } from './ELOSparkline';
+export { SegmentedControl } from './SegmentedControl';
 export { RankingsTable } from './RankingsTable';
 export { RankingsChart } from './RankingsChart';
 export { SessionList } from './SessionList';
@@ -13,6 +16,9 @@ export { ParametersPanel } from './ParametersPanel';
 export { SeatRacingEmptyState, RankingsEmptyState } from './SeatRacingEmptyState';
 
 export type { ConfidenceBadgeProps } from './ConfidenceBadge';
+export type { ConfidenceRingProps } from './ConfidenceRing';
+export type { ELOSparklineProps, ELODataPoint } from './ELOSparkline';
+export type { SegmentedControlProps, SegmentedControlOption } from './SegmentedControl';
 export type { RankingsTableProps } from './RankingsTable';
 export type { RankingsChartProps } from './RankingsChart';
 export type { SessionListProps } from './SessionList';
