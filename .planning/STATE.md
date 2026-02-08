@@ -4,9 +4,9 @@
 
 **Milestone:** v3.0 — App Redesign
 **Phase:** 33 (Regattas & Rankings Migration) — In Progress
-**Plan:** 2/6 complete
-**Status:** Phase 33 in progress. Plan 33-02 complete: All rankings components and regatta/rankings pages migrated to V3 design tokens. Combined with Plan 01, entire regattas/rankings domain (13 files) is V3-compliant.
-**Last activity:** 2026-02-08 — Completed 33-02-PLAN.md (rankings components and pages V3 token migration)
+**Plan:** 3/6 complete
+**Status:** Phase 33 in progress. Plan 33-03 complete: Race day WebSocket infrastructure implemented with server-side event broadcasting (raceday:*), client hooks for live updates (useRaceDaySocket, useConnectionHealth), and connection health indicator. Real-time race results and rankings now broadcast via Socket.IO with debounced cache invalidation.
+**Last activity:** 2026-02-08 — Completed 33-03-PLAN.md (race day WebSocket infrastructure)
 
 ## Project Reference
 
@@ -494,9 +494,9 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-02-08
-**Stopped at:** Phase 33, Plan 02 complete. Continuing Phase 33 execution.
+**Stopped at:** Phase 33, Plan 03 complete. Race day WebSocket infrastructure implemented.
 **Resume file:** None
-**Resume with:** Continue executing remaining Phase 33 plans (33-03 through 33-06)
+**Resume with:** Continue executing remaining Phase 33 plans (33-04 through 33-06)
 
 ## Roadmap Evolution
 
@@ -895,5 +895,14 @@ Phase 13 delivered the cross-feature integration layer:
 | 25-06 | Session-only undo/redo (no persistence) | Aligns with user decision from CONTEXT.md, simpler implementation, resets on page refresh |
 | 25-06 | Deprecated lineupStore.js instead of deleting | 41 files still reference it (12 V2, 29 V1), deletion deferred to phase 25-07 component migration |
 
+### v3.0 Decisions (Phase 33)
+
+| Plan | Decision | Rationale |
+|------|----------|-----------|
+| 33-03 | Extend existing Socket.IO server for race day events | collaboration.js already wired, race day adds event handlers to same io instance, avoids multiple WebSocket connections |
+| 33-03 | Debounce cache invalidation by 2 seconds on live events | Prevents broadcast storm when 10+ users watch same regatta (RESEARCH.md Pitfall 3), server-side rate limiting would still cause thundering herd |
+| 33-03 | Add getSocket() method to collaborationService | Encapsulation - race day features access socket without knowing connection management details, better abstraction |
+| 33-03 | Use raceday:* event prefix for namespacing | Avoids collision with collaboration events (session:*, lineup:*), simpler than Socket.IO namespaces |
+
 ---
-*Last updated: 2026-02-08 — Phase 32 Plan 03 Complete (Calendar UX: 2-step wizard, ComplianceBadge, drag feedback)*
+*Last updated: 2026-02-08 — Phase 33 Plan 03 Complete (Race day WebSocket infrastructure: server-side broadcasting, client hooks, connection health indicator)*
