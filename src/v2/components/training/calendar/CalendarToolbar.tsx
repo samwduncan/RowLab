@@ -1,8 +1,10 @@
 // src/v2/components/training/calendar/CalendarToolbar.tsx
 
 import React from 'react';
-import { format } from 'date-fns';
 import type { ToolbarProps, View } from 'react-big-calendar';
+import { ComplianceBadge } from '../compliance/ComplianceBadge';
+import { useNcaaWeeklyHours } from '../../../hooks/useNcaaCompliance';
+import { startOfWeek } from 'date-fns';
 
 interface CalendarToolbarProps extends ToolbarProps {
   onViewChange?: (view: View) => void;
@@ -10,13 +12,21 @@ interface CalendarToolbarProps extends ToolbarProps {
 
 /**
  * Custom toolbar for training calendar.
- * Provides navigation buttons and view switcher (month/week).
+ * Provides navigation buttons, view switcher, and NCAA compliance badge for the current week.
  */
-export function CalendarToolbar({ label, onNavigate, onView, view }: CalendarToolbarProps) {
+export function CalendarToolbar({ label, date, onNavigate, onView, view }: CalendarToolbarProps) {
   const viewOptions: { key: View; label: string }[] = [
     { key: 'month', label: 'Month' },
     { key: 'week', label: 'Week' },
   ];
+
+  // Get compliance data for the currently visible week (Monday start per NCAA rules)
+  const currentWeekStart = startOfWeek(date, { weekStartsOn: 1 });
+  const { entries } = useNcaaWeeklyHours(currentWeekStart);
+
+  // Calculate total team weekly hours (average across athletes, or max)
+  const totalTeamHours =
+    entries.length > 0 ? entries.reduce((max, entry) => Math.max(max, entry.totalHours), 0) : 0;
 
   return (
     <div className="flex items-center justify-between mb-4 px-2">
@@ -65,6 +75,9 @@ export function CalendarToolbar({ label, onNavigate, onView, view }: CalendarToo
             </svg>
           </button>
         </div>
+
+        {/* NCAA Compliance Badge */}
+        {totalTeamHours > 0 && <ComplianceBadge weeklyHours={totalTeamHours} size="md" />}
       </div>
 
       {/* Current Date Label */}

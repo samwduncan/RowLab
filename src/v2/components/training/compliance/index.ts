@@ -6,3 +6,4 @@ export { TrainingLoadChart } from './TrainingLoadChart';
 export { AttendanceTrainingLinkPanel } from './AttendanceTrainingLinkPanel';
 export { NCAA20HourWarning, NCAAWarningBadge } from './NCAA20HourWarning';
 export { NCAAAuditReport } from './NCAAAuditReport';
+export { ComplianceBadge } from './ComplianceBadge';
