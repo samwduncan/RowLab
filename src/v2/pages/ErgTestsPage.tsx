@@ -11,7 +11,13 @@ import {
   ErgCSVImportModal,
 } from '@v2/components/erg';
 import { Plus, Network, Upload } from 'lucide-react';
-import type { ErgTest, ErgTestFilters as FilterState, CreateErgTestInput, UpdateErgTestInput } from '@v2/types/ergTests';
+import { ErgPageSkeleton } from '@v2/features/erg/components/ErgSkeleton';
+import type {
+  ErgTest,
+  ErgTestFilters as FilterState,
+  CreateErgTestInput,
+  UpdateErgTestInput,
+} from '@v2/types/ergTests';
 
 /**
  * Main Erg Tests page with table, filters, and CRUD operations
@@ -79,14 +85,11 @@ export function ErgTestsPage() {
   const handleSubmit = (data: CreateErgTestInput | UpdateErgTestInput) => {
     if (editingTest) {
       // Update existing test
-      updateTest(
-        { ...data, id: editingTest.id } as any,
-        {
-          onSuccess: () => {
-            handleCloseModal();
-          },
-        }
-      );
+      updateTest({ ...data, id: editingTest.id } as any, {
+        onSuccess: () => {
+          handleCloseModal();
+        },
+      });
     } else {
       // Create new test
       createTest(data as CreateErgTestInput, {
@@ -121,13 +124,9 @@ export function ErgTestsPage() {
     handleOpenEditModal(test);
   };
 
-  // Show loading while checking auth
+  // Show skeleton while checking auth
   if (isAuthLoading) {
-    return (
-      <div className="flex items-center justify-center h-full bg-bg-default">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-interactive-primary" />
-      </div>
-    );
+    return <ErgPageSkeleton />;
   }
 
   return (
