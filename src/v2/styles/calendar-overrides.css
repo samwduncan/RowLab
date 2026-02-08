@@ -34,7 +34,7 @@
 
 /* Today highlight */
 .v2 .rbc-today {
-  background-color: var(--color-accent-primary);
+  background-color: var(--color-interactive-primary);
   color: var(--color-text-inverse);
 }
 
@@ -74,9 +74,9 @@
 }
 
 .v2 .rbc-toolbar button.rbc-active {
-  background-color: var(--color-accent-primary);
+  background-color: var(--color-interactive-primary);
   color: var(--color-text-inverse);
-  border-color: var(--color-accent-primary);
+  border-color: var(--color-interactive-primary);
 }
 
 /* Time slot labels */

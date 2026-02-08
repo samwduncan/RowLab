@@ -3,7 +3,16 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { Calendar, dateFnsLocalizer, View } from 'react-big-calendar';
 import withDragAndDrop, { withDragAndDropProps } from 'react-big-calendar/lib/addons/dragAndDrop';
-import { format, parse, startOfWeek, getDay, startOfMonth, endOfMonth, addMonths, subMonths } from 'date-fns';
+import {
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  startOfMonth,
+  endOfMonth,
+  addMonths,
+  subMonths,
+} from 'date-fns';
 import enUS from 'date-fns/locale/en-US';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
@@ -68,11 +77,7 @@ export function DragDropCalendar({
   }, [currentDate, view]);
 
   // Fetch calendar events
-  const { events, isLoading, error } = useCalendarEvents(
-    dateRange.start,
-    dateRange.end,
-    planId
-  );
+  const { events, isLoading, error } = useCalendarEvents(dateRange.start, dateRange.end, planId);
 
   // Reschedule mutation with optimistic update
   const { rescheduleWorkout, isRescheduling } = useRescheduleWorkout();
@@ -88,18 +93,24 @@ export function DragDropCalendar({
   }, []);
 
   // Handle event selection
-  const handleSelectEvent = useCallback((event: CalendarEvent) => {
-    if (!draggingEvent) {
-      onSelectEvent?.(event);
-    }
-  }, [onSelectEvent, draggingEvent]);
+  const handleSelectEvent = useCallback(
+    (event: CalendarEvent) => {
+      if (!draggingEvent) {
+        onSelectEvent?.(event);
+      }
+    },
+    [onSelectEvent, draggingEvent]
+  );
 
   // Handle slot selection (for creating new events)
-  const handleSelectSlot = useCallback((slotInfo: { start: Date; end: Date; action: string }) => {
-    if (slotInfo.action === 'click' || slotInfo.action === 'select') {
-      onSelectSlot?.({ start: slotInfo.start, end: slotInfo.end });
-    }
-  }, [onSelectSlot]);
+  const handleSelectSlot = useCallback(
+    (slotInfo: { start: Date; end: Date; action: string }) => {
+      if (slotInfo.action === 'click' || slotInfo.action === 'select') {
+        onSelectSlot?.({ start: slotInfo.start, end: slotInfo.end });
+      }
+    },
+    [onSelectSlot]
+  );
 
   // Handle drag start
   const handleDragStart = useCallback((args: { event: CalendarEvent }) => {
@@ -108,7 +119,14 @@ export function DragDropCalendar({
 
   // Handle event drop (reschedule)
   const handleEventDrop = useCallback(
-    ({ event, start, end, isAllDay }: withDragAndDropProps<CalendarEvent>['onEventDrop'] extends ((args: infer A) => any) ? A : never) => {
+    ({
+      event,
+      start,
+      end,
+      isAllDay,
+    }: withDragAndDropProps<CalendarEvent>['onEventDrop'] extends (args: infer A) => any
+      ? A
+      : never) => {
       setDraggingEvent(null);
 
       // Get the workout ID from the event
@@ -154,7 +172,13 @@ export function DragDropCalendar({
 
   // Handle event resize (change duration)
   const handleEventResize = useCallback(
-    ({ event, start, end }: withDragAndDropProps<CalendarEvent>['onEventResize'] extends ((args: infer A) => any) ? A : never) => {
+    ({
+      event,
+      start,
+      end,
+    }: withDragAndDropProps<CalendarEvent>['onEventResize'] extends (args: infer A) => any
+      ? A
+      : never) => {
       // For now, we only support rescheduling (moving events)
       // Resizing would require updating duration, which is a more complex operation
       // Could be added in a future plan if needed
@@ -183,10 +207,13 @@ export function DragDropCalendar({
   }, []);
 
   // Custom components
-  const components = useMemo(() => ({
-    toolbar: CalendarToolbar,
-    event: WorkoutEventCard,
-  }), []);
+  const components = useMemo(
+    () => ({
+      toolbar: CalendarToolbar,
+      event: WorkoutEventCard,
+    }),
+    []
+  );
 
   if (error) {
     return (
@@ -200,12 +227,10 @@ export function DragDropCalendar({
     <div className={`drag-drop-calendar ${className}`}>
       {/* Loading overlay */}
       {(isLoading || isRescheduling) && (
-        <div className="absolute inset-0 bg-surface-default/50 flex items-center justify-center z-10 rounded-lg">
+        <div className="absolute inset-0 bg-bg-surface/50 flex items-center justify-center z-10 rounded-lg">
           <div className="flex items-center gap-2">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-accent-primary" />
-            {isRescheduling && (
-              <span className="text-sm text-txt-secondary">Rescheduling...</span>
-            )}
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-interactive-primary" />
+            {isRescheduling && <span className="text-sm text-txt-secondary">Rescheduling...</span>}
           </div>
         </div>
       )}
@@ -243,26 +268,28 @@ export function DragDropCalendar({
 
       {/* Dragging indicator */}
       {draggingEvent && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-surface-elevated
-                        text-txt-primary text-sm rounded-lg shadow-lg border border-bdr-default z-50">
+        <div
+          className="fixed bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-bg-surface-elevated
+                        text-txt-primary text-sm rounded-lg shadow-lg border border-bdr-default z-50"
+        >
           Moving: <span className="font-medium">{draggingEvent.title}</span>
         </div>
       )}
 
-      {/* Calendar Custom Styles - Same as TrainingCalendar plus drag-drop styles */}
+      {/* Calendar Custom Styles - V3 Design Tokens + drag-drop styles */}
       <style jsx global>{`
         .drag-drop-calendar .rbc-calendar {
           font-family: inherit;
-          background-color: var(--surface-default);
-          border: 1px solid var(--bdr-default);
+          background-color: var(--color-bg-surface);
+          border: 1px solid var(--color-border-default);
           border-radius: 0.5rem;
         }
 
         .drag-drop-calendar .rbc-header {
           padding: 0.75rem 0.5rem;
           font-weight: 500;
-          color: var(--txt-secondary);
-          border-bottom: 1px solid var(--bdr-default);
+          color: var(--color-text-secondary);
+          border-bottom: 1px solid var(--color-border-default);
         }
 
         .drag-drop-calendar .rbc-month-view,
@@ -271,20 +298,20 @@ export function DragDropCalendar({
         }
 
         .drag-drop-calendar .rbc-day-bg {
-          background-color: var(--surface-default);
+          background-color: var(--color-bg-surface);
         }
 
         .drag-drop-calendar .rbc-day-bg + .rbc-day-bg,
         .drag-drop-calendar .rbc-month-row + .rbc-month-row {
-          border-color: var(--bdr-default);
+          border-color: var(--color-border-default);
         }
 
         .drag-drop-calendar .rbc-off-range-bg {
-          background-color: var(--surface-sunken);
+          background-color: var(--color-bg-base);
         }
 
         .drag-drop-calendar .rbc-today {
-          background-color: var(--accent-primary-faint, rgba(59, 130, 246, 0.1));
+          background-color: var(--glow-good);
         }
 
         .drag-drop-calendar .rbc-date-cell {
@@ -293,11 +320,11 @@ export function DragDropCalendar({
         }
 
         .drag-drop-calendar .rbc-date-cell > a {
-          color: var(--txt-primary);
+          color: var(--color-text-primary);
         }
 
         .drag-drop-calendar .rbc-date-cell.rbc-now > a {
-          color: var(--accent-primary);
+          color: var(--color-interactive-primary);
           font-weight: 600;
         }
 
@@ -308,7 +335,7 @@ export function DragDropCalendar({
         }
 
         .drag-drop-calendar .rbc-event:focus {
-          outline: 2px solid var(--accent-primary);
+          outline: 2px solid var(--color-interactive-primary);
           outline-offset: 1px;
         }
 
@@ -323,7 +350,7 @@ export function DragDropCalendar({
         }
 
         .drag-drop-calendar .rbc-addons-dnd-over-drop-zone {
-          background-color: var(--accent-primary-faint, rgba(59, 130, 246, 0.15)) !important;
+          background-color: var(--glow-good) !important;
         }
 
         .drag-drop-calendar .rbc-addons-dnd-row-body {
@@ -331,7 +358,7 @@ export function DragDropCalendar({
         }
 
         .drag-drop-calendar .rbc-time-header {
-          border-bottom: 1px solid var(--bdr-default);
+          border-bottom: 1px solid var(--color-border-default);
         }
 
         .drag-drop-calendar .rbc-time-content {
@@ -339,34 +366,35 @@ export function DragDropCalendar({
         }
 
         .drag-drop-calendar .rbc-time-slot {
-          border-top: 1px solid var(--bdr-subtle, rgba(255,255,255,0.05));
+          border-top: 1px solid var(--color-border-subtle);
         }
 
         .drag-drop-calendar .rbc-timeslot-group {
-          border-bottom: 1px solid var(--bdr-default);
+          border-bottom: 1px solid var(--color-border-default);
         }
 
         .drag-drop-calendar .rbc-time-gutter {
-          color: var(--txt-tertiary);
+          color: var(--color-text-tertiary);
           font-size: 0.75rem;
+          font-family: var(--font-mono);
         }
 
         .drag-drop-calendar .rbc-current-time-indicator {
-          background-color: var(--accent-destructive, #ef4444);
+          background-color: var(--data-poor);
         }
 
         .drag-drop-calendar .rbc-show-more {
-          color: var(--accent-primary);
+          color: var(--color-interactive-primary);
           font-size: 0.75rem;
           font-weight: 500;
         }
 
         /* Dark mode adjustments */
-        .v2[data-theme="dark"] .drag-drop-calendar .rbc-day-bg {
-          background-color: var(--surface-default);
+        .v2[data-theme='dark'] .drag-drop-calendar .rbc-day-bg {
+          background-color: var(--color-bg-surface);
         }
 
-        .v2[data-theme="dark"] .drag-drop-calendar .rbc-addons-dnd-drag-preview {
+        .v2[data-theme='dark'] .drag-drop-calendar .rbc-addons-dnd-drag-preview {
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
       `}</style>
