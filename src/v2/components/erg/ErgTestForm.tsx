@@ -67,14 +67,14 @@ function formatTimeDisplay(seconds: number): string {
  * Calculate split from watts
  */
 function wattsToSplit(watts: number): number {
-  return Math.pow(2.80 / watts, 1 / 3);
+  return Math.pow(2.8 / watts, 1 / 3);
 }
 
 /**
  * Calculate watts from split
  */
 function splitToWatts(splitSeconds: number): number {
-  return 2.80 / Math.pow(splitSeconds, 3);
+  return 2.8 / Math.pow(splitSeconds, 3);
 }
 
 export function ErgTestForm({
@@ -213,7 +213,7 @@ export function ErgTestForm({
           ))}
         </select>
         {errors.athleteId && (
-          <p className="mt-1 text-sm text-red-600">{errors.athleteId.message}</p>
+          <p className="mt-1 text-sm text-status-error">{errors.athleteId.message}</p>
         )}
       </div>
 
@@ -236,7 +236,7 @@ export function ErgTestForm({
             ))}
           </select>
           {errors.testType && (
-            <p className="mt-1 text-sm text-red-600">{errors.testType.message}</p>
+            <p className="mt-1 text-sm text-status-error">{errors.testType.message}</p>
           )}
         </div>
 
@@ -252,7 +252,7 @@ export function ErgTestForm({
             className="w-full px-3 py-2 bg-bg-surface border border-bdr-default rounded-md text-txt-primary focus:outline-none focus:ring-2 focus:ring-interactive-primary disabled:opacity-50"
           />
           {errors.testDate && (
-            <p className="mt-1 text-sm text-red-600">{errors.testDate.message}</p>
+            <p className="mt-1 text-sm text-status-error">{errors.testDate.message}</p>
           )}
         </div>
       </div>
@@ -272,7 +272,7 @@ export function ErgTestForm({
           className="w-full px-3 py-2 bg-bg-surface border border-bdr-default rounded-md text-txt-primary focus:outline-none focus:ring-2 focus:ring-interactive-primary disabled:opacity-50"
         />
         {errors.timeSeconds && (
-          <p className="mt-1 text-sm text-red-600">{errors.timeSeconds.message}</p>
+          <p className="mt-1 text-sm text-status-error">{errors.timeSeconds.message}</p>
         )}
       </div>
 

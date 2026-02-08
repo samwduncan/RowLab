@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
   LineChart,
   Line,
@@ -44,7 +45,7 @@ function formatDate(dateString: string, isLongRange: boolean): string {
  */
 function isLongDateRange(tests: ErgTest[]): boolean {
   if (tests.length < 2) return false;
-  const dates = tests.map(t => new Date(t.testDate).getTime());
+  const dates = tests.map((t) => new Date(t.testDate).getTime());
   const minDate = Math.min(...dates);
   const maxDate = Math.max(...dates);
   const diffDays = (maxDate - minDate) / (1000 * 60 * 60 * 24);
@@ -52,14 +53,22 @@ function isLongDateRange(tests: ErgTest[]): boolean {
 }
 
 /**
- * Test type colors for chart lines
+ * Test type CSS variable names for chart lines.
+ * Resolved at render time via getComputedStyle for theme awareness.
  */
-const testTypeColors: Record<TestType, string> = {
-  '2k': '#f43f5e',    // rose-500
-  '6k': '#3b82f6',    // blue-500
-  '30min': '#22c55e', // green-500
-  '500m': '#f59e0b',  // amber-500
+const testTypeColorVars: Record<TestType, string> = {
+  '2k': '--color-data-poor',
+  '6k': '--color-data-good',
+  '30min': '--color-data-excellent',
+  '500m': '--color-data-warning',
 };
+
+/**
+ * Resolve CSS variable to computed hex color
+ */
+function resolveColor(cssVar: string): string {
+  return getComputedStyle(document.documentElement).getPropertyValue(cssVar).trim() || '#71717a';
+}
 
 /**
  * Custom tooltip showing test details
@@ -75,7 +84,7 @@ function CustomTooltip({ active, payload }: TooltipProps<number, string>) {
         {new Date(data.testDate).toLocaleDateString('en-US', {
           month: 'short',
           day: 'numeric',
-          year: 'numeric'
+          year: 'numeric',
         })}
       </div>
       <div className="space-y-1">
@@ -96,9 +105,7 @@ function CustomTooltip({ active, payload }: TooltipProps<number, string>) {
         {data.watts && (
           <div className="flex items-center justify-between gap-4">
             <span className="text-xs text-txt-secondary">Watts</span>
-            <span className="text-sm font-mono text-txt-primary">
-              {Math.round(data.watts)}W
-            </span>
+            <span className="text-sm font-mono text-txt-primary">{Math.round(data.watts)}W</span>
           </div>
         )}
       </div>
@@ -114,12 +121,10 @@ export function ErgProgressChart({
   testType,
   height = 300,
   showTrendLine = false,
-  className = ''
+  className = '',
 }: ErgProgressChartProps) {
   // Filter by test type if specified
-  const filteredTests = testType
-    ? tests.filter(t => t.testType === testType)
-    : tests;
+  const filteredTests = testType ? tests.filter((t) => t.testType === testType) : tests;
 
   // Sort by date ascending
   const sortedTests = [...filteredTests].sort(
@@ -140,23 +145,36 @@ export function ErgProgressChart({
   const isLongRange = isLongDateRange(sortedTests);
 
   // Group tests by type if showing multiple types
-  const testsByType = sortedTests.reduce((acc, test) => {
-    if (!acc[test.testType]) {
-      acc[test.testType] = [];
+  const testsByType = sortedTests.reduce(
+    (acc, test) => {
+      if (!acc[test.testType]) {
+        acc[test.testType] = [];
+      }
+      acc[test.testType].push(test);
+      return acc;
+    },
+    {} as Record<string, ErgTest[]>
+  );
+
+  // Resolve CSS variables at render time for theme awareness
+  const axisColor = useMemo(() => resolveColor('--color-txt-tertiary'), []);
+  const gridColor = useMemo(() => resolveColor('--color-bdr-subtle'), []);
+  const resolvedColors = useMemo(() => {
+    const resolved: Record<string, string> = {};
+    for (const [type, cssVar] of Object.entries(testTypeColorVars)) {
+      resolved[type] = resolveColor(cssVar);
     }
-    acc[test.testType].push(test);
-    return acc;
-  }, {} as Record<string, ErgTest[]>);
+    return resolved;
+  }, []);
 
   return (
     <div className={`bg-bg-surface rounded-lg border border-bdr-subtle p-4 ${className}`}>
       <ResponsiveContainer width="100%" height={height}>
-        <LineChart
-          margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
-        >
+        <LineChart margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
           <CartesianGrid
             strokeDasharray="3 3"
-            stroke="rgba(255, 255, 255, 0.05)"
+            stroke={gridColor}
+            strokeOpacity={0.3}
             vertical={false}
           />
           <XAxis
@@ -164,15 +182,15 @@ export function ErgProgressChart({
             type="category"
             allowDuplicatedCategory={false}
             tickFormatter={(date) => formatDate(date, isLongRange)}
-            stroke="#71717A"
-            tick={{ fill: '#71717A', fontSize: 12 }}
-            tickLine={{ stroke: '#71717A' }}
+            stroke={axisColor}
+            tick={{ fill: axisColor, fontSize: 12 }}
+            tickLine={{ stroke: axisColor }}
           />
           <YAxis
             tickFormatter={formatTime}
-            stroke="#71717A"
-            tick={{ fill: '#71717A', fontSize: 12 }}
-            tickLine={{ stroke: '#71717A' }}
+            stroke={axisColor}
+            tick={{ fill: axisColor, fontSize: 12 }}
+            tickLine={{ stroke: axisColor }}
             domain={['auto', 'auto']}
           />
           <Tooltip content={<CustomTooltip />} />
@@ -180,9 +198,7 @@ export function ErgProgressChart({
             <Legend
               wrapperStyle={{ paddingTop: '20px' }}
               iconType="line"
-              formatter={(value) => (
-                <span className="text-sm text-txt-secondary">{value}</span>
-              )}
+              formatter={(value) => <span className="text-sm text-txt-secondary">{value}</span>}
             />
           )}
 
@@ -194,18 +210,18 @@ export function ErgProgressChart({
               type="monotone"
               dataKey="timeSeconds"
               name={type}
-              stroke={testTypeColors[type as TestType]}
+              stroke={resolvedColors[type] || axisColor}
               strokeWidth={2}
               dot={{
-                fill: testTypeColors[type as TestType],
+                fill: resolvedColors[type] || axisColor,
                 r: 4,
-                strokeWidth: 0
+                strokeWidth: 0,
               }}
               activeDot={{
                 r: 6,
-                fill: testTypeColors[type as TestType],
+                fill: resolvedColors[type] || axisColor,
                 strokeWidth: 2,
-                stroke: '#fff'
+                stroke: '#fff',
               }}
               connectNulls
             />
