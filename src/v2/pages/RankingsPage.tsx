@@ -43,8 +43,8 @@ export function RankingsPage() {
         <button
           onClick={() => setIsImportOpen(true)}
           className="flex items-center gap-2 px-4 py-2 text-sm font-medium
-                   bg-surface-elevated text-txt-primary rounded-lg
-                   hover:bg-surface-hover transition-colors"
+                   bg-bg-raised text-txt-primary rounded-lg
+                   hover:bg-bg-hover transition-colors"
         >
           <Plus className="w-4 h-4" />
           Add External Ranking
@@ -58,7 +58,7 @@ export function RankingsPage() {
             className={({ selected }) =>
               `px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
                 selected
-                  ? 'border-accent-primary text-accent-primary'
+                  ? 'border-interactive-primary text-interactive-primary'
                   : 'border-transparent text-txt-secondary hover:text-txt-primary'
               }`
             }
@@ -69,7 +69,7 @@ export function RankingsPage() {
             className={({ selected }) =>
               `px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
                 selected
-                  ? 'border-accent-primary text-accent-primary'
+                  ? 'border-interactive-primary text-interactive-primary'
                   : 'border-transparent text-txt-secondary hover:text-txt-primary'
               }`
             }
@@ -96,17 +96,19 @@ export function RankingsPage() {
                   <select
                     value={selectedComparison?.opponent || ''}
                     onChange={(e) =>
-                      setSelectedComparison(prev => ({
+                      setSelectedComparison((prev) => ({
                         opponent: e.target.value,
                         boatClass: prev?.boatClass || boatClasses[0]?.value || '8+',
                       }))
                     }
-                    className="w-full px-3 py-2 bg-surface-default border border-bdr-default rounded-lg
-                             text-txt-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
+                    className="w-full px-3 py-2 bg-bg-default border border-bdr-default rounded-lg
+                             text-txt-primary focus:outline-none focus:ring-2 focus:ring-interactive-primary"
                   >
                     <option value="">Select a team</option>
-                    {externalTeams?.map(team => (
-                      <option key={team.id} value={team.name}>{team.name}</option>
+                    {externalTeams?.map((team) => (
+                      <option key={team.id} value={team.name}>
+                        {team.name}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -118,16 +120,18 @@ export function RankingsPage() {
                   <select
                     value={selectedComparison?.boatClass || ''}
                     onChange={(e) =>
-                      setSelectedComparison(prev => ({
+                      setSelectedComparison((prev) => ({
                         opponent: prev?.opponent || '',
                         boatClass: e.target.value,
                       }))
                     }
-                    className="w-full px-3 py-2 bg-surface-default border border-bdr-default rounded-lg
-                             text-txt-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
+                    className="w-full px-3 py-2 bg-bg-default border border-bdr-default rounded-lg
+                             text-txt-primary focus:outline-none focus:ring-2 focus:ring-interactive-primary"
                   >
-                    {boatClasses.map(bc => (
-                      <option key={bc.value} value={bc.value}>{bc.label}</option>
+                    {boatClasses.map((bc) => (
+                      <option key={bc.value} value={bc.value}>
+                        {bc.label}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -150,14 +154,10 @@ export function RankingsPage() {
       </Tab.Group>
 
       {/* Import Modal */}
-      <Dialog
-        open={isImportOpen}
-        onClose={() => setIsImportOpen(false)}
-        className="relative z-50"
-      >
+      <Dialog open={isImportOpen} onClose={() => setIsImportOpen(false)} className="relative z-50">
         <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="w-full max-w-md bg-surface-default rounded-xl shadow-xl p-6">
+          <Dialog.Panel className="w-full max-w-md bg-bg-default rounded-xl shadow-xl p-6">
             <Dialog.Title className="text-lg font-semibold text-txt-primary mb-4">
               Add External Ranking
             </Dialog.Title>
