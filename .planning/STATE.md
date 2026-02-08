@@ -3,10 +3,10 @@
 ## Current Status
 
 **Milestone:** v3.0 — App Redesign
-**Phase:** 29 (Lineup Builder Migration) — Complete ✅
-**Plan:** 5/5 complete (29-01 through 29-05)
-**Status:** All lineup components migrated to V3 (TanStack Query + command pattern + design tokens). V1/V2 data disconnect bugs fixed during verification. PDF export deferred (GitHub #2).
-**Last activity:** 2026-02-08 — Phase 29 complete
+**Phase:** 30 (Erg Data Migration) — In Progress
+**Plan:** 2/4 complete (30-01 pending, 30-02 done)
+**Status:** Erg page skeleton loaders (CW-03) and keyboard shortcuts (CW-02) implemented. Ready for 30-03.
+**Last activity:** 2026-02-08 — Completed 30-02-PLAN.md
 
 ## Project Reference
 
@@ -91,7 +91,8 @@ v3.1 Progress: ░░░░░░░░░░░░░░ (0 phases complete)
 | 27 | Dashboard Rebuild | Complete ✅ | 7/7 |
 | 28 | Athletes Feature Migration | Complete ✅ | 8/8 |
 | 29 | Lineup Builder Migration | Complete ✅ | 5/5 |
-| 30-36 | Feature Modules | Planned | TBD |
+| 30 | Erg Data Migration | In Progress | 2/4 |
+| 31-36 | Feature Modules | Planned | TBD |
 
 v3.0 Progress: ████████████████░ (6 phases complete, 7 remaining)
 
@@ -490,9 +491,9 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-02-08
-**Stopped at:** Phase 29 complete. All 5 plans executed and verified.
+**Stopped at:** Completed 30-02-PLAN.md (erg skeleton loaders + keyboard shortcuts)
 **Resume file:** None
-**Resume with:** `/gsd:plan-phase 30` to start next feature module migration
+**Resume with:** `/gsd:execute-phase 30` to continue with 30-03
 
 ## Roadmap Evolution
 
@@ -516,7 +517,7 @@ Key architectural decisions carrying forward:
 
 **v3.0 — App Redesign** (In Progress)
 
-Phase 29 (Lineup Builder Migration) complete. 6 of 13 v3.0 phases done.
+Phase 30 (Erg Data Migration) in progress. Plan 02 of 4 complete.
 
 **v3.0 Progress:**
 - Phase 24: Foundation & Design System ✅
@@ -525,9 +526,10 @@ Phase 29 (Lineup Builder Migration) complete. 6 of 13 v3.0 phases done.
 - Phase 27: Dashboard Rebuild ✅
 - Phase 28: Athletes Feature Migration ✅
 - Phase 29: Lineup Builder Migration ✅
-- Phases 30-36: Planned
+- Phase 30: Erg Data Migration (2/4 plans)
+- Phases 31-36: Planned
 
-To continue, run `/gsd:plan-phase 30` to start next feature module migration.
+To continue, run `/gsd:execute-phase 30` to execute next plan.
 
 Phase 13 delivered the cross-feature integration layer:
 
