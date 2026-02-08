@@ -188,7 +188,26 @@ export function useCreateEvent() {
       if (!accessToken) throw new Error('Authentication required');
       return createEvent(accessToken, regattaId, event);
     },
-    onSuccess: (_, { regattaId }) => {
+    networkMode: 'offlineFirst',
+    retry: 3,
+    onMutate: async ({ regattaId, event }) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.regattas.detail(regattaId) });
+      const previous = queryClient.getQueryData(queryKeys.regattas.detail(regattaId));
+
+      queryClient.setQueryData(queryKeys.regattas.detail(regattaId), (old: any) => {
+        if (!old) return old;
+        const tempEvent = { ...event, id: `temp-${Date.now()}`, races: [] };
+        return { ...old, events: [...(old.events || []), tempEvent] };
+      });
+
+      return { previous, regattaId };
+    },
+    onError: (err, { regattaId }, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(queryKeys.regattas.detail(regattaId), context.previous);
+      }
+    },
+    onSettled: (_, __, { regattaId }) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.regattas.detail(regattaId) });
     },
   });
@@ -201,7 +220,31 @@ export function useUpdateEvent() {
   return useMutation({
     mutationFn: ({ eventId, updates }: { eventId: string; updates: Partial<EventFormData> }) =>
       updateEvent(accessToken!, eventId, updates),
-    onSuccess: () => {
+    networkMode: 'offlineFirst',
+    retry: 3,
+    onMutate: async ({ eventId, updates }) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.regattas.all });
+      const previous = queryClient.getQueriesData({ queryKey: queryKeys.regattas.all });
+
+      // Update all regatta caches that contain this event
+      queryClient.setQueriesData({ queryKey: queryKeys.regattas.all }, (old: any) => {
+        if (!old?.events) return old;
+        return {
+          ...old,
+          events: old.events.map((e: any) => (e.id === eventId ? { ...e, ...updates } : e)),
+        };
+      });
+
+      return { previous };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previous) {
+        context.previous.forEach(([key, data]) => {
+          queryClient.setQueryData(key, data);
+        });
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.regattas.all });
     },
   });
@@ -213,7 +256,31 @@ export function useDeleteEvent() {
 
   return useMutation({
     mutationFn: (eventId: string) => deleteEvent(accessToken!, eventId),
-    onSuccess: () => {
+    networkMode: 'offlineFirst',
+    retry: 3,
+    onMutate: async (eventId) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.regattas.all });
+      const previous = queryClient.getQueriesData({ queryKey: queryKeys.regattas.all });
+
+      // Remove event from all regatta caches
+      queryClient.setQueriesData({ queryKey: queryKeys.regattas.all }, (old: any) => {
+        if (!old?.events) return old;
+        return {
+          ...old,
+          events: old.events.filter((e: any) => e.id !== eventId),
+        };
+      });
+
+      return { previous };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previous) {
+        context.previous.forEach(([key, data]) => {
+          queryClient.setQueryData(key, data);
+        });
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.regattas.all });
     },
   });
@@ -230,7 +297,38 @@ export function useCreateRace() {
   return useMutation({
     mutationFn: ({ eventId, race }: { eventId: string; race: RaceFormData }) =>
       createRace(accessToken!, eventId, race),
-    onSuccess: () => {
+    networkMode: 'offlineFirst',
+    retry: 3,
+    onMutate: async ({ eventId, race }) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.regattas.all });
+      const previous = queryClient.getQueriesData({ queryKey: queryKeys.regattas.all });
+
+      // Add temp race to event
+      queryClient.setQueriesData({ queryKey: queryKeys.regattas.all }, (old: any) => {
+        if (!old?.events) return old;
+        return {
+          ...old,
+          events: old.events.map((e: any) =>
+            e.id === eventId
+              ? {
+                  ...e,
+                  races: [...(e.races || []), { ...race, id: `temp-${Date.now()}`, results: [] }],
+                }
+              : e
+          ),
+        };
+      });
+
+      return { previous };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previous) {
+        context.previous.forEach(([key, data]) => {
+          queryClient.setQueryData(key, data);
+        });
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.regattas.all });
     },
   });
@@ -243,7 +341,34 @@ export function useUpdateRace() {
   return useMutation({
     mutationFn: ({ raceId, updates }: { raceId: string; updates: Partial<RaceFormData> }) =>
       updateRace(accessToken!, raceId, updates),
-    onSuccess: () => {
+    networkMode: 'offlineFirst',
+    retry: 3,
+    onMutate: async ({ raceId, updates }) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.regattas.all });
+      const previous = queryClient.getQueriesData({ queryKey: queryKeys.regattas.all });
+
+      // Update race in all caches
+      queryClient.setQueriesData({ queryKey: queryKeys.regattas.all }, (old: any) => {
+        if (!old?.events) return old;
+        return {
+          ...old,
+          events: old.events.map((e: any) => ({
+            ...e,
+            races: e.races?.map((r: any) => (r.id === raceId ? { ...r, ...updates } : r)),
+          })),
+        };
+      });
+
+      return { previous };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previous) {
+        context.previous.forEach(([key, data]) => {
+          queryClient.setQueryData(key, data);
+        });
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.regattas.all });
     },
   });
@@ -255,7 +380,34 @@ export function useDeleteRace() {
 
   return useMutation({
     mutationFn: (raceId: string) => deleteRace(accessToken!, raceId),
-    onSuccess: () => {
+    networkMode: 'offlineFirst',
+    retry: 3,
+    onMutate: async (raceId) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.regattas.all });
+      const previous = queryClient.getQueriesData({ queryKey: queryKeys.regattas.all });
+
+      // Remove race from all caches
+      queryClient.setQueriesData({ queryKey: queryKeys.regattas.all }, (old: any) => {
+        if (!old?.events) return old;
+        return {
+          ...old,
+          events: old.events.map((e: any) => ({
+            ...e,
+            races: e.races?.filter((r: any) => r.id !== raceId),
+          })),
+        };
+      });
+
+      return { previous };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previous) {
+        context.previous.forEach(([key, data]) => {
+          queryClient.setQueryData(key, data);
+        });
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.regattas.all });
     },
   });
@@ -272,7 +424,38 @@ export function useAddResult() {
   return useMutation({
     mutationFn: ({ raceId, result }: { raceId: string; result: RaceResultFormData }) =>
       addResult(accessToken!, raceId, result),
-    onSuccess: () => {
+    networkMode: 'offlineFirst',
+    retry: 3,
+    onMutate: async ({ raceId, result }) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.regattas.all });
+      const previous = queryClient.getQueriesData({ queryKey: queryKeys.regattas.all });
+
+      // Add result to race in all caches
+      queryClient.setQueriesData({ queryKey: queryKeys.regattas.all }, (old: any) => {
+        if (!old?.events) return old;
+        return {
+          ...old,
+          events: old.events.map((e: any) => ({
+            ...e,
+            races: e.races?.map((r: any) =>
+              r.id === raceId
+                ? { ...r, results: [...(r.results || []), { ...result, id: `temp-${Date.now()}` }] }
+                : r
+            ),
+          })),
+        };
+      });
+
+      return { previous };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previous) {
+        context.previous.forEach(([key, data]) => {
+          queryClient.setQueryData(key, data);
+        });
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.regattas.all });
     },
   });
@@ -285,7 +468,37 @@ export function useBatchAddResults() {
   return useMutation({
     mutationFn: ({ raceId, results }: { raceId: string; results: RaceResultFormData[] }) =>
       batchAddResults(accessToken!, raceId, results),
-    onSuccess: () => {
+    networkMode: 'offlineFirst',
+    retry: 3,
+    onMutate: async ({ raceId, results }) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.regattas.all });
+      const previous = queryClient.getQueriesData({ queryKey: queryKeys.regattas.all });
+
+      // Add multiple results to race in all caches
+      queryClient.setQueriesData({ queryKey: queryKeys.regattas.all }, (old: any) => {
+        if (!old?.events) return old;
+        const tempResults = results.map((r, i) => ({ ...r, id: `temp-${Date.now()}-${i}` }));
+        return {
+          ...old,
+          events: old.events.map((e: any) => ({
+            ...e,
+            races: e.races?.map((r: any) =>
+              r.id === raceId ? { ...r, results: [...(r.results || []), ...tempResults] } : r
+            ),
+          })),
+        };
+      });
+
+      return { previous };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previous) {
+        context.previous.forEach(([key, data]) => {
+          queryClient.setQueryData(key, data);
+        });
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.regattas.all });
     },
   });
@@ -303,7 +516,39 @@ export function useUpdateResult() {
       resultId: string;
       updates: Partial<RaceResultFormData>;
     }) => updateResult(accessToken!, resultId, updates),
-    onSuccess: () => {
+    networkMode: 'offlineFirst',
+    retry: 3,
+    onMutate: async ({ resultId, updates }) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.regattas.all });
+      const previous = queryClient.getQueriesData({ queryKey: queryKeys.regattas.all });
+
+      // Update result in all caches
+      queryClient.setQueriesData({ queryKey: queryKeys.regattas.all }, (old: any) => {
+        if (!old?.events) return old;
+        return {
+          ...old,
+          events: old.events.map((e: any) => ({
+            ...e,
+            races: e.races?.map((r: any) => ({
+              ...r,
+              results: r.results?.map((res: any) =>
+                res.id === resultId ? { ...res, ...updates } : res
+              ),
+            })),
+          })),
+        };
+      });
+
+      return { previous };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previous) {
+        context.previous.forEach(([key, data]) => {
+          queryClient.setQueryData(key, data);
+        });
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.regattas.all });
     },
   });

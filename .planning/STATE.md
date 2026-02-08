@@ -4,9 +4,9 @@
 
 **Milestone:** v3.0 — App Redesign
 **Phase:** 33 (Regattas & Rankings Migration) — In Progress
-**Plan:** 3/6 complete
-**Status:** Phase 33 in progress. Plan 33-03 complete: Race day WebSocket infrastructure implemented with server-side event broadcasting (raceday:*), client hooks for live updates (useRaceDaySocket, useConnectionHealth), and connection health indicator. Real-time race results and rankings now broadcast via Socket.IO with debounced cache invalidation.
-**Last activity:** 2026-02-08 — Completed 33-03-PLAN.md (race day WebSocket infrastructure)
+**Plan:** 4/6 complete
+**Status:** Phase 33 in progress. Plan 33-04 complete: Animated ranking rows with Framer Motion layout transitions, inline speed sparklines (recharts), NCAA CSV export dialog, and polished results entry form with V3 visual hierarchy. Rankings now animate smoothly on position changes with performance optimization (top 20 rows only).
+**Last activity:** 2026-02-08 — Completed 33-04-PLAN.md (animated rankings, NCAA export, polished results entry)
 
 ## Project Reference
 
@@ -94,7 +94,7 @@ v3.1 Progress: ░░░░░░░░░░░░░░ (0 phases complete)
 | 30 | Erg Data Migration | Complete ✅ | 4/4 |
 | 31 | Seat Racing Migration | Complete ✅ | 6/6 |
 | 32 | Training & Attendance Migration | Complete ✅ | 6/6 |
-| 33 | Regattas & Rankings Migration | In Progress | 2/6 |
+| 33 | Regattas & Rankings Migration | In Progress | 4/6 |
 | 33-36 | Feature Modules | Planned | TBD |
 
 v3.0 Progress: ████████████████████░ (9 phases complete, 1 in progress, 3 remaining)
