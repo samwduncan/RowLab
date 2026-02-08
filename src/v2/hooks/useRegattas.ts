@@ -134,8 +134,38 @@ export function useCreateRegatta() {
 
   return useMutation({
     mutationFn: (regatta: RegattaFormData) => createRegatta(accessToken!, regatta),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.regattas.lists() });
+    networkMode: 'offlineFirst', // Queue while offline (RT-04)
+    retry: 3,
+    onMutate: async (newRegatta) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: queryKeys.regattas.lists() });
+
+      // Snapshot previous value
+      const previous = queryClient.getQueryData(queryKeys.regattas.lists());
+
+      // Optimistically update cache with temp ID
+      queryClient.setQueryData(queryKeys.regattas.lists(), (old: Regatta[] | undefined) => {
+        const tempRegatta: Regatta = {
+          ...newRegatta,
+          id: `temp-${Date.now()}`,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          events: [],
+        } as Regatta;
+        return old ? [...old, tempRegatta] : [tempRegatta];
+      });
+
+      return { previous };
+    },
+    onError: (err, variables, context) => {
+      // Rollback on error
+      if (context?.previous) {
+        queryClient.setQueryData(queryKeys.regattas.lists(), context.previous);
+      }
+    },
+    onSettled: () => {
+      // Always refetch after mutation settles
+      queryClient.invalidateQueries({ queryKey: queryKeys.regattas.all });
     },
   });
 }
@@ -150,9 +180,45 @@ export function useUpdateRegatta() {
   return useMutation({
     mutationFn: ({ id, updates }: { id: string; updates: Partial<RegattaFormData> }) =>
       updateRegatta(accessToken!, id, updates),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.regattas.lists() });
-      queryClient.setQueryData(queryKeys.regattas.detail(data.id), data);
+    networkMode: 'offlineFirst',
+    retry: 3,
+    onMutate: async ({ id, updates }) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: queryKeys.regattas.lists() });
+      await queryClient.cancelQueries({ queryKey: queryKeys.regattas.detail(id) });
+
+      // Snapshot previous values
+      const previousList = queryClient.getQueryData(queryKeys.regattas.lists());
+      const previousDetail = queryClient.getQueryData(queryKeys.regattas.detail(id));
+
+      // Optimistically update list cache
+      queryClient.setQueryData(queryKeys.regattas.lists(), (old: Regatta[] | undefined) => {
+        if (!old) return old;
+        return old.map((r) => (r.id === id ? { ...r, ...updates } : r));
+      });
+
+      // Optimistically update detail cache
+      queryClient.setQueryData(queryKeys.regattas.detail(id), (old: Regatta | undefined) => {
+        if (!old) return old;
+        return { ...old, ...updates };
+      });
+
+      return { previousList, previousDetail, id };
+    },
+    onError: (err, variables, context) => {
+      // Rollback on error
+      if (context) {
+        if (context.previousList) {
+          queryClient.setQueryData(queryKeys.regattas.lists(), context.previousList);
+        }
+        if (context.previousDetail) {
+          queryClient.setQueryData(queryKeys.regattas.detail(context.id), context.previousDetail);
+        }
+      }
+    },
+    onSettled: (data, error, { id }) => {
+      // Always refetch after mutation settles
+      queryClient.invalidateQueries({ queryKey: queryKeys.regattas.all });
     },
   });
 }
@@ -166,8 +232,32 @@ export function useDeleteRegatta() {
 
   return useMutation({
     mutationFn: (id: string) => deleteRegatta(accessToken!, id),
-    onSuccess: (_, id) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.regattas.lists() });
+    networkMode: 'offlineFirst',
+    retry: 3,
+    onMutate: async (id) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: queryKeys.regattas.lists() });
+
+      // Snapshot previous value
+      const previous = queryClient.getQueryData(queryKeys.regattas.lists());
+
+      // Optimistically remove from cache
+      queryClient.setQueryData(queryKeys.regattas.lists(), (old: Regatta[] | undefined) => {
+        if (!old) return old;
+        return old.filter((r) => r.id !== id);
+      });
+
+      return { previous, id };
+    },
+    onError: (err, variables, context) => {
+      // Rollback on error
+      if (context?.previous) {
+        queryClient.setQueryData(queryKeys.regattas.lists(), context.previous);
+      }
+    },
+    onSettled: (_, __, id) => {
+      // Always refetch and remove detail cache
+      queryClient.invalidateQueries({ queryKey: queryKeys.regattas.all });
       queryClient.removeQueries({ queryKey: queryKeys.regattas.detail(id) });
     },
   });

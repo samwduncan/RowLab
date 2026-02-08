@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Plus, FileSpreadsheet } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
+import { Plus, FileSpreadsheet, HelpCircle } from 'lucide-react';
 import { Dialog, Tab } from '@headlessui/react';
 import {
   RankingsView,
@@ -12,10 +13,13 @@ import {
   useAddExternalRanking,
   useBoatClassRankings,
 } from '../hooks/useTeamRankings';
+import { useRegattaKeyboard, getRegattaShortcuts } from '../hooks/useRegattaKeyboard';
+import { queryKeys } from '../lib/queryKeys';
 import { getBoatClasses } from '../utils/marginCalculations';
 import type { ExternalRankingFormData } from '../types/regatta';
 
 export function RankingsPage() {
+  const queryClient = useQueryClient();
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [selectedBoatClass, setSelectedBoatClass] = useState<string | null>(null);
@@ -28,6 +32,16 @@ export function RankingsPage() {
   const addRanking = useAddExternalRanking();
   const boatClasses = getBoatClasses();
   const { data: rankings } = useBoatClassRankings(selectedBoatClass || undefined);
+
+  // Keyboard shortcuts
+  const { showHelp, setShowHelp } = useRegattaKeyboard({
+    onRefresh: () => queryClient.invalidateQueries({ queryKey: queryKeys.rankings.all }),
+    onExport: () => setIsExportOpen(true),
+    onEscape: () => {
+      if (isImportOpen) setIsImportOpen(false);
+      if (isExportOpen) setIsExportOpen(false);
+    },
+  });
 
   const handleSelectTeam = (teamName: string, boatClass: string) => {
     setSelectedComparison({ opponent: teamName, boatClass });
@@ -201,6 +215,45 @@ export function RankingsPage() {
         onClose={() => setIsExportOpen(false)}
         rankings={rankings || []}
       />
+
+      {/* Keyboard Shortcuts Help */}
+      <Dialog open={showHelp} onClose={() => setShowHelp(false)} className="relative z-50">
+        <div className="fixed inset-0 bg-ink-deep/80 backdrop-blur-sm" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <Dialog.Panel className="w-full max-w-md bg-ink-well rounded-xl shadow-xl p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <HelpCircle className="w-5 h-5 text-txt-secondary" />
+              <Dialog.Title className="text-lg font-semibold text-txt-primary">
+                Keyboard Shortcuts
+              </Dialog.Title>
+            </div>
+            <div className="space-y-2">
+              {getRegattaShortcuts({
+                hasRefresh: true,
+                hasExport: true,
+                hasEscape: true,
+              })
+                .filter((s) => s.available)
+                .map((shortcut) => (
+                  <div key={shortcut.key} className="flex items-center justify-between py-2">
+                    <span className="text-sm text-txt-secondary">{shortcut.description}</span>
+                    <kbd className="px-2 py-1 text-xs font-mono bg-ink-raised text-txt-primary rounded border border-bdr-default">
+                      {shortcut.key}
+                    </kbd>
+                  </div>
+                ))}
+            </div>
+            <button
+              onClick={() => setShowHelp(false)}
+              className="mt-6 w-full px-4 py-2 text-sm font-medium
+                       bg-accent-primary text-white rounded-lg
+                       hover:bg-accent-primary-hover transition-colors"
+            >
+              Got it
+            </button>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
     </div>
   );
 }
