@@ -3,10 +3,10 @@
 ## Current Status
 
 **Milestone:** v3.0 — App Redesign
-**Phase:** 31 (Seat Racing Migration) — In Progress
-**Plan:** 5/6 complete (31-01 through 31-05 done)
-**Status:** Phase 31 in progress. All seat racing pages migrated to V3 design tokens with keyboard shortcuts, optimistic UI, and skeleton loaders. Matrix planner has driver.js guided tour (4 steps), balance score as numeric progress bar, and Generate Session pre-fills wizard. Keyboard shortcuts: N (new), R (recalculate), ? (help), Escape (close). No spinners remain - all loading states use skeletons.
-**Last activity:** 2026-02-08 — Completed 31-05-PLAN.md
+**Phase:** 31 (Seat Racing Migration) — Complete
+**Plan:** 6/6 complete
+**Status:** Phase 31 complete. All seat racing pages migrated to V3 design tokens with 3 new animated components (ConfidenceRing, ELOSparkline, SegmentedControl), RankingDetailPanel slide-out, 3-step session wizard with segmented time input, matrix planner with driver.js tour, keyboard shortcuts, optimistic UI, and skeleton loaders. Fixed composite ranking bug (GitHub #4). 11 commits total.
+**Last activity:** 2026-02-08 — Completed Phase 31 (all 6 plans)
 
 ## Project Reference
 
@@ -92,10 +92,10 @@ v3.1 Progress: ░░░░░░░░░░░░░░ (0 phases complete)
 | 28 | Athletes Feature Migration | Complete ✅ | 8/8 |
 | 29 | Lineup Builder Migration | Complete ✅ | 5/5 |
 | 30 | Erg Data Migration | Complete ✅ | 4/4 |
-| 31 | Seat Racing Migration | In Progress | 5/6 |
+| 31 | Seat Racing Migration | Complete ✅ | 6/6 |
 | 32-36 | Feature Modules | Planned | TBD |
 
-v3.0 Progress: █████████████████░░ (7 phases complete, 1 in progress, 5 remaining)
+v3.0 Progress: ██████████████████░ (8 phases complete, 5 remaining)
 
 ## Quick Context
 
@@ -492,9 +492,9 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-02-08
-**Stopped at:** Completed 31-05-PLAN.md (Matrix planner, keyboard shortcuts, optimistic UI, skeleton loaders)
+**Stopped at:** Phase 31 complete. Ready for Phase 32 (Training & Attendance Migration).
 **Resume file:** None
-**Resume with:** `/gsd:execute-plan 31-06` to continue Seat Racing Migration (if plan exists)
+**Resume with:** `/gsd:plan-phase 32` to plan Training & Attendance Migration
 
 ## Roadmap Evolution
 
@@ -519,7 +519,7 @@ Key architectural decisions carrying forward:
 
 **v3.0 — App Redesign** (In Progress)
 
-Phase 30 (Erg Data Migration) complete. Ready for Phase 31 (Seat Racing Migration).
+Phase 31 (Seat Racing Migration) complete. Ready for Phase 32 (Training & Attendance Migration).
 
 **v3.0 Progress:**
 - Phase 24: Foundation & Design System ✅
@@ -529,9 +529,10 @@ Phase 30 (Erg Data Migration) complete. Ready for Phase 31 (Seat Racing Migratio
 - Phase 28: Athletes Feature Migration ✅
 - Phase 29: Lineup Builder Migration ✅
 - Phase 30: Erg Data Migration ✅
-- Phases 31-36: Planned
+- Phase 31: Seat Racing Migration ✅
+- Phases 32-36: Planned
 
-To continue, run `/gsd:execute-phase 31` to begin Seat Racing Migration.
+To continue, run `/gsd:plan-phase 32` to plan Training & Attendance Migration.
 
 Phase 13 delivered the cross-feature integration layer:
 

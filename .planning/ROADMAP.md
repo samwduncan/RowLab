@@ -1141,10 +1141,10 @@ Plans:
 **Plans:** 4 plans
 
 Plans:
-- [ ] 30-01-PLAN.md — V3 design token migration for all erg components (14 components + PRCelebration)
-- [ ] 30-02-PLAN.md — Skeleton loaders + keyboard shortcuts (CW-03, CW-02)
-- [ ] 30-03-PLAN.md — Improved leaderboard + PR celebration integration + gamification (ERG-01, ERG-02, ERG-03)
-- [ ] 30-04-PLAN.md — V1 legacy cleanup + human verification
+- [x] 30-01-PLAN.md — V3 design token migration for all erg components (14 components + PRCelebration)
+- [x] 30-02-PLAN.md — Skeleton loaders + keyboard shortcuts (CW-03, CW-02)
+- [x] 30-03-PLAN.md — Improved leaderboard + PR celebration integration + gamification (ERG-01, ERG-02, ERG-03)
+- [x] 30-04-PLAN.md — V1 legacy cleanup + human verification
 
 ---
 
@@ -1164,7 +1164,15 @@ Plans:
 5. User can use keyboard shortcuts for common actions
 6. User sees skeleton loaders instead of spinners on every page
 
-**Plans:** TBD
+**Plans:** 6 plans
+
+Plans:
+- [x] 31-01-PLAN.md — V3 design token migration + ConfidenceRing, ELOSparkline, SegmentedControl
+- [x] 31-02-PLAN.md — Data visualizations: Bradley-Terry gradient bands, ProbabilityMatrix hues, ComparisonGraph click-to-expand
+- [x] 31-03-PLAN.md — Ranking detail slide-out panel (ELO history, composite breakdown, recent sessions)
+- [x] 31-04-PLAN.md — Session wizard overhaul: 3-step flow, horizontal slides, segmented time input, rankings impact preview
+- [x] 31-05-PLAN.md — Matrix planner (driver.js tour, generate session), keyboard shortcuts, optimistic UI, skeleton loaders
+- [x] 31-06-PLAN.md — Human verification checkpoint
 
 ---
 
@@ -1347,10 +1355,10 @@ The following requirements apply across all v3.0 phases:
 | 25 | State Management Migration | 5 | 7 | Complete ✅ |
 | 26 | Route & Navigation Cleanup | 4 | 2 | Complete ✅ |
 | 27 | Dashboard Rebuild | 12 | 7 | Complete ✅ |
-| 28 | Athletes Feature Migration | 7 | 8 | Planned |
-| 29 | Lineup Builder Migration | 7 | 5 | Planned |
-| 30 | Erg Data Migration | 6 | TBD | Not started |
-| 31 | Seat Racing Migration | 6 | TBD | Not started |
+| 28 | Athletes Feature Migration | 7 | 8 | Complete ✅ |
+| 29 | Lineup Builder Migration | 7 | 5 | Complete ✅ |
+| 30 | Erg Data Migration | 6 | 4 | Complete ✅ |
+| 31 | Seat Racing Migration | 6 | 6 | Complete ✅ |
 | 32 | Training & Attendance Migration | 9 | TBD | Not started |
 | 33 | Regattas & Rankings Migration | 10 | TBD | Not started |
 | 34 | Gamification & Activity Feed Migration | 9 | TBD | Not started |
