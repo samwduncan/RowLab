@@ -31,7 +31,7 @@ function formatDate(dateString: string): string {
   return date.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
-    year: 'numeric'
+    year: 'numeric',
   });
 }
 
@@ -40,37 +40,31 @@ function formatDate(dateString: string): string {
  */
 const testTypeColors: Record<TestType, { bg: string; border: string; text: string }> = {
   '2k': {
-    bg: 'bg-rose-500/10',
-    border: 'border-rose-500/30',
-    text: 'text-rose-400',
+    bg: 'bg-data-poor/10',
+    border: 'border-data-poor/30',
+    text: 'text-data-poor',
   },
   '6k': {
-    bg: 'bg-blue-500/10',
-    border: 'border-blue-500/30',
-    text: 'text-blue-400',
+    bg: 'bg-data-good/10',
+    border: 'border-data-good/30',
+    text: 'text-data-good',
   },
   '30min': {
-    bg: 'bg-green-500/10',
-    border: 'border-green-500/30',
-    text: 'text-green-400',
+    bg: 'bg-data-excellent/10',
+    border: 'border-data-excellent/30',
+    text: 'text-data-excellent',
   },
   '500m': {
-    bg: 'bg-amber-500/10',
-    border: 'border-amber-500/30',
-    text: 'text-amber-400',
+    bg: 'bg-data-warning/10',
+    border: 'border-data-warning/30',
+    text: 'text-data-warning',
   },
 };
 
 /**
  * Display personal best for a single test type
  */
-function PersonalBestItem({
-  testType,
-  pb
-}: {
-  testType: TestType;
-  pb: PersonalBests[TestType]
-}) {
+function PersonalBestItem({ testType, pb }: { testType: TestType; pb: PersonalBests[TestType] }) {
   const colors = testTypeColors[testType];
 
   if (!pb) {
@@ -104,9 +98,7 @@ function PersonalBestItem({
       <div className="grid grid-cols-2 gap-2 pt-3 border-t border-bdr-subtle">
         <div>
           <div className="text-xs text-txt-tertiary mb-1">Split</div>
-          <div className="text-sm font-mono text-txt-secondary">
-            {formatSplit(pb.splitSeconds)}
-          </div>
+          <div className="text-sm font-mono text-txt-secondary">{formatSplit(pb.splitSeconds)}</div>
         </div>
         <div>
           <div className="text-xs text-txt-tertiary mb-1">Watts</div>
@@ -125,7 +117,7 @@ function PersonalBestItem({
 export function PersonalBestsCard({
   personalBests,
   testTypes = ['2k', '6k', '30min', '500m'],
-  className = ''
+  className = '',
 }: PersonalBestsCardProps) {
   return (
     <div className={`bg-card-bg rounded-lg border border-card-border shadow-card ${className}`}>
@@ -138,11 +130,7 @@ export function PersonalBestsCard({
       <div className="p-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {testTypes.map((testType) => (
-            <PersonalBestItem
-              key={testType}
-              testType={testType}
-              pb={personalBests[testType]}
-            />
+            <PersonalBestItem key={testType} testType={testType} pb={personalBests[testType]} />
           ))}
         </div>
       </div>
