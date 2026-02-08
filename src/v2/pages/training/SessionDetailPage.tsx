@@ -4,6 +4,7 @@ import { Play, Pencil, Trash, Clock, Users, Copy, Calendar } from '@phosphor-ico
 import { useSession, useUpdateSession, useDeleteSession } from '../../hooks/useSessions';
 import { Breadcrumbs } from '../../features/shared/components/Breadcrumbs';
 import { TrainingShortcutsHelp } from '../../features/training/components/TrainingShortcutsHelp';
+import { SessionDetailSkeleton } from '../../features/sessions/components/SessionSkeleton';
 import { useTrainingKeyboard, getTrainingShortcuts } from '../../hooks/useTrainingKeyboard';
 import type { PieceSegment } from '../../types/session';
 
@@ -67,17 +68,7 @@ export function SessionDetailPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="p-6 space-y-6">
-        <div className="h-8 bg-bg-surface rounded w-48 animate-pulse" />
-        <div className="h-24 bg-bg-surface-elevated rounded-lg animate-pulse" />
-        <div className="space-y-3">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-16 bg-bg-surface-elevated rounded-lg animate-pulse" />
-          ))}
-        </div>
-      </div>
-    );
+    return <SessionDetailSkeleton />;
   }
 
   if (error || !session) {
