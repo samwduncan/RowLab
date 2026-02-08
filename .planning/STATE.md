@@ -4,10 +4,10 @@
 
 **Milestone:** v3.0 — App Redesign
 **Phase:** 37 (Warm Copper Design Sweep) — In Progress
-**Plan:** 5/6 complete
-**Status:** Gamification + Settings copper redesign complete. All 6 remaining pages (achievements, challenges, recruiting, beta home, advanced rankings, settings) now have copper editorial design. Phase 37 nearly complete.
-**Next Plan:** 37-06 (verification and cleanup)
-**Last activity:** 2026-02-08 — Completed 37-05-PLAN.md (Gamification & Settings Copper Editorial)
+**Plan:** 2/6 complete
+**Status:** Athlete/shared pages copper redesign complete (Athletes, Attendance, Erg Tests, MeDashboard). Linear-inspired table design established. Next: Training pages (37-03).
+**Next Plan:** 37-03 (Training pages copper editorial)
+**Last activity:** 2026-02-08 — Completed 37-02-PLAN.md (Athlete Pages Copper Sweep)
 
 ## Project Reference
 
@@ -99,7 +99,7 @@ v3.1 Progress: ░░░░░░░░░░░░░░ (0 phases complete)
 | 34 | Gamification & Activity Feed Migration | Not started | TBD |
 | 35 | Mobile Responsiveness & Performance | Not started | TBD |
 | 36 | V1/V2 Cleanup | Not started | TBD |
-| 37 | Warm Copper Design Sweep | In Progress | 5/6 |
+| 37 | Warm Copper Design Sweep | In Progress | 2/6 |
 
 v3.0 Progress: ████████████████████░ (9 phases complete, 1 in progress, 4 remaining)
 

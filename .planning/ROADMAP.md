@@ -1224,12 +1224,12 @@ Plans:
 **Plans:** 6 plans
 
 Plans:
-- [ ] 33-01-PLAN.md — V3 token migration for regatta components (10 files)
-- [ ] 33-02-PLAN.md — V3 token migration for rankings components + pages (7 files)
-- [ ] 33-03-PLAN.md — WebSocket infrastructure (server race day events, client hooks, connection indicator)
-- [ ] 33-04-PLAN.md — Animated rankings, NCAA export, improved results entry
-- [ ] 33-05-PLAN.md — Keyboard shortcuts, optimistic UI, skeleton loaders, offline queue
-- [ ] 33-06-PLAN.md — Human verification checkpoint
+- [x] 33-01-PLAN.md — V3 token migration for regatta components (10 files)
+- [x] 33-02-PLAN.md — V3 token migration for rankings components + pages (7 files)
+- [x] 33-03-PLAN.md — WebSocket infrastructure (server race day events, client hooks, connection indicator)
+- [x] 33-04-PLAN.md — Animated rankings, NCAA export, improved results entry
+- [x] 33-05-PLAN.md — Keyboard shortcuts, optimistic UI, skeleton loaders, offline queue
+- [x] 33-06-PLAN.md — Human verification checkpoint
 
 ---
 
@@ -1291,6 +1291,46 @@ Plans:
 3. Developer can work without feature toggles (removed after full cutover)
 
 **Plans:** TBD
+
+---
+
+### Phase 37: App-Wide Warm Copper Editorial Design Sweep
+
+**Goal:** Apply the warm copper editorial design system (established in Phase 33 regattas/rankings redesign) across ALL remaining app pages — hero headers, copper accent buttons, visible card borders, left accent bars, section headers with copper dot indicators, and theme-aware tokens that work in dark/light/field.
+
+**Dependencies:** Phase 33 (design pattern established)
+
+**Requirements:** DS-37-01 through DS-37-06
+
+**Success Criteria:**
+1. Every page has a hero header with copper category label + serif title (matching regattas/rankings pattern)
+2. All primary action buttons use copper gradient with glow shadow (not blue)
+3. All cards use visible `border-ink-border` instead of invisible `white/[0.xx]` gradient wrappers
+4. All section headers use copper dot indicator + copper label + gradient divider pattern
+5. All tab navigation uses copper underlines (not blue)
+6. All empty states use copper-tinted icons, serif typography, and visible card borders
+7. Design works correctly across dark, light, and field themes
+
+Plans:
+- [ ] 37-01-PLAN.md — Coach pages (Dashboard, Fleet, Availability, Whiteboard, Training, RaceDay)
+- [ ] 37-02-PLAN.md — Athlete/Shared pages (Athletes, Attendance, ErgTests, AthleteDetail, MeDashboard)
+- [ ] 37-03-PLAN.md — Training pages (Sessions, SessionDetail, LiveSession)
+- [ ] 37-04-PLAN.md — Builder pages (LineupBuilder, SeatRacing, MatrixPlanner)
+- [ ] 37-05-PLAN.md — Gamification & Other pages (Achievements, Challenges, Recruiting, BetaHome, AdvancedRankings, Settings)
+- [ ] 37-06-PLAN.md — Human verification checkpoint
+
+**Details:**
+
+The Phase 33 regattas/rankings redesign established a clear visual pattern:
+- **Hero headers:** `text-[11px] font-semibold uppercase tracking-[0.2em] text-accent-copper` category label + `text-4xl font-display font-bold text-ink-bright` title
+- **Copper buttons:** `bg-gradient-to-b from-accent-copper to-accent-copper-hover text-white shadow-glow-copper`
+- **Card borders:** `border border-ink-border` replacing invisible `bg-gradient-to-b from-white/[0.12] to-white/[0.02]` wrappers
+- **Left accent bars:** `w-1 bg-accent-copper` on card left edges
+- **Section headers:** Copper dot + copper label + `bg-gradient-to-r from-accent-copper/20 to-transparent` divider
+- **Tab underlines:** `border-accent-copper` instead of `border-accent-primary`
+- **Empty states:** `bg-ink-raised border border-ink-border` with copper-tinted icons and top copper gradient accent
+
+Each plan handles ~4-6 pages grouped by feature area. Subagents apply the established patterns mechanically.
 
 ---
 
@@ -1376,12 +1416,13 @@ The following requirements apply across all v3.0 phases:
 | 30 | Erg Data Migration | 6 | 4 | Complete ✅ |
 | 31 | Seat Racing Migration | 6 | 6 | Complete ✅ |
 | 32 | Training & Attendance Migration | 9 | 6 | Complete ✅ |
-| 33 | Regattas & Rankings Migration | 10 | 6 | Not started |
+| 33 | Regattas & Rankings Migration | 10 | 6 | Complete ✅ |
 | 34 | Gamification & Activity Feed Migration | 9 | TBD | Not started |
 | 35 | Mobile Responsiveness & Performance | 15 | TBD | Not started |
 | 36 | V1/V2 Cleanup | 3 | TBD | Not started |
+| 37 | Warm Copper Design Sweep | 7 | 6 | Not started |
 
-**v3.0 Total:** 101 requirements across 13 phases
+**v3.0 Total:** 108 requirements across 14 phases
 
 ---
 
@@ -1678,4 +1719,4 @@ Ideas evaluated but deferred for future consideration:
 ---
 
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-02-08 — Phase 32 complete (training & attendance migration)*
+*Last updated: 2026-02-08 — Phase 37 added (app-wide warm copper design sweep)*

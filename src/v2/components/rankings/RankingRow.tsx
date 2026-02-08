@@ -74,8 +74,8 @@ export function RankingRow({
       initial={isHighlighted ? { backgroundColor: 'rgba(245, 158, 11, 0.1)' } : false}
       animate={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
       className={`group flex items-center gap-4 px-5 py-3 cursor-pointer
-                  border-b border-white/[0.04] last:border-b-0
-                  hover:bg-white/[0.03] transition-colors duration-150
+                  border-b border-accent-copper/10 last:border-b-0
+                  hover:bg-accent-copper/[0.03] transition-colors duration-150
                   ${isOwnTeam ? 'bg-accent-copper/[0.03]' : ''}`}
       onClick={onClick}
     >

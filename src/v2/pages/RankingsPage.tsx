@@ -159,7 +159,7 @@ export function RankingsPage() {
                           boatClass: prev?.boatClass || boatClasses[0]?.value || '8+',
                         }))
                       }
-                      className="w-full px-4 py-2.5 bg-ink-well border border-white/[0.08] rounded-xl
+                      className="w-full px-4 py-2.5 bg-ink-well border border-accent-copper/20 rounded-xl
                              text-ink-primary focus:outline-none focus:ring-2 focus:ring-accent-primary/30
                              focus:border-accent-primary/50 transition-all"
                     >
@@ -184,7 +184,7 @@ export function RankingsPage() {
                           boatClass: e.target.value,
                         }))
                       }
-                      className="w-full px-4 py-2.5 bg-ink-well border border-white/[0.08] rounded-xl
+                      className="w-full px-4 py-2.5 bg-ink-well border border-accent-copper/20 rounded-xl
                              text-ink-primary focus:outline-none focus:ring-2 focus:ring-accent-primary/30
                              focus:border-accent-primary/50 transition-all"
                     >
@@ -204,8 +204,8 @@ export function RankingsPage() {
                     boatClass={selectedComparison.boatClass}
                   />
                 ) : (
-                  <div className="relative text-center py-16 rounded-2xl border border-white/[0.06] bg-white/[0.01] overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-b from-accent-primary/[0.02] to-transparent pointer-events-none" />
+                  <div className="relative text-center py-16 rounded-2xl border border-accent-copper/20 bg-accent-copper/[0.02] overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-b from-accent-copper/[0.03] to-transparent pointer-events-none" />
                     <p className="text-ink-secondary">Select a team to compare your race history</p>
                   </div>
                 )}
@@ -222,7 +222,7 @@ export function RankingsPage() {
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel
             className="w-full max-w-md rounded-2xl shadow-2xl p-6
-                                   bg-ink-raised border border-white/[0.08]"
+                                   bg-ink-raised border border-accent-copper/20"
           >
             <Dialog.Title className="text-lg font-display font-semibold text-ink-bright mb-4">
               Add External Ranking
@@ -249,7 +249,7 @@ export function RankingsPage() {
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel
             className="w-full max-w-md rounded-2xl shadow-2xl p-6
-                                   bg-ink-raised border border-white/[0.08]"
+                                   bg-ink-raised border border-accent-copper/20"
           >
             <div className="flex items-center gap-2 mb-4">
               <HelpCircle className="w-5 h-5 text-ink-secondary" />
@@ -267,10 +267,10 @@ export function RankingsPage() {
                 .map((shortcut) => (
                   <div
                     key={shortcut.key}
-                    className="flex items-center justify-between py-2.5 border-b border-white/[0.04] last:border-0"
+                    className="flex items-center justify-between py-2.5 border-b border-accent-copper/10 last:border-0"
                   >
                     <span className="text-sm text-ink-body">{shortcut.description}</span>
-                    <kbd className="px-2.5 py-1 text-xs font-mono bg-ink-deep text-ink-primary rounded-lg border border-white/[0.08]">
+                    <kbd className="px-2.5 py-1 text-xs font-mono bg-ink-deep text-ink-primary rounded-lg border border-accent-copper/20">
                       {shortcut.key}
                     </kbd>
                   </div>
@@ -279,9 +279,9 @@ export function RankingsPage() {
             <button
               onClick={() => setShowHelp(false)}
               className="mt-6 w-full px-4 py-2.5 text-sm font-medium
-                       bg-gradient-to-b from-accent-primary to-accent-primary/90
-                       text-white rounded-xl shadow-glow-blue
-                       hover:shadow-glow-blue-lg transition-all duration-150"
+                       bg-gradient-to-b from-accent-copper to-accent-copper/90
+                       text-white rounded-xl shadow-glow-copper
+                       hover:shadow-glow-copper-lg transition-all duration-150"
             >
               Got it
             </button>

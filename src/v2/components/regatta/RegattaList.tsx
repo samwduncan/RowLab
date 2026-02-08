@@ -39,7 +39,7 @@ export function RegattaList({
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="animate-pulse bg-white/[0.02] rounded-2xl h-24 border border-white/[0.06]"
+            className="animate-pulse bg-accent-copper/[0.02] rounded-2xl h-24 border border-accent-copper/[0.15]"
           />
         ))}
       </div>

@@ -197,7 +197,7 @@ export function RegattaDetail({ regatta, onEdit }: RegattaDetailProps) {
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel
             className="w-full max-w-lg rounded-2xl shadow-2xl p-6
-                                   bg-ink-raised border border-white/[0.08]"
+                                   bg-ink-raised border border-accent-copper/20"
           >
             <Dialog.Title className="text-lg font-display font-semibold text-ink-bright mb-4">
               {modalContent?.type === 'event' && 'Add Event'}
@@ -395,7 +395,7 @@ function RaceRow({
             className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-150
               ${
                 hasResults
-                  ? 'bg-white/[0.04] text-ink-secondary border border-white/[0.06] hover:bg-white/[0.08]'
+                  ? 'bg-accent-copper/[0.04] text-ink-secondary border border-accent-copper/[0.15] hover:bg-accent-copper/[0.08]'
                   : 'bg-data-good/[0.10] text-data-good border border-data-good/[0.15] hover:bg-data-good/[0.15]'
               }`}
           >
