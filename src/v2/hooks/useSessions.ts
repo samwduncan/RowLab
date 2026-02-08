@@ -233,14 +233,63 @@ export function useUpcomingSessions(days: number = 7) {
 // ============================================
 
 /**
- * Create session mutation
+ * Create session mutation with optimistic update.
+ * Instantly adds the session to the cache, then rolls back on error.
  */
 export function useCreateSession() {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: createSession,
-    onSuccess: () => {
+    onMutate: async (newSessionInput) => {
+      // Cancel in-flight session queries to avoid overwriting optimistic update
+      await queryClient.cancelQueries({ queryKey: queryKeys.sessions.all });
+
+      // Snapshot previous sessions for rollback
+      const previousSessions = queryClient.getQueriesData({ queryKey: queryKeys.sessions.all });
+
+      // Optimistically add a placeholder session to relevant list caches
+      queryClient.setQueriesData(
+        { queryKey: queryKeys.sessions.lists() },
+        (old: SessionsResponse | undefined) => {
+          if (!old) return old;
+          const optimisticSession: Session = {
+            id: `temp-${Date.now()}`,
+            name: newSessionInput.name,
+            type: newSessionInput.type,
+            date: newSessionInput.date,
+            startTime: newSessionInput.startTime,
+            endTime: newSessionInput.endTime,
+            recurrenceRule: newSessionInput.recurrenceRule,
+            notes: newSessionInput.notes || '',
+            status: 'PLANNED',
+            teamId: '',
+            createdById: '',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            pieces: [],
+            athleteVisibility: newSessionInput.athleteVisibility ?? true,
+          };
+          return {
+            ...old,
+            sessions: [optimisticSession, ...old.sessions],
+            total: old.total + 1,
+          };
+        }
+      );
+
+      return { previousSessions };
+    },
+    onError: (_err, _variables, context) => {
+      // Rollback on error
+      if (context?.previousSessions) {
+        for (const [queryKey, data] of context.previousSessions) {
+          queryClient.setQueryData(queryKey, data);
+        }
+      }
+    },
+    onSettled: () => {
+      // Always refetch after mutation settles to ensure cache consistency
       queryClient.invalidateQueries({ queryKey: queryKeys.sessions.all });
     },
   });

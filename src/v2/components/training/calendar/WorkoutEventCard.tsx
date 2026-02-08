@@ -1,8 +1,9 @@
 // src/v2/components/training/calendar/WorkoutEventCard.tsx
 
 import React from 'react';
-import type { CalendarEvent, WorkoutType, IntensityLevel } from '../../../types/training';
+import type { CalendarEvent } from '../../../types/training';
 import { getWorkoutTypeColor } from '../../../utils/calendarHelpers';
+import { ComplianceBadge } from '../compliance/ComplianceBadge';
 
 interface WorkoutEventCardProps {
   event: CalendarEvent;
@@ -10,19 +11,20 @@ interface WorkoutEventCardProps {
 
 /**
  * Custom event component for react-big-calendar.
- * Displays workout name with type-based color coding.
+ * Displays workout name with type-based color coding and inline NCAA compliance badge.
  */
 export function WorkoutEventCard({ event }: WorkoutEventCardProps) {
   const workoutType = event.resource?.type || 'row';
   const intensity = event.resource?.intensity;
   const tss = event.resource?.tss;
   const isRecurring = event.resource?.isRecurring;
+  const weeklyHours = (event.resource as any)?.weeklyHours;
 
   const bgColor = getWorkoutTypeColor(workoutType);
 
   return (
     <div
-      className="h-full px-1.5 py-0.5 rounded text-xs overflow-hidden"
+      className="h-full px-1.5 py-0.5 rounded text-xs overflow-hidden relative"
       style={{ backgroundColor: bgColor }}
       title={`${event.title}${tss ? ` | TSS: ${tss}` : ''}${intensity ? ` | ${intensity}` : ''}`}
     >
@@ -37,6 +39,11 @@ export function WorkoutEventCard({ event }: WorkoutEventCardProps) {
           </svg>
         )}
         <span className="truncate font-medium text-white">{event.title}</span>
+        {weeklyHours != null && weeklyHours > 0 && (
+          <div className="ml-auto flex-shrink-0">
+            <ComplianceBadge weeklyHours={weeklyHours} size="sm" showHours={false} />
+          </div>
+        )}
       </div>
       {tss && <div className="text-[10px] text-white/80 truncate font-mono">TSS: {tss}</div>}
     </div>
