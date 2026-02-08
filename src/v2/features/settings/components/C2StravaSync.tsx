@@ -116,8 +116,8 @@ export function C2StravaSync() {
                 Strava Write Permission Required
               </p>
               <p className="text-xs text-txt-secondary mt-1">
-                To upload workouts to Strava, please disconnect and reconnect Strava to grant
-                upload permission.
+                To upload workouts to Strava, please disconnect and reconnect Strava to grant upload
+                permission.
               </p>
             </div>
           </div>
@@ -183,7 +183,7 @@ export function C2StravaSync() {
             <button
               onClick={() => syncToStrava()}
               disabled={isSyncing}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-interactive-primary text-txt-inverse border border-interactive-primary hover:bg-interactive-hover hover:shadow-glow-blue transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-interactive-primary text-txt-inverse border border-interactive-primary hover:bg-interactive-hover hover:shadow-glow-copper transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSyncing ? (
                 <>

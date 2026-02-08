@@ -263,7 +263,7 @@ export function RegattasPage() {
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel
             className="w-full max-w-lg rounded-2xl shadow-2xl p-6 max-h-[90vh] overflow-y-auto
-                                   bg-ink-raised border border-white/[0.08]"
+                                   bg-ink-raised border border-accent-copper/20"
           >
             <Dialog.Title className="text-lg font-display font-semibold text-ink-bright mb-4">
               {editingRegatta ? 'Edit Regatta' : 'New Regatta'}
@@ -291,7 +291,7 @@ export function RegattasPage() {
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel
             className="w-full max-w-sm rounded-2xl shadow-2xl p-6
-                                   bg-ink-raised border border-white/[0.08]"
+                                   bg-ink-raised border border-accent-copper/20"
           >
             <Dialog.Title className="text-lg font-display font-semibold text-ink-bright">
               Delete Regatta
@@ -304,7 +304,7 @@ export function RegattasPage() {
               <button
                 onClick={() => setDeleteConfirm(null)}
                 className="px-4 py-2 text-sm font-medium text-ink-secondary
-                         rounded-xl border border-white/[0.08] hover:bg-white/[0.04]
+                         rounded-xl border border-accent-copper/20 hover:bg-accent-copper/[0.04]
                          transition-colors"
               >
                 Cancel
@@ -330,7 +330,7 @@ export function RegattasPage() {
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel
             className="w-full max-w-md rounded-2xl shadow-2xl p-6
-                                   bg-ink-raised border border-white/[0.08]"
+                                   bg-ink-raised border border-accent-copper/20"
           >
             <div className="flex items-center gap-2 mb-4">
               <HelpCircle className="w-5 h-5 text-ink-secondary" />
@@ -348,10 +348,10 @@ export function RegattasPage() {
                 .map((shortcut) => (
                   <div
                     key={shortcut.key}
-                    className="flex items-center justify-between py-2.5 border-b border-white/[0.04] last:border-0"
+                    className="flex items-center justify-between py-2.5 border-b border-accent-copper/10 last:border-0"
                   >
                     <span className="text-sm text-ink-body">{shortcut.description}</span>
-                    <kbd className="px-2.5 py-1 text-xs font-mono bg-ink-deep text-ink-primary rounded-lg border border-white/[0.08]">
+                    <kbd className="px-2.5 py-1 text-xs font-mono bg-ink-deep text-ink-primary rounded-lg border border-accent-copper/20">
                       {shortcut.key}
                     </kbd>
                   </div>
@@ -360,9 +360,9 @@ export function RegattasPage() {
             <button
               onClick={() => setShowHelp(false)}
               className="mt-6 w-full px-4 py-2.5 text-sm font-medium
-                       bg-gradient-to-b from-accent-primary to-accent-primary/90
-                       text-white rounded-xl shadow-glow-blue
-                       hover:shadow-glow-blue-lg transition-all duration-150"
+                       bg-gradient-to-b from-accent-copper to-accent-copper/90
+                       text-white rounded-xl shadow-glow-copper
+                       hover:shadow-glow-copper-lg transition-all duration-150"
             >
               Got it
             </button>

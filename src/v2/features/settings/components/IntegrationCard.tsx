@@ -108,9 +108,7 @@ export function IntegrationCard({
                 </span>
               </div>
               {lastSynced && (
-                <p className="text-xs text-txt-tertiary">
-                  {formatLastSynced(lastSynced)}
-                </p>
+                <p className="text-xs text-txt-tertiary">{formatLastSynced(lastSynced)}</p>
               )}
             </div>
           ) : (
@@ -162,7 +160,7 @@ export function IntegrationCard({
           <button
             onClick={onConnect}
             disabled={connectLoading}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-interactive-primary text-txt-inverse border border-interactive-primary hover:bg-interactive-hover hover:shadow-glow-blue transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-interactive-primary text-txt-inverse border border-interactive-primary hover:bg-interactive-hover hover:shadow-glow-copper transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {connectLoading ? (
               <>
