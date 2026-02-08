@@ -19,7 +19,9 @@ import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 
 import { CalendarToolbar } from './CalendarToolbar';
 import { WorkoutEventCard, getEventStyle } from './WorkoutEventCard';
+import { DragFeedback } from './DragFeedback';
 import { useCalendarEvents, useRescheduleWorkout } from '../../../hooks/useWorkouts';
+import { useNcaaWeeklyHours } from '../../../hooks/useNcaaCompliance';
 import { getMonthBounds, getWeekBounds } from '../../../utils/calendarHelpers';
 import type { CalendarEvent } from '../../../types/training';
 
@@ -39,6 +41,14 @@ const localizer = dateFnsLocalizer({
 // Apply drag-and-drop HOC to Calendar
 const DnDCalendar = withDragAndDrop<CalendarEvent>(Calendar);
 
+type ComplianceStatus = 'ok' | 'warning' | 'violation';
+
+function calculateComplianceStatus(hours: number, limit: number = 20): ComplianceStatus {
+  if (hours >= limit) return 'violation';
+  if (hours >= limit * 0.9) return 'warning';
+  return 'ok';
+}
+
 interface DragDropCalendarProps {
   planId?: string;
   onSelectEvent?: (event: CalendarEvent) => void;
@@ -50,7 +60,8 @@ interface DragDropCalendarProps {
 
 /**
  * Training calendar with drag-drop rescheduling support.
- * Uses react-big-calendar's drag-drop addon with optimistic updates.
+ * Uses react-big-calendar's drag-drop addon with optimistic updates,
+ * spring physics drag feedback, and NCAA compliance preview.
  */
 export function DragDropCalendar({
   planId,
@@ -63,6 +74,7 @@ export function DragDropCalendar({
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<View>('month');
   const [draggingEvent, setDraggingEvent] = useState<CalendarEvent | null>(null);
+  const [dragTargetDate, setDragTargetDate] = useState<Date | null>(null);
 
   // Calculate date range based on current view
   const dateRange = useMemo(() => {
@@ -81,6 +93,24 @@ export function DragDropCalendar({
 
   // Reschedule mutation with optimistic update
   const { rescheduleWorkout, isRescheduling } = useRescheduleWorkout();
+
+  // Fetch current week compliance for drag preview
+  const currentWeekStart = startOfWeek(currentDate, { weekStartsOn: 1 });
+  const { entries: complianceEntries } = useNcaaWeeklyHours(currentWeekStart);
+
+  // Calculate current week hours for compliance preview during drag
+  const currentWeekHours = useMemo(() => {
+    if (complianceEntries.length === 0) return 0;
+    return complianceEntries.reduce((max, entry) => Math.max(max, entry.totalHours), 0);
+  }, [complianceEntries]);
+
+  // Projected compliance status for drag target
+  const projectedComplianceStatus = useMemo((): ComplianceStatus => {
+    if (!draggingEvent || !dragTargetDate) return 'ok';
+    // Simple projection: current week hours (the event's duration is already counted)
+    // In a more sophisticated version, we'd recalculate based on which week the event lands in
+    return calculateComplianceStatus(currentWeekHours);
+  }, [draggingEvent, dragTargetDate, currentWeekHours]);
 
   // Handle navigation
   const handleNavigate = useCallback((newDate: Date) => {
@@ -115,6 +145,7 @@ export function DragDropCalendar({
   // Handle drag start
   const handleDragStart = useCallback((args: { event: CalendarEvent }) => {
     setDraggingEvent(args.event);
+    setDragTargetDate(null);
   }, []);
 
   // Handle event drop (reschedule)
@@ -128,6 +159,7 @@ export function DragDropCalendar({
       ? A
       : never) => {
       setDraggingEvent(null);
+      setDragTargetDate(null);
 
       // Get the workout ID from the event
       const workoutId = event.resource?.workoutId || event.id;
@@ -143,10 +175,8 @@ export function DragDropCalendar({
         return;
       }
 
-      // Don't reschedule recurring event instances (need to edit the parent)
+      // Don't reschedule recurring event instances (per Phase 10-05 decision)
       if (event.resource?.isRecurring && event.resource?.parentId) {
-        // For now, show a message that recurring events can't be dragged
-        // Future: could open a dialog to edit the series or this instance
         console.warn('Cannot reschedule recurring event instance. Edit the parent event instead.');
         return;
       }
@@ -181,19 +211,17 @@ export function DragDropCalendar({
       : never) => {
       // For now, we only support rescheduling (moving events)
       // Resizing would require updating duration, which is a more complex operation
-      // Could be added in a future plan if needed
       console.log('Event resize not implemented:', event.title);
     },
     []
   );
 
   // Determine if an event is draggable
+  // Recurring event instances can't be dragged individually (per Phase 10-05 decision)
   const draggableAccessor = useCallback((event: CalendarEvent) => {
-    // Recurring event instances can't be dragged individually
     if (event.resource?.isRecurring && event.resource?.parentId) {
       return false;
     }
-    // Must have planId to be draggable (required for reschedule API)
     if (!event.resource?.planId) {
       return false;
     }
@@ -202,7 +230,6 @@ export function DragDropCalendar({
 
   // Determine if an event is resizable
   const resizableAccessor = useCallback(() => {
-    // Disable resizing for now
     return false;
   }, []);
 
@@ -266,13 +293,15 @@ export function DragDropCalendar({
         />
       </div>
 
-      {/* Dragging indicator */}
+      {/* Drag feedback overlay with spring physics and compliance preview */}
       {draggingEvent && (
-        <div
-          className="fixed bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-bg-surface-elevated
-                        text-txt-primary text-sm rounded-lg shadow-lg border border-bdr-default z-50"
-        >
-          Moving: <span className="font-medium">{draggingEvent.title}</span>
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
+          <DragFeedback
+            event={draggingEvent}
+            newDate={dragTargetDate}
+            complianceStatus={projectedComplianceStatus}
+            projectedHours={currentWeekHours}
+          />
         </div>
       )}
 
@@ -339,10 +368,14 @@ export function DragDropCalendar({
           outline-offset: 1px;
         }
 
-        /* Drag-drop specific styles */
+        /* Drag-drop specific styles - spring physics visual */
         .drag-drop-calendar .rbc-addons-dnd-drag-preview {
-          opacity: 0.7;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+          opacity: 0.85;
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+          transform: scale(1.02) rotate(1deg);
+          transition:
+            transform 0.15s cubic-bezier(0.2, 0, 0, 1),
+            box-shadow 0.15s ease-out;
         }
 
         .drag-drop-calendar .rbc-addons-dnd-dragged-event {
@@ -395,7 +428,7 @@ export function DragDropCalendar({
         }
 
         .v2[data-theme='dark'] .drag-drop-calendar .rbc-addons-dnd-drag-preview {
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
         }
       `}</style>
     </div>
