@@ -1195,12 +1195,12 @@ Plans:
 **Plans:** 6 plans
 
 Plans:
-- [ ] 32-01-PLAN.md — V3 design token migration for calendar, workout, and periodization components
-- [ ] 32-02-PLAN.md — V3 design token migration for compliance, session, assignment components and pages
-- [ ] 32-03-PLAN.md — Calendar enhancements: simplified 2-step session creation, drag-to-reschedule with spring physics, ComplianceBadge
-- [ ] 32-04-PLAN.md — Attendance UX: one-tap P/L/E/U buttons, attendance streak badges, LiveAttendancePanel
-- [ ] 32-05-PLAN.md — Cross-cutting: keyboard shortcuts, optimistic UI audit, skeleton loaders
-- [ ] 32-06-PLAN.md — Human verification checkpoint
+- [x] 32-01-PLAN.md — V3 design token migration for calendar, workout, and periodization components
+- [x] 32-02-PLAN.md — V3 design token migration for compliance, session, assignment components and pages
+- [x] 32-03-PLAN.md — Calendar enhancements: simplified 2-step session creation, drag-to-reschedule with spring physics, ComplianceBadge
+- [x] 32-04-PLAN.md — Attendance UX: one-tap P/L/E/U buttons, attendance streak badges, LiveAttendancePanel
+- [x] 32-05-PLAN.md — Cross-cutting: keyboard shortcuts, optimistic UI audit, skeleton loaders
+- [x] 32-06-PLAN.md — Human verification checkpoint
 
 ---
 
@@ -1367,7 +1367,7 @@ The following requirements apply across all v3.0 phases:
 | 29 | Lineup Builder Migration | 7 | 5 | Complete ✅ |
 | 30 | Erg Data Migration | 6 | 4 | Complete ✅ |
 | 31 | Seat Racing Migration | 6 | 6 | Complete ✅ |
-| 32 | Training & Attendance Migration | 9 | 6 | Planned |
+| 32 | Training & Attendance Migration | 9 | 6 | Complete ✅ |
 | 33 | Regattas & Rankings Migration | 10 | TBD | Not started |
 | 34 | Gamification & Activity Feed Migration | 9 | TBD | Not started |
 | 35 | Mobile Responsiveness & Performance | 15 | TBD | Not started |
@@ -1670,4 +1670,4 @@ Ideas evaluated but deferred for future consideration:
 ---
 
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-02-07 — Expanded v3.1 milestone to 6 phases (37-42): C2 sync, share card platform, Strava, performance analytics, fitness intelligence, Garmin on-water data*
+*Last updated: 2026-02-08 — Phase 32 complete (training & attendance migration)*
