@@ -1,12 +1,15 @@
 import { useState, useMemo } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { Calendar, BarChart3, ChevronLeft, ChevronRight, CheckCircle } from 'lucide-react';
 import { AttendanceSummary as AttendanceSummaryView } from '@v2/components/athletes/AttendanceSummary';
 import { AttendanceHistory } from '@v2/components/athletes/AttendanceHistory';
 import { AthleteAvatar } from '@v2/components/athletes/AthleteAvatar';
 import { QuickMarkAttendance } from '@v2/features/attendance/components/QuickMarkAttendance';
 import { AttendanceStreakBadge } from '@v2/features/attendance/components/AttendanceStreakBadge';
+import { LiveAttendancePanel } from '@v2/features/attendance/components/LiveAttendancePanel';
 import { useAthletes } from '@v2/hooks/useAthletes';
 import { useAttendance, useAttendanceStreaks } from '@v2/hooks/useAttendance';
+import { useActiveSession } from '@v2/hooks/useSessions';
 import type { AttendanceStatus } from '@v2/types/athletes';
 
 type Tab = 'daily' | 'summary';
@@ -43,6 +46,8 @@ export default function AttendancePage() {
     isBulkRecording,
   } = useAttendance(selectedDate);
   const { streakMap } = useAttendanceStreaks();
+  const { session: activeSession } = useActiveSession();
+  const hasActiveSession = activeSession?.status === 'ACTIVE';
 
   // Find selected athlete
   const selectedAthlete = useMemo(() => {
@@ -155,7 +160,16 @@ export default function AttendancePage() {
       </div>
 
       {/* Content */}
-      <div className="px-6 py-4">
+      <div className={`px-6 py-4 ${hasActiveSession ? 'border-l-2 border-data-excellent/20' : ''}`}>
+        {/* Live Attendance Panel — shown during active sessions */}
+        <AnimatePresence>
+          {hasActiveSession && (
+            <div className="mb-4">
+              <LiveAttendancePanel date={selectedDate} />
+            </div>
+          )}
+        </AnimatePresence>
+
         {activeTab === 'daily' ? (
           <div className="space-y-4">
             {/* Date picker */}
