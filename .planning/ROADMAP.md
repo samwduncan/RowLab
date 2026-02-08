@@ -1192,7 +1192,15 @@ Plans:
 5. User can see attendance streak visibility for each athlete
 6. User sees real-time attendance updates during practice
 
-**Plans:** TBD
+**Plans:** 6 plans
+
+Plans:
+- [ ] 32-01-PLAN.md — V3 design token migration for calendar, workout, and periodization components
+- [ ] 32-02-PLAN.md — V3 design token migration for compliance, session, assignment components and pages
+- [ ] 32-03-PLAN.md — Calendar enhancements: simplified 2-step session creation, drag-to-reschedule with spring physics, ComplianceBadge
+- [ ] 32-04-PLAN.md — Attendance UX: one-tap P/L/E/U buttons, attendance streak badges, LiveAttendancePanel
+- [ ] 32-05-PLAN.md — Cross-cutting: keyboard shortcuts, optimistic UI audit, skeleton loaders
+- [ ] 32-06-PLAN.md — Human verification checkpoint
 
 ---
 
@@ -1359,7 +1367,7 @@ The following requirements apply across all v3.0 phases:
 | 29 | Lineup Builder Migration | 7 | 5 | Complete ✅ |
 | 30 | Erg Data Migration | 6 | 4 | Complete ✅ |
 | 31 | Seat Racing Migration | 6 | 6 | Complete ✅ |
-| 32 | Training & Attendance Migration | 9 | TBD | Not started |
+| 32 | Training & Attendance Migration | 9 | 6 | Planned |
 | 33 | Regattas & Rankings Migration | 10 | TBD | Not started |
 | 34 | Gamification & Activity Feed Migration | 9 | TBD | Not started |
 | 35 | Mobile Responsiveness & Performance | 15 | TBD | Not started |

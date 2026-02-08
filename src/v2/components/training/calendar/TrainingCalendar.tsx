@@ -2,7 +2,16 @@
 
 import React, { useState, useCallback, useMemo } from 'react';
 import { Calendar, dateFnsLocalizer, View } from 'react-big-calendar';
-import { format, parse, startOfWeek, getDay, startOfMonth, endOfMonth, addMonths, subMonths } from 'date-fns';
+import {
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  startOfMonth,
+  endOfMonth,
+  addMonths,
+  subMonths,
+} from 'date-fns';
 import enUS from 'date-fns/locale/en-US';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
@@ -54,16 +63,12 @@ export function TrainingCalendar({
     const monthBounds = getMonthBounds(currentDate);
     return {
       start: subMonths(monthBounds.start, 0), // Start of month
-      end: addMonths(monthBounds.end, 0),     // End of month
+      end: addMonths(monthBounds.end, 0), // End of month
     };
   }, [currentDate, view]);
 
   // Fetch calendar events
-  const { events, isLoading, error } = useCalendarEvents(
-    dateRange.start,
-    dateRange.end,
-    planId
-  );
+  const { events, isLoading, error } = useCalendarEvents(dateRange.start, dateRange.end, planId);
 
   // Handle navigation
   const handleNavigate = useCallback((newDate: Date) => {
@@ -76,22 +81,31 @@ export function TrainingCalendar({
   }, []);
 
   // Handle event selection
-  const handleSelectEvent = useCallback((event: CalendarEvent) => {
-    onSelectEvent?.(event);
-  }, [onSelectEvent]);
+  const handleSelectEvent = useCallback(
+    (event: CalendarEvent) => {
+      onSelectEvent?.(event);
+    },
+    [onSelectEvent]
+  );
 
   // Handle slot selection (for creating new events)
-  const handleSelectSlot = useCallback((slotInfo: { start: Date; end: Date; action: string }) => {
-    if (slotInfo.action === 'click' || slotInfo.action === 'select') {
-      onSelectSlot?.({ start: slotInfo.start, end: slotInfo.end });
-    }
-  }, [onSelectSlot]);
+  const handleSelectSlot = useCallback(
+    (slotInfo: { start: Date; end: Date; action: string }) => {
+      if (slotInfo.action === 'click' || slotInfo.action === 'select') {
+        onSelectSlot?.({ start: slotInfo.start, end: slotInfo.end });
+      }
+    },
+    [onSelectSlot]
+  );
 
   // Custom components
-  const components = useMemo(() => ({
-    toolbar: CalendarToolbar,
-    event: WorkoutEventCard,
-  }), []);
+  const components = useMemo(
+    () => ({
+      toolbar: CalendarToolbar,
+      event: WorkoutEventCard,
+    }),
+    []
+  );
 
   if (error) {
     return (
@@ -104,8 +118,8 @@ export function TrainingCalendar({
   return (
     <div className={`training-calendar ${className}`}>
       {isLoading && (
-        <div className="absolute inset-0 bg-surface-default/50 flex items-center justify-center z-10">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-primary" />
+        <div className="absolute inset-0 bg-bg-surface/50 flex items-center justify-center z-10">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-interactive-primary" />
         </div>
       )}
 
@@ -134,20 +148,20 @@ export function TrainingCalendar({
         />
       </div>
 
-      {/* Calendar Custom Styles */}
+      {/* Calendar Custom Styles - V3 Design Tokens */}
       <style jsx global>{`
         .training-calendar .rbc-calendar {
           font-family: inherit;
-          background-color: var(--surface-default);
-          border: 1px solid var(--bdr-default);
+          background-color: var(--color-bg-surface);
+          border: 1px solid var(--color-border-default);
           border-radius: 0.5rem;
         }
 
         .training-calendar .rbc-header {
           padding: 0.75rem 0.5rem;
           font-weight: 500;
-          color: var(--txt-secondary);
-          border-bottom: 1px solid var(--bdr-default);
+          color: var(--color-text-secondary);
+          border-bottom: 1px solid var(--color-border-default);
         }
 
         .training-calendar .rbc-month-view,
@@ -156,20 +170,20 @@ export function TrainingCalendar({
         }
 
         .training-calendar .rbc-day-bg {
-          background-color: var(--surface-default);
+          background-color: var(--color-bg-surface);
         }
 
         .training-calendar .rbc-day-bg + .rbc-day-bg,
         .training-calendar .rbc-month-row + .rbc-month-row {
-          border-color: var(--bdr-default);
+          border-color: var(--color-border-default);
         }
 
         .training-calendar .rbc-off-range-bg {
-          background-color: var(--surface-sunken);
+          background-color: var(--color-bg-base);
         }
 
         .training-calendar .rbc-today {
-          background-color: var(--accent-primary-faint, rgba(59, 130, 246, 0.1));
+          background-color: var(--glow-good);
         }
 
         .training-calendar .rbc-date-cell {
@@ -178,11 +192,11 @@ export function TrainingCalendar({
         }
 
         .training-calendar .rbc-date-cell > a {
-          color: var(--txt-primary);
+          color: var(--color-text-primary);
         }
 
         .training-calendar .rbc-date-cell.rbc-now > a {
-          color: var(--accent-primary);
+          color: var(--color-interactive-primary);
           font-weight: 600;
         }
 
@@ -193,12 +207,12 @@ export function TrainingCalendar({
         }
 
         .training-calendar .rbc-event:focus {
-          outline: 2px solid var(--accent-primary);
+          outline: 2px solid var(--color-interactive-primary);
           outline-offset: 1px;
         }
 
         .training-calendar .rbc-time-header {
-          border-bottom: 1px solid var(--bdr-default);
+          border-bottom: 1px solid var(--color-border-default);
         }
 
         .training-calendar .rbc-time-content {
@@ -206,31 +220,32 @@ export function TrainingCalendar({
         }
 
         .training-calendar .rbc-time-slot {
-          border-top: 1px solid var(--bdr-subtle, rgba(255,255,255,0.05));
+          border-top: 1px solid var(--color-border-subtle);
         }
 
         .training-calendar .rbc-timeslot-group {
-          border-bottom: 1px solid var(--bdr-default);
+          border-bottom: 1px solid var(--color-border-default);
         }
 
         .training-calendar .rbc-time-gutter {
-          color: var(--txt-tertiary);
+          color: var(--color-text-tertiary);
           font-size: 0.75rem;
+          font-family: var(--font-mono);
         }
 
         .training-calendar .rbc-current-time-indicator {
-          background-color: var(--accent-destructive, #ef4444);
+          background-color: var(--data-poor);
         }
 
         .training-calendar .rbc-show-more {
-          color: var(--accent-primary);
+          color: var(--color-interactive-primary);
           font-size: 0.75rem;
           font-weight: 500;
         }
 
         /* Dark mode adjustments */
-        .v2[data-theme="dark"] .training-calendar .rbc-day-bg {
-          background-color: var(--surface-default);
+        .v2[data-theme='dark'] .training-calendar .rbc-day-bg {
+          background-color: var(--color-bg-surface);
         }
       `}</style>
     </div>
