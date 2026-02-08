@@ -12,6 +12,7 @@ describe('mapBoatsForPrintableLineup', () => {
         shell: { name: 'Seaweed' },
         seats: [
           { seatNumber: 1, side: 'N/A', athlete, isCoxswain: false },
+          { seatNumber: 2, side: 'Unknown', athlete: null, isCoxswain: false },
           { seatNumber: 0, side: 'N/A', athlete: coxswain, isCoxswain: true },
         ],
       },
@@ -22,8 +23,9 @@ describe('mapBoatsForPrintableLineup', () => {
     expect(mapped.name).toBe('Varsity 8+');
     expect(mapped.shellName).toBe('Seaweed');
     expect(mapped.hasCoxswain).toBe(true);
-    expect(mapped.seats).toHaveLength(1);
+    expect(mapped.seats).toHaveLength(2);
     expect(mapped.seats[0].side).toBe('Port');
+    expect(mapped.seats[1].side).toBe('Port');
     expect(mapped.coxswain).toEqual(coxswain);
   });
 
