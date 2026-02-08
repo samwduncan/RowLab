@@ -3,10 +3,10 @@
 ## Current Status
 
 **Milestone:** v3.0 — App Redesign
-**Phase:** 32 (Training & Attendance Migration) — In Progress
-**Plan:** 5/6 complete
-**Status:** Phase 32 in progress. Plans 32-01 through 32-05 complete. Plan 32-05: useTrainingKeyboard hook with N/R/?/Escape/T shortcuts, optimistic UI on all workout/plan mutations, 4 skeleton loaders replacing all spinners.
-**Last activity:** 2026-02-08 — Completed 32-05-PLAN.md (keyboard shortcuts, optimistic UI audit, skeleton loaders)
+**Phase:** 33 (Regattas & Rankings Migration) — In Progress
+**Plan:** 1/6 complete
+**Status:** Phase 33 in progress. Plan 33-01 complete: All 10 regatta components migrated to V3 design tokens (ink-*, txt-*, data-*) with glass morphism, zero V1/V2 color classes remain.
+**Last activity:** 2026-02-08 — Completed 33-01-PLAN.md (regatta components V3 token migration)
 
 ## Project Reference
 
@@ -93,10 +93,11 @@ v3.1 Progress: ░░░░░░░░░░░░░░ (0 phases complete)
 | 29 | Lineup Builder Migration | Complete ✅ | 5/5 |
 | 30 | Erg Data Migration | Complete ✅ | 4/4 |
 | 31 | Seat Racing Migration | Complete ✅ | 6/6 |
-| 32 | Training & Attendance Migration | In Progress | 4/6 |
+| 32 | Training & Attendance Migration | Complete ✅ | 6/6 |
+| 33 | Regattas & Rankings Migration | In Progress | 1/6 |
 | 33-36 | Feature Modules | Planned | TBD |
 
-v3.0 Progress: ██████████████████░ (8 phases complete, 1 in progress, 4 remaining)
+v3.0 Progress: ████████████████████░ (9 phases complete, 1 in progress, 3 remaining)
 
 ## Quick Context
 
@@ -493,9 +494,9 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-02-08
-**Stopped at:** Phase 32, Plan 04 complete. Continuing Phase 32 execution.
+**Stopped at:** Phase 33, Plan 01 complete. Continuing Phase 33 execution.
 **Resume file:** None
-**Resume with:** Continue executing remaining Phase 32 plans (32-05 through 32-06)
+**Resume with:** Continue executing remaining Phase 33 plans (33-02 through 33-06)
 
 ## Roadmap Evolution
 
@@ -520,7 +521,7 @@ Key architectural decisions carrying forward:
 
 **v3.0 — App Redesign** (In Progress)
 
-Phase 32 (Training & Attendance Migration) in progress. Plans 01-04 complete: V3 token migration for calendar/workout/periodization/compliance/session/assignment/training pages, plus attendance improvements (one-tap P/L/E/U buttons, streak badges, live polling panel).
+Phase 33 (Regattas & Rankings Migration) in progress. Plan 33-01 complete: All 10 regatta components migrated to V3 design tokens (ink-*, txt-*, data-*) with glass morphism.
 
 **v3.0 Progress:**
 - Phase 24: Foundation & Design System ✅
@@ -531,10 +532,11 @@ Phase 32 (Training & Attendance Migration) in progress. Plans 01-04 complete: V3
 - Phase 29: Lineup Builder Migration ✅
 - Phase 30: Erg Data Migration ✅
 - Phase 31: Seat Racing Migration ✅
-- Phase 32: Training & Attendance Migration (4/6 plans complete)
-- Phases 33-36: Planned
+- Phase 32: Training & Attendance Migration ✅
+- Phase 33: Regattas & Rankings Migration (1/6 plans complete)
+- Phases 34-36: Planned
 
-Continue executing remaining Phase 32 plans (32-05 through 32-06).
+Continue executing remaining Phase 33 plans (33-02 through 33-06).
 
 Phase 13 delivered the cross-feature integration layer:
 
