@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import { createServer } from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs/promises';
@@ -72,10 +73,15 @@ import {
 } from './middleware/security.js';
 import logger, { requestLogger, errorLogger } from './utils/logger.js';
 
+// WebSocket
+import { initializeWebSocket } from './socket/collaboration.js';
+import { initializeRaceDaySocket } from './socket/raceDay.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+const httpServer = createServer(app);
 const PORT = process.env.PORT || 3002;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -224,7 +230,7 @@ app.get('/api/headshots/:filename', async (req, res) => {
   const nameVariations = [
     baseName, // Original (usually capitalized)
     baseName.toLowerCase(), // lowercase
-    baseName.charAt(0).toUpperCase() + baseName.slice(1).toLowerCase() // Capitalized
+    baseName.charAt(0).toUpperCase() + baseName.slice(1).toLowerCase(), // Capitalized
   ];
 
   for (const name of nameVariations) {
@@ -312,7 +318,7 @@ async function checkDatabaseHealth() {
 
     // Check if admin user exists
     const adminUser = await prisma.user.findFirst({
-      where: { isAdmin: true }
+      where: { isAdmin: true },
     });
 
     if (!adminUser) {
@@ -328,8 +334,12 @@ async function checkDatabaseHealth() {
   }
 }
 
+// Initialize WebSocket server
+const io = initializeWebSocket(httpServer);
+initializeRaceDaySocket(io);
+
 // Start server
-app.listen(PORT, async () => {
+httpServer.listen(PORT, async () => {
   logger.info('RowLab Server Started', {
     environment: NODE_ENV,
     port: PORT,
