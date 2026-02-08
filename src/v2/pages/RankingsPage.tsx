@@ -24,7 +24,7 @@ export function RankingsPage() {
   const queryClient = useQueryClient();
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
-  const [selectedBoatClass, setSelectedBoatClass] = useState<string | null>(null);
+  const [selectedBoatClass] = useState<string | null>(null);
   const [selectedComparison, setSelectedComparison] = useState<{
     opponent: string;
     boatClass: string;
@@ -37,7 +37,7 @@ export function RankingsPage() {
 
   // Keyboard shortcuts
   const { showHelp, setShowHelp } = useRegattaKeyboard({
-    onRefresh: () => queryClient.invalidateQueries({ queryKey: queryKeys.rankings.all }),
+    onRefresh: () => queryClient.invalidateQueries({ queryKey: queryKeys.teamRankings.all }),
     onExport: () => setIsExportOpen(true),
     onEscape: () => {
       if (isImportOpen) setIsImportOpen(false);
@@ -60,10 +60,12 @@ export function RankingsPage() {
   return (
     <div className="p-6 max-w-5xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-txt-primary">Team Rankings</h1>
-          <p className="text-sm text-txt-secondary mt-1">
+          <h1 className="text-3xl font-display font-bold bg-gradient-to-b from-ink-bright to-ink-body bg-clip-text text-transparent">
+            Team Rankings
+          </h1>
+          <p className="text-sm text-ink-secondary mt-1.5">
             Compare your team's speed against competitors
           </p>
         </div>
@@ -72,19 +74,24 @@ export function RankingsPage() {
           <button
             onClick={() => setIsExportOpen(true)}
             disabled={!rankings || rankings.length === 0}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium
-                     bg-accent-copper text-white rounded-lg
-                     hover:bg-accent-copper-hover transition-colors
-                     disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium
+                     bg-gradient-to-b from-accent-copper to-accent-copper/90
+                     text-white rounded-xl
+                     shadow-[0_0_20px_-5px_rgba(184,115,51,0.4)]
+                     hover:shadow-[0_0_30px_-5px_rgba(184,115,51,0.5)]
+                     hover:-translate-y-px active:translate-y-0
+                     transition-all duration-150
+                     disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:translate-y-0"
           >
             <FileSpreadsheet className="w-4 h-4" />
             Export for NCAA
           </button>
           <button
             onClick={() => setIsImportOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium
-                     bg-ink-raised text-txt-primary rounded-lg
-                     hover:bg-ink-hover transition-colors"
+            className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium
+                     text-ink-primary rounded-xl border border-white/[0.08]
+                     hover:bg-white/[0.04] hover:border-white/[0.12]
+                     transition-all duration-150"
           >
             <Plus className="w-4 h-4" />
             Add External Ranking
@@ -94,13 +101,13 @@ export function RankingsPage() {
 
       {/* Tabs */}
       <Tab.Group>
-        <Tab.List className="flex gap-1 border-b border-bdr-default mb-6">
+        <Tab.List className="flex gap-1 mb-8 border-b border-white/[0.06]">
           <Tab
             className={({ selected }) =>
-              `px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
+              `px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-all duration-150 ${
                 selected
-                  ? 'border-interactive-primary text-interactive-primary'
-                  : 'border-transparent text-txt-secondary hover:text-txt-primary'
+                  ? 'border-accent-primary text-ink-bright'
+                  : 'border-transparent text-ink-secondary hover:text-ink-body hover:border-white/[0.08]'
               }`
             }
           >
@@ -108,10 +115,10 @@ export function RankingsPage() {
           </Tab>
           <Tab
             className={({ selected }) =>
-              `px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
+              `px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-all duration-150 ${
                 selected
-                  ? 'border-interactive-primary text-interactive-primary'
-                  : 'border-transparent text-txt-secondary hover:text-txt-primary'
+                  ? 'border-accent-primary text-ink-bright'
+                  : 'border-transparent text-ink-secondary hover:text-ink-body hover:border-white/[0.08]'
               }`
             }
           >
@@ -131,7 +138,7 @@ export function RankingsPage() {
               {/* Team and boat class selectors */}
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-txt-secondary mb-1">
+                  <label className="block text-xs font-semibold text-ink-secondary uppercase tracking-[0.1em] mb-2">
                     Compare against
                   </label>
                   <select
@@ -142,8 +149,9 @@ export function RankingsPage() {
                         boatClass: prev?.boatClass || boatClasses[0]?.value || '8+',
                       }))
                     }
-                    className="w-full px-3 py-2 bg-ink-well border border-bdr-default rounded-lg
-                             text-txt-primary focus:outline-none focus:ring-2 focus:ring-interactive-primary"
+                    className="w-full px-4 py-2.5 bg-ink-well border border-white/[0.08] rounded-xl
+                             text-ink-primary focus:outline-none focus:ring-2 focus:ring-accent-primary/30
+                             focus:border-accent-primary/50 transition-all"
                   >
                     <option value="">Select a team</option>
                     {externalTeams?.map((team) => (
@@ -155,7 +163,7 @@ export function RankingsPage() {
                 </div>
 
                 <div className="w-48">
-                  <label className="block text-sm font-medium text-txt-secondary mb-1">
+                  <label className="block text-xs font-semibold text-ink-secondary uppercase tracking-[0.1em] mb-2">
                     Boat Class
                   </label>
                   <select
@@ -166,8 +174,9 @@ export function RankingsPage() {
                         boatClass: e.target.value,
                       }))
                     }
-                    className="w-full px-3 py-2 bg-ink-well border border-bdr-default rounded-lg
-                             text-txt-primary focus:outline-none focus:ring-2 focus:ring-interactive-primary"
+                    className="w-full px-4 py-2.5 bg-ink-well border border-white/[0.08] rounded-xl
+                             text-ink-primary focus:outline-none focus:ring-2 focus:ring-accent-primary/30
+                             focus:border-accent-primary/50 transition-all"
                   >
                     {boatClasses.map((bc) => (
                       <option key={bc.value} value={bc.value}>
@@ -185,8 +194,9 @@ export function RankingsPage() {
                   boatClass={selectedComparison.boatClass}
                 />
               ) : (
-                <div className="text-center py-12 text-txt-secondary">
-                  <p>Select a team to compare your race history</p>
+                <div className="relative text-center py-16 rounded-2xl border border-white/[0.06] bg-white/[0.01] overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-b from-accent-primary/[0.02] to-transparent pointer-events-none" />
+                  <p className="text-ink-secondary">Select a team to compare your race history</p>
                 </div>
               )}
             </div>
@@ -196,10 +206,13 @@ export function RankingsPage() {
 
       {/* Import Modal */}
       <Dialog open={isImportOpen} onClose={() => setIsImportOpen(false)} className="relative z-50">
-        <div className="fixed inset-0 bg-ink-deep/80 backdrop-blur-sm" aria-hidden="true" />
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="w-full max-w-md bg-ink-well rounded-xl shadow-xl p-6">
-            <Dialog.Title className="text-lg font-semibold text-txt-primary mb-4">
+          <Dialog.Panel
+            className="w-full max-w-md rounded-2xl shadow-2xl p-6
+                                   bg-ink-raised border border-white/[0.08]"
+          >
+            <Dialog.Title className="text-lg font-display font-semibold text-ink-bright mb-4">
               Add External Ranking
             </Dialog.Title>
             <RankingImportForm
@@ -220,16 +233,19 @@ export function RankingsPage() {
 
       {/* Keyboard Shortcuts Help */}
       <Dialog open={showHelp} onClose={() => setShowHelp(false)} className="relative z-50">
-        <div className="fixed inset-0 bg-ink-deep/80 backdrop-blur-sm" aria-hidden="true" />
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="w-full max-w-md bg-ink-well rounded-xl shadow-xl p-6">
+          <Dialog.Panel
+            className="w-full max-w-md rounded-2xl shadow-2xl p-6
+                                   bg-ink-raised border border-white/[0.08]"
+          >
             <div className="flex items-center gap-2 mb-4">
-              <HelpCircle className="w-5 h-5 text-txt-secondary" />
-              <Dialog.Title className="text-lg font-semibold text-txt-primary">
+              <HelpCircle className="w-5 h-5 text-ink-secondary" />
+              <Dialog.Title className="text-lg font-display font-semibold text-ink-bright">
                 Keyboard Shortcuts
               </Dialog.Title>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1">
               {getRegattaShortcuts({
                 hasRefresh: true,
                 hasExport: true,
@@ -237,9 +253,12 @@ export function RankingsPage() {
               })
                 .filter((s) => s.available)
                 .map((shortcut) => (
-                  <div key={shortcut.key} className="flex items-center justify-between py-2">
-                    <span className="text-sm text-txt-secondary">{shortcut.description}</span>
-                    <kbd className="px-2 py-1 text-xs font-mono bg-ink-raised text-txt-primary rounded border border-bdr-default">
+                  <div
+                    key={shortcut.key}
+                    className="flex items-center justify-between py-2.5 border-b border-white/[0.04] last:border-0"
+                  >
+                    <span className="text-sm text-ink-body">{shortcut.description}</span>
+                    <kbd className="px-2.5 py-1 text-xs font-mono bg-ink-deep text-ink-primary rounded-lg border border-white/[0.08]">
                       {shortcut.key}
                     </kbd>
                   </div>
@@ -247,9 +266,10 @@ export function RankingsPage() {
             </div>
             <button
               onClick={() => setShowHelp(false)}
-              className="mt-6 w-full px-4 py-2 text-sm font-medium
-                       bg-accent-primary text-white rounded-lg
-                       hover:bg-accent-primary-hover transition-colors"
+              className="mt-6 w-full px-4 py-2.5 text-sm font-medium
+                       bg-gradient-to-b from-accent-primary to-accent-primary/90
+                       text-white rounded-xl shadow-glow-blue
+                       hover:shadow-glow-blue-lg transition-all duration-150"
             >
               Got it
             </button>
