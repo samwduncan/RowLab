@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from '@phosphor-icons/react';
+import { motion } from 'framer-motion';
 import { MatrixPlanner } from '../components/seat-racing';
+import { FADE_IN_VARIANTS } from '@v2/utils/animations';
 import type { SwapSchedule } from '../types/advancedRanking';
 
 export function MatrixPlannerPage() {
@@ -18,12 +20,17 @@ export function MatrixPlannerPage() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <motion.div
+      variants={FADE_IN_VARIANTS}
+      initial="hidden"
+      animate="visible"
+      className="p-6 space-y-6"
+    >
       {/* Header */}
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate(-1)}
-          className="p-2 text-txt-secondary hover:text-txt-primary rounded-lg hover:bg-surface-hover"
+          className="p-2 text-txt-secondary hover:text-txt-primary rounded-lg hover:bg-bg-hover transition-colors"
         >
           <ArrowLeft size={20} />
         </button>
@@ -35,24 +42,9 @@ export function MatrixPlannerPage() {
         </div>
       </div>
 
-      {/* Instructions */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h3 className="font-semibold text-blue-800 mb-2">How it works</h3>
-        <ol className="text-sm text-blue-700 space-y-1 list-decimal ml-4">
-          <li>Select the athletes you want to include in the seat race</li>
-          <li>Choose the boat class (determines how many athletes per boat)</li>
-          <li>Generate an optimal swap schedule that maximizes comparison coverage</li>
-          <li>Review the schedule in grid or timeline view</li>
-          <li>Use the schedule to run your seat race session</li>
-        </ol>
-      </div>
-
       {/* Planner */}
-      <div className="bg-surface-primary rounded-lg shadow-sm border border-bdr-primary overflow-hidden">
-        <MatrixPlanner
-          onScheduleGenerated={handleScheduleGenerated}
-          onClose={handleClose}
-        />
+      <div className="bg-bg-surface rounded-lg shadow-sm border border-bdr-default overflow-hidden">
+        <MatrixPlanner onScheduleGenerated={handleScheduleGenerated} onClose={handleClose} />
       </div>
 
       {/* Benefits */}
@@ -70,13 +62,13 @@ export function MatrixPlannerPage() {
           description="Balanced designs produce more reliable rankings with narrower confidence intervals."
         />
       </div>
-    </div>
+    </motion.div>
   );
 }
 
 function BenefitCard({ title, description }: { title: string; description: string }) {
   return (
-    <div className="bg-surface-secondary rounded-lg p-4">
+    <div className="bg-bg-raised rounded-lg p-4 border border-bdr-subtle">
       <h4 className="font-medium text-txt-primary mb-1">{title}</h4>
       <p className="text-sm text-txt-secondary">{description}</p>
     </div>

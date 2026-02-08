@@ -1,11 +1,13 @@
-import { useState, Fragment } from 'react';
+import { useState, Fragment, useEffect } from 'react';
 import { Tab } from '@headlessui/react';
 import { Dialog, Transition } from '@headlessui/react';
-import { Plus, X, BarChart3, Calendar, Share2, Beaker } from 'lucide-react';
+import { Plus, X, BarChart3, Calendar, Share2, Beaker, HelpCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAthleteRatings, useRecalculateRatings } from '@v2/hooks/useAthleteRatings';
-import { useSeatRaceSessions } from '@v2/hooks/useSeatRaceSessions';
+import { useSeatRaceSessions, useDeleteSession } from '@v2/hooks/useSeatRaceSessions';
 import { useRequireAuth } from '../../hooks/useAuth';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   RankingsChart,
   RankingsTable,
@@ -14,7 +16,24 @@ import {
   SessionDetail,
   SessionWizard,
 } from '@v2/components/seat-racing';
+import {
+  RankingsTableSkeleton,
+  SessionListSkeleton,
+} from '@v2/features/seat-racing/components/SeatRacingSkeleton';
+import { FADE_IN_VARIANTS, SPRING_CONFIG } from '@v2/utils/animations';
 import type { Side } from '@v2/types/seatRacing';
+
+const INPUT_TAGS = new Set(['INPUT', 'TEXTAREA', 'SELECT']);
+
+function shouldIgnoreEvent(e: KeyboardEvent): boolean {
+  const target = e.target as HTMLElement;
+  return (
+    INPUT_TAGS.has(target.tagName) ||
+    target.isContentEditable ||
+    !!target.closest('[role="dialog"]') ||
+    !!target.closest('[role="combobox"]')
+  );
+}
 
 /**
  * FeatureCard Component
@@ -50,6 +69,72 @@ function FeatureCard({ to, icon: Icon, title, description }: FeatureCardProps) {
 }
 
 /**
+ * KeyboardShortcutsHelp Component
+ *
+ * Modal overlay showing available keyboard shortcuts
+ */
+function KeyboardShortcutsHelp({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={SPRING_CONFIG}
+            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-bg-surface rounded-xl border border-bdr-default shadow-2xl p-6 z-50 w-96"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-txt-primary">Keyboard Shortcuts</h3>
+              <button
+                onClick={onClose}
+                className="p-1 text-txt-secondary hover:text-txt-primary rounded transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-txt-secondary">New Session</span>
+                <kbd className="px-2 py-1 text-xs font-mono bg-bg-raised border border-bdr-default rounded">
+                  N
+                </kbd>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-txt-secondary">Recalculate Rankings</span>
+                <kbd className="px-2 py-1 text-xs font-mono bg-bg-raised border border-bdr-default rounded">
+                  R
+                </kbd>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-txt-secondary">Show Shortcuts</span>
+                <kbd className="px-2 py-1 text-xs font-mono bg-bg-raised border border-bdr-default rounded">
+                  ?
+                </kbd>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-txt-secondary">Close</span>
+                <kbd className="px-2 py-1 text-xs font-mono bg-bg-raised border border-bdr-default rounded">
+                  Escape
+                </kbd>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
+
+/**
  * SeatRacingPage Component
  *
  * Main page for seat racing functionality with tabs:
@@ -60,7 +145,9 @@ function FeatureCard({ to, icon: Icon, title, description }: FeatureCardProps) {
  * - New Session button opens wizard modal
  * - Session list items open detail slide-out panel
  * - Rankings include side filter buttons (All/Port/Starboard)
- * - Responsive layout for mobile
+ * - Keyboard shortcuts: N (new session), R (recalculate), ? (help), Escape (close)
+ * - Optimistic UI for session mutations
+ * - Skeleton loaders for loading states
  */
 export function SeatRacingPage() {
   // Tab state
@@ -73,6 +160,7 @@ export function SeatRacingPage() {
   const [showWizard, setShowWizard] = useState(false);
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
   const [selectedAthleteId, setSelectedAthleteId] = useState<string | null>(null);
+  const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
 
   // Auth - redirects to login if not authenticated
   const { isLoading: isAuthLoading } = useRequireAuth();
@@ -84,6 +172,8 @@ export function SeatRacingPage() {
   });
   const { sessions, isLoading: isLoadingSessions } = useSeatRaceSessions();
   const { recalculate, isRecalculating } = useRecalculateRatings();
+  const deleteSessionMutation = useDeleteSession();
+  const queryClient = useQueryClient();
 
   const handleOpenWizard = () => {
     setShowWizard(true);
@@ -107,6 +197,73 @@ export function SeatRacingPage() {
     setSelectedTab(1);
   };
 
+  const handleDeleteSession = (sessionId: string) => {
+    // Optimistic deletion
+    deleteSessionMutation.mutate(sessionId, {
+      onMutate: async (id) => {
+        // Cancel outbound queries
+        await queryClient.cancelQueries({ queryKey: ['seatRaceSessions'] });
+
+        // Snapshot for rollback
+        const previousSessions = queryClient.getQueryData(['seatRaceSessions']);
+
+        // Optimistically remove from cache
+        queryClient.setQueryData(['seatRaceSessions'], (old: any) => {
+          if (!old) return [];
+          return Array.isArray(old) ? old.filter((s: any) => s.id !== id) : [];
+        });
+
+        return { previousSessions };
+      },
+      onError: (err, id, context: any) => {
+        // Rollback on error
+        if (context?.previousSessions) {
+          queryClient.setQueryData(['seatRaceSessions'], context.previousSessions);
+        }
+      },
+      onSettled: () => {
+        // Refetch to sync with server
+        queryClient.invalidateQueries({ queryKey: ['seatRaceSessions'] });
+      },
+    });
+
+    handleCloseDetail();
+  };
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (shouldIgnoreEvent(e)) return;
+
+      switch (e.key.toLowerCase()) {
+        case 'n':
+          e.preventDefault();
+          handleOpenWizard();
+          break;
+        case 'r':
+          e.preventDefault();
+          if (!isRecalculating) {
+            recalculate();
+          }
+          break;
+        case '?':
+          e.preventDefault();
+          setShowShortcutsHelp(true);
+          break;
+        case 'escape':
+          e.preventDefault();
+          if (showWizard) handleCloseWizard();
+          if (selectedSessionId) handleCloseDetail();
+          if (selectedAthleteId) setSelectedAthleteId(null);
+          if (showShortcutsHelp) setShowShortcutsHelp(false);
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showWizard, selectedSessionId, selectedAthleteId, showShortcutsHelp, isRecalculating]);
+
   // Show loading while checking auth
   if (isAuthLoading) {
     return (
@@ -127,6 +284,13 @@ export function SeatRacingPage() {
           </div>
 
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => setShowShortcutsHelp(true)}
+              className="p-2 text-txt-secondary hover:text-txt-primary hover:bg-bg-hover rounded-lg transition-colors"
+              title="Keyboard shortcuts (?)"
+            >
+              <HelpCircle size={18} />
+            </button>
             <a
               href="/app/coach/seat-racing/advanced-rankings"
               className="px-4 py-2 bg-bg-subtle text-txt-primary rounded-md hover:bg-bg-hover transition-colors text-sm font-medium"
@@ -218,8 +382,8 @@ export function SeatRacingPage() {
                       px-3 py-1.5 text-sm font-medium rounded-md transition-colors
                       ${
                         sideFilter === 'Port'
-                          ? 'bg-red-500 text-white'
-                          : 'bg-bg-subtle text-txt-secondary hover:bg-red-500/10'
+                          ? 'bg-data-poor text-white'
+                          : 'bg-bg-subtle text-txt-secondary hover:bg-data-poor/10'
                       }
                     `}
                   >
@@ -231,8 +395,8 @@ export function SeatRacingPage() {
                       px-3 py-1.5 text-sm font-medium rounded-md transition-colors
                       ${
                         sideFilter === 'Starboard'
-                          ? 'bg-green-500 text-white'
-                          : 'bg-bg-subtle text-txt-secondary hover:bg-green-500/10'
+                          ? 'bg-data-excellent text-white'
+                          : 'bg-bg-subtle text-txt-secondary hover:bg-data-excellent/10'
                       }
                     `}
                   >
@@ -243,72 +407,95 @@ export function SeatRacingPage() {
 
               {/* Rankings content */}
               <div className="flex-1 overflow-y-auto p-6">
-                <div className="max-w-6xl mx-auto space-y-6">
-                  {/* Chart */}
-                  <div className="bg-bg-surface border border-bdr-default rounded-lg p-6">
-                    <h2 className="text-lg font-semibold text-txt-primary mb-4">
-                      ELO Rating Distribution
-                    </h2>
-                    <RankingsChart ratings={ratings} />
+                {isLoadingRatings ? (
+                  <div className="max-w-6xl mx-auto space-y-6">
+                    <RankingsTableSkeleton />
                   </div>
+                ) : (
+                  <motion.div
+                    variants={FADE_IN_VARIANTS}
+                    initial="hidden"
+                    animate="visible"
+                    className="max-w-6xl mx-auto space-y-6"
+                  >
+                    {/* Chart */}
+                    <div className="bg-bg-surface border border-bdr-default rounded-lg p-6">
+                      <h2 className="text-lg font-semibold text-txt-primary mb-4">
+                        ELO Rating Distribution
+                      </h2>
+                      <RankingsChart ratings={ratings} />
+                    </div>
 
-                  {/* Table */}
-                  <div className="bg-bg-surface border border-bdr-default rounded-lg overflow-hidden">
-                    <RankingsTable
-                      ratings={ratings}
-                      isLoading={isLoadingRatings}
-                      onRecalculate={recalculate}
-                      onAthleteClick={setSelectedAthleteId}
-                    />
-                  </div>
-
-                  {/* Advanced Analytics Section */}
-                  <div className="mt-8">
-                    <h2 className="text-lg font-semibold text-txt-primary mb-4">
-                      Advanced Analytics
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                      <FeatureCard
-                        to="/app/coach/seat-racing/advanced-rankings"
-                        icon={BarChart3}
-                        title="Advanced Rankings"
-                        description="Bradley-Terry model, composite rankings, and comparison graphs"
-                      />
-                      <FeatureCard
-                        to="/app/coach/seat-racing/matrix-planner"
-                        icon={Calendar}
-                        title="Matrix Planner"
-                        description="Generate optimal swap schedules for seat racing sessions"
-                      />
-                      <FeatureCard
-                        to="/app/coach/seat-racing/advanced-rankings#comparison-graph"
-                        icon={Share2}
-                        title="Comparison Graph"
-                        description="Visualize which athletes have been compared"
-                      />
-                      <FeatureCard
-                        to="/app/coach/seat-racing/advanced-rankings#probability"
-                        icon={Beaker}
-                        title="Win Probability"
-                        description="Heatmap of predicted head-to-head outcomes"
+                    {/* Table */}
+                    <div className="bg-bg-surface border border-bdr-default rounded-lg overflow-hidden">
+                      <RankingsTable
+                        ratings={ratings}
+                        isLoading={false}
+                        onRecalculate={recalculate}
+                        onAthleteClick={setSelectedAthleteId}
                       />
                     </div>
-                  </div>
-                </div>
+
+                    {/* Advanced Analytics Section */}
+                    <div className="mt-8">
+                      <h2 className="text-lg font-semibold text-txt-primary mb-4">
+                        Advanced Analytics
+                      </h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <FeatureCard
+                          to="/app/coach/seat-racing/advanced-rankings"
+                          icon={BarChart3}
+                          title="Advanced Rankings"
+                          description="Bradley-Terry model, composite rankings, and comparison graphs"
+                        />
+                        <FeatureCard
+                          to="/app/coach/seat-racing/matrix-planner"
+                          icon={Calendar}
+                          title="Matrix Planner"
+                          description="Generate optimal swap schedules for seat racing sessions"
+                        />
+                        <FeatureCard
+                          to="/app/coach/seat-racing/advanced-rankings#comparison-graph"
+                          icon={Share2}
+                          title="Comparison Graph"
+                          description="Visualize which athletes have been compared"
+                        />
+                        <FeatureCard
+                          to="/app/coach/seat-racing/advanced-rankings#probability"
+                          icon={Beaker}
+                          title="Win Probability"
+                          description="Heatmap of predicted head-to-head outcomes"
+                        />
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
               </div>
             </Tab.Panel>
 
             {/* Sessions tab */}
             <Tab.Panel className="h-full overflow-hidden">
-              <SessionList
-                sessions={sessions}
-                isLoading={isLoadingSessions}
-                onSessionClick={handleSessionClick}
-              />
+              {isLoadingSessions ? (
+                <div className="p-6">
+                  <SessionListSkeleton cards={5} />
+                </div>
+              ) : (
+                <SessionList
+                  sessions={sessions}
+                  isLoading={false}
+                  onSessionClick={handleSessionClick}
+                />
+              )}
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
       </div>
+
+      {/* Keyboard Shortcuts Help */}
+      <KeyboardShortcutsHelp
+        isOpen={showShortcutsHelp}
+        onClose={() => setShowShortcutsHelp(false)}
+      />
 
       {/* Wizard Modal */}
       <Transition appear show={showWizard} as={Fragment}>
@@ -394,7 +581,7 @@ export function SeatRacingPage() {
                         <SessionDetail
                           sessionId={selectedSessionId}
                           onClose={handleCloseDetail}
-                          onDelete={handleCloseDetail}
+                          onDelete={handleDeleteSession}
                         />
                       )}
                     </div>
