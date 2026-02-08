@@ -7,6 +7,7 @@ import { AthleteAvatar } from '@v2/components/athletes/AthleteAvatar';
 import { QuickMarkAttendance } from '@v2/features/attendance/components/QuickMarkAttendance';
 import { AttendanceStreakBadge } from '@v2/features/attendance/components/AttendanceStreakBadge';
 import { LiveAttendancePanel } from '@v2/features/attendance/components/LiveAttendancePanel';
+import { AttendanceSkeleton } from '@v2/features/attendance/components/AttendanceSkeleton';
 import { TrainingShortcutsHelp } from '@v2/features/training/components/TrainingShortcutsHelp';
 import { useAthletes } from '@v2/hooks/useAthletes';
 import { useAttendance, useAttendanceStreaks } from '@v2/hooks/useAttendance';
@@ -268,11 +269,7 @@ export default function AttendancePage() {
 
             {/* Athlete roster with one-tap attendance */}
             {attendanceLoading ? (
-              <div className="space-y-2">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="h-16 bg-bg-surface-elevated rounded-lg animate-pulse" />
-                ))}
-              </div>
+              <AttendanceSkeleton rowCount={6} />
             ) : athletes.length === 0 ? (
               <div className="text-center py-12 text-txt-secondary">
                 No athletes in roster. Add athletes to track attendance.

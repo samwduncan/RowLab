@@ -5,6 +5,7 @@ import { useSession, useUpdateSession } from '../../hooks/useSessions';
 import { LiveErgDashboard } from '../../features/live-erg/components/LiveErgDashboard';
 import { Breadcrumbs } from '../../features/shared/components/Breadcrumbs';
 import { TrainingShortcutsHelp } from '../../features/training/components/TrainingShortcutsHelp';
+import { SessionDetailSkeleton } from '../../features/sessions/components/SessionSkeleton';
 import { useTrainingKeyboard, getTrainingShortcuts } from '../../hooks/useTrainingKeyboard';
 
 export function LiveSessionPage() {
@@ -39,11 +40,7 @@ export function LiveSessionPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="p-6">
-        <div className="animate-spin w-8 h-8 border-2 border-interactive-primary border-t-transparent rounded-full mx-auto" />
-      </div>
-    );
+    return <SessionDetailSkeleton />;
   }
 
   if (error || !session) {

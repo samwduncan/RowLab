@@ -267,8 +267,13 @@ export function CoachTrainingPage() {
                 </div>
 
                 {loadingPlans ? (
-                  <div className="flex items-center justify-center h-48">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-interactive-primary" />
+                  <div className="space-y-3">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="h-16 bg-bg-surface-elevated rounded-lg animate-pulse"
+                      />
+                    ))}
                   </div>
                 ) : !plans || plans.length === 0 ? (
                   <div className="text-center py-12 text-txt-tertiary">

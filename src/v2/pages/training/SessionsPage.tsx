@@ -5,6 +5,7 @@ import { useSessions } from '../../hooks/useSessions';
 import { SessionForm } from '../../features/sessions/components/SessionForm';
 import { Breadcrumbs } from '../../features/shared/components/Breadcrumbs';
 import { TrainingShortcutsHelp } from '../../features/training/components/TrainingShortcutsHelp';
+import { SessionsListSkeleton } from '../../features/sessions/components/SessionSkeleton';
 import { useTrainingKeyboard, getTrainingShortcuts } from '../../hooks/useTrainingKeyboard';
 import type { SessionType, SessionStatus } from '../../types/session';
 
@@ -50,16 +51,7 @@ export function SessionsPage() {
   );
 
   if (isLoading) {
-    return (
-      <div className="p-6 space-y-4">
-        <div className="h-8 bg-bg-surface rounded w-48 animate-pulse" />
-        <div className="space-y-3">
-          {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-20 bg-bg-surface-elevated rounded-lg animate-pulse" />
-          ))}
-        </div>
-      </div>
-    );
+    return <SessionsListSkeleton />;
   }
 
   if (error) {
