@@ -10,10 +10,10 @@ type RankingsViewProps = {
 };
 
 const SOURCE_BADGES: Record<RankingSource, { label: string; color: string }> = {
-  row2k: { label: 'Row2k', color: 'bg-blue-500/10 text-blue-600' },
-  usrowing: { label: 'USRowing', color: 'bg-red-500/10 text-red-600' },
-  regattacentral: { label: 'RegattaCentral', color: 'bg-purple-500/10 text-purple-600' },
-  manual: { label: 'Manual', color: 'bg-gray-500/10 text-gray-600' },
+  row2k: { label: 'Row2k', color: 'bg-data-good/10 text-data-good' },
+  usrowing: { label: 'USRowing', color: 'bg-data-poor/10 text-data-poor' },
+  regattacentral: { label: 'RegattaCentral', color: 'bg-chart-2/10 text-chart-2' },
+  manual: { label: 'Manual', color: 'bg-ink-muted/10 text-txt-tertiary' },
 };
 
 export function RankingsView({ onSelectTeam }: RankingsViewProps) {
@@ -26,7 +26,7 @@ export function RankingsView({ onSelectTeam }: RankingsViewProps) {
   // Find our team in rankings
   const ourRanking = useMemo(() => {
     if (!rankings) return null;
-    return rankings.find(r => r.teamName === 'Our Team'); // Replace with actual team name lookup
+    return rankings.find((r) => r.teamName === 'Our Team'); // Replace with actual team name lookup
   }, [rankings]);
 
   return (
@@ -37,7 +37,7 @@ export function RankingsView({ onSelectTeam }: RankingsViewProps) {
           Select Boat Class
         </label>
         <div className="flex flex-wrap gap-2">
-          {boatClasses.map(bc => (
+          {boatClasses.map((bc) => (
             <button
               key={bc.value}
               onClick={() => setSelectedBoatClass(bc.value)}
@@ -59,7 +59,7 @@ export function RankingsView({ onSelectTeam }: RankingsViewProps) {
           {/* Header */}
           <div className="px-4 py-3 border-b border-bdr-default flex items-center justify-between">
             <h3 className="font-semibold text-txt-primary">
-              {boatClasses.find(bc => bc.value === selectedBoatClass)?.label} Rankings
+              {boatClasses.find((bc) => bc.value === selectedBoatClass)?.label} Rankings
             </h3>
             {ourRanking && (
               <div className="flex items-center gap-2">
@@ -106,15 +106,15 @@ export function RankingsView({ onSelectTeam }: RankingsViewProps) {
       {selectedBoatClass && rankings && rankings.length > 0 && (
         <div className="flex items-center gap-6 text-xs text-txt-tertiary">
           <span className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-green-500" />
+            <div className="w-2 h-2 rounded-full bg-data-excellent" />
             High confidence (10+ races)
           </span>
           <span className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-amber-500" />
+            <div className="w-2 h-2 rounded-full bg-data-warning" />
             Medium (5-9 races)
           </span>
           <span className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-red-500" />
+            <div className="w-2 h-2 rounded-full bg-data-poor" />
             Low (&lt;5 races)
           </span>
         </div>
@@ -143,16 +143,16 @@ function RankingRow({
 }) {
   // Confidence color
   const getConfidenceColor = () => {
-    if (sampleCount >= 10) return 'bg-green-500';
-    if (sampleCount >= 5) return 'bg-amber-500';
-    return 'bg-red-500';
+    if (sampleCount >= 10) return 'bg-data-excellent';
+    if (sampleCount >= 5) return 'bg-data-warning';
+    return 'bg-data-poor';
   };
 
   // Rank badge
   const RankBadge = () => {
-    if (rank === 1) return <Trophy className="w-5 h-5 text-yellow-500" />;
-    if (rank === 2) return <Medal className="w-5 h-5 text-gray-400" />;
-    if (rank === 3) return <Award className="w-5 h-5 text-amber-600" />;
+    if (rank === 1) return <Trophy className="w-5 h-5 text-data-warning" />;
+    if (rank === 2) return <Medal className="w-5 h-5 text-ink-secondary" />;
+    if (rank === 3) return <Award className="w-5 h-5 text-data-warning" />;
     return <span className="text-lg font-bold text-txt-tertiary">{rank}</span>;
   };
 
@@ -170,7 +170,9 @@ function RankingRow({
 
       {/* Team name */}
       <div className="flex-1 min-w-0">
-        <p className={`font-medium truncate ${isOwnTeam ? 'text-accent-primary' : 'text-txt-primary'}`}>
+        <p
+          className={`font-medium truncate ${isOwnTeam ? 'text-accent-primary' : 'text-txt-primary'}`}
+        >
           {teamName}
           {isOwnTeam && <span className="text-xs ml-2">(Your Team)</span>}
         </p>
@@ -179,22 +181,21 @@ function RankingRow({
       {/* Speed estimate */}
       {speed && (
         <div className="text-right">
-          <p className="text-sm font-mono text-txt-primary">
-            {speed.toFixed(3)} m/s
-          </p>
+          <p className="text-sm font-mono text-txt-primary">{speed.toFixed(3)} m/s</p>
         </div>
       )}
 
       {/* Confidence indicator */}
       <div className="flex items-center gap-2">
         <div className={`w-2 h-2 rounded-full ${getConfidenceColor()}`} />
-        <span className="text-xs text-txt-tertiary w-16">
-          {sampleCount} races
-        </span>
+        <span className="text-xs text-txt-tertiary w-16">{sampleCount} races</span>
       </div>
 
       {/* Last updated */}
-      <div className="text-xs text-txt-tertiary w-24 text-right" title={format(parseISO(lastUpdated), 'PPp')}>
+      <div
+        className="text-xs text-txt-tertiary w-24 text-right"
+        title={format(parseISO(lastUpdated), 'PPp')}
+      >
         {formatDistanceToNow(parseISO(lastUpdated), { addSuffix: true })}
       </div>
     </div>

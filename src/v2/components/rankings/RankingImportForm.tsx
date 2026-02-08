@@ -63,7 +63,6 @@ export function RankingImportForm({
     },
   });
 
-
   const onFormSubmit = (data: FormValues) => {
     const formData: ExternalRankingFormData = {
       ...data,
@@ -77,15 +76,13 @@ export function RankingImportForm({
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
       {/* Source selector */}
       <div>
-        <label className="block text-sm font-medium text-txt-primary mb-2">
-          Ranking Source *
-        </label>
+        <label className="block text-sm font-medium text-txt-primary mb-2">Ranking Source *</label>
         <Controller
           name="source"
           control={control}
           render={({ field }) => (
             <div className="flex flex-wrap gap-2">
-              {SOURCES.map(s => (
+              {SOURCES.map((s) => (
                 <button
                   key={s.value}
                   type="button"
@@ -106,16 +103,14 @@ export function RankingImportForm({
 
       {/* Team selector */}
       <div>
-        <label className="block text-sm font-medium text-txt-primary mb-1">
-          Team *
-        </label>
+        <label className="block text-sm font-medium text-txt-primary mb-1">Team *</label>
         <select
           {...register('externalTeamId')}
           className="w-full px-3 py-2 bg-surface-default border border-bdr-default rounded-lg
                    text-txt-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
         >
           <option value="">Select team</option>
-          {externalTeams?.map(team => (
+          {externalTeams?.map((team) => (
             <option key={team.id} value={team.id}>
               {team.name}
               {team.division && ` (${team.division})`}
@@ -123,7 +118,7 @@ export function RankingImportForm({
           ))}
         </select>
         {errors.externalTeamId && (
-          <p className="mt-1 text-sm text-red-500">{errors.externalTeamId.message}</p>
+          <p className="mt-1 text-sm text-data-poor">{errors.externalTeamId.message}</p>
         )}
         {!externalTeams?.length && !loadingTeams && (
           <p className="mt-1 text-xs text-txt-tertiary">
@@ -135,28 +130,26 @@ export function RankingImportForm({
       {/* Boat class and ranking */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-txt-primary mb-1">
-            Boat Class *
-          </label>
+          <label className="block text-sm font-medium text-txt-primary mb-1">Boat Class *</label>
           <select
             {...register('boatClass')}
             className="w-full px-3 py-2 bg-surface-default border border-bdr-default rounded-lg
                      text-txt-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
           >
             <option value="">Select class</option>
-            {boatClasses.map(bc => (
-              <option key={bc.value} value={bc.value}>{bc.label}</option>
+            {boatClasses.map((bc) => (
+              <option key={bc.value} value={bc.value}>
+                {bc.label}
+              </option>
             ))}
           </select>
           {errors.boatClass && (
-            <p className="mt-1 text-sm text-red-500">{errors.boatClass.message}</p>
+            <p className="mt-1 text-sm text-data-poor">{errors.boatClass.message}</p>
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-txt-primary mb-1">
-            Ranking *
-          </label>
+          <label className="block text-sm font-medium text-txt-primary mb-1">Ranking *</label>
           <input
             type="number"
             {...register('ranking', { valueAsNumber: true })}
@@ -165,7 +158,7 @@ export function RankingImportForm({
                      text-txt-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
           />
           {errors.ranking && (
-            <p className="mt-1 text-sm text-red-500">{errors.ranking.message}</p>
+            <p className="mt-1 text-sm text-data-poor">{errors.ranking.message}</p>
           )}
         </div>
       </div>
@@ -173,24 +166,22 @@ export function RankingImportForm({
       {/* Season and date */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-txt-primary mb-1">
-            Season
-          </label>
+          <label className="block text-sm font-medium text-txt-primary mb-1">Season</label>
           <select
             {...register('season')}
             className="w-full px-3 py-2 bg-surface-default border border-bdr-default rounded-lg
                      text-txt-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
           >
-            {SEASONS.map(s => (
-              <option key={s.value} value={s.value}>{s.label}</option>
+            {SEASONS.map((s) => (
+              <option key={s.value} value={s.value}>
+                {s.label}
+              </option>
             ))}
           </select>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-txt-primary mb-1">
-            As of Date *
-          </label>
+          <label className="block text-sm font-medium text-txt-primary mb-1">As of Date *</label>
           <input
             type="date"
             {...register('updatedDate')}
@@ -198,16 +189,14 @@ export function RankingImportForm({
                      text-txt-primary focus:outline-none focus:ring-2 focus:ring-accent-primary"
           />
           {errors.updatedDate && (
-            <p className="mt-1 text-sm text-red-500">{errors.updatedDate.message}</p>
+            <p className="mt-1 text-sm text-data-poor">{errors.updatedDate.message}</p>
           )}
         </div>
       </div>
 
       {/* Notes */}
       <div>
-        <label className="block text-sm font-medium text-txt-primary mb-1">
-          Notes
-        </label>
+        <label className="block text-sm font-medium text-txt-primary mb-1">Notes</label>
         <textarea
           {...register('notes')}
           rows={2}
