@@ -38,19 +38,15 @@ export function HeadToHeadTable({ opponent, boatClass, season }: HeadToHeadTable
         <div className="flex items-center gap-4">
           <div
             className={`w-12 h-12 rounded-full flex items-center justify-center ${
-              isWinning
-                ? 'bg-green-500/10'
-                : isTied
-                ? 'bg-amber-500/10'
-                : 'bg-red-500/10'
+              isWinning ? 'bg-data-excellent/10' : isTied ? 'bg-data-warning/10' : 'bg-data-poor/10'
             }`}
           >
             {isWinning ? (
-              <TrendingUp className="w-6 h-6 text-green-500" />
+              <TrendingUp className="w-6 h-6 text-data-excellent" />
             ) : isTied ? (
-              <Minus className="w-6 h-6 text-amber-500" />
+              <Minus className="w-6 h-6 text-data-warning" />
             ) : (
-              <TrendingDown className="w-6 h-6 text-red-500" />
+              <TrendingDown className="w-6 h-6 text-data-poor" />
             )}
           </div>
           <div>
@@ -84,18 +80,18 @@ export function HeadToHeadTable({ opponent, boatClass, season }: HeadToHeadTable
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                       didWin
-                        ? 'bg-green-500/10'
+                        ? 'bg-data-excellent/10'
                         : didTie
-                        ? 'bg-amber-500/10'
-                        : 'bg-red-500/10'
+                          ? 'bg-data-warning/10'
+                          : 'bg-data-poor/10'
                     }`}
                   >
                     {didWin ? (
-                      <Trophy className="w-4 h-4 text-green-500" />
+                      <Trophy className="w-4 h-4 text-data-excellent" />
                     ) : didTie ? (
-                      <Minus className="w-4 h-4 text-amber-500" />
+                      <Minus className="w-4 h-4 text-data-warning" />
                     ) : (
-                      <Medal className="w-4 h-4 text-red-500" />
+                      <Medal className="w-4 h-4 text-data-poor" />
                     )}
                   </div>
 
@@ -109,12 +105,16 @@ export function HeadToHeadTable({ opponent, boatClass, season }: HeadToHeadTable
 
                   {/* Places */}
                   <div className="text-sm">
-                    <span className={`font-medium ${didWin ? 'text-green-500' : 'text-txt-primary'}`}>
-                      {race.ownPlace}{getOrdinal(race.ownPlace)}
+                    <span
+                      className={`font-medium ${didWin ? 'text-data-excellent' : 'text-txt-primary'}`}
+                    >
+                      {race.ownPlace}
+                      {getOrdinal(race.ownPlace)}
                     </span>
                     <span className="text-txt-tertiary mx-1">vs</span>
                     <span className="text-txt-primary">
-                      {race.opponentPlace}{getOrdinal(race.opponentPlace)}
+                      {race.opponentPlace}
+                      {getOrdinal(race.opponentPlace)}
                     </span>
                   </div>
 
@@ -122,9 +122,9 @@ export function HeadToHeadTable({ opponent, boatClass, season }: HeadToHeadTable
                   {race.margin !== null && (
                     <div className="text-xs">
                       {race.margin > 0 ? (
-                        <span className="text-green-500">+{race.margin.toFixed(1)}s</span>
+                        <span className="text-data-excellent">+{race.margin.toFixed(1)}s</span>
                       ) : (
-                        <span className="text-red-500">{race.margin.toFixed(1)}s</span>
+                        <span className="text-data-poor">{race.margin.toFixed(1)}s</span>
                       )}
                     </div>
                   )}
@@ -145,7 +145,13 @@ function getOrdinal(n: number): string {
 }
 
 // Compact version for quick comparison
-export function HeadToHeadSummary({ opponent, boatClass }: { opponent: string; boatClass: string }) {
+export function HeadToHeadSummary({
+  opponent,
+  boatClass,
+}: {
+  opponent: string;
+  boatClass: string;
+}) {
   const { data: comparison } = useHeadToHead(opponent, boatClass);
 
   if (!comparison) return null;
@@ -155,11 +161,11 @@ export function HeadToHeadSummary({ opponent, boatClass }: { opponent: string; b
   return (
     <div className="flex items-center gap-2">
       {isWinning ? (
-        <TrendingUp className="w-4 h-4 text-green-500" />
+        <TrendingUp className="w-4 h-4 text-data-excellent" />
       ) : comparison.wins === comparison.losses ? (
-        <Minus className="w-4 h-4 text-amber-500" />
+        <Minus className="w-4 h-4 text-data-warning" />
       ) : (
-        <TrendingDown className="w-4 h-4 text-red-500" />
+        <TrendingDown className="w-4 h-4 text-data-poor" />
       )}
       <span className="text-sm font-medium">
         {comparison.wins}-{comparison.losses}
