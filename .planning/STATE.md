@@ -4,10 +4,10 @@
 
 **Milestone:** v3.0 — App Redesign
 **Phase:** 36 (Dead Code Cleanup) — IN PROGRESS
-**Plan:** 1/5 complete (1 commit)
-**Status:** Completed 36-01: Deleted 30 dead V2 pages (27 non-Canvas + 3 feature-specific), cleaned 25 dead imports from App.jsx, recorded baseline bundle size (35M, WhiteboardEditor 1.2M largest chunk).
-**Next Plan:** 36-02 (Remove V2Layout dead code)
-**Last activity:** 2026-02-09 — Completed 36-01-PLAN.md: Dead V2 pages removal and baseline metrics
+**Plan:** 2/5 complete (3 commits)
+**Status:** Completed 36-02: Deleted 19 dead V1 pages + 6 dead layouts (10,128 LOC removed), preserved auth/landing/callback pages, eliminated src/layouts/ directory.
+**Next Plan:** 36-03 (Remove V1 components and hooks)
+**Last activity:** 2026-02-09 — Completed 36-02-PLAN.md: Dead V1 pages and layouts removal
 
 ## Project Reference
 
@@ -98,7 +98,7 @@ v3.1 Progress: ░░░░░░░░░░░░░░ (0 phases complete)
 | 33 | Regattas & Rankings Migration | Complete ✅ | 6/6 |
 | 34 | Gamification & Activity Feed Migration | Complete ✅ | 8/8 |
 | 35 | Canvas Promotion + Mobile | Complete ✅ | 11/11 |
-| 36 | Dead Code Cleanup | In Progress | 1/5 |
+| 36 | Dead Code Cleanup | In Progress | 2/5 |
 
 v3.0 Progress: ██████████████████░░ (11 phases complete, 1 in progress, 1 remaining)
 
