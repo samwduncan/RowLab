@@ -26,6 +26,7 @@ import { QuickActions } from '../../features/athletes/components/profile/QuickAc
 import { ActivityTimeline } from '../../features/athletes/components/profile/ActivityTimeline';
 import { AchievementsSection } from '../../features/athletes/components/profile/AchievementsSection';
 import { AthleteEditForm } from '../../features/athletes/components/edit/AthleteEditForm';
+import { PinnedBadges } from '../../features/gamification';
 import {
   RuledHeader,
   CanvasChamferPanel,
@@ -235,6 +236,12 @@ export function CanvasAthleteDetailPage() {
                 <p className="text-sm font-mono text-ink-secondary mt-2">
                   {athlete.side} &middot; {athlete.classYear ?? 'N/A'}
                 </p>
+              )}
+              {/* Pinned Achievement Badges */}
+              {gamificationEnabled && (
+                <div className="mt-3">
+                  <PinnedBadges athleteId={athlete.id} maxDisplay={5} />
+                </div>
               )}
             </div>
           </div>
