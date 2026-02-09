@@ -4,10 +4,10 @@
 
 **Milestone:** v3.0 — App Redesign
 **Phase:** 34 (Gamification & Activity Feed Migration) — In Progress
-**Plan:** 2/6 complete
-**Status:** Created 6 typed activity card components (ErgTest, Session, RaceResult, Attendance, SeatRace, LineupAssignment) with internal navigation, type-specific metadata, and V3 glass design. Ready for Plan 07 dispatcher integration.
-**Next Plan:** 34-03 (Leaderboard Tables)
-**Last activity:** 2026-02-09 — Completed 34-02 (typed activity cards)
+**Plan:** 5/6 complete
+**Status:** All 16 gamification components migrated to V3 warm design tokens. PRCelebration redesigned as toast notification (quiet gamification). StreakDisplay verified non-anxious. Ready for Plan 04 (command palette) and Plan 05 (activity feed real-time).
+**Next Plan:** 34-04 (Command Palette Actions) or 34-05 (Activity Feed Real-time)
+**Last activity:** 2026-02-09 — Completed 34-03 (gamification V3 design migration)
 
 ## Project Reference
 
@@ -96,7 +96,7 @@ v3.1 Progress: ░░░░░░░░░░░░░░ (0 phases complete)
 | 31 | Seat Racing Migration | Complete ✅ | 6/6 |
 | 32 | Training & Attendance Migration | Complete ✅ | 6/6 |
 | 33 | Regattas & Rankings Migration | Complete ✅ | 6/6 |
-| 34 | Gamification & Activity Feed Migration | In Progress | 2/6 |
+| 34 | Gamification & Activity Feed Migration | In Progress | 5/6 |
 | 35 | Mobile Responsiveness & Performance | Not started | TBD |
 | 36 | V1/V2 Cleanup | Not started | TBD |
 | 37 | Warm Copper Design Sweep | Paused | 2/6 |
@@ -229,6 +229,9 @@ Key architectural decisions carrying forward:
 | 09-03 | Navigation restricted to previously visited steps | canGoToStep() only allows clicking to steps <= maxStepReached, preventing skipping ahead without validation |
 | 34-01 | Use V2 design tokens (Inkwell palette) not Canvas | Plan specified "V3 tokens" but codebase has V2 (Inkwell) and Canvas - used V2 tokens for skeleton components as they work across all /app routes |
 | 34-01 | Inline shimmer style + Tailwind animation | Applied shimmer via inline style with CSS variables + tailwind animate-shimmer class to allow gradient to use CSS custom properties while keeping animation timing in Tailwind |
+| 34-03 | PRCelebration as toast notification | Changed from inline border highlight to toast-style slide-in notification (opacity + y-offset + scale), warm gold accent-primary, no confetti/fireworks - quiet gamification |
+| 34-03 | Locked achievement badges use opacity-40 + grayscale | More visually distinct than opacity-50 alone, clear dimming effect for locked state |
+| 34-03 | AchievementBadge subtle unlock animation | Opacity fade (0→1) + slight scale (0.9→1) in 0.3s, no bouncing/spinning - understated celebration |
 | 09-04 | BoatTimeEntry accepts multiple time formats | Coaches can enter "1:32.5" (MM:SS.s), "1:32" (MM:SS), or "92.5" (seconds) - reduces data entry friction |
 | 09-04 | Nested useFieldArray for pieces.boats | react-hook-form useFieldArray supports nested arrays, provides proper form state management for complex structures |
 | 09-04 | Collapsible piece cards for UX scalability | Sessions with many pieces would create excessive scroll, collapse provides better management for 4+ pieces |
@@ -501,9 +504,9 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-02-09
-**Stopped at:** Phase 34, Plan 01 complete. Skeleton loader system created (4 components with CSS shimmer animation).
+**Stopped at:** Phase 34, Plan 03 complete. All gamification components migrated to V3 warm design tokens, PRCelebration redesigned as toast.
 **Resume file:** None
-**Resume with:** Continue with Phase 34 Plan 02 (Activity Feed Migration)
+**Resume with:** Continue with Phase 34 Plan 04 (Command Palette Actions) or Plan 05 (Activity Feed Real-time)
 
 ## Roadmap Evolution
 
