@@ -15,13 +15,20 @@
 
 /* ============================================
    FONT OVERRIDE
-   Canvas uses sans-serif only. Override the serif display font
-   so any child pages using font-display render in Inter instead.
+   Canvas uses Plus Jakarta Sans — a geometric sans-serif with
+   slightly rounded terminals. Warmer than Inter, more personality.
+   Overrides both display and body fonts within the Canvas layout.
    ============================================ */
 
 .canvas-layout {
-  --font-display:
-    'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-body: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  font-family:
+    'Plus Jakarta Sans',
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 /* ============================================
