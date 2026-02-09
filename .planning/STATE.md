@@ -4,10 +4,10 @@
 
 **Milestone:** v3.0 — App Redesign
 **Phase:** 36 (Dead Code Cleanup) — IN PROGRESS
-**Plan:** 3/5 complete (6 commits)
-**Status:** Completed 36-03: Deleted 131 dead V1 components (25,774 LOC removed), preserved only Auth/ and App.jsx-critical components, fixed broken import paths in gamification.
-**Next Plan:** 36-04 (Remove V1 hooks and stores)
-**Last activity:** 2026-02-09 — Completed 36-03-PLAN.md: Dead V1 components removal
+**Plan:** 4/5 complete (9 commits)
+**Status:** Completed 36-04: Deleted 14 dead Zustand stores + entire feature toggle system (21 files, 4789 LOC), retained authStore/lineupStore/settingsStore for Canvas, kept CSS scoping for safety.
+**Next Plan:** 36-05 (Remove V1 hooks)
+**Last activity:** 2026-02-09 — Completed 36-04-PLAN.md: Dead stores and feature toggle cleanup
 
 ## Project Reference
 
@@ -501,12 +501,21 @@ Key architectural decisions carrying forward:
 | 29-03 | AthleteBank filters by draft.assignments client-side | TanStack Query provides all athletes, component filters assigned IDs - scales to hundreds of athletes |
 | 29-03 | Parent derives BoatInstance[] from flat assignments | LineupWorkspace reconstructs boat/seat structure from draft.assignments array for display components |
 
+### v3.0 Decisions (Phase 36 - Dead Code Cleanup)
+
+| Plan | Decision | Rationale |
+|------|----------|-----------|
+| 36-04 | Retain CSS .v2 scoping infrastructure | 234 CSS rules use .v2 scoping, App.css has 2075 lines. Risk of style conflicts too high, minimal benefit from removal. |
+| 36-04 | Remove entire feature toggle system | Zero usage in Canvas pages or components. Gamification now always enabled at team level, athletes can opt out individually. |
+| 36-04 | Retain 3 Zustand stores (auth/lineup/settings) | authStore used by Auth components, lineupStore used by LineupWorkspace, settingsStore used by V2Layout. |
+| 36-04 | Restore undoMiddleware for lineupStore | lineupStore requires undoMiddleware for undo/redo functionality in Canvas lineup builder. |
+
 ## Session Continuity
 
 **Last session:** 2026-02-09
-**Stopped at:** Phase 35-06 COMPLETE. 7 Canvas data table pages mobile-responsive with horizontal scroll, sticky columns, and TanStack Virtual for erg tests.
+**Stopped at:** Phase 36-04 COMPLETE. Deleted 14 dead Zustand stores + feature toggle system (21 files, 4789 LOC), retained 3 stores for Canvas.
 **Resume file:** None
-**Resume with:** Continue Phase 35 with plan 35-11 (Canvas promotion to default navigation)
+**Resume with:** Continue Phase 36 with plan 36-05 (Remove dead V1 hooks)
 
 ## Roadmap Evolution
 
