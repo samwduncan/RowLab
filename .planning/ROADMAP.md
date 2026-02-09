@@ -745,7 +745,7 @@ Plans:
 - [x] 17-05-PLAN.md — Core UI components (Button, Card, Toggle with tactile feedback)
 - [x] 17-06-PLAN.md — Modal, Input, Table components with warm palette)
 - [x] 17-07-PLAN.md — Mobile responsive overhaul (MobileNav, MobileCard, touch targets)
-- [ ] 17-08-PLAN.md — Final verification checkpoint
+- [x] 17-08-PLAN.md — Final verification checkpoint (superseded by Canvas design system)
 
 **Delivers:**
 - Warm color system (dark and light modes with stone neutrals)
@@ -821,7 +821,7 @@ Plans:
 - [x] 19-03-PLAN.md — LandingPageWarm React component
 - [x] 19-04-PLAN.md — Warm image overlays and gallery treatment
 - [x] 19-05-PLAN.md — Route setup and final polish
-- [ ] 19-06-PLAN.md — Human verification checkpoint
+- [x] 19-06-PLAN.md — Human verification checkpoint (superseded by Canvas design system)
 
 **Design Philosophy:**
 - **Primary palette:** Warm creams, ambers, terracottas, warm grays
@@ -952,9 +952,9 @@ Telemetry, AI optimization, predictive modeling, and mobile coxswain experience.
 
 ## Milestone: v3.0 — App Redesign (IN PROGRESS)
 
-Complete frontend redesign with unified warm dark design system, world-class UX for every feature, V1/V2 migration completion, mobile responsiveness, and performance optimization.
+Complete frontend redesign with Canvas design system, world-class UX for every feature, V1/V2 migration completion, mobile responsiveness, and performance optimization.
 
-**Milestone Goal:** Transform all 22 features from B/C-grade to A/A+ quality with unified design system, eliminate V1/V2 split, achieve mobile-first responsiveness, and deliver industry-leading user experience across all workflows.
+**Milestone Goal:** Transform all features to Canvas design language (chamfered panels, ruled headers, log-tape layouts), eliminate V1/V2/old-V3 code, achieve mobile-first responsiveness, and deliver industry-leading user experience across all workflows.
 
 ### Phase 24: Foundation & Design System
 
@@ -1114,11 +1114,11 @@ Plans:
 **Plans:** 5 plans
 
 Plans:
-- [ ] 29-01-PLAN.md — Foundation hooks: command-based undo/redo + optimistic mutations
-- [ ] 29-02-PLAN.md — Keyboard accessibility + magnetic snap + DnD accessibility
-- [ ] 29-03-PLAN.md — Migrate toolbar, sidebar, boat components from V1 store
-- [ ] 29-04-PLAN.md — Migrate dialogs, mobile, page + skeleton loaders
-- [ ] 29-05-PLAN.md — V3 design compliance audit + human verification
+- [x] 29-01-PLAN.md — Foundation hooks: command-based undo/redo + optimistic mutations
+- [x] 29-02-PLAN.md — Keyboard accessibility + magnetic snap + DnD accessibility
+- [x] 29-03-PLAN.md — Migrate toolbar, sidebar, boat components from V1 store
+- [x] 29-04-PLAN.md — Migrate dialogs, mobile, page + skeleton loaders
+- [x] 29-05-PLAN.md — V3 design compliance audit + human verification
 
 ---
 
@@ -1249,123 +1249,75 @@ Plans:
 5. User can trigger actions from command palette (Create athlete, Start practice, Log erg test)
 6. User can see recent commands and context-aware suggestions in cmd+k with keyboard shortcuts displayed
 
-**Plans:** 6 plans
+**Plans:** 8 plans
 
 Plans:
-- [ ] 34-01-PLAN.md — Skeleton loader system (base + card/table/list variants with shimmer)
-- [ ] 34-02-PLAN.md — Activity feed typed cards (6 card types + timeline connector)
-- [ ] 34-03-PLAN.md — Gamification V3 design migration + athlete profile integration
-- [ ] 34-04-PLAN.md — Command palette actions + keyboard shortcuts system
-- [ ] 34-05-PLAN.md — Season milestones + optimistic UI for gamification mutations
-- [ ] 34-06-PLAN.md — Integration wiring + skeleton loader deployment + verification
+- [x] 34-01-PLAN.md — Skeleton loader system (base + card/table/list variants with shimmer)
+- [x] 34-02-PLAN.md — Activity feed typed cards (6 card types with internal navigation)
+- [x] 34-03-PLAN.md — Gamification V3 design migration (16 components + 2 pages)
+- [x] 34-04-PLAN.md — Command palette actions + keyboard shortcuts system
+- [x] 34-05-PLAN.md — Season milestones backend API + timeline + optimistic UI
+- [x] 34-07-PLAN.md — Activity feed timeline container + card dispatcher
+- [x] 34-08-PLAN.md — Achievements in athlete profiles + team challenges section
+- [x] 34-06-PLAN.md — Integration wiring + skeleton loader deployment + verification
 
 ---
 
-### Phase 35: Mobile Responsiveness & Performance
+### Phase 35: Canvas Promotion + Mobile Responsiveness
 
-**Goal:** Achieve mobile-first responsiveness (375px-1440px), optimize performance with code splitting and virtualization, and enforce performance budgets.
+**Goal:** Make Canvas the default design system (swap /canvas → /app routes), achieve mobile-first responsiveness (375px-1440px) for all Canvas pages, optimize performance with code splitting and virtualization, and enforce performance budgets.
 
-**Dependencies:** All feature migrations (Phases 28-34)
+**Dependencies:** Phase 34 (all feature migrations complete), Phase 38-old (Canvas pages built at /canvas/*)
 
-**Requirements:** MR-01, MR-02, MR-03, MR-04, PO-01, PO-02, PO-03, PO-04, TC-02, TC-03, TC-04
+**Note:** Phase 38 (Full Canvas Design System Redesign) was completed — 7/7 plans, 25 Canvas pages, 15 Canvas primitives all built and routed at `/canvas/*`. This phase promotes Canvas to be the default and makes it mobile-ready.
+
+**Requirements:** MR-01, MR-02, MR-03, MR-04, PO-01, PO-02, PO-03, PO-04, TC-02, TC-03, TC-04, RN-05
 
 **Success Criteria:**
-1. User can use the app on any device from 375px to 1440px without horizontal scroll
-2. User can tap touch targets that are at least 44px on mobile devices
-3. User sees simplified mobile navigation (bottom tab bar on small screens)
-4. Coach can run tablet-optimized workflows during practice (landscape, touch-friendly)
-5. User experiences fast initial load via route-based code splitting (<200KB initial bundle)
-6. User can scroll large lists smoothly via TanStack Virtual (>100 items)
-7. User experiences <2.5s LCP and <0.1 CLS on initial page load
-8. Critical paths have smoke tests (auth, lineup save, seat race calc, erg import)
-9. All new components include accessibility assertions (jest-axe)
-10. New V3 component coverage reaches 60% target
+1. Canvas pages serve at /app/* (replaces old V3 warm pages as default)
+2. User can use the app on any device from 375px to 1440px without horizontal scroll
+3. User can tap touch targets that are at least 44px on mobile devices
+4. User sees simplified mobile navigation (bottom tab bar on small screens)
+5. Coach can run tablet-optimized workflows during practice (landscape, touch-friendly)
+6. User experiences fast initial load via route-based code splitting (<200KB initial bundle)
+7. User can scroll large lists smoothly via TanStack Virtual (>100 items)
+8. User experiences <2.5s LCP and <0.1 CLS on initial page load
+9. Critical paths have smoke tests (auth, lineup save, seat race calc, erg import)
+10. All new components include accessibility assertions (jest-axe)
 
-**Plans:** TBD
+**Plans:** 10 plans
+
+Plans:
+- [ ] 35-01-PLAN.md — Route swap: promote Canvas to /app default, remove prototype routes
+- [ ] 35-02-PLAN.md — Mobile navigation: wire MobileNav into CanvasLayout with Canvas styling
+- [ ] 35-03-PLAN.md — Canvas primitive mobile adaptation (chamfer, ruled, console, table, ticket)
+- [ ] 35-04-PLAN.md — Test infrastructure + backend API smoke tests (jest-axe, web-vitals, auth/lineup/erg/C2)
+- [ ] 35-05-PLAN.md — Mobile responsiveness: dashboards & simple pages (8 pages)
+- [ ] 35-06-PLAN.md — Mobile responsiveness: data table pages (7 pages)
+- [ ] 35-07-PLAN.md — Mobile responsiveness: complex interaction pages (10 pages)
+- [ ] 35-08-PLAN.md — Performance: bundle optimization, splash screen, route prefetch, Web Vitals
+- [ ] 35-09-PLAN.md — Frontend smoke tests for critical paths (auth, lineup, erg, seat race, C2, workout)
+- [ ] 35-10-PLAN.md — Accessibility tests + 60% coverage enforcement
 
 ---
 
-### Phase 36: V1/V2 Cleanup
+### Phase 36: Dead Code Cleanup
 
-**Goal:** Remove all V1 and V2 dead code, eliminate CSS scoping, remove feature toggles, and deliver clean V3-only codebase.
+**Goal:** Remove ALL non-Canvas page components, V1/V2 remnants, old V3 warm/copper design tokens, unused CSS, feature toggles, and CSS scoping hacks. Deliver a single clean Canvas-only codebase.
 
-**Dependencies:** Phase 35 (all features migrated)
+**Dependencies:** Phase 35 (Canvas is default, old pages no longer routed)
 
-**Requirements:** CL-01, CL-02, CL-03
+**Requirements:** CL-01, CL-02, CL-03, CL-04
 
 **Success Criteria:**
 1. Developer can work in clean codebase with V1/V2 dead code removed
-2. User is not affected by V1/V2 CSS scoping (removed after migration)
-3. Developer can work without feature toggles (removed after full cutover)
+2. All non-Canvas page components deleted (old /app pages, warm copper pages)
+3. Old design tokens removed (warm copper, V2 glass cards, etc.) — Canvas tokens only
+4. User is not affected by V1/V2 CSS scoping (removed after migration)
+5. Developer can work without feature toggles (removed after full cutover)
+6. Bundle size reduced by removal of dead code
 
 **Plans:** TBD
-
----
-
-### Phase 37: App-Wide Warm Copper Editorial Design Sweep
-
-**Goal:** Apply the warm copper editorial design system (established in Phase 33 regattas/rankings redesign) across ALL remaining app pages — hero headers, copper accent buttons, visible card borders, left accent bars, section headers with copper dot indicators, and theme-aware tokens that work in dark/light/field.
-
-**Dependencies:** Phase 33 (design pattern established)
-
-**Requirements:** DS-37-01 through DS-37-06
-
-**Success Criteria:**
-1. Every page has a hero header with copper category label + serif title (matching regattas/rankings pattern)
-2. All primary action buttons use copper gradient with glow shadow (not blue)
-3. All cards use visible `border-ink-border` instead of invisible `white/[0.xx]` gradient wrappers
-4. All section headers use copper dot indicator + copper label + gradient divider pattern
-5. All tab navigation uses copper underlines (not blue)
-6. All empty states use copper-tinted icons, serif typography, and visible card borders
-7. Design works correctly across dark, light, and field themes
-
-Plans:
-- [ ] 37-01-PLAN.md — Coach pages (Dashboard, Fleet, Availability, Whiteboard, Training, RaceDay)
-- [ ] 37-02-PLAN.md — Athlete/Shared pages (Athletes, Attendance, ErgTests, AthleteDetail, MeDashboard)
-- [ ] 37-03-PLAN.md — Training pages (Sessions, SessionDetail, LiveSession)
-- [ ] 37-04-PLAN.md — Builder pages (LineupBuilder, SeatRacing, MatrixPlanner)
-- [ ] 37-05-PLAN.md — Gamification & Other pages (Achievements, Challenges, Recruiting, BetaHome, AdvancedRankings, Settings)
-- [ ] 37-06-PLAN.md — Human verification checkpoint
-
-**Details:**
-
-The Phase 33 regattas/rankings redesign established a clear visual pattern:
-- **Hero headers:** `text-[11px] font-semibold uppercase tracking-[0.2em] text-accent-copper` category label + `text-4xl font-display font-bold text-ink-bright` title
-- **Copper buttons:** `bg-gradient-to-b from-accent-copper to-accent-copper-hover text-white shadow-glow-copper`
-- **Card borders:** `border border-ink-border` replacing invisible `bg-gradient-to-b from-white/[0.12] to-white/[0.02]` wrappers
-- **Left accent bars:** `w-1 bg-accent-copper` on card left edges
-- **Section headers:** Copper dot + copper label + `bg-gradient-to-r from-accent-copper/20 to-transparent` divider
-- **Tab underlines:** `border-accent-copper` instead of `border-accent-primary`
-- **Empty states:** `bg-ink-raised border border-ink-border` with copper-tinted icons and top copper gradient accent
-
-Each plan handles ~4-6 pages grouped by feature area. Subagents apply the established patterns mechanically.
-
----
-
-### Phase 38: Full Canvas Design System Redesign
-
-**Goal:** Apply the Canvas design language (chamfered panels, ruled headers, log-tape layouts, console readouts, breathing animations, warm gold palette, Outfit font) across ALL app pages — replacing the current card-based UI with bespoke Canvas primitives per page.
-
-**Dependencies:** Phase 37 (design pattern established on Canvas dashboard prototype)
-
-**Plans:** 7 plans
-
-Plans:
-- [ ] 38-01-PLAN.md — Canvas primitive library (extract 7 + build 6 new components)
-- [ ] 38-02-PLAN.md — Simple Canvas pages (Rankings, Settings, Sessions)
-- [ ] 38-03-PLAN.md — Medium Canvas pages batch 1 (Regattas, Erg Tests)
-- [ ] 38-04-PLAN.md — Medium Canvas pages batch 2 (Attendance, Coach Training)
-- [ ] 38-05-PLAN.md — Complex Canvas page: Seat Racing (matrix, analytics, wizard)
-- [ ] 38-06-PLAN.md — Complex Canvas page: Athletes (virtual table, 3 views, editor)
-- [ ] 38-07-PLAN.md — Canvas route swap + human verification
-
-**Success Criteria:**
-1. All 13 Canvas primitives in reusable component library
-2. All 9 app pages have Canvas-styled versions
-3. All /canvas/* routes point to Canvas pages
-4. Zero rounded corners in Canvas pages
-5. All numeric values use ScrambleNumber animation
-6. Human verification of all 9 routes passes
 
 ---
 
@@ -1375,10 +1327,10 @@ The following requirements apply across all v3.0 phases:
 
 | Requirement | Description | Application |
 |-------------|-------------|-------------|
-| CW-01 | Optimistic UI for all mutations | Phases 28-34 |
-| CW-02 | Keyboard shortcuts for common actions | Phases 28-34 |
-| CW-03 | Skeleton loaders instead of spinners | Phases 28-34 |
-| TC-01 | Vitest + Testing Library + MSW infrastructure | Phase 24 |
+| CW-01 | Optimistic UI for all mutations | Phases 28-34 (complete) |
+| CW-02 | Keyboard shortcuts for common actions | Phases 28-34 (complete) |
+| CW-03 | Skeleton loaders instead of spinners | Phases 28-34 (complete) |
+| TC-01 | Vitest + Testing Library + MSW infrastructure | Phase 24 (complete) |
 | TC-02 | Critical paths have smoke tests | Phase 35 |
 | TC-03 | All new components include accessibility assertions | Phase 35 |
 | TC-04 | New V3 component coverage reaches 60% target | Phase 35 |
@@ -1421,11 +1373,11 @@ The following requirements apply across all v3.0 phases:
 |-------|------|--------------|-------|--------|
 | 15 | Feature Toggles & Recruiting | 6 | 10 | Complete ✅ |
 | 16 | Gamification & Engagement | 8 | 12 | Complete ✅ |
-| 17 | Complete Design Overhaul | 7 | 8 | In Progress |
+| 17 | Complete Design Overhaul | 7 | 8 | Complete ✅ (superseded by Canvas) |
 | 18 | Lineup & Boat Improvements | 9 | 11 | Complete ✅ |
-| 19 | Warm Design System & Landing Page | 8 | 6 | In Progress |
+| 19 | Warm Design System & Landing Page | 8 | 6 | Complete ✅ (superseded by Canvas) |
 
-**v2.1 Total:** 38 requirements across 5 phases (3 complete, 2 in progress)
+**v2.1 Total:** 38 requirements across 5 phases
 
 ### v2.2 Milestone (Planned)
 
@@ -1452,13 +1404,13 @@ The following requirements apply across all v3.0 phases:
 | 31 | Seat Racing Migration | 6 | 6 | Complete ✅ |
 | 32 | Training & Attendance Migration | 9 | 6 | Complete ✅ |
 | 33 | Regattas & Rankings Migration | 10 | 6 | Complete ✅ |
-| 34 | Gamification & Activity Feed Migration | 9 | TBD | Not started |
-| 35 | Mobile Responsiveness & Performance | 15 | TBD | Not started |
-| 36 | V1/V2 Cleanup | 3 | TBD | Not started |
-| 37 | Warm Copper Design Sweep | 7 | 6 | Not started |
-| 38 | Full Canvas Design System Redesign | TBD | 7 | Not started |
+| 34 | Gamification & Activity Feed | 9 | 8 | Complete ✅ |
+| 35 | Canvas Promotion + Mobile | 12 | TBD | Not started |
+| 36 | Dead Code Cleanup | 4 | TBD | Not started |
+| ~~37~~ | ~~Warm Copper Sweep~~ | — | — | Removed (superseded by Canvas) |
+| ~~38~~ | ~~Canvas Redesign~~ | — | 7 | Absorbed (work complete, route swap in Phase 35) |
 
-**v3.0 Total:** 108+ requirements across 15 phases
+**v3.0 Total:** 13 phases (11 complete, 2 remaining)
 
 ---
 
@@ -1468,29 +1420,18 @@ Phases requiring deeper research during planning:
 
 | Phase | Topic | Reason |
 |-------|-------|--------|
-| 8 | Drag-drop with undo/redo | Complex @dnd-kit + Zustand temporal middleware integration |
-| 9 | ELO calculation | Optimal K-factor for rowing, confidence intervals, edge cases |
-| 10 | Calendar integration | react-big-calendar virtualization, mobile-first patterns |
-| 14 | **Bradley-Terry & Matrix Racing** | **DEEP RESEARCH COMPLETE** — See 14-RESEARCH.md |
-| 15 | **Feature toggles & Recruiting** | **RESEARCH COMPLETE** — See 15-RESEARCH.md |
-| 16 | **Gamification patterns** | Achievement system design, streak mechanics, engagement psychology |
-| 17 | **Design system rebuild** | Framer Motion patterns, spring physics, satisfying interactions |
-| 19 | **Penpot Design System** | **RESEARCH COMPLETE** — See 19-RESEARCH.md |
-| 20 | **Telemetry file formats** | Empower, Peach, NK have different file structures and metrics |
-| 21 | **AI/LLM integration** | GPT/Claude API patterns, prompt engineering for lineup optimization |
-| 22 | **Predictive modeling** | ML model selection, training data requirements, accuracy metrics |
-| 23 | **PWA offline patterns** | Service worker caching, IndexedDB, background sync strategies |
-| 25 | **State migration patterns** | TanStack Query cache persistence, lineupStore localStorage decision, multi-tab sync |
-| 29 | **Drag-drop accessibility** | Keyboard support, screen reader announcements for lineup builder |
-| 32 | **Mobile practice flow** | Tablet landscape, offline support, touch-optimized training UI |
-| 33 | **WebSocket patterns** | Reconnection strategy, offline queue for race day |
+| 35 | **Canvas mobile patterns** | Canvas design has chamfered panels, ruled headers — need mobile adaptation strategy for these bespoke primitives |
+| 35 | **Touch interaction for Canvas** | How do Canvas components (DataTable, LogEntry, ConsoleReadout) adapt to touch? |
+| 35 | **Bottom tab bar + Canvas toolbar** | Canvas has its own toolbar — reconcile with mobile bottom nav |
+
+Completed research (archived):
+- Phase 14: Bradley-Terry & Matrix Racing — See 14-RESEARCH.md
+- Phase 15: Feature toggles & Recruiting — See 15-RESEARCH.md
+- Phase 19: Penpot Design System — See 19-RESEARCH.md
+- Phase 38: Canvas Design System — See 38-RESEARCH.md
 
 Phases with standard patterns (skip research):
-- Phase 24: Design token patterns (Style Dictionary, Tailwind, ESLint)
-- Phase 26: Client-side redirect guards (React Router)
-- Phase 28, 30, 31, 34: Feature migration patterns established in earlier phases
-- Phase 35: Performance optimization (Vite code splitting, TanStack Virtual)
-- Phase 36: Code deletion and cleanup
+- Phase 36: Code deletion and cleanup (mechanical removal)
 
 ---
 
@@ -1755,4 +1696,4 @@ Ideas evaluated but deferred for future consideration:
 ---
 
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-02-08 — Phase 37 added (app-wide warm copper design sweep)*
+*Last updated: 2026-02-09 — Roadmap audit: killed Phase 37 (copper sweep), absorbed Phase 38 (Canvas complete), merged Phase 35+36 into Canvas Promotion + Mobile, marked v2.1 complete*

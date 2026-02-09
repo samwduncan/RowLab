@@ -147,7 +147,7 @@ export function CanvasDock() {
   );
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden lg:block">
       {/* Dock container */}
       <motion.div
         className="flex items-center gap-1 px-3 py-2.5 rounded-full
