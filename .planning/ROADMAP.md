@@ -1285,19 +1285,20 @@ Plans:
 9. Critical paths have smoke tests (auth, lineup save, seat race calc, erg import)
 10. All new components include accessibility assertions (jest-axe)
 
-**Plans:** 10 plans
+**Plans:** 11 plans — **COMPLETE** (2026-02-09)
 
 Plans:
-- [ ] 35-01-PLAN.md — Route swap: promote Canvas to /app default, remove prototype routes
-- [ ] 35-02-PLAN.md — Mobile navigation: wire MobileNav into CanvasLayout with Canvas styling
-- [ ] 35-03-PLAN.md — Canvas primitive mobile adaptation (chamfer, ruled, console, table, ticket)
-- [ ] 35-04-PLAN.md — Test infrastructure + backend API smoke tests (jest-axe, web-vitals, auth/lineup/erg/C2)
-- [ ] 35-05-PLAN.md — Mobile responsiveness: dashboards & simple pages (8 pages)
-- [ ] 35-06-PLAN.md — Mobile responsiveness: data table pages (7 pages)
-- [ ] 35-07-PLAN.md — Mobile responsiveness: complex interaction pages (10 pages)
-- [ ] 35-08-PLAN.md — Performance: bundle optimization, splash screen, route prefetch, Web Vitals
-- [ ] 35-09-PLAN.md — Frontend smoke tests for critical paths (auth, lineup, erg, seat race, C2, workout)
-- [ ] 35-10-PLAN.md — Accessibility tests + 60% coverage enforcement
+- [x] 35-01-PLAN.md — Route swap: promote Canvas to /app default, remove prototype routes
+- [x] 35-02-PLAN.md — Mobile navigation: wire MobileNav into CanvasLayout with Canvas styling
+- [x] 35-03-PLAN.md — Canvas primitive mobile adaptation (chamfer, ruled, console, table, ticket)
+- [x] 35-04-PLAN.md — Test infrastructure + backend API smoke tests (jest-axe, web-vitals, auth/lineup/erg/C2)
+- [x] 35-05-PLAN.md — Mobile responsiveness: dashboards & simple pages (8 pages)
+- [x] 35-06-PLAN.md — Mobile responsiveness: data table pages (7 pages)
+- [x] 35-07-PLAN.md — Mobile responsiveness: complex interaction pages (4 pages)
+- [x] 35-08-PLAN.md — Mobile responsiveness: session, fleet, whiteboard pages (6 pages)
+- [x] 35-09-PLAN.md — Performance: bundle optimization, splash screen, route prefetch, Web Vitals
+- [x] 35-10-PLAN.md — Frontend smoke tests for critical paths (auth, lineup, erg, seat race, C2, workout)
+- [x] 35-11-PLAN.md — Accessibility tests + 60% coverage enforcement + Lighthouse CI
 
 ---
 
@@ -1317,7 +1318,14 @@ Plans:
 5. Developer can work without feature toggles (removed after full cutover)
 6. Bundle size reduced by removal of dead code
 
-**Plans:** TBD
+**Plans:** 5 plans
+
+Plans:
+- [ ] 36-01-PLAN.md — Remove 30 dead V2 pages + clean App.jsx imports + record baseline bundle size
+- [ ] 36-02-PLAN.md — Remove 19 dead V1 pages + 4 dead layouts
+- [ ] 36-03-PLAN.md — Remove ~100 dead V1 components (preserve auth/landing dependencies)
+- [ ] 36-04-PLAN.md — Remove dead Zustand stores + CSS scoping + audit feature toggles
+- [ ] 36-05-PLAN.md — Remove dead CSS tokens + hooks/utils cleanup + final bundle comparison
 
 ---
 
@@ -1405,8 +1413,8 @@ The following requirements apply across all v3.0 phases:
 | 32 | Training & Attendance Migration | 9 | 6 | Complete ✅ |
 | 33 | Regattas & Rankings Migration | 10 | 6 | Complete ✅ |
 | 34 | Gamification & Activity Feed | 9 | 8 | Complete ✅ |
-| 35 | Canvas Promotion + Mobile | 12 | TBD | Not started |
-| 36 | Dead Code Cleanup | 4 | TBD | Not started |
+| 35 | Canvas Promotion + Mobile | 12 | 11 | Complete |
+| 36 | Dead Code Cleanup | 4 | 5 | Not started |
 | ~~37~~ | ~~Warm Copper Sweep~~ | — | — | Removed (superseded by Canvas) |
 | ~~38~~ | ~~Canvas Redesign~~ | — | 7 | Absorbed (work complete, route swap in Phase 35) |
 
