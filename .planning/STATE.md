@@ -4,10 +4,10 @@
 
 **Milestone:** v3.0 — App Redesign
 **Phase:** 35 (Canvas Promotion + Mobile Responsiveness) — IN PROGRESS
-**Plan:** 9/11 complete (2 commits)
-**Status:** Completed 35-08: 6 complex Canvas pages made mobile-responsive with touch-friendly layouts (sessions, detail, live, fleet, whiteboard, dashboard). 44px touch targets, single-column mobile layouts.
+**Plan:** 10/11 complete (3 commits)
+**Status:** Completed 35-06: 7 data-table-heavy Canvas pages mobile-responsive with horizontal scroll, sticky first columns, and TanStack Virtual for erg tests. All pages render without horizontal page scroll at 375px.
 **Next Plan:** 35-11 (Canvas promotion to default navigation)
-**Last activity:** 2026-02-09 — Completed 35-08-PLAN.md: Mobile-responsive Canvas complex layouts
+**Last activity:** 2026-02-09 — Completed 35-06-PLAN.md: Canvas data tables mobile-responsive
 
 ## Project Reference
 
@@ -504,9 +504,9 @@ Key architectural decisions carrying forward:
 ## Session Continuity
 
 **Last session:** 2026-02-09
-**Stopped at:** Phase 35-09 COMPLETE. Performance optimized: Vite auto-splitting, splash screen, route prefetching, Web Vitals tracking.
+**Stopped at:** Phase 35-06 COMPLETE. 7 Canvas data table pages mobile-responsive with horizontal scroll, sticky columns, and TanStack Virtual for erg tests.
 **Resume file:** None
-**Resume with:** Continue Phase 35 with plan 35-10 (Frontend smoke tests)
+**Resume with:** Continue Phase 35 with plan 35-11 (Canvas promotion to default navigation)
 
 ## Roadmap Evolution
 
