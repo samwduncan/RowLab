@@ -4,19 +4,58 @@
  * Replaces ShellLayout with:
  * - No sidebar, no rail
  * - Full-width content
- * - Animated zone background gradients
+ * - Breathing animated zone background gradients
  * - Floating dock (bottom) + floating toolbar (top)
  * - Framer Motion page transitions between zones
+ *
+ * Background system: Three independently-animated CSS gradient layers
+ * that drift slowly, creating an organic "breathing" atmosphere.
+ * Zone colors are injected via CSS custom properties and crossfade
+ * with Framer Motion when zones change.
  *
  * Design: design/canvas branch prototype
  */
 
+import { useMemo } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRequireAuth } from '@/hooks/useAuth';
 import { LoadingSkeleton, SkeletonLine } from '@v2/components/common';
 import { CanvasDock, useZone } from '@v2/components/shell/CanvasDock';
 import { CanvasToolbar } from '@v2/components/shell/CanvasToolbar';
+import '@v2/styles/canvas-atmosphere.css';
+
+// ============================================
+// ZONE → CSS CUSTOM PROPERTY MAPPING
+// Each zone gets a unique glow + wash color pair
+// ============================================
+
+const ZONE_ATMOSPHERE: Record<string, { glow: string; wash: string }> = {
+  home: {
+    glow: 'rgba(251, 191, 36, 0.05)',
+    wash: 'rgba(245, 158, 11, 0.025)',
+  },
+  team: {
+    glow: 'rgba(20, 184, 166, 0.05)',
+    wash: 'rgba(129, 140, 248, 0.025)',
+  },
+  training: {
+    glow: 'rgba(245, 158, 11, 0.05)',
+    wash: 'rgba(251, 191, 36, 0.025)',
+  },
+  racing: {
+    glow: 'rgba(248, 113, 113, 0.05)',
+    wash: 'rgba(236, 72, 153, 0.025)',
+  },
+  analysis: {
+    glow: 'rgba(129, 140, 248, 0.05)',
+    wash: 'rgba(20, 184, 166, 0.025)',
+  },
+  settings: {
+    glow: 'rgba(115, 115, 115, 0.035)',
+    wash: 'rgba(115, 115, 115, 0.02)',
+  },
+};
 
 // ============================================
 // CANVAS LAYOUT
@@ -28,6 +67,15 @@ export function CanvasLayout() {
 
   // Require authentication
   const { isLoading: isAuthLoading } = useRequireAuth();
+
+  // Build CSS custom property values for the current zone
+  const atmosphereVars = useMemo(
+    () => ({
+      '--canvas-zone-glow': ZONE_ATMOSPHERE[zone.id]?.glow ?? ZONE_ATMOSPHERE.home.glow,
+      '--canvas-zone-wash': ZONE_ATMOSPHERE[zone.id]?.wash ?? ZONE_ATMOSPHERE.home.wash,
+    }),
+    [zone.id]
+  ) as React.CSSProperties;
 
   // Show loading state while auth is verified
   if (isAuthLoading) {
@@ -45,9 +93,31 @@ export function CanvasLayout() {
   }
 
   return (
-    <div className="v2 min-h-screen bg-ink-deep relative overflow-hidden">
+    <div className="v2 min-h-screen bg-ink-deep relative overflow-hidden" style={atmosphereVars}>
       {/* ============================================ */}
-      {/* AMBIENT ZONE GRADIENT - very subtle, background layer */}
+      {/* BREATHING ATMOSPHERE — animated CSS gradient layers */}
+      {/* These drift independently via canvas-atmosphere.css keyframes */}
+      {/* Zone colors crossfade when zone changes (Framer Motion handles the */}
+      {/* CSS custom property transition, CSS handles the drift animation) */}
+      {/* ============================================ */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        {/* Layer 1: Primary zone nebula — slow diagonal drift */}
+        <div className="canvas-atmo-layer-1" />
+
+        {/* Layer 2: Secondary wash — complementary tone, counter-orbit */}
+        <div className="canvas-atmo-layer-2" />
+
+        {/* Layer 3: Breathing pulse — gentle opacity oscillation */}
+        <div className="canvas-atmo-pulse" />
+
+        {/* Layer 4: Edge vignette — grounds the atmosphere */}
+        <div className="canvas-atmo-vignette" />
+      </div>
+
+      {/* ============================================ */}
+      {/* ZONE ACCENT GLOW — Framer Motion crossfade on zone change */}
+      {/* This provides the instant zone-color feedback while the CSS */}
+      {/* layers provide the continuous breathing motion */}
       {/* ============================================ */}
       <motion.div
         className="fixed inset-0 pointer-events-none z-0"
@@ -55,7 +125,7 @@ export function CanvasLayout() {
         transition={{ duration: 0.8, ease: 'easeInOut' }}
       />
 
-      {/* Secondary ambient glow — lower, more diffuse */}
+      {/* Secondary zone glow — bottom edge reflection */}
       <motion.div
         className="fixed inset-0 pointer-events-none z-0"
         animate={{
@@ -64,13 +134,14 @@ export function CanvasLayout() {
         transition={{ duration: 1, ease: 'easeInOut' }}
       />
 
-      {/* Subtle noise texture overlay for depth */}
+      {/* Subtle noise texture overlay for depth/anti-banding */}
       <div
-        className="fixed inset-0 pointer-events-none z-0 opacity-[0.015]"
+        className="fixed inset-0 pointer-events-none z-0 opacity-[0.018]"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
           backgroundRepeat: 'repeat',
           backgroundSize: '256px 256px',
+          mixBlendMode: 'overlay',
         }}
       />
 

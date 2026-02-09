@@ -141,7 +141,7 @@ export function CanvasDock() {
         className="flex items-center gap-1 px-3 py-2.5 rounded-full
                    bg-ink-base/70 backdrop-blur-2xl
                    border border-white/[0.08]
-                   shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.05)]"
+                   shadow-[0_8px_24px_rgba(0,0,0,0.3),0_0_0_1px_rgba(255,255,255,0.04)]"
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30, delay: 0.2 }}
@@ -171,8 +171,8 @@ export function CanvasDock() {
                     layoutId="dock-active-bg"
                     className="absolute inset-0 rounded-full"
                     style={{
-                      background: `radial-gradient(circle, rgba(${z.accentRgb}, 0.2) 0%, transparent 70%)`,
-                      boxShadow: `0 0 20px rgba(${z.accentRgb}, 0.3)`,
+                      background: `radial-gradient(circle, rgba(${z.accentRgb}, 0.12) 0%, transparent 70%)`,
+                      boxShadow: `0 0 12px rgba(${z.accentRgb}, 0.15)`,
                     }}
                     transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                   />
