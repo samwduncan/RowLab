@@ -3,11 +3,11 @@
 ## Current Status
 
 **Milestone:** v3.0 — App Redesign
-**Phase:** 35 (Canvas Promotion + Mobile Responsiveness) — COMPLETE ✅
-**Plan:** 11/11 complete (3 commits)
-**Status:** Completed 35-11: Added jest-axe accessibility tests (12 tests), enforced 60% coverage threshold in vitest, and configured Lighthouse CI with LCP/CLS assertions. Phase 35 complete - Canvas is production-ready.
-**Next Phase:** 36 (V1 to Canvas Migration)
-**Last activity:** 2026-02-09 — Completed 35-11-PLAN.md: Accessibility tests, coverage threshold, Lighthouse CI
+**Phase:** 36 (Dead Code Cleanup) — IN PROGRESS
+**Plan:** 1/5 complete (1 commit)
+**Status:** Completed 36-01: Deleted 30 dead V2 pages (27 non-Canvas + 3 feature-specific), cleaned 25 dead imports from App.jsx, recorded baseline bundle size (35M, WhiteboardEditor 1.2M largest chunk).
+**Next Plan:** 36-02 (Remove V2Layout dead code)
+**Last activity:** 2026-02-09 — Completed 36-01-PLAN.md: Dead V2 pages removal and baseline metrics
 
 ## Project Reference
 
@@ -98,9 +98,9 @@ v3.1 Progress: ░░░░░░░░░░░░░░ (0 phases complete)
 | 33 | Regattas & Rankings Migration | Complete ✅ | 6/6 |
 | 34 | Gamification & Activity Feed Migration | Complete ✅ | 8/8 |
 | 35 | Canvas Promotion + Mobile | Complete ✅ | 11/11 |
-| 36 | Dead Code Cleanup | Not started | TBD |
+| 36 | Dead Code Cleanup | In Progress | 1/5 |
 
-v3.0 Progress: ██████████████████░░ (11 phases complete, 2 remaining)
+v3.0 Progress: ██████████████████░░ (11 phases complete, 1 in progress, 1 remaining)
 
 **Removed phases:** Phase 37 (Warm Copper Sweep — superseded by Canvas), Phase 38 (Canvas Redesign — work complete, route swap absorbed into Phase 35)
 
