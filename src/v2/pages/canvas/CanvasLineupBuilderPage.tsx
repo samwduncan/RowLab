@@ -18,6 +18,7 @@ import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAthletes } from '@v2/hooks/useAthletes';
 import { useRequireAuth } from '../../../hooks/useAuth';
+import { useIsMobile } from '@v2/hooks/useBreakpoint';
 import { LineupWorkspace } from '@v2/components/lineup';
 import { LineupSkeleton } from '@v2/features/lineup/components/LineupSkeleton';
 import { CanvasConsoleReadout, ScrambleNumber } from '@v2/components/canvas';
@@ -75,6 +76,9 @@ export function CanvasLineupBuilderPage() {
   const [searchParams] = useSearchParams();
   const lineupId = searchParams.get('id') || null;
 
+  // Responsive layout
+  const isMobile = useIsMobile();
+
   // Show skeleton while checking auth or loading athletes
   if (isAuthLoading || isAthletesLoading) {
     return <CanvasLineupLoading />;
@@ -121,12 +125,12 @@ export function CanvasLineupBuilderPage() {
       {/* ============================================ */}
       {/* CONSOLE READOUT */}
       {/* ============================================ */}
-      <div className="flex-shrink-0 border-t border-ink-border px-6">
+      <div className="flex-shrink-0 border-t border-ink-border px-4 sm:px-6">
         <CanvasConsoleReadout
           items={[
             { label: 'ATHLETES', value: athleteCount.toString() },
             { label: 'LINEUP', value: lineupId ? lineupId.slice(0, 8).toUpperCase() : 'NEW' },
-            { label: 'MODE', value: 'DRAG-DROP' },
+            { label: 'MODE', value: isMobile ? 'TAP-SELECT' : 'DRAG-DROP' },
             { label: 'STATUS', value: 'READY' },
           ]}
         />

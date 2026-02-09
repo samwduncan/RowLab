@@ -45,38 +45,8 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          // Core React dependencies
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          // State management and data fetching
-          'query-vendor': [
-            '@tanstack/react-query',
-            '@tanstack/react-table',
-            '@tanstack/react-virtual',
-          ],
-          // Forms
-          'forms-vendor': ['react-hook-form', '@hookform/resolvers', 'zod'],
-          // UI libraries
-          'ui-vendor': ['@headlessui/react', 'sonner'],
-          // 3D rendering (large chunk, load separately)
-          'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
-          // Animation library
-          'animation-vendor': ['framer-motion'],
-          // Charting
-          'chart-vendor': ['recharts'],
-          // Drag and drop
-          'dnd-vendor': ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
-          // PDF/Export
-          'export-vendor': ['jspdf', 'html2canvas'],
-          // Icons
-          'icons-vendor': ['@phosphor-icons/react', 'lucide-react'],
-        },
-      },
-    },
-    // Increase chunk size warning limit (Three.js is large)
-    chunkSizeWarningLimit: 1000,
+    // Let Vite's automatic code splitting optimize bundle size
+    chunkSizeWarningLimit: 500,
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom', 'zustand', 'framer-motion'],

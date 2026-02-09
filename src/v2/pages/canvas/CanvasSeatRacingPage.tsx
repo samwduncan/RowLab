@@ -24,6 +24,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAthleteRatings, useRecalculateRatings } from '@v2/hooks/useAthleteRatings';
 import { useSeatRaceSessions } from '@v2/hooks/useSeatRaceSessions';
 import { useRequireAuth } from '../../../hooks/useAuth';
+import { useIsMobile, useIsTabletOrSmaller } from '@v2/hooks/useBreakpoint';
 import {
   RankingsChart,
   SessionList,
@@ -69,10 +70,10 @@ interface FeatureCardProps {
 function CanvasFeatureCard({ to, icon: Icon, title, description }: FeatureCardProps) {
   return (
     <Link to={to} className="block group">
-      <CanvasChamferPanel className="p-4 transition-all duration-200 hover:-translate-y-1">
+      <CanvasChamferPanel className="p-4 min-h-[80px] transition-all duration-200 hover:-translate-y-1">
         <div className="flex items-start gap-3">
-          <div className="p-2 bg-ink-hover">
-            <Icon className="w-4 h-4 text-data-excellent" />
+          <div className="p-2 bg-ink-hover min-h-[44px] min-w-[44px] flex items-center justify-center">
+            <Icon className="w-5 h-5 text-data-excellent" />
           </div>
           <div className="min-w-0 flex-1">
             <h3 className="text-sm font-semibold text-ink-bright group-hover:text-white transition-colors">
@@ -258,6 +259,10 @@ export function CanvasSeatRacingPage() {
   const [selectedAthleteId, setSelectedAthleteId] = useState<string | null>(null);
   const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
 
+  // Responsive layout
+  const isMobile = useIsMobile();
+  const isTabletOrSmaller = useIsTabletOrSmaller();
+
   // Auth - redirects to login if not authenticated
   const { isLoading: isAuthLoading } = useRequireAuth();
 
@@ -352,38 +357,47 @@ export function CanvasSeatRacingPage() {
       {/* ============================================ */}
       {/* HEADER — text against void (Canvas pattern) */}
       {/* ============================================ */}
-      <div className="flex-shrink-0 px-6 pt-8 pb-6">
-        <div className="flex items-end justify-between">
+      <div className="flex-shrink-0 px-4 sm:px-6 pt-6 sm:pt-8 pb-4 sm:pb-6">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <div>
             <p className="text-xs font-medium text-ink-muted uppercase tracking-[0.15em] mb-1">
               Analytics
             </p>
-            <h1 className="text-4xl sm:text-5xl font-bold text-ink-bright tracking-tight leading-none">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-ink-bright tracking-tight leading-none">
               Seat Racing
             </h1>
           </div>
 
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setShowShortcutsHelp(true)}
-              className="p-2 text-ink-secondary hover:text-ink-bright transition-colors"
-              title="Keyboard shortcuts (?)"
+          <div className="flex items-center gap-2 flex-wrap">
+            {!isMobile && (
+              <>
+                <button
+                  onClick={() => setShowShortcutsHelp(true)}
+                  className="p-2 text-ink-secondary hover:text-ink-bright transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  title="Keyboard shortcuts (?)"
+                >
+                  <HelpCircle size={18} />
+                </button>
+                <Link to="/app/coach/seat-racing/advanced-rankings">
+                  <CanvasButton variant="ghost" size="sm">
+                    Advanced Rankings
+                  </CanvasButton>
+                </Link>
+                <Link to="/app/coach/seat-racing/matrix-planner">
+                  <CanvasButton variant="ghost" size="sm">
+                    Matrix Planner
+                  </CanvasButton>
+                </Link>
+              </>
+            )}
+            <CanvasButton
+              onClick={handleOpenWizard}
+              variant="primary"
+              size="md"
+              className="min-h-[44px]"
             >
-              <HelpCircle size={18} />
-            </button>
-            <Link to="/app/coach/seat-racing/advanced-rankings">
-              <CanvasButton variant="ghost" size="sm">
-                Advanced Rankings
-              </CanvasButton>
-            </Link>
-            <Link to="/app/coach/seat-racing/matrix-planner">
-              <CanvasButton variant="ghost" size="sm">
-                Matrix Planner
-              </CanvasButton>
-            </Link>
-            <CanvasButton onClick={handleOpenWizard} variant="primary" size="md">
               <Plus size={18} />
-              New Session
+              {!isMobile && 'New Session'}
             </CanvasButton>
           </div>
         </div>
@@ -427,15 +441,15 @@ export function CanvasSeatRacingPage() {
             {/* RANKINGS TAB */}
             <Tab.Panel className="h-full flex flex-col overflow-hidden">
               {/* Side filter */}
-              <div className="flex-shrink-0 px-6 py-4 border-b border-ink-border">
-                <div className="flex items-center gap-2">
+              <div className="flex-shrink-0 px-4 sm:px-6 py-4 border-b border-ink-border">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-xs font-mono text-ink-muted uppercase tracking-wider mr-2">
                     Filter:
                   </span>
                   <button
                     onClick={() => setSideFilter('all')}
                     className={`
-                      px-3 py-1.5 text-xs font-mono uppercase tracking-wider transition-colors
+                      px-3 py-1.5 min-h-[44px] text-xs font-mono uppercase tracking-wider transition-colors
                       ${
                         sideFilter === 'all'
                           ? 'bg-ink-bright text-ink-default'
@@ -448,7 +462,7 @@ export function CanvasSeatRacingPage() {
                   <button
                     onClick={() => setSideFilter('Port')}
                     className={`
-                      px-3 py-1.5 text-xs font-mono uppercase tracking-wider transition-colors
+                      px-3 py-1.5 min-h-[44px] text-xs font-mono uppercase tracking-wider transition-colors
                       ${
                         sideFilter === 'Port'
                           ? 'bg-data-poor text-white'
@@ -461,7 +475,7 @@ export function CanvasSeatRacingPage() {
                   <button
                     onClick={() => setSideFilter('Starboard')}
                     className={`
-                      px-3 py-1.5 text-xs font-mono uppercase tracking-wider transition-colors
+                      px-3 py-1.5 min-h-[44px] text-xs font-mono uppercase tracking-wider transition-colors
                       ${
                         sideFilter === 'Starboard'
                           ? 'bg-data-excellent text-white'
@@ -475,7 +489,7 @@ export function CanvasSeatRacingPage() {
               </div>
 
               {/* Rankings content */}
-              <div className="flex-1 overflow-y-auto p-6">
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6">
                 {isLoadingRatings ? (
                   <div className="max-w-4xl mx-auto">
                     <RankingsTableSkeleton />
@@ -490,8 +504,10 @@ export function CanvasSeatRacingPage() {
                     {/* Chart section (keep V2 RankingsChart, update wrapper) */}
                     <div>
                       <RuledHeader>ELO Distribution</RuledHeader>
-                      <div className="bg-ink-raised border border-ink-border p-6">
-                        <RankingsChart ratings={ratings} />
+                      <div className="bg-ink-raised border border-ink-border p-4 sm:p-6">
+                        <div style={{ height: isMobile ? '200px' : '300px' }}>
+                          <RankingsChart ratings={ratings} />
+                        </div>
                       </div>
                     </div>
 
