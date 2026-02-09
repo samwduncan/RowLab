@@ -308,15 +308,15 @@ export function CanvasDashboard() {
                 {/* Value + trend inline */}
                 <div className="flex items-baseline gap-2">
                   <span
-                    className={`font-mono font-bold tracking-tighter leading-none ${
+                    className={`font-extrabold tracking-tight leading-none ${
                       isFeatured ? 'text-4xl lg:text-5xl' : 'text-3xl lg:text-4xl'
                     }`}
-                    style={{ color: m.dataColor }}
+                    style={{ color: m.dataColor, fontVariantNumeric: 'tabular-nums' }}
                   >
                     <ScrambleNumber value={m.value} />
                   </span>
                   {m.suffix && (
-                    <span className="text-lg font-mono text-ink-secondary">{m.suffix}</span>
+                    <span className="text-lg font-semibold text-ink-secondary">{m.suffix}</span>
                   )}
 
                   {/* Trend — pushed to the right */}
