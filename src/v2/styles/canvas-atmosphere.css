@@ -12,21 +12,30 @@
  */
 
 /* ============================================
-   FONT OVERRIDE
-   Canvas uses Rubik — geometric sans-serif with softly rounded
-   corners. Clean, friendly, distinctive without being trendy.
-   Overrides both display and body fonts within the Canvas layout.
+   CANVAS IDENTITY OVERRIDES
+   Typeface + data palette scoped to the Canvas layout.
+   These cascade to all child pages without touching global tokens.
    ============================================ */
 
 .canvas-layout {
-  --font-display: 'Rubik', 'Inter', system-ui, -apple-system, sans-serif;
-  --font-body: 'Rubik', 'Inter', system-ui, -apple-system, sans-serif;
+  /* Typeface: Outfit — geometric sans-serif, crisper than Rubik,
+     less "startup friendly", more instrument-panel precision */
+  --font-display: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-body: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
   font-family:
-    'Rubik',
+    'Outfit',
     'Inter',
     system-ui,
     -apple-system,
     sans-serif;
+
+  /* Data palette — warm gold tones ONLY, no blue, no green.
+     These override the global Tailwind-default tokens.
+     The goal: data numbers feel "printed in warm ink", not "digital SaaS." */
+  --data-excellent: #d4a853; /* aged brass — primary emphasis */
+  --data-good: #c9b88a; /* warm sand — secondary data */
+  --data-warning: #c98a3d; /* goldenrod — deeper amber */
+  --data-poor: #b86a58; /* terra cotta — warm negative, not neon red */
 }
 
 /* ============================================
