@@ -30,6 +30,8 @@ import type { Athlete, SidePreference } from '@v2/types/athletes';
 import { useGlobalSearch, useCommandPaletteStore } from '../hooks/useGlobalSearch';
 import { useAthletes } from '@v2/hooks/useAthletes';
 import { AthleteAvatar } from '@v2/components/athletes/AthleteAvatar';
+import { ActionsGroup } from './ActionsGroup';
+import { SuggestionsGroup } from './SuggestionsGroup';
 
 // ============================================
 // ICON MAP
@@ -417,6 +419,7 @@ export function CommandPalette() {
   const showRecent = !query.trim() && recentItems.length > 0;
   const showResults = query.trim() && results.length > 0;
   const showEmpty = query.trim() && results.length === 0;
+  const showSuggestions = !query.trim();
 
   return (
     <AnimatePresence>
@@ -490,6 +493,9 @@ export function CommandPalette() {
                   </div>
                 )}
 
+                {/* Suggestions when no query */}
+                {showSuggestions && <SuggestionsGroup onClose={close} />}
+
                 {/* Recent items when no query */}
                 {showRecent && (
                   <RecentItems items={recentItems} onSelect={handleSelect} onClear={clearRecent} />
@@ -500,6 +506,9 @@ export function CommandPalette() {
                   results.map((group) => (
                     <ResultGroup key={group.type} group={group} onSelect={handleSelect} />
                   ))}
+
+                {/* Actions group (visible when typing) */}
+                {query.trim() && <ActionsGroup onClose={close} />}
 
                 {/* Athletes group with avatars and quick actions */}
                 <AthletesGroup
