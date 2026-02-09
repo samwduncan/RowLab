@@ -411,23 +411,33 @@ export function CanvasAthletesPage() {
       {/* ============================================ */}
       {/* HEADER — Text against void (Canvas pattern) */}
       {/* ============================================ */}
-      <div className="flex items-end justify-between pt-8 pb-6 px-6">
+      <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between pt-8 pb-6 px-4 lg:px-6 gap-4">
         <div>
           <p className="text-[10px] font-medium text-ink-muted uppercase tracking-[0.2em] mb-2">
             TEAM
           </p>
-          <h1 className="text-5xl font-bold text-ink-bright tracking-tight leading-none">
+          <h1 className="text-4xl lg:text-5xl font-bold text-ink-bright tracking-tight leading-none">
             Athletes
           </h1>
         </div>
-        <div className="flex items-center gap-3">
-          <CanvasButton variant="primary" onClick={() => navigate('/app/athletes/new')}>
+        <div className="flex items-center gap-3 w-full lg:w-auto">
+          <CanvasButton
+            variant="primary"
+            onClick={() => navigate('/app/athletes/new')}
+            className="flex-1 lg:flex-none"
+          >
             <UserPlus className="h-4 w-4" />
-            Add Athlete
+            <span className="hidden sm:inline">Add Athlete</span>
+            <span className="sm:hidden">Add</span>
           </CanvasButton>
-          <CanvasButton variant="ghost" onClick={() => setIsImportOpen(true)}>
+          <CanvasButton
+            variant="ghost"
+            onClick={() => setIsImportOpen(true)}
+            className="flex-1 lg:flex-none"
+          >
             <Upload className="h-4 w-4" />
-            Import CSV
+            <span className="hidden sm:inline">Import CSV</span>
+            <span className="sm:hidden">Import</span>
           </CanvasButton>
         </div>
       </div>
@@ -435,7 +445,7 @@ export function CanvasAthletesPage() {
       {/* ============================================ */}
       {/* SEARCH + FILTERS */}
       {/* ============================================ */}
-      <div className="px-6 pb-4 space-y-3">
+      <div className="px-4 lg:px-6 pb-4 space-y-3">
         {/* Search */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-muted pointer-events-none z-10" />
@@ -553,7 +563,7 @@ export function CanvasAthletesPage() {
       </div>
 
       {/* Ruled separator */}
-      <div className="px-6">
+      <div className="px-4 lg:px-6">
         <RuledHeader>
           {athletes.length} of {allAthletes.length} athletes
         </RuledHeader>
@@ -562,7 +572,7 @@ export function CanvasAthletesPage() {
       {/* ============================================ */}
       {/* CONTENT AREA — View-dependent */}
       {/* ============================================ */}
-      <div className="flex-1 overflow-hidden px-6">
+      <div className="flex-1 overflow-hidden px-4 lg:px-6">
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
             <CanvasConsoleReadout items={[{ label: 'STATUS', value: 'LOADING ATHLETES' }]} />
@@ -791,21 +801,32 @@ function CanvasTableView({
     virtualRows.length > 0 ? totalSize - (virtualRows[virtualRows.length - 1]?.end || 0) : 0;
 
   return (
-    <div ref={parentRef} className="h-full overflow-auto" style={{ contain: 'strict' }}>
+    <div
+      ref={parentRef}
+      className="h-full overflow-auto canvas-table-scroll -mx-4 lg:mx-0"
+      style={{ contain: 'strict' }}
+    >
       <table className="w-full border-collapse">
         <thead className="sticky top-0 z-10 bg-ink-raised border-b border-ink-border">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
+              {headerGroup.headers.map((header, idx) => {
                 const canSort = header.column.getCanSort();
                 const sortDirection = header.column.getIsSorted();
+                const isFirstCol = idx === 0;
+                const isNameCol = idx === 1;
                 return (
                   <th
                     key={header.id}
-                    style={{ width: header.getSize() }}
+                    style={{
+                      width: header.getSize(),
+                      minWidth: isNameCol ? '150px' : isFirstCol ? '40px' : '120px',
+                    }}
                     className={`
                       px-4 py-3 text-left text-[10px] font-semibold text-ink-muted uppercase tracking-[0.2em]
+                      whitespace-nowrap
                       ${canSort ? 'cursor-pointer select-none hover:text-ink-primary' : ''}
+                      ${isNameCol ? 'canvas-table-sticky-col' : ''}
                     `}
                     onClick={canSort ? header.column.getToggleSortingHandler() : undefined}
                   >
@@ -849,14 +870,17 @@ function CanvasTableView({
                 <td className="relative" colSpan={0}>
                   <div className="absolute left-0 top-0 bottom-0 w-px bg-ink-primary opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
                 </td>
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="px-4 py-3 text-sm text-ink-primary whitespace-nowrap"
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
+                {row.getVisibleCells().map((cell, idx) => {
+                  const isNameCol = idx === 0;
+                  return (
+                    <td
+                      key={cell.id}
+                      className={`px-4 py-3 text-sm text-ink-primary whitespace-nowrap ${isNameCol ? 'canvas-table-sticky-col' : ''}`}
+                    >
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  );
+                })}
               </tr>
             );
           })}

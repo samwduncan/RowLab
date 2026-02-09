@@ -167,13 +167,13 @@ export function CanvasAttendancePage() {
   return (
     <div className="h-full bg-void text-ink-primary">
       {/* Page Header — text against void */}
-      <div className="relative px-6 pt-8 pb-6 mb-4">
+      <div className="relative px-4 lg:px-6 pt-8 pb-6 mb-4">
         <div className="flex items-end justify-between">
           <div>
             <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-muted mb-2">
               TEAM
             </p>
-            <h1 className="text-4xl font-display font-bold text-ink-bright tracking-tight">
+            <h1 className="text-3xl lg:text-4xl font-display font-bold text-ink-bright tracking-tight">
               Attendance
             </h1>
             <p className="text-sm text-ink-secondary mt-2">Record and track practice attendance</p>
@@ -182,12 +182,14 @@ export function CanvasAttendancePage() {
       </div>
 
       {/* Tabs */}
-      <div className="px-6 mb-4">
+      <div className="px-4 lg:px-6 mb-4">
         <CanvasTabs tabs={tabs} activeTab={activeTab} onChange={(id) => setActiveTab(id as Tab)} />
       </div>
 
       {/* Content */}
-      <div className={`px-6 pb-4 ${hasActiveSession ? 'border-l-2 border-data-excellent/20' : ''}`}>
+      <div
+        className={`px-4 lg:px-6 pb-4 ${hasActiveSession ? 'border-l-2 border-data-excellent/20' : ''}`}
+      >
         {/* Live Attendance Panel */}
         <AnimatePresence>
           {hasActiveSession && (
@@ -237,27 +239,30 @@ export function CanvasAttendancePage() {
             </div>
 
             {/* Stats console + bulk action */}
-            <div className="flex items-center justify-between">
-              <CanvasConsoleReadout
-                items={[
-                  { label: 'PRESENT', value: String(stats.present) },
-                  { label: 'LATE', value: String(stats.late) },
-                  { label: 'EXCUSED', value: String(stats.excused) },
-                  { label: 'UNEXCUSED', value: String(stats.unexcused) },
-                  ...(stats.unmarked > 0
-                    ? [{ label: 'UNMARKED', value: String(stats.unmarked) }]
-                    : []),
-                ]}
-              />
+            <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-4 lg:justify-between">
+              <div className="overflow-x-auto -mx-4 px-4 lg:mx-0 lg:px-0">
+                <CanvasConsoleReadout
+                  items={[
+                    { label: 'PRESENT', value: String(stats.present) },
+                    { label: 'LATE', value: String(stats.late) },
+                    { label: 'EXCUSED', value: String(stats.excused) },
+                    { label: 'UNEXCUSED', value: String(stats.unexcused) },
+                    ...(stats.unmarked > 0
+                      ? [{ label: 'UNMARKED', value: String(stats.unmarked) }]
+                      : []),
+                  ]}
+                />
+              </div>
 
               <CanvasButton
                 variant="primary"
                 onClick={handleMarkAllPresent}
                 disabled={isBulkRecording}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 w-full lg:w-auto justify-center"
               >
                 <CheckCircle size={18} />
-                Mark All Present
+                <span className="hidden sm:inline">Mark All Present</span>
+                <span className="sm:hidden">All Present</span>
               </CanvasButton>
             </div>
 
@@ -338,9 +343,9 @@ export function CanvasAttendancePage() {
         ) : (
           <div className="space-y-6">
             {/* Date range picker */}
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
               <div className="flex items-center gap-2">
-                <label className="text-sm text-ink-muted font-mono uppercase tracking-wider">
+                <label className="text-sm text-ink-muted font-mono uppercase tracking-wider whitespace-nowrap">
                   FROM:
                 </label>
                 <input
@@ -348,12 +353,12 @@ export function CanvasAttendancePage() {
                   value={dateRange.start}
                   onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
                   className="px-3 py-2 bg-ink-raised border border-white/[0.04]
-                             text-ink-primary font-mono text-sm
+                             text-ink-primary font-mono text-sm flex-1
                              focus:outline-none focus:border-accent-primary/50 transition-colors"
                 />
               </div>
               <div className="flex items-center gap-2">
-                <label className="text-sm text-ink-muted font-mono uppercase tracking-wider">
+                <label className="text-sm text-ink-muted font-mono uppercase tracking-wider whitespace-nowrap">
                   TO:
                 </label>
                 <input
@@ -361,7 +366,7 @@ export function CanvasAttendancePage() {
                   value={dateRange.end}
                   onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
                   className="px-3 py-2 bg-ink-raised border border-white/[0.04]
-                             text-ink-primary font-mono text-sm
+                             text-ink-primary font-mono text-sm flex-1
                              focus:outline-none focus:border-accent-primary/50 transition-colors"
                 />
               </div>
