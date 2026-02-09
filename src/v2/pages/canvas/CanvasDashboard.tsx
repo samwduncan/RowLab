@@ -14,9 +14,9 @@
  * This is a DESIGN PROTOTYPE — uses demo data for visual impact.
  */
 
-import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown, Clock, Users, Waves, Award, Activity } from 'lucide-react';
+import { ScrambleNumber, StripChart, RuledHeader } from '@v2/components/canvas';
 
 // ============================================
 // DEMO DATA — prototype visual content
@@ -113,124 +113,6 @@ const UPCOMING = [
   { id: 2, title: '2k Test Day', time: 'Wed 3:30 PM', athletes: 24, type: 'Erg' },
   { id: 3, title: 'Race Prep', time: 'Fri 7:00 AM', athletes: 12, type: 'On Water' },
 ];
-
-// ============================================
-// SCRAMBLE NUMBER — digits randomize then settle L→R
-// Like an instrument display powering on.
-// Much more distinctive than a simple count-up.
-// ============================================
-
-function ScrambleNumber({ value }: { value: number | string }) {
-  const target = String(value);
-  const [display, setDisplay] = useState(() =>
-    target.replace(/\d/g, () => String(Math.floor(Math.random() * 10)))
-  );
-  const rafRef = useRef(0);
-
-  useEffect(() => {
-    const chars = target.split('');
-    const digitIndices: number[] = [];
-    chars.forEach((ch, i) => {
-      if (/\d/.test(ch)) digitIndices.push(i);
-    });
-
-    const INITIAL_DELAY = 8; // frames of pure scramble
-    const SETTLE_RATE = 4; // frames between each digit locking in
-    let frame = 0;
-    let settled = 0;
-
-    const tick = () => {
-      frame++;
-
-      if (frame > INITIAL_DELAY && frame % SETTLE_RATE === 0 && settled < digitIndices.length) {
-        settled++;
-      }
-
-      const result = chars
-        .map((ch, i) => {
-          if (!/\d/.test(ch)) return ch;
-          const pos = digitIndices.indexOf(i);
-          if (pos < settled) return ch;
-          return String(Math.floor(Math.random() * 10));
-        })
-        .join('');
-
-      setDisplay(result);
-
-      if (settled >= digitIndices.length) {
-        setDisplay(target);
-        return;
-      }
-
-      rafRef.current = requestAnimationFrame(tick);
-    };
-
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [target]);
-
-  return <span>{display}</span>;
-}
-
-// ============================================
-// STRIP CHART — mini bar histogram with progressive opacity
-// Older data fades, recent data glows. NOT a generic sparkline.
-// ============================================
-
-function StripChart({
-  data,
-  color,
-  delay = 0,
-}: {
-  data: readonly number[];
-  color: string;
-  delay?: number;
-}) {
-  const max = Math.max(...data);
-  const min = Math.min(...data);
-  const range = max - min || 1;
-
-  return (
-    <div className="flex items-end gap-[2px] h-3 mt-3">
-      {data.map((v, i) => {
-        const normalized = (v - min) / range;
-        const heightPct = 15 + normalized * 85;
-        const isLast = i === data.length - 1;
-        const opacity = isLast ? 0.85 : 0.12 + (i / (data.length - 1)) * 0.5;
-
-        return (
-          <motion.div
-            key={i}
-            className="flex-1 rounded-[1px]"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: `${heightPct}%`, opacity }}
-            transition={{
-              delay: delay + i * 0.05,
-              duration: 0.5,
-              ease: [0.16, 1, 0.3, 1],
-            }}
-            style={{ backgroundColor: color }}
-          />
-        );
-      })}
-    </div>
-  );
-}
-
-// ============================================
-// RULED HEADER — label with extending gradient line
-// Replaces generic card-with-title pattern.
-// ============================================
-
-function RuledHeader({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="canvas-ruled mb-4 mt-2">
-      <span className="text-[10px] font-semibold text-ink-muted uppercase tracking-[0.2em] select-none">
-        {children}
-      </span>
-    </div>
-  );
-}
 
 // ============================================
 // STAGGER ANIMATION HELPERS

@@ -1334,6 +1334,33 @@ Each plan handles ~4-6 pages grouped by feature area. Subagents apply the establ
 
 ---
 
+### Phase 38: Full Canvas Design System Redesign
+
+**Goal:** Apply the Canvas design language (chamfered panels, ruled headers, log-tape layouts, console readouts, breathing animations, warm gold palette, Outfit font) across ALL app pages — replacing the current card-based UI with bespoke Canvas primitives per page.
+
+**Dependencies:** Phase 37 (design pattern established on Canvas dashboard prototype)
+
+**Plans:** 7 plans
+
+Plans:
+- [ ] 38-01-PLAN.md — Canvas primitive library (extract 7 + build 6 new components)
+- [ ] 38-02-PLAN.md — Simple Canvas pages (Rankings, Settings, Sessions)
+- [ ] 38-03-PLAN.md — Medium Canvas pages batch 1 (Regattas, Erg Tests)
+- [ ] 38-04-PLAN.md — Medium Canvas pages batch 2 (Attendance, Coach Training)
+- [ ] 38-05-PLAN.md — Complex Canvas page: Seat Racing (matrix, analytics, wizard)
+- [ ] 38-06-PLAN.md — Complex Canvas page: Athletes (virtual table, 3 views, editor)
+- [ ] 38-07-PLAN.md — Canvas route swap + human verification
+
+**Success Criteria:**
+1. All 13 Canvas primitives in reusable component library
+2. All 9 app pages have Canvas-styled versions
+3. All /canvas/* routes point to Canvas pages
+4. Zero rounded corners in Canvas pages
+5. All numeric values use ScrambleNumber animation
+6. Human verification of all 9 routes passes
+
+---
+
 ## Cross-Cutting Requirements
 
 The following requirements apply across all v3.0 phases:
@@ -1421,8 +1448,9 @@ The following requirements apply across all v3.0 phases:
 | 35 | Mobile Responsiveness & Performance | 15 | TBD | Not started |
 | 36 | V1/V2 Cleanup | 3 | TBD | Not started |
 | 37 | Warm Copper Design Sweep | 7 | 6 | Not started |
+| 38 | Full Canvas Design System Redesign | TBD | 7 | Not started |
 
-**v3.0 Total:** 108 requirements across 14 phases
+**v3.0 Total:** 108+ requirements across 15 phases
 
 ---
 
