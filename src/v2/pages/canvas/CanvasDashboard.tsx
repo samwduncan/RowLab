@@ -1,290 +1,235 @@
 /**
- * CanvasDashboard — Dashboard for The Canvas prototype
+ * CanvasDashboard - Dashboard for The Canvas prototype
  *
- * Design language:
- * - ONE hero metric dominates the viewport (100px+ number)
- * - Mouse-tracking perspective tilt on interactive surfaces
- * - Self-drawing SVG sparkline (dasharray animation)
- * - Clip-path wipe reveals instead of simple fade-ins
- * - Bare editorial timeline (no card wrapper, just dots + line)
- * - Continuous metric strip with hairline dividers
- * - Data numbers are the ONLY chromatic elements
+ * Every element here is a custom Canvas primitive, not a generic HTML pattern:
+ * - Chamfered panels (clip-path diagonal corners, NOT rounded rectangles)
+ * - Scramble-in numbers (digits randomize then settle L→R, like instrument boot)
+ * - Strip charts (mini bar histograms with progressive opacity, NOT SVG sparklines)
+ * - Ruled section headers (label with extending gradient line, NOT card headers)
+ * - Log-tape activity (4-column grid with indicator bars, NOT card lists)
+ * - Console readout (monospace strip with blinking cursor, NOT a stats bar)
+ * - Ticket sessions (chamfered + tilt-on-hover, NOT standard cards)
  *
+ * Data is the ONLY chromatic element. All chrome is monochrome inkwell.
  * This is a DESIGN PROTOTYPE — uses demo data for visual impact.
  */
 
-import { useEffect, useRef, useCallback, useState } from 'react';
-import { motion, animate, useSpring } from 'framer-motion';
-import { Users, Waves, Award, Activity, Clock, ArrowRight } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import { TrendingUp, TrendingDown, Clock, Users, Waves, Award, Activity } from 'lucide-react';
 
 // ============================================
-// DEMO DATA
+// DEMO DATA — prototype visual content
 // ============================================
 
-const HERO_METRIC = {
-  label: 'Attendance Rate',
-  value: 91,
-  suffix: '%',
-  sparkData: [82, 85, 87, 84, 88, 90, 89, 92, 91, 93, 91],
-  dataColor: 'var(--data-excellent)',
-  context: 'Last 7 days',
-};
-
-const SECONDARY_METRICS = [
-  { id: 'athletes', label: 'Athletes', value: '24', dataColor: 'var(--data-good)', icon: Users },
-  { id: 'split', label: 'Avg Split', value: '1:48.3', dataColor: 'var(--data-good)', icon: Waves },
-  { id: 'prs', label: 'PRs', value: '5', dataColor: 'var(--data-warning)', icon: Award },
+const METRICS = [
   {
-    id: 'sessions',
-    label: 'This Week',
-    value: '12',
-    dataColor: 'var(--data-good)',
+    id: 'attendance',
+    label: 'Attendance',
+    value: 91,
+    suffix: '%',
     icon: Activity,
+    sparkData: [85, 87, 88, 90, 89, 92, 91],
+    dataColor: 'var(--data-excellent)',
+    trend: { value: '+3%', up: true },
   },
-];
+  {
+    id: 'athletes',
+    label: 'Active Athletes',
+    value: 24,
+    suffix: '',
+    icon: Users,
+    sparkData: [18, 19, 20, 22, 21, 23, 24],
+    dataColor: 'var(--data-good)',
+    trend: { value: '+3', up: true },
+  },
+  {
+    id: 'split',
+    label: 'Avg 2k Split',
+    value: '1:48.3',
+    suffix: '',
+    icon: Waves,
+    sparkData: [110, 109, 108.5, 109, 108, 107.5, 108.3],
+    dataColor: 'var(--data-good)',
+    trend: { value: '-1.2s', up: true },
+  },
+  {
+    id: 'prs',
+    label: 'PRs This Week',
+    value: 5,
+    suffix: '',
+    icon: Award,
+    sparkData: [1, 2, 1, 3, 2, 4, 5],
+    dataColor: 'var(--data-warning)',
+    trend: { value: '+2', up: true },
+  },
+] as const;
 
-const TIMELINE = [
+const RECENT_ACTIVITY = [
   {
     id: 1,
     athlete: 'Sarah K.',
     action: 'PR on 2k',
     value: '7:12.4',
     time: '2h ago',
-    type: 'pr' as const,
+    positive: true,
   },
   {
     id: 2,
     athlete: 'Mike T.',
-    action: 'Completed 6k',
+    action: 'Completed 6k test',
     value: '22:48.1',
     time: '3h ago',
-    type: 'test' as const,
+    positive: true,
   },
   {
     id: 3,
     athlete: 'Emma R.',
-    action: 'Streak: 14 days',
-    value: '14d',
+    action: 'Attendance streak',
+    value: '14 days',
     time: '5h ago',
-    type: 'streak' as const,
+    positive: true,
   },
   {
     id: 4,
     athlete: 'Jake L.',
     action: 'Split improvement',
     value: '-1.2s',
-    time: '1d',
-    type: 'improvement' as const,
+    time: '1d ago',
+    positive: true,
   },
   {
     id: 5,
     athlete: 'Lily M.',
     action: 'Missed practice',
     value: '\u2014',
-    time: '1d',
-    type: 'absence' as const,
+    time: '1d ago',
+    positive: false,
   },
 ];
 
 const UPCOMING = [
-  { id: 1, title: 'Morning Row', time: 'Tomorrow 6:00 AM', count: 18, accent: 'var(--data-good)' },
-  { id: 2, title: '2k Test Day', time: 'Wed 3:30 PM', count: 24, accent: 'var(--data-warning)' },
-  { id: 3, title: 'Race Prep', time: 'Fri 7:00 AM', count: 12, accent: 'var(--data-poor)' },
+  { id: 1, title: 'Morning Row', time: 'Tomorrow 6:00 AM', athletes: 18, type: 'On Water' },
+  { id: 2, title: '2k Test Day', time: 'Wed 3:30 PM', athletes: 24, type: 'Erg' },
+  { id: 3, title: 'Race Prep', time: 'Fri 7:00 AM', athletes: 12, type: 'On Water' },
 ];
 
 // ============================================
-// MOUSE-TRACKING TILT HOOK
-// Tracks cursor position within an element and applies
-// a subtle 3D perspective rotation via spring physics.
+// SCRAMBLE NUMBER — digits randomize then settle L→R
+// Like an instrument display powering on.
+// Much more distinctive than a simple count-up.
 // ============================================
 
-function useTilt(maxTilt = 3) {
-  const ref = useRef<HTMLDivElement>(null);
-  const rotateX = useSpring(0, { stiffness: 300, damping: 30 });
-  const rotateY = useSpring(0, { stiffness: 300, damping: 30 });
-
-  const onMove = useCallback(
-    (e: React.MouseEvent) => {
-      if (!ref.current) return;
-      const rect = ref.current.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width - 0.5;
-      const y = (e.clientY - rect.top) / rect.height - 0.5;
-      rotateX.set(-y * maxTilt);
-      rotateY.set(x * maxTilt);
-    },
-    [maxTilt, rotateX, rotateY]
+function ScrambleNumber({ value }: { value: number | string }) {
+  const target = String(value);
+  const [display, setDisplay] = useState(() =>
+    target.replace(/\d/g, () => String(Math.floor(Math.random() * 10)))
   );
+  const rafRef = useRef(0);
 
-  const onLeave = useCallback(() => {
-    rotateX.set(0);
-    rotateY.set(0);
-  }, [rotateX, rotateY]);
+  useEffect(() => {
+    const chars = target.split('');
+    const digitIndices: number[] = [];
+    chars.forEach((ch, i) => {
+      if (/\d/.test(ch)) digitIndices.push(i);
+    });
 
-  return { ref, rotateX, rotateY, onMove, onLeave };
+    const INITIAL_DELAY = 8; // frames of pure scramble
+    const SETTLE_RATE = 4; // frames between each digit locking in
+    let frame = 0;
+    let settled = 0;
+
+    const tick = () => {
+      frame++;
+
+      if (frame > INITIAL_DELAY && frame % SETTLE_RATE === 0 && settled < digitIndices.length) {
+        settled++;
+      }
+
+      const result = chars
+        .map((ch, i) => {
+          if (!/\d/.test(ch)) return ch;
+          const pos = digitIndices.indexOf(i);
+          if (pos < settled) return ch;
+          return String(Math.floor(Math.random() * 10));
+        })
+        .join('');
+
+      setDisplay(result);
+
+      if (settled >= digitIndices.length) {
+        setDisplay(target);
+        return;
+      }
+
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [target]);
+
+  return <span>{display}</span>;
 }
 
 // ============================================
-// ANIMATED NUMBER — imperative count-up
+// STRIP CHART — mini bar histogram with progressive opacity
+// Older data fades, recent data glows. NOT a generic sparkline.
 // ============================================
 
-function AnimatedNumber({ value, duration = 1.5 }: { value: number; duration?: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    const ctrl = animate(0, value, {
-      duration,
-      ease: [0.16, 1, 0.3, 1],
-      onUpdate: (v) => {
-        if (ref.current) ref.current.textContent = Math.round(v).toString();
-      },
-    });
-    return () => ctrl.stop();
-  }, [value, duration]);
-
-  return <span ref={ref}>{value}</span>;
-}
-
-// ============================================
-// SELF-DRAWING SPARKLINE
-// SVG path draws itself via dasharray/dashoffset,
-// then fades in a subtle area fill, then the endpoint
-// dot appears with a continuously pulsing ring.
-// ============================================
-
-function DrawingSparkline({
-  data,
-  color,
-  height = 56,
-}: {
-  data: number[];
-  color: string;
-  height?: number;
-}) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const pathRef = useRef<SVGPathElement>(null);
-  const areaRef = useRef<SVGPathElement>(null);
-  const [width, setWidth] = useState(0);
-
-  // Measure container width
-  useEffect(() => {
-    if (!containerRef.current) return;
-    const ro = new ResizeObserver((entries) => {
-      setWidth(entries[0].contentRect.width);
-    });
-    ro.observe(containerRef.current);
-    return () => ro.disconnect();
-  }, []);
-
+function StripChart({ data, color }: { data: readonly number[]; color: string }) {
   const max = Math.max(...data);
   const min = Math.min(...data);
   const range = max - min || 1;
-  const pad = 4;
-
-  const points =
-    width > 0
-      ? data.map((v, i) => ({
-          x: (i / (data.length - 1)) * width,
-          y: pad + (height - pad * 2) - ((v - min) / range) * (height - pad * 2),
-        }))
-      : [];
-
-  const d = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
-  const areaD = width > 0 ? `${d} L ${width} ${height} L 0 ${height} Z` : '';
-  const last = points[points.length - 1];
-
-  // Animate path draw
-  useEffect(() => {
-    if (!pathRef.current || width === 0) return;
-    const len = pathRef.current.getTotalLength();
-    pathRef.current.style.strokeDasharray = `${len}`;
-    pathRef.current.style.strokeDashoffset = `${len}`;
-    const ctrl = animate(len, 0, {
-      duration: 1.8,
-      delay: 0.3,
-      ease: [0.16, 1, 0.3, 1],
-      onUpdate: (v) => {
-        if (pathRef.current) pathRef.current.style.strokeDashoffset = `${v}`;
-      },
-    });
-    return () => ctrl.stop();
-  }, [width]);
-
-  // Fade in area fill
-  useEffect(() => {
-    if (!areaRef.current || width === 0) return;
-    areaRef.current.style.opacity = '0';
-    const ctrl = animate(0, 1, {
-      duration: 0.8,
-      delay: 1.4,
-      onUpdate: (v) => {
-        if (areaRef.current) areaRef.current.style.opacity = `${v * 0.06}`;
-      },
-    });
-    return () => ctrl.stop();
-  }, [width]);
 
   return (
-    <div ref={containerRef} className="w-full" style={{ height }}>
-      {width > 0 && (
-        <svg width={width} height={height} className="overflow-visible">
-          <path ref={areaRef} d={areaD} fill={color} opacity={0} />
-          <path
-            ref={pathRef}
-            d={d}
-            fill="none"
-            stroke={color}
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+    <div className="flex items-end gap-[2px] h-3 mt-3">
+      {data.map((v, i) => {
+        const normalized = (v - min) / range;
+        const heightPct = 15 + normalized * 85;
+        const isLast = i === data.length - 1;
+        const opacity = isLast ? 0.85 : 0.12 + (i / (data.length - 1)) * 0.5;
+
+        return (
+          <div
+            key={i}
+            className="flex-1 rounded-[1px]"
+            style={{
+              height: `${heightPct}%`,
+              backgroundColor: color,
+              opacity,
+            }}
           />
-          {last && (
-            <>
-              {/* Endpoint dot */}
-              <motion.circle
-                cx={last.x}
-                cy={last.y}
-                r={3.5}
-                fill={color}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 1.8, duration: 0.3 }}
-              />
-              {/* Pulsing ring — breathes every 4s */}
-              <motion.circle
-                cx={last.x}
-                cy={last.y}
-                r={3.5}
-                fill="none"
-                stroke={color}
-                strokeWidth={1}
-                initial={{ scale: 1, opacity: 0 }}
-                animate={{ scale: [1, 3], opacity: [0.5, 0] }}
-                transition={{
-                  delay: 2.2,
-                  duration: 2,
-                  repeat: Infinity,
-                  repeatDelay: 4,
-                  ease: 'easeOut',
-                }}
-              />
-            </>
-          )}
-        </svg>
-      )}
+        );
+      })}
     </div>
   );
 }
 
 // ============================================
-// ANIMATION VARIANTS
+// RULED HEADER — label with extending gradient line
+// Replaces generic card-with-title pattern.
+// ============================================
+
+function RuledHeader({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="canvas-ruled mb-4 mt-2">
+      <span className="text-[10px] font-semibold text-ink-muted uppercase tracking-[0.2em] select-none">
+        {children}
+      </span>
+    </div>
+  );
+}
+
+// ============================================
+// STAGGER ANIMATION HELPERS
 // ============================================
 
 const stagger = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.07, delayChildren: 0.1 },
+    transition: { staggerChildren: 0.06, delayChildren: 0.1 },
   },
 };
 
@@ -297,312 +242,229 @@ const fadeUp = {
   },
 };
 
-// Clip-path wipe — reveals left-to-right
-const wipeIn = {
-  hidden: { clipPath: 'inset(0 100% 0 0)' },
-  visible: {
-    clipPath: 'inset(0 0% 0 0)',
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
 // ============================================
-// CANVAS DASHBOARD — MAIN
+// CANVAS DASHBOARD
 // ============================================
 
 export function CanvasDashboard() {
   const now = new Date();
   const greeting =
     now.getHours() < 12 ? 'Good morning' : now.getHours() < 18 ? 'Good afternoon' : 'Good evening';
+  const dateStr = now.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  });
 
   return (
-    <motion.div variants={stagger} initial="hidden" animate="visible">
-      <HeroSection greeting={greeting} />
-      <MetricStrip />
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 mt-10">
-        <motion.div variants={fadeUp} className="lg:col-span-7 lg:pr-10">
-          <ActivityTimeline />
+    <motion.div variants={stagger} initial="hidden" animate="visible" className="space-y-8">
+      {/* ============================================ */}
+      {/* HEADER — no wrapper, just text against the void */}
+      {/* ============================================ */}
+      <motion.div variants={fadeUp} className="flex items-end justify-between pt-2 pb-6">
+        <div>
+          <p className="text-xs font-medium text-ink-muted uppercase tracking-[0.15em] mb-1">
+            {greeting}
+          </p>
+          <h1 className="text-4xl sm:text-5xl font-bold text-ink-bright tracking-tight leading-none">
+            Dashboard
+          </h1>
+        </div>
+        <span className="text-xs font-mono text-ink-muted tracking-wide">{dateStr}</span>
+      </motion.div>
+
+      {/* ============================================ */}
+      {/* METRICS — chamfered panels with accent edges */}
+      {/* First metric spans 2 cols (featured), rest are 1 each */}
+      {/* ============================================ */}
+      <motion.div variants={fadeUp}>
+        <RuledHeader>Metrics</RuledHeader>
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+          {METRICS.map((m, i) => {
+            const Icon = m.icon;
+            const isFeatured = i === 0;
+
+            return (
+              <motion.div
+                key={m.id}
+                className={`canvas-chamfer bg-ink-raised relative p-5 group ${isFeatured ? 'col-span-2' : ''}`}
+                whileHover={{ y: -2 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+              >
+                {/* Left accent edge — the ONLY color on the chrome */}
+                <div
+                  className="absolute left-0 top-0 bottom-0 w-0.5"
+                  style={{ backgroundColor: m.dataColor }}
+                />
+
+                {/* Label row */}
+                <div className="flex items-center gap-1.5 mb-3">
+                  <Icon size={12} className="text-ink-muted" />
+                  <span className="text-[10px] font-medium text-ink-tertiary uppercase tracking-[0.15em]">
+                    {m.label}
+                  </span>
+                </div>
+
+                {/* Value + trend inline */}
+                <div className="flex items-baseline gap-2">
+                  <span
+                    className={`font-mono font-bold tracking-tighter leading-none ${
+                      isFeatured ? 'text-4xl lg:text-5xl' : 'text-3xl lg:text-4xl'
+                    }`}
+                    style={{ color: m.dataColor }}
+                  >
+                    <ScrambleNumber value={m.value} />
+                  </span>
+                  {m.suffix && (
+                    <span className="text-lg font-mono text-ink-secondary">{m.suffix}</span>
+                  )}
+
+                  {/* Trend — pushed to the right */}
+                  <div className="flex items-center gap-1 ml-auto">
+                    {m.trend.up ? (
+                      <TrendingUp size={11} className="text-ink-secondary" />
+                    ) : (
+                      <TrendingDown size={11} className="text-ink-secondary" />
+                    )}
+                    <span className="text-[11px] font-mono text-ink-secondary">
+                      {m.trend.value}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Strip chart — progressive opacity bar histogram */}
+                <StripChart data={m.sparkData} color={m.dataColor} />
+              </motion.div>
+            );
+          })}
+        </div>
+      </motion.div>
+
+      {/* ============================================ */}
+      {/* TWO-COLUMN: Activity log + Upcoming tickets */}
+      {/* ============================================ */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
+        {/* ACTIVITY — log tape entries, NO card wrapper */}
+        <motion.div variants={fadeUp} className="lg:col-span-3">
+          <RuledHeader>Recent Activity</RuledHeader>
+          <div>
+            {RECENT_ACTIVITY.map((item, i) => (
+              <motion.div
+                key={item.id}
+                className="canvas-log-entry"
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{
+                  delay: 0.3 + i * 0.06,
+                  duration: 0.3,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+              >
+                {/* Timestamp column */}
+                <span className="text-[11px] font-mono text-ink-muted text-right">{item.time}</span>
+
+                {/* Indicator bar — 3px colored strip */}
+                <div
+                  className="self-stretch rounded-full"
+                  style={{
+                    backgroundColor: item.positive ? 'var(--data-good)' : 'var(--data-poor)',
+                  }}
+                />
+
+                {/* Name + action */}
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="text-sm font-medium text-ink-primary">{item.athlete}</span>
+                  <span className="text-xs text-ink-muted truncate">{item.action}</span>
+                </div>
+
+                {/* Value — data colored */}
+                <span
+                  className="text-sm font-mono font-semibold tabular-nums"
+                  style={{
+                    color: item.positive ? 'var(--data-excellent)' : 'var(--data-poor)',
+                  }}
+                >
+                  {item.value}
+                </span>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
-        <motion.div
-          variants={fadeUp}
-          className="lg:col-span-5 lg:border-l lg:border-ink-border lg:pl-10 mt-10 lg:mt-0"
-        >
-          <UpcomingStack />
+
+        {/* UPCOMING — chamfered tickets that tilt on hover */}
+        <motion.div variants={fadeUp} className="lg:col-span-2">
+          <RuledHeader>Upcoming</RuledHeader>
+          <div className="space-y-3">
+            {UPCOMING.map((session, i) => (
+              <motion.div
+                key={session.id}
+                className="canvas-chamfer canvas-ticket bg-ink-raised relative p-4 group"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: 0.35 + i * 0.08,
+                  duration: 0.35,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+              >
+                {/* Top accent line — stops at chamfer cut */}
+                <div
+                  className="absolute top-0 left-0 h-px"
+                  style={{
+                    right: '14px',
+                    background: 'linear-gradient(to right, rgba(255,255,255,0.06), transparent)',
+                  }}
+                />
+
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h4 className="text-sm font-semibold text-ink-bright group-hover:text-white transition-colors duration-150">
+                      {session.title}
+                    </h4>
+                    <div className="flex items-center gap-1.5 mt-1.5">
+                      <Clock size={11} className="text-ink-muted" />
+                      <span className="text-xs text-ink-secondary">{session.time}</span>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-mono font-medium uppercase tracking-wider text-ink-secondary">
+                    {session.type}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1.5 mt-3">
+                  <Users size={11} className="text-ink-muted" />
+                  <span className="text-xs text-ink-tertiary">{session.athletes} athletes</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
       </div>
-    </motion.div>
-  );
-}
 
-// ============================================
-// HERO SECTION
-// Oversized number with perspective tilt + self-drawing sparkline.
-// The number IS the design — like a Stripe annual report.
-// ============================================
-
-function HeroSection({ greeting }: { greeting: string }) {
-  const tilt = useTilt(2.5);
-
-  return (
-    <motion.div variants={fadeUp} className="pt-2 pb-8">
-      <p className="text-[11px] font-medium text-ink-muted uppercase tracking-[0.2em] mb-8">
-        {greeting}
-      </p>
-
-      <motion.div
-        ref={tilt.ref}
-        onMouseMove={tilt.onMove}
-        onMouseLeave={tilt.onLeave}
-        style={{
-          rotateX: tilt.rotateX,
-          rotateY: tilt.rotateY,
-          transformPerspective: 800,
-        }}
-      >
-        {/* The number — oversized, data-colored, the focal point */}
-        <div className="flex items-end gap-2">
-          <span
-            className="text-[80px] sm:text-[112px] lg:text-[128px] font-mono font-bold leading-[0.82] tracking-[-0.05em]"
-            style={{
-              color: HERO_METRIC.dataColor,
-              fontVariantNumeric: 'tabular-nums',
-              textShadow: `0 0 80px color-mix(in srgb, ${HERO_METRIC.dataColor} 15%, transparent)`,
-            }}
-          >
-            <AnimatedNumber value={HERO_METRIC.value} duration={2} />
-          </span>
-          <span
-            className="text-[32px] sm:text-[44px] font-mono font-extralight leading-[0.82] mb-[0.08em]"
-            style={{ color: HERO_METRIC.dataColor, opacity: 0.4 }}
-          >
-            {HERO_METRIC.suffix}
-          </span>
-        </div>
-
-        {/* Label rule: LABEL ————————————————— context */}
-        <div className="flex items-center gap-4 mt-4">
-          <span className="text-[11px] font-semibold text-ink-secondary uppercase tracking-[0.15em] shrink-0">
-            {HERO_METRIC.label}
-          </span>
-          <div className="flex-1 h-px bg-ink-border" />
-          <span className="text-[11px] text-ink-muted shrink-0">{HERO_METRIC.context}</span>
-        </div>
-
-        {/* Self-drawing sparkline — full width */}
-        <div className="mt-5">
-          <DrawingSparkline
-            data={HERO_METRIC.sparkData}
-            color={HERO_METRIC.dataColor}
-            height={64}
-          />
+      {/* ============================================ */}
+      {/* CONSOLE READOUT — monospace strip with blinking cursor */}
+      {/* NOT a card, NOT a stats bar — a live instrument readout */}
+      {/* ============================================ */}
+      <motion.div variants={fadeUp}>
+        <div className="canvas-console flex items-center flex-wrap gap-y-2 text-xs py-4 border-t border-ink-border">
+          {[
+            { label: 'TEAM POWER', value: 'High' },
+            { label: 'NEXT RACE', value: '12 days' },
+            { label: 'TREND', value: 'Improving' },
+            { label: 'RANKING', value: '#4' },
+          ].map((pair, i) => (
+            <div key={pair.label} className="flex items-center">
+              {i > 0 && (
+                <span className="text-ink-muted opacity-25 mx-3 select-none">{'\u2502'}</span>
+              )}
+              <span className="text-ink-muted">{pair.label}</span>
+              <span className="text-ink-primary font-medium ml-2">{pair.value}</span>
+            </div>
+          ))}
+          <span className="canvas-cursor text-ink-muted ml-1" />
         </div>
       </motion.div>
     </motion.div>
-  );
-}
-
-// ============================================
-// METRIC STRIP
-// Continuous surface with hairline vertical dividers.
-// No card gaps — feels like an instrument panel.
-// Wipe-reveals left-to-right on mount.
-// ============================================
-
-function MetricStrip() {
-  return (
-    <motion.div variants={wipeIn} className="flex border-y border-ink-border">
-      {SECONDARY_METRICS.map((m, i) => {
-        const Icon = m.icon;
-        return (
-          <div
-            key={m.id}
-            className={`flex-1 py-5 px-5 group cursor-default
-                       ${i > 0 ? 'border-l border-ink-border' : ''}
-                       relative overflow-hidden`}
-          >
-            {/* Hover highlight — slides up from bottom */}
-            <div
-              className="absolute inset-0 bg-ink-raised/60 opacity-0 group-hover:opacity-100
-                         translate-y-full group-hover:translate-y-0
-                         transition-all duration-300 ease-out"
-            />
-
-            <div className="relative">
-              <div className="flex items-center gap-2 mb-2">
-                <Icon
-                  size={12}
-                  className="text-ink-muted group-hover:text-ink-secondary transition-colors duration-200"
-                />
-                <span className="text-[10px] font-medium text-ink-muted uppercase tracking-[0.15em]">
-                  {m.label}
-                </span>
-              </div>
-              <span
-                className="text-2xl font-mono font-bold tracking-tight block"
-                style={{ color: m.dataColor, fontVariantNumeric: 'tabular-nums' }}
-              >
-                {m.value}
-              </span>
-            </div>
-          </div>
-        );
-      })}
-    </motion.div>
-  );
-}
-
-// ============================================
-// ACTIVITY TIMELINE
-// Bare editorial — no card wrapper. A thin vertical line
-// with dot markers. Content floats beside it. Each dot
-// is hollow by default; PRs/streaks get a filled dot.
-// ============================================
-
-function ActivityTimeline() {
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-[11px] font-semibold text-ink-muted uppercase tracking-[0.15em]">
-          Recent Activity
-        </h3>
-        <button className="text-[11px] text-ink-tertiary hover:text-ink-primary transition-colors duration-150 flex items-center gap-1.5 group">
-          All activity
-          <ArrowRight
-            size={10}
-            className="group-hover:translate-x-0.5 transition-transform duration-150"
-          />
-        </button>
-      </div>
-
-      <div className="relative">
-        {/* Vertical timeline line */}
-        <motion.div
-          className="absolute left-[6px] top-3 bottom-3 w-px bg-ink-border"
-          initial={{ scaleY: 0, originY: 0 }}
-          animate={{ scaleY: 1 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        />
-
-        {TIMELINE.map((item, i) => {
-          const isNegative = item.type === 'absence';
-          const isMilestone = item.type === 'pr' || item.type === 'streak';
-
-          return (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, x: -12 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{
-                delay: 0.4 + i * 0.1,
-                duration: 0.45,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="relative flex items-start gap-5 py-3.5 group cursor-pointer"
-            >
-              {/* Timeline dot — hollow default, filled for milestones, red border for negative */}
-              <div className="relative z-10 mt-1.5 shrink-0">
-                <div
-                  className="w-[13px] h-[13px] rounded-full border-[1.5px] transition-colors duration-200"
-                  style={{
-                    borderColor: isNegative
-                      ? 'var(--data-poor)'
-                      : isMilestone
-                        ? 'var(--data-excellent)'
-                        : 'var(--ink-border)',
-                    backgroundColor: isMilestone ? 'var(--data-excellent)' : 'var(--ink-deep)',
-                  }}
-                />
-              </div>
-
-              {/* Content row */}
-              <div className="flex-1 flex items-baseline justify-between min-w-0 pb-3.5 border-b border-ink-border/40 group-last:border-b-0">
-                <div className="min-w-0">
-                  <span className="text-sm font-medium text-ink-primary">{item.athlete}</span>
-                  <span className="text-sm text-ink-muted ml-2.5">{item.action}</span>
-                </div>
-                <div className="flex items-baseline gap-3 ml-4 shrink-0">
-                  <span
-                    className="text-sm font-mono font-semibold"
-                    style={{
-                      color: isNegative ? 'var(--data-poor)' : 'var(--data-good)',
-                      fontVariantNumeric: 'tabular-nums',
-                    }}
-                  >
-                    {item.value}
-                  </span>
-                  <span className="text-[10px] text-ink-muted">{item.time}</span>
-                </div>
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-// ============================================
-// UPCOMING STACK
-// Session cards with a colored left accent border.
-// Each card slides in and shifts right on hover.
-// ============================================
-
-function UpcomingStack() {
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-[11px] font-semibold text-ink-muted uppercase tracking-[0.15em]">
-          Upcoming
-        </h3>
-        <button className="text-[11px] text-ink-tertiary hover:text-ink-primary transition-colors duration-150 flex items-center gap-1.5 group">
-          Full schedule
-          <ArrowRight
-            size={10}
-            className="group-hover:translate-x-0.5 transition-transform duration-150"
-          />
-        </button>
-      </div>
-
-      <div className="space-y-3">
-        {UPCOMING.map((session, i) => (
-          <motion.div
-            key={session.id}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: 0.5 + i * 0.12,
-              duration: 0.45,
-              ease: [0.16, 1, 0.3, 1],
-            }}
-            className="group cursor-pointer"
-          >
-            <div
-              className="bg-ink-raised border border-ink-border rounded-lg px-5 py-4
-                         hover:border-ink-border-strong
-                         group-hover:translate-x-1
-                         transition-all duration-200 ease-out"
-              style={{ borderLeftWidth: '3px', borderLeftColor: session.accent }}
-            >
-              <div className="flex items-start justify-between">
-                <h4 className="text-sm font-medium text-ink-bright group-hover:text-white transition-colors duration-150">
-                  {session.title}
-                </h4>
-                <span
-                  className="text-lg font-mono font-bold leading-none"
-                  style={{ color: session.accent, fontVariantNumeric: 'tabular-nums' }}
-                >
-                  {session.count}
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5 mt-2">
-                <Clock size={11} className="text-ink-muted" />
-                <span className="text-xs text-ink-secondary">{session.time}</span>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
   );
 }
 
