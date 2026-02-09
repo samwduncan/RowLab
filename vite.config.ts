@@ -12,6 +12,28 @@ export default defineConfig({
       brotliSize: true,
     }),
   ],
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html', 'lcov'],
+      include: ['src/v2/**/*.{ts,tsx}'],
+      exclude: [
+        'src/v2/**/*.test.{ts,tsx}',
+        'src/v2/**/*.stories.{ts,tsx}',
+        'src/v2/**/index.ts',
+        'src/v2/types/**',
+      ],
+      thresholds: {
+        lines: 60,
+        functions: 60,
+        branches: 50,
+        statements: 60,
+      },
+    },
+  },
   server: {
     port: 3001,
     host: '0.0.0.0',
