@@ -325,25 +325,37 @@ export function CanvasErgTestsPage() {
       </AnimatePresence>
 
       {/* Page header — text against void */}
-      <div className="px-6 pt-8 pb-6 border-b border-ink-border/30">
+      <div className="px-4 lg:px-6 pt-8 pb-6 border-b border-ink-border/30">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-end justify-between">
+          <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-4">
             <div>
               <p className="text-[10px] font-mono uppercase tracking-[0.15em] text-ink-secondary mb-3">
                 PERFORMANCE
               </p>
-              <h1 className="text-3xl font-semibold text-ink-bright tracking-tight">Erg Tests</h1>
+              <h1 className="text-2xl lg:text-3xl font-semibold text-ink-bright tracking-tight">
+                Erg Tests
+              </h1>
             </div>
 
-            <div className="flex items-center gap-3">
-              <CanvasButton variant="secondary" onClick={handleOpenImportModal}>
+            <div className="flex items-center gap-3 w-full lg:w-auto">
+              <CanvasButton
+                variant="secondary"
+                onClick={handleOpenImportModal}
+                className="flex-1 lg:flex-none"
+              >
                 <Upload className="w-4 h-4" />
-                IMPORT CSV
+                <span className="hidden sm:inline">IMPORT CSV</span>
+                <span className="sm:hidden">IMPORT</span>
               </CanvasButton>
 
-              <CanvasButton variant="primary" onClick={handleOpenAddModal}>
+              <CanvasButton
+                variant="primary"
+                onClick={handleOpenAddModal}
+                className="flex-1 lg:flex-none"
+              >
                 <Plus className="w-4 h-4" />
-                ADD TEST
+                <span className="hidden sm:inline">ADD TEST</span>
+                <span className="sm:hidden">ADD</span>
               </CanvasButton>
             </div>
           </div>
@@ -351,7 +363,7 @@ export function CanvasErgTestsPage() {
       </div>
 
       {/* Tab navigation */}
-      <div className="border-b border-ink-border/30 px-6">
+      <div className="border-b border-ink-border/30 px-4 lg:px-6">
         <div className="max-w-7xl mx-auto">
           <CanvasTabs
             tabs={[
@@ -366,8 +378,8 @@ export function CanvasErgTestsPage() {
 
       {/* Filters (only show for tests tab) */}
       {activeView === 'tests' && (
-        <div className="px-6 py-3 border-b border-ink-border/30">
-          <div className="max-w-7xl mx-auto flex gap-3">
+        <div className="px-4 lg:px-6 py-3 border-b border-ink-border/30">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row gap-3">
             <CanvasSelect
               value={filters.testType || 'all'}
               onChange={(value) =>
@@ -389,7 +401,7 @@ export function CanvasErgTestsPage() {
 
       {/* Content */}
       <div className="flex-1 overflow-auto">
-        <div className="max-w-7xl mx-auto px-6 py-6">
+        <div className="max-w-7xl mx-auto px-4 lg:px-6 py-6">
           <AnimatePresence mode="wait">
             {activeView === 'tests' ? (
               <motion.div
@@ -440,7 +452,7 @@ export function CanvasErgTestsPage() {
       </div>
 
       {/* Console readout footer */}
-      <div className="border-t border-ink-border/30 px-6 py-3 bg-ink-well/20">
+      <div className="border-t border-ink-border/30 px-4 lg:px-6 py-3 bg-ink-well/20">
         <div className="max-w-7xl mx-auto">
           <CanvasConsoleReadout
             items={[
