@@ -23,6 +23,8 @@ import { useRequireAuth } from '@/hooks/useAuth';
 import { LoadingSkeleton, SkeletonLine } from '@v2/components/common';
 import { CanvasDock, useZone } from '@v2/components/shell/CanvasDock';
 import { CanvasToolbar } from '@v2/components/shell/CanvasToolbar';
+import { MobileNav } from '@v2/components/shell/MobileNav';
+import { useShowMobileLayout } from '@v2/hooks/useBreakpoint';
 import '@v2/styles/canvas-atmosphere.css';
 
 // ============================================
@@ -64,6 +66,7 @@ const ZONE_ATMOSPHERE: Record<string, { glow: string; wash: string }> = {
 export function CanvasLayout() {
   const zone = useZone();
   const location = useLocation();
+  const showMobileLayout = useShowMobileLayout();
 
   // Require authentication
   const { isLoading: isAuthLoading } = useRequireAuth();
@@ -149,9 +152,16 @@ export function CanvasLayout() {
       />
 
       {/* ============================================ */}
-      {/* FLOATING TOOLBAR - top */}
+      {/* NAVIGATION - Mobile or Desktop */}
       {/* ============================================ */}
-      <CanvasToolbar zone={zone} />
+      {showMobileLayout ? (
+        <MobileNav />
+      ) : (
+        <>
+          {/* FLOATING TOOLBAR - top (desktop only) */}
+          <CanvasToolbar zone={zone} />
+        </>
+      )}
 
       {/* ============================================ */}
       {/* CONTENT AREA - full width, with page transitions */}
@@ -166,22 +176,27 @@ export function CanvasLayout() {
             duration: 0.25,
             ease: [0.16, 1, 0.3, 1],
           }}
-          className="relative z-10 pt-20 pb-28 px-6 max-w-7xl mx-auto min-h-screen"
+          className={`relative z-10 px-6 max-w-7xl mx-auto min-h-screen ${
+            showMobileLayout ? 'pt-14 pb-16' : 'pt-20 pb-28'
+          }`}
         >
           <Outlet />
         </motion.main>
       </AnimatePresence>
 
       {/* ============================================ */}
-      {/* FLOATING DOCK - bottom */}
+      {/* FLOATING DOCK - bottom (desktop only) */}
       {/* ============================================ */}
-      <CanvasDock />
-
-      {/* Bottom fade for dock breathing room */}
-      <div
-        className="fixed bottom-0 left-0 right-0 h-24 pointer-events-none z-40
-                      bg-gradient-to-t from-ink-deep/80 via-ink-deep/40 to-transparent"
-      />
+      {!showMobileLayout && (
+        <>
+          <CanvasDock />
+          {/* Bottom fade for dock breathing room */}
+          <div
+            className="fixed bottom-0 left-0 right-0 h-24 pointer-events-none z-40
+                          bg-gradient-to-t from-ink-deep/80 via-ink-deep/40 to-transparent"
+          />
+        </>
+      )}
     </div>
   );
 }
