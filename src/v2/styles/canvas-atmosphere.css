@@ -1,0 +1,141 @@
+/**
+ * canvas-atmosphere.css - Breathing gradient system for Canvas prototype
+ *
+ * Adds organic, slowly-drifting gradient layers behind the Canvas layout.
+ * Tuned for restraint — these should feel like ambient weather, not neon.
+ * The goal is "you notice something is alive" not "look at these gradients."
+ *
+ * Three independently-animated layers create depth:
+ *   1. Primary nebula — zone-colored, slow drift (30s)
+ *   2. Secondary wash — complementary tone, medium drift (24s)
+ *   3. Ambient pulse — zone glow that breathes slowly (12s)
+ *
+ * Zone colors are injected via CSS custom properties set by React.
+ */
+
+/* ============================================
+   LAYER 1: PRIMARY NEBULA
+   The main zone-colored gradient blob. Drifts diagonally.
+   ============================================ */
+
+.canvas-atmo-layer-1 {
+  position: absolute;
+  inset: -60%;
+  width: 220%;
+  height: 220%;
+  background: radial-gradient(
+    ellipse 70% 55% at 35% 25%,
+    var(--canvas-zone-glow, rgba(251, 191, 36, 0.07)) 0%,
+    transparent 65%
+  );
+  animation: canvasNebula1 30s ease-in-out infinite alternate;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* ============================================
+   LAYER 2: SECONDARY WASH
+   A cooler complementary tone for depth. Orbits opposite to layer 1.
+   ============================================ */
+
+.canvas-atmo-layer-2 {
+  position: absolute;
+  inset: -40%;
+  width: 180%;
+  height: 180%;
+  background: radial-gradient(
+    ellipse 60% 45% at 70% 75%,
+    var(--canvas-zone-wash, rgba(129, 140, 248, 0.04)) 0%,
+    transparent 60%
+  );
+  animation: canvasNebula2 24s ease-in-out infinite alternate;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* ============================================
+   LAYER 3: AMBIENT PULSE
+   A gentle breathing glow centered on the viewport.
+   Pulses opacity on a shorter cycle for "alive" feeling.
+   ============================================ */
+
+.canvas-atmo-pulse {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 50% at 50% 0%,
+    var(--canvas-zone-glow, rgba(251, 191, 36, 0.05)) 0%,
+    transparent 70%
+  );
+  animation: canvasPulse 12s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ============================================
+   LAYER 4: EDGE VIGNETTE
+   Darkens the edges to frame content and ground the atmosphere.
+   Static — no animation.
+   ============================================ */
+
+.canvas-atmo-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 120% 80% at 100% 100%, rgba(10, 10, 10, 0.6) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 70% at 0% 0%, rgba(10, 10, 10, 0.4) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* ============================================
+   KEYFRAME ANIMATIONS
+   Slow, organic, barely perceptible movement
+   ============================================ */
+
+@keyframes canvasNebula1 {
+  0% {
+    transform: translate(0%, 0%) rotate(0deg) scale(1);
+  }
+  33% {
+    transform: translate(4%, -6%) rotate(1.5deg) scale(1.03);
+  }
+  66% {
+    transform: translate(-3%, -8%) rotate(-1deg) scale(0.98);
+  }
+  100% {
+    transform: translate(5%, -4%) rotate(2deg) scale(1.02);
+  }
+}
+
+@keyframes canvasNebula2 {
+  0% {
+    transform: translate(0%, 0%) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translate(-6%, 5%) rotate(-1.5deg) scale(1.04);
+  }
+  100% {
+    transform: translate(3%, -6%) rotate(1deg) scale(0.97);
+  }
+}
+
+@keyframes canvasPulse {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   REDUCED MOTION — respect user preference
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas-atmo-layer-1,
+  .canvas-atmo-layer-2,
+  .canvas-atmo-pulse {
+    animation: none !important;
+  }
+}
