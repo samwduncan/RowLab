@@ -8,9 +8,34 @@
  */
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Plus, Filter, UserPlus, ClipboardPlus, Timer, Bell } from 'lucide-react';
+import {
+  Search,
+  Plus,
+  Filter,
+  UserPlus,
+  ClipboardPlus,
+  Timer,
+  Bell,
+  Users,
+  UserCheck,
+  ClipboardList,
+  Ship,
+  CalendarRange,
+  Briefcase,
+  Calendar,
+  Dumbbell,
+  LayoutGrid,
+  Flag,
+  BarChart2,
+  Trophy,
+  Swords,
+  Grid3X3,
+  Settings,
+  Award,
+  Target,
+} from 'lucide-react';
 import type { ZoneConfig } from './CanvasDock';
 
 // ============================================
@@ -47,6 +72,66 @@ function getZoneActions(zoneId: string): ZoneAction[] {
 }
 
 // ============================================
+// ZONE SUB-NAVIGATION
+// ============================================
+
+interface SubNavItem {
+  label: string;
+  route: string;
+  icon: typeof Plus;
+}
+
+function getZoneSubNav(zoneId: string): SubNavItem[] {
+  switch (zoneId) {
+    case 'home':
+      return [
+        { label: 'Dashboard', route: '/canvas', icon: LayoutGrid },
+        { label: 'Achievements', route: '/canvas/achievements', icon: Award },
+        { label: 'Challenges', route: '/canvas/challenges', icon: Target },
+      ];
+    case 'team':
+      return [
+        { label: 'Athletes', route: '/canvas/athletes', icon: Users },
+        { label: 'Attendance', route: '/canvas/attendance', icon: UserCheck },
+        { label: 'Whiteboard', route: '/canvas/coach/whiteboard', icon: ClipboardList },
+        { label: 'Fleet', route: '/canvas/coach/fleet', icon: Ship },
+        { label: 'Availability', route: '/canvas/coach/availability', icon: CalendarRange },
+        { label: 'Recruiting', route: '/canvas/recruiting', icon: Briefcase },
+      ];
+    case 'training':
+      return [
+        { label: 'Calendar', route: '/canvas/coach/training', icon: Calendar },
+        { label: 'Sessions', route: '/canvas/training/sessions', icon: Dumbbell },
+        { label: 'Lineup Builder', route: '/canvas/coach/lineup-builder', icon: LayoutGrid },
+      ];
+    case 'racing':
+      return [
+        { label: 'Regattas', route: '/canvas/regattas', icon: Flag },
+        { label: 'Rankings', route: '/canvas/rankings', icon: BarChart2 },
+        { label: 'Seat Racing', route: '/canvas/coach/seat-racing', icon: Trophy },
+      ];
+    case 'analysis':
+      return [
+        { label: 'Erg Tests', route: '/canvas/erg-tests', icon: Timer },
+        {
+          label: 'Advanced Rankings',
+          route: '/canvas/coach/seat-racing/advanced-rankings',
+          icon: Swords,
+        },
+        {
+          label: 'Matrix Planner',
+          route: '/canvas/coach/seat-racing/matrix-planner',
+          icon: Grid3X3,
+        },
+      ];
+    case 'settings':
+      return [{ label: 'Settings', route: '/canvas/settings', icon: Settings }];
+    default:
+      return [];
+  }
+}
+
+// ============================================
 // TOOLBAR COMPONENT
 // ============================================
 
@@ -56,8 +141,10 @@ interface CanvasToolbarProps {
 
 export function CanvasToolbar({ zone }: CanvasToolbarProps) {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [searchOpen, setSearchOpen] = useState(false);
   const actions = getZoneActions(zone.id);
+  const subNav = getZoneSubNav(zone.id);
   const ZoneIcon = zone.icon;
 
   return (
@@ -158,6 +245,58 @@ export function CanvasToolbar({ zone }: CanvasToolbarProps) {
           </motion.div>
         </AnimatePresence>
       </motion.div>
+
+      {/* Sub-navigation: zone pages */}
+      {subNav.length > 1 && (
+        <motion.div
+          className="flex items-center justify-center gap-1 mt-2 px-2 py-1.5 rounded-xl
+                     bg-ink-base/40 backdrop-blur-xl
+                     border border-white/[0.04]"
+          initial={{ y: -40, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 30, delay: 0.2 }}
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={zone.id + '-subnav'}
+              className="flex items-center gap-1 flex-wrap justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              {subNav.map((item) => {
+                const NavIcon = item.icon;
+                const isActive =
+                  pathname === item.route ||
+                  (item.route !== '/canvas' && pathname.startsWith(item.route));
+                return (
+                  <motion.button
+                    key={item.route}
+                    onClick={() => navigate(item.route)}
+                    className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium
+                               transition-colors duration-150
+                               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+                    style={{
+                      color: isActive ? zone.accent : undefined,
+                      backgroundColor: isActive ? `rgba(${zone.accentRgb}, 0.12)` : 'transparent',
+                    }}
+                    whileHover={{
+                      backgroundColor: isActive
+                        ? `rgba(${zone.accentRgb}, 0.15)`
+                        : 'rgba(255,255,255,0.04)',
+                    }}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                    <NavIcon size={12} className={isActive ? '' : 'text-ink-tertiary'} />
+                    <span className={isActive ? '' : 'text-ink-secondary'}>{item.label}</span>
+                  </motion.button>
+                );
+              })}
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
+      )}
     </div>
   );
 }
