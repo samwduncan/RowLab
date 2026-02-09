@@ -1,14 +1,12 @@
 /**
- * canvas-atmosphere.css - Breathing gradient system for Canvas prototype
+ * canvas-atmosphere.css - Breathing gradient system + custom element styles
  *
- * Adds organic, slowly-drifting gradient layers behind the Canvas layout.
- * Tuned for restraint — these should feel like ambient weather, not neon.
- * The goal is "you notice something is alive" not "look at these gradients."
+ * Two responsibilities:
+ *   1. Ambient animated gradient layers behind the Canvas layout
+ *   2. Custom element primitives that give Canvas its distinctive identity
  *
- * Three independently-animated layers create depth:
- *   1. Primary nebula — zone-colored, slow drift (30s)
- *   2. Secondary wash — complementary tone, medium drift (24s)
- *   3. Ambient pulse — zone glow that breathes slowly (12s)
+ * Every element class here is unique to Canvas — no generic card/list/badge
+ * patterns. These are the building blocks of a custom design language.
  *
  * Zone colors are injected via CSS custom properties set by React.
  */
@@ -32,9 +30,113 @@
 }
 
 /* ============================================
-   LAYER 1: PRIMARY NEBULA
-   The main zone-colored gradient blob. Drifts diagonally.
+   CANVAS ELEMENT PRIMITIVES
+   Custom shapes, interactions, and visual treatments
    ============================================ */
+
+/* CHAMFERED PANEL — clip-path cut corner, NOT rounded-lg
+   The diagonal cut at top-right is the signature Canvas shape.
+   On hover the chamfer opens wider, a subtle "breathing" effect. */
+
+.canvas-chamfer {
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  transition: clip-path 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.canvas-chamfer:hover {
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
+}
+
+/* RULED SECTION HEADER — label with extending gradient line
+   Replaces card headers. The line fades from visible to transparent,
+   creating a directional reading flow. */
+
+.canvas-ruled {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.canvas-ruled::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.08), transparent 80%);
+}
+
+/* LOG TAPE ENTRY — grid-based instrument readout layout
+   4 columns: [timestamp] [indicator bar] [content] [value]
+   Slides right on hover like a tape being pulled.
+   No card wrapper — entries float directly in the page. */
+
+.canvas-log-entry {
+  display: grid;
+  grid-template-columns: 52px 3px 1fr auto;
+  gap: 0 12px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
+}
+
+.canvas-log-entry:last-child {
+  border-bottom: none;
+}
+
+.canvas-log-entry:hover {
+  transform: translateX(6px);
+}
+
+/* CONSOLE READOUT — monospace instrument display
+   Used for the bottom status strip. Feels like a cox box readout. */
+
+.canvas-console {
+  font-family: 'Geist Mono', 'JetBrains Mono', monospace;
+  letter-spacing: 0.03em;
+}
+
+/* BLINKING CURSOR — the readout is "live" */
+
+.canvas-cursor::after {
+  content: '\25AE';
+  animation: canvasCursorBlink 1.4s step-end infinite;
+  font-size: 0.85em;
+  margin-left: 6px;
+}
+
+@keyframes canvasCursorBlink {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* TICKET — session cards with slight rotation on hover
+   Feels like a physical ticket tilting when you pick it up.
+   Combined with canvas-chamfer for the cut corner. */
+
+.canvas-ticket {
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    clip-path 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.canvas-ticket:hover {
+  transform: translateY(-3px) rotate(-0.5deg);
+}
+
+/* ============================================
+   ATMOSPHERE LAYERS
+   Three independently-animated CSS gradient layers
+   that drift slowly, creating an organic "breathing" background.
+   ============================================ */
+
+/* LAYER 1: PRIMARY NEBULA
+   The main zone-colored gradient blob. Drifts diagonally. */
 
 .canvas-atmo-layer-1 {
   position: absolute;
@@ -51,10 +153,8 @@
   pointer-events: none;
 }
 
-/* ============================================
-   LAYER 2: SECONDARY WASH
-   A cooler complementary tone for depth. Orbits opposite to layer 1.
-   ============================================ */
+/* LAYER 2: SECONDARY WASH
+   A cooler complementary tone for depth. Orbits opposite to layer 1. */
 
 .canvas-atmo-layer-2 {
   position: absolute;
@@ -71,11 +171,8 @@
   pointer-events: none;
 }
 
-/* ============================================
-   LAYER 3: AMBIENT PULSE
-   A gentle breathing glow centered on the viewport.
-   Pulses opacity on a shorter cycle for "alive" feeling.
-   ============================================ */
+/* LAYER 3: AMBIENT PULSE
+   A gentle breathing glow centered on the viewport. */
 
 .canvas-atmo-pulse {
   position: absolute;
@@ -89,11 +186,8 @@
   pointer-events: none;
 }
 
-/* ============================================
-   LAYER 4: EDGE VIGNETTE
-   Darkens the edges to frame content and ground the atmosphere.
-   Static — no animation.
-   ============================================ */
+/* LAYER 4: EDGE VIGNETTE
+   Darkens the edges to frame content and ground the atmosphere. */
 
 .canvas-atmo-vignette {
   position: absolute;
@@ -106,7 +200,6 @@
 
 /* ============================================
    KEYFRAME ANIMATIONS
-   Slow, organic, barely perceptible movement
    ============================================ */
 
 @keyframes canvasNebula1 {
@@ -155,5 +248,25 @@
   .canvas-atmo-layer-2,
   .canvas-atmo-pulse {
     animation: none !important;
+  }
+
+  .canvas-chamfer,
+  .canvas-chamfer:hover {
+    transition: none !important;
+  }
+
+  .canvas-ticket,
+  .canvas-ticket:hover {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .canvas-log-entry:hover {
+    transform: none !important;
+  }
+
+  .canvas-cursor::after {
+    animation: none !important;
+    opacity: 0.5;
   }
 }
