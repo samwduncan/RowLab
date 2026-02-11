@@ -418,7 +418,7 @@ export function validateErgTestRow(
   };
 
   return {
-    data: validData as Record<string, unknown>,
+    data: validData as unknown as Record<string, unknown>,
     isValid: true,
     errors: [],
   };
