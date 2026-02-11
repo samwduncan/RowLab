@@ -121,21 +121,8 @@ export default function LoginPage() {
         if (!res.ok) return;
         const data = await res.json();
         if (data.success) {
-          const store = (await import('../../store/authStore')).default;
-          const { user, teams, activeTeamId, accessToken } = data.data;
-          const activeTeam = teams.find((t) => t.id === activeTeamId);
-          store.setState({
-            user,
-            teams,
-            activeTeamId,
-            activeTeamRole: activeTeam?.role || null,
-            activeTeamIsCoxswain: activeTeam?.isCoxswain || false,
-            accessToken,
-            isAuthenticated: true,
-            isLoading: false,
-            error: null,
-            isInitialized: true,
-          });
+          const { accessToken } = data.data;
+          // V2 auth: Set token for axios interceptor (AuthContext will load user data)
           window.__rowlab_access_token = accessToken;
           const from = location.state?.from?.pathname || '/app';
           navigate(from, { replace: true });

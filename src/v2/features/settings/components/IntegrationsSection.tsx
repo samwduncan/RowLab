@@ -17,6 +17,23 @@ import {
 import { queryKeys } from '@v2/lib/queryKeys';
 
 /**
+ * Brand Color Exception (DS-01 compliance)
+ *
+ * This file uses hardcoded hex values for third-party brand colors:
+ * - #FC4C02: Strava official brand orange (https://brand.strava.com)
+ * - #8B5CF6: Generic integration/webhook purple
+ *
+ * These are exempt from design system token requirements because:
+ * 1. Third-party brand colors must match official brand guidelines exactly
+ * 2. They are not theme-adjustable (Strava orange stays orange in all themes)
+ * 3. Only used in this single integration settings component
+ *
+ * Tailwind JIT compiler requires literal hex values in className strings,
+ * so these cannot be extracted to CSS custom properties without losing
+ * the utility class pattern.
+ */
+
+/**
  * IntegrationsSection - Main integrations tab content for Settings page
  *
  * Features:
@@ -141,6 +158,7 @@ export function IntegrationsSection() {
       {/* Strava Activities Section */}
       <section>
         <div className="flex items-center gap-3 mb-4">
+          {/* Brand color: Strava official orange */}
           <div className="w-8 h-8 rounded-lg bg-[#FC4C02]/10 flex items-center justify-center">
             <span className="text-lg">🏃</span>
           </div>
@@ -148,7 +166,7 @@ export function IntegrationsSection() {
         </div>
         <IntegrationCard
           icon={<span className="text-xl">🏃</span>}
-          iconBg="bg-[#FC4C02]/20 border border-[#FC4C02]/30"
+          iconBg="bg-[#FC4C02]/20 border border-[#FC4C02]/30" // Brand color: Strava orange
           title="Strava Activities"
           description="Sync rowing and training activities"
           connected={stravaConnected}
@@ -160,7 +178,7 @@ export function IntegrationsSection() {
           connectLoading={stravaConnecting}
           disconnectLoading={stravaDisconnecting}
           syncLoading={stravaSyncing}
-          accentColor="text-[#FC4C02]"
+          accentColor="text-[#FC4C02]" // Brand color: Strava orange
         />
         <p className="text-sm text-txt-secondary mt-3">
           Connect Strava to automatically import rowing activities, cross-training, and other
@@ -174,6 +192,7 @@ export function IntegrationsSection() {
       {/* Coming Soon Section */}
       <section>
         <div className="flex items-center gap-3 mb-4">
+          {/* Brand color: Generic integration purple */}
           <div className="w-8 h-8 rounded-lg bg-[#8B5CF6]/10 flex items-center justify-center">
             <Plug className="w-4 h-4 text-[#8B5CF6]" />
           </div>
@@ -181,6 +200,7 @@ export function IntegrationsSection() {
         </div>
         <div className="flex items-center justify-between p-4 rounded-xl bg-bg-surface-elevated/30 border border-bdr-subtle opacity-50">
           <div className="flex items-center gap-4">
+            {/* Brand color: Generic integration purple */}
             <div className="w-12 h-12 rounded-xl bg-[#8B5CF6]/20 border border-[#8B5CF6]/30 flex items-center justify-center">
               <span className="text-xl">📊</span>
             </div>
