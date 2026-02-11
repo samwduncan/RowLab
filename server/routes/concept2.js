@@ -13,12 +13,12 @@ import {
   disconnectC2,
   getC2Status,
   getMyC2Status,
-  syncUserWorkouts,
   disconnectMyC2,
   parseState,
   handleWebhook,
   connectAthlete,
 } from '../services/concept2Service.js';
+import { syncUserWorkouts } from '../services/c2SyncService.js';
 import { authenticateToken, requireRole, teamIsolation } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -46,7 +46,8 @@ router.get(
   validateRequest,
   async (req, res) => {
     try {
-      const redirectUri = process.env.CONCEPT2_REDIRECT_URI ||
+      const redirectUri =
+        process.env.CONCEPT2_REDIRECT_URI ||
         `${req.protocol}://${req.get('host')}/api/v1/concept2/callback`;
 
       const url = getAuthorizationUrl(req.params.athleteId, redirectUri);
@@ -109,7 +110,7 @@ router.get('/callback', async (req, res) => {
           <div class="container">
             <div class="icon">${success ? '✓' : '✗'}</div>
             <h1>${success ? 'Connected!' : 'Connection Failed'}</h1>
-            <p>${success ? 'You can close this window.' : (data.error || 'Please try again.')}</p>
+            <p>${success ? 'You can close this window.' : data.error || 'Please try again.'}</p>
           </div>
           <script>
             // Send message to opener window
@@ -154,7 +155,8 @@ router.get('/callback', async (req, res) => {
       return sendPopupResponse(false, { error: 'Invalid state parameter' });
     }
 
-    const redirectUri = process.env.CONCEPT2_REDIRECT_URI ||
+    const redirectUri =
+      process.env.CONCEPT2_REDIRECT_URI ||
       `${req.protocol}://${req.get('host')}/api/v1/concept2/callback`;
 
     // Exchange code for tokens
@@ -180,25 +182,21 @@ router.get('/callback', async (req, res) => {
  * Used by Settings page to check/display connection status
  * NOTE: Must be declared BEFORE /status/:athleteId to avoid route collision
  */
-router.get(
-  '/status/me',
-  authenticateToken,
-  async (req, res) => {
-    try {
-      const status = await getMyC2Status(req.user.id);
-      res.json({
-        success: true,
-        data: status,
-      });
-    } catch (error) {
-      logger.error('Get my C2 status error:', { error: error.message, stack: error.stack });
-      res.status(500).json({
-        success: false,
-        error: { code: 'SERVER_ERROR', message: 'Failed to get status' },
-      });
-    }
+router.get('/status/me', authenticateToken, async (req, res) => {
+  try {
+    const status = await getMyC2Status(req.user.id);
+    res.json({
+      success: true,
+      data: status,
+    });
+  } catch (error) {
+    logger.error('Get my C2 status error:', { error: error.message, stack: error.stack });
+    res.status(500).json({
+      success: false,
+      error: { code: 'SERVER_ERROR', message: 'Failed to get status' },
+    });
   }
-);
+});
 
 /**
  * GET /api/v1/concept2/status/:athleteId
@@ -233,38 +231,33 @@ router.get(
  * Athletes can sync their own data
  * NOTE: Must be declared BEFORE /sync/:athleteId to avoid route collision
  */
-router.post(
-  '/sync/me',
-  authenticateToken,
-  teamIsolation,
-  async (req, res) => {
-    try {
-      const result = await syncUserWorkouts(req.user.id, req.user.activeTeamId);
-      res.json({
-        success: true,
-        data: result,
-      });
-    } catch (error) {
-      if (error.message === 'No Concept2 connection') {
-        return res.status(404).json({
-          success: false,
-          error: { code: 'NOT_CONNECTED', message: error.message },
-        });
-      }
-      if (error.message === 'No athlete profile linked to this user') {
-        return res.status(404).json({
-          success: false,
-          error: { code: 'NO_ATHLETE_PROFILE', message: error.message },
-        });
-      }
-      logger.error('Sync my workouts error:', { error: error.message, stack: error.stack });
-      res.status(500).json({
+router.post('/sync/me', authenticateToken, teamIsolation, async (req, res) => {
+  try {
+    const result = await syncUserWorkouts(req.user.id, req.user.activeTeamId);
+    res.json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    if (error.message === 'No Concept2 connection') {
+      return res.status(404).json({
         success: false,
-        error: { code: 'SERVER_ERROR', message: 'Failed to sync workouts' },
+        error: { code: 'NOT_CONNECTED', message: error.message },
       });
     }
+    if (error.message === 'No athlete profile linked to this user') {
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NO_ATHLETE_PROFILE', message: error.message },
+      });
+    }
+    logger.error('Sync my workouts error:', { error: error.message, stack: error.stack });
+    res.status(500).json({
+      success: false,
+      error: { code: 'SERVER_ERROR', message: 'Failed to sync workouts' },
+    });
   }
-);
+});
 
 /**
  * POST /api/v1/concept2/sync/:athleteId
@@ -279,10 +272,7 @@ router.post(
   validateRequest,
   async (req, res) => {
     try {
-      const result = await syncAthleteWorkouts(
-        req.params.athleteId,
-        req.user.activeTeamId
-      );
+      const result = await syncAthleteWorkouts(req.params.athleteId, req.user.activeTeamId);
       res.json({
         success: true,
         data: result,
@@ -308,31 +298,27 @@ router.post(
  * Disconnect current user's Concept2 account
  * NOTE: Must be declared BEFORE /disconnect/:athleteId to avoid route collision
  */
-router.delete(
-  '/disconnect/me',
-  authenticateToken,
-  async (req, res) => {
-    try {
-      await disconnectMyC2(req.user.id);
-      res.json({
-        success: true,
-        data: { message: 'Concept2 disconnected' },
-      });
-    } catch (error) {
-      if (error.message === 'No Concept2 connection') {
-        return res.status(404).json({
-          success: false,
-          error: { code: 'NOT_CONNECTED', message: error.message },
-        });
-      }
-      logger.error('Disconnect my C2 error:', { error: error.message, stack: error.stack });
-      res.status(500).json({
+router.delete('/disconnect/me', authenticateToken, async (req, res) => {
+  try {
+    await disconnectMyC2(req.user.id);
+    res.json({
+      success: true,
+      data: { message: 'Concept2 disconnected' },
+    });
+  } catch (error) {
+    if (error.message === 'No Concept2 connection') {
+      return res.status(404).json({
         success: false,
-        error: { code: 'SERVER_ERROR', message: 'Failed to disconnect' },
+        error: { code: 'NOT_CONNECTED', message: error.message },
       });
     }
+    logger.error('Disconnect my C2 error:', { error: error.message, stack: error.stack });
+    res.status(500).json({
+      success: false,
+      error: { code: 'SERVER_ERROR', message: 'Failed to disconnect' },
+    });
   }
-);
+});
 
 /**
  * DELETE /api/v1/concept2/disconnect/:athleteId
@@ -437,34 +423,31 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
  * Start OAuth flow - returns authorization URL
  * Connects the current user's Concept2 account (coaches and athletes can both connect)
  */
-router.post(
-  '/connect',
-  authenticateToken,
-  teamIsolation,
-  async (req, res) => {
-    try {
-      const userId = req.user.id;
+router.post('/connect', authenticateToken, teamIsolation, async (req, res) => {
+  try {
+    const userId = req.user.id;
 
-      // Generate state with user ID and timestamp
-      const state = Buffer.from(JSON.stringify({
+    // Generate state with user ID and timestamp
+    const state = Buffer.from(
+      JSON.stringify({
         userId,
         nonce: Date.now().toString(36),
-      })).toString('base64url');
+      })
+    ).toString('base64url');
 
-      const url = generateAuthUrl(state);
+    const url = generateAuthUrl(state);
 
-      res.json({
-        success: true,
-        data: { url, state },
-      });
-    } catch (error) {
-      logger.error('Connect error:', { error: error.message, stack: error.stack });
-      res.status(500).json({
-        success: false,
-        error: { code: 'SERVER_ERROR', message: 'Failed to initiate connection' },
-      });
-    }
+    res.json({
+      success: true,
+      data: { url, state },
+    });
+  } catch (error) {
+    logger.error('Connect error:', { error: error.message, stack: error.stack });
+    res.status(500).json({
+      success: false,
+      error: { code: 'SERVER_ERROR', message: 'Failed to initiate connection' },
+    });
   }
-);
+});
 
 export default router;

@@ -112,7 +112,9 @@ export async function exchangeCodeForTokens(code, redirectUri) {
     try {
       errorData = JSON.parse(errorText);
     } catch {}
-    throw new Error(`Failed to exchange code: ${errorData.error_description || errorData.error || response.status}`);
+    throw new Error(
+      `Failed to exchange code: ${errorData.error_description || errorData.error || response.status}`
+    );
   }
 
   const data = await response.json();
@@ -245,11 +247,16 @@ export async function getValidToken(userId) {
   if (needsMigration && process.env.ENCRYPTION_KEY) {
     // Calculate remaining expiry time
     const remainingSeconds = Math.floor((auth.tokenExpiresAt - now) / 1000);
-    await storeTokens(userId, auth.c2UserId, {
-      accessToken,
-      refreshToken,
-      expiresIn: remainingSeconds,
-    }, auth.username);
+    await storeTokens(
+      userId,
+      auth.c2UserId,
+      {
+        accessToken,
+        refreshToken,
+        expiresIn: remainingSeconds,
+      },
+      auth.username
+    );
   }
 
   return accessToken;
@@ -398,7 +405,7 @@ export async function syncAthleteWorkouts(athleteId, teamId) {
   const c2Workouts = await fetchC2Workouts(accessToken, fromDate);
 
   // Convert and import
-  const workouts = c2Workouts.map(w => convertC2Workout(w, athleteId));
+  const workouts = c2Workouts.map((w) => convertC2Workout(w, athleteId));
   const result = await bulkCreateWorkouts(teamId, workouts);
 
   // Update last synced timestamp
@@ -486,6 +493,8 @@ export async function getMyC2Status(userId) {
 /**
  * Sync workouts for the current user (athlete self-sync)
  * Different from syncAthleteWorkouts which is for coaches syncing athletes
+ *
+ * @deprecated Use c2SyncService.syncUserWorkouts() instead (Phase 37 - includes splits and machine type)
  */
 export async function syncUserWorkouts(userId, teamId) {
   // Get user's C2 auth
@@ -514,7 +523,10 @@ export async function syncUserWorkouts(userId, teamId) {
       where: { id: athlete.id },
       data: { concept2UserId: auth.c2UserId },
     });
-    logger.info('Linked C2 account to existing athlete', { athleteId: athlete.id, c2UserId: auth.c2UserId });
+    logger.info('Linked C2 account to existing athlete', {
+      athleteId: athlete.id,
+      c2UserId: auth.c2UserId,
+    });
   }
 
   if (!athlete) {
@@ -523,8 +535,12 @@ export async function syncUserWorkouts(userId, teamId) {
     // Parse name from user's email or use defaults
     const user = auth.user;
     const nameParts = user.email.split('@')[0].split(/[._-]/);
-    const firstName = nameParts[0] ? nameParts[0].charAt(0).toUpperCase() + nameParts[0].slice(1) : 'User';
-    const lastName = nameParts[1] ? nameParts[1].charAt(0).toUpperCase() + nameParts[1].slice(1) : user.email.split('@')[0];
+    const firstName = nameParts[0]
+      ? nameParts[0].charAt(0).toUpperCase() + nameParts[0].slice(1)
+      : 'User';
+    const lastName = nameParts[1]
+      ? nameParts[1].charAt(0).toUpperCase() + nameParts[1].slice(1)
+      : user.email.split('@')[0];
 
     athlete = await prisma.athlete.create({
       data: {
@@ -554,7 +570,7 @@ export async function syncUserWorkouts(userId, teamId) {
   const { results } = await fetchResults(accessToken, profile.id, { page: 1, perPage: 100 });
 
   // Filter results newer than fromDate
-  const newResults = results.filter(r => new Date(r.date) > fromDate);
+  const newResults = results.filter((r) => new Date(r.date) > fromDate);
 
   // Convert to erg tests
   const ergTests = [];
@@ -592,9 +608,8 @@ export async function syncUserWorkouts(userId, teamId) {
       // Also create erg test if it's a standard test distance
       if (['2k', '6k', '500m', '1k'].includes(testType)) {
         const timeSeconds = result.time ? result.time / 10 : 0;
-        const splitSeconds = timeSeconds > 0 && result.distance > 0
-          ? (timeSeconds / (result.distance / 500))
-          : null;
+        const splitSeconds =
+          timeSeconds > 0 && result.distance > 0 ? timeSeconds / (result.distance / 500) : null;
 
         await prisma.ergTest.create({
           data: {
@@ -695,15 +710,12 @@ export async function fetchResultWithStrokes(accessToken, userId, resultId) {
   const config = getConfig();
 
   // Fetch result details
-  const resultRes = await fetch(
-    `${config.apiUrl}/api/users/${userId}/results/${resultId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        Accept: 'application/vnd.c2logbook.v1+json',
-      },
-    }
-  );
+  const resultRes = await fetch(`${config.apiUrl}/api/users/${userId}/results/${resultId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      Accept: 'application/vnd.c2logbook.v1+json',
+    },
+  });
 
   if (!resultRes.ok) {
     throw new Error(`Failed to fetch result: ${resultRes.status}`);
@@ -737,66 +749,30 @@ export async function fetchResultWithStrokes(accessToken, userId, resultId) {
 
 /**
  * Handle webhook from Concept2
+ * Delegates to c2SyncService for actual sync processing
  * @param {object} payload - Webhook payload
  * @returns {Promise<{success: boolean, event?: string, ignored?: boolean}>}
  */
 export async function handleWebhook(payload) {
   const { event, user_id, result_id } = payload;
 
-  // Find athlete by Concept2 user ID
+  // Find auth by Concept2 user ID (now uses userId, not athleteId)
   const auth = await prisma.concept2Auth.findFirst({
     where: { c2UserId: String(user_id) },
-    include: { athlete: true },
   });
 
   if (!auth || !auth.syncEnabled) {
     return { success: true, ignored: true };
   }
 
+  // Delegate to c2SyncService for processing
+  const { syncSingleResult } = await import('./c2SyncService.js');
+
   switch (event) {
     case 'result-added':
     case 'result-updated': {
-      // Fetch the result from C2 and upsert
       try {
-        const accessToken = await getValidToken(auth.athleteId);
-        if (!accessToken) {
-          return { success: false, error: 'No valid token' };
-        }
-
-        const result = await fetchResultWithStrokes(accessToken, user_id, result_id);
-
-        // Upsert into Workout table
-        await prisma.workout.upsert({
-          where: { c2LogbookId: String(result_id) },
-          create: {
-            athleteId: auth.athleteId,
-            teamId: auth.athlete.teamId,
-            source: 'concept2_sync',
-            c2LogbookId: String(result_id),
-            date: new Date(result.date),
-            distanceM: result.distance,
-            durationSeconds: result.time ? result.time / 10 : null,
-            strokeRate: result.stroke_rate,
-            calories: result.calories_total,
-            dragFactor: result.drag_factor,
-            rawData: result,
-          },
-          update: {
-            distanceM: result.distance,
-            durationSeconds: result.time ? result.time / 10 : null,
-            strokeRate: result.stroke_rate,
-            calories: result.calories_total,
-            dragFactor: result.drag_factor,
-            rawData: result,
-          },
-        });
-
-        // Update last sync time
-        await prisma.concept2Auth.update({
-          where: { athleteId: auth.athleteId },
-          data: { lastSyncedAt: new Date() },
-        });
-
+        await syncSingleResult(auth.userId, result_id);
         return { success: true, event };
       } catch (error) {
         logger.error('Webhook processing error', { error: error.message });

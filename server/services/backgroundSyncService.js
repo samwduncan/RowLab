@@ -8,7 +8,7 @@
 import cron from 'node-cron';
 import { prisma } from '../db/connection.js';
 import logger from '../utils/logger.js';
-import * as concept2Service from './concept2Service.js';
+import * as c2SyncService from './c2SyncService.js';
 import * as stravaService from './stravaService.js';
 
 // Store sync status
@@ -67,18 +67,15 @@ async function syncAllConcept2() {
           continue;
         }
 
-        // Sync results (last 30 days by default)
-        const results = await concept2Service.syncResults(
-          auth.userId,
-          teamMember.teamId,
-          { days: 30 }
-        );
+        // Sync workouts (using enhanced c2SyncService with splits and machine type)
+        const results = await c2SyncService.syncUserWorkouts(auth.userId, teamMember.teamId);
 
-        if (results.imported > 0) {
+        if (results.workoutsCreated > 0) {
           logger.info('Concept2 sync completed', {
             userId: auth.userId,
-            imported: results.imported,
-            skipped: results.skipped,
+            workoutsCreated: results.workoutsCreated,
+            ergTestsCreated: results.ergTestsCreated,
+            splits: results.splits,
           });
         }
 
@@ -155,11 +152,9 @@ async function syncAllStrava() {
         }
 
         // Sync activities (last 14 days by default)
-        const results = await stravaService.syncActivities(
-          auth.userId,
-          teamMember.teamId,
-          { days: 14 }
-        );
+        const results = await stravaService.syncActivities(auth.userId, teamMember.teamId, {
+          days: 14,
+        });
 
         if (results.imported > 0) {
           logger.info('Strava sync completed', {
@@ -203,7 +198,7 @@ async function syncAllStrava() {
 export function startBackgroundSync(options = {}) {
   const {
     concept2Cron = '0 */6 * * *', // Every 6 hours
-    stravaCron = '0 */4 * * *',   // Every 4 hours
+    stravaCron = '0 */4 * * *', // Every 4 hours
   } = options;
 
   // Schedule Concept2 sync
