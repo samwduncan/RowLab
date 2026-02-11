@@ -1516,6 +1516,33 @@ Plans:
 
 ---
 
+### Phase 37.1: Post-37 Regression Cleanup (INSERTED)
+
+**Goal:** Fix all regressions and design debt discovered after Phase 37 execution — old design tokens, broken API params, zone navigation inconsistencies.
+
+**Depends on:** Phase 37
+
+**Delivers:**
+- Canvas design token migration (~20 dashboard/widget files)
+- Attendance widget API parameter fix
+- Zone navigation UX consistency (Seat Racing)
+- Old CSS variable cleanup (bg-surface-*, text-txt-*, var(--color-*))
+
+**Plans:** 4 plans
+
+Plans:
+- [x] 37.1-01-PLAN.md — Dashboard design token migration (27 files, 636 line changes)
+- [x] 37.1-02-PLAN.md — Attendance widget API fix (useAttendanceSummary hook)
+- [x] 37.1-03-PLAN.md — Common components and skeleton token migration (10 files)
+- [x] 37.1-04-PLAN.md — Canvas pages token consistency (5 files, 28 border fixes)
+
+**Details:**
+Post-execution audit found ~20 files using pre-Canvas design tokens (Phase 27 era),
+attendance widget sending wrong API params, and inconsistent border tokens in Canvas pages.
+All 4 plans executed in parallel wave.
+
+---
+
 ### Phase 38: Share Card Platform
 
 **Goal:** Build a share card generation service with multiple card types and formats. Port the Cairo+Pango renderer into a RowLab API endpoint, support multiple templates (erg results, PR celebrations, regatta results, season recaps), and multiple output formats (1:1 square, 9:16 story).

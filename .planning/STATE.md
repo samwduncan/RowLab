@@ -3,11 +3,11 @@
 ## Current Status
 
 **Milestone:** v3.1 — Integrations, Analytics & Social Sharing
-**Phase:** 37.1 (Post-37 Regression Cleanup) — IN PROGRESS
-**Plan:** 1/TBD (37-04 complete)
-**Status:** Canvas token consistency complete. Canvas pages now unified.
+**Phase:** 37.1 (Post-37 Regression Cleanup) — COMPLETE
+**Plan:** 4/4 complete
+**Status:** All 4 plans executed in parallel. Dashboard tokens migrated (27 files), attendance widget API fixed, common components/skeletons migrated (10 files), Canvas pages unified (5 files).
 **Next Phase:** 38 (Share Card Platform)
-**Last activity:** 2026-02-11 — Completed 37-04-PLAN.md (Canvas border token unification)
+**Last activity:** 2026-02-11 — Completed Phase 37.1 (Post-37 Regression Cleanup)
 
 ## Project Reference
 
@@ -74,7 +74,7 @@ v2.2 Progress: ░░░░░░░░░░░░░░ (0 phases complete)
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
 | 37 | Concept2 Workout Sync | Complete ✅ | 6/6 |
-| 37.1 | Post-37 Regression Cleanup | In Progress | TBD |
+| 37.1 | Post-37 Regression Cleanup | Complete ✅ | 4/4 |
 | 38 | Share Card Platform | Planned | TBD |
 | 39 | Strava Integration & Cross-Platform Sync | Planned | TBD |
 | 40 | Performance Analytics Engine | Planned | TBD |
