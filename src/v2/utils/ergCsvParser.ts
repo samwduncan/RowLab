@@ -151,16 +151,23 @@ export function parseTimeToSeconds(timeStr: string | number): number | null {
 
   if (parts.length === 2) {
     // MM:SS.s format (e.g., "6:30.5")
-    const minutes = parseInt(parts[0], 10);
-    const seconds = parseFloat(parts[1]);
+    const minutesPart = parts[0];
+    const secondsPart = parts[1];
+    if (!minutesPart || !secondsPart) return null;
+    const minutes = parseInt(minutesPart, 10);
+    const seconds = parseFloat(secondsPart);
 
     if (isNaN(minutes) || isNaN(seconds)) return null;
     return minutes * 60 + seconds;
   } else if (parts.length === 3) {
     // HH:MM:SS format (e.g., "1:06:30")
-    const hours = parseInt(parts[0], 10);
-    const minutes = parseInt(parts[1], 10);
-    const seconds = parseFloat(parts[2]);
+    const hoursPart = parts[0];
+    const minutesPart = parts[1];
+    const secondsPart = parts[2];
+    if (!hoursPart || !minutesPart || !secondsPart) return null;
+    const hours = parseInt(hoursPart, 10);
+    const minutes = parseInt(minutesPart, 10);
+    const seconds = parseFloat(secondsPart);
 
     if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) return null;
     return hours * 3600 + minutes * 60 + seconds;
@@ -189,7 +196,7 @@ export function parseTestType(value: string | number): TestType | null {
     '6000': '6k',
     '30min': '30min',
     '30': '30min',
-    'thirty': '30min',
+    thirty: '30min',
     '500': '500m',
   };
 
@@ -205,9 +212,10 @@ function findAthleteByName(name: string, athletes: Athlete[]): Athlete | null {
   const searchName = normalize(name);
 
   // Try exact match first
-  let match = athletes.find((a) =>
-    normalize(`${a.firstName}${a.lastName}`) === searchName ||
-    normalize(`${a.lastName}${a.firstName}`) === searchName
+  let match = athletes.find(
+    (a) =>
+      normalize(`${a.firstName}${a.lastName}`) === searchName ||
+      normalize(`${a.lastName}${a.firstName}`) === searchName
   );
 
   if (match) return match;
@@ -216,8 +224,12 @@ function findAthleteByName(name: string, athletes: Athlete[]): Athlete | null {
   match = athletes.find((a) => {
     const fullName = normalize(`${a.firstName}${a.lastName}`);
     const reverseName = normalize(`${a.lastName}${a.firstName}`);
-    return fullName.includes(searchName) || reverseName.includes(searchName) ||
-           searchName.includes(fullName) || searchName.includes(reverseName);
+    return (
+      fullName.includes(searchName) ||
+      reverseName.includes(searchName) ||
+      searchName.includes(fullName) ||
+      searchName.includes(reverseName)
+    );
   });
 
   return match || null;
@@ -346,9 +358,10 @@ export function validateErgTestRow(
   // Parse optional distance
   let distanceM: number | null = null;
   if (result.data.distanceM) {
-    distanceM = typeof result.data.distanceM === 'number'
-      ? result.data.distanceM
-      : parseFloat(String(result.data.distanceM));
+    distanceM =
+      typeof result.data.distanceM === 'number'
+        ? result.data.distanceM
+        : parseFloat(String(result.data.distanceM));
   }
 
   // Parse date (handle various formats)
@@ -370,7 +383,11 @@ export function validateErgTestRow(
         ],
       };
     }
-    testDate = parsed.toISOString().split('T')[0]; // YYYY-MM-DD format
+    const isoDate = parsed.toISOString().split('T')[0];
+    if (!isoDate) {
+      throw new Error('Failed to format date');
+    }
+    testDate = isoDate; // YYYY-MM-DD format
   } catch (err) {
     return {
       data: mappedData,
@@ -394,14 +411,14 @@ export function validateErgTestRow(
     timeSeconds,
     distanceM,
     splitSeconds,
-    watts: result.data.watts || null,
-    strokeRate: result.data.strokeRate || null,
-    weightKg: result.data.weightKg || null,
-    notes: result.data.notes || null,
+    watts: (result.data.watts as number | null) || null,
+    strokeRate: (result.data.strokeRate as number | null) || null,
+    weightKg: (result.data.weightKg as number | null) || null,
+    notes: (result.data.notes as string | null) || null,
   };
 
   return {
-    data: validData,
+    data: validData as Record<string, unknown>,
     isValid: true,
     errors: [],
   };
@@ -426,7 +443,7 @@ export function validateAllErgRows(
   data.forEach((row, index) => {
     const result = validateErgTestRow(row, mapping, athletes, index);
     if (result.isValid) {
-      validRows.push(result.data as ValidatedErgTestData);
+      validRows.push(result.data as unknown as ValidatedErgTestData);
     } else {
       invalidRows.push({ row: index + 1, errors: result.errors });
     }
