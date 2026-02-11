@@ -4,10 +4,10 @@
 
 **Milestone:** v3.1 — Integrations, Analytics & Social Sharing
 **Phase:** 37 (Concept2 Workout Sync) — IN PROGRESS
-**Plan:** 1/8 complete
-**Status:** Plan 37-01 complete: Enhanced C2 sync schema with WorkoutSplit model and machineType field. Built split-aware c2SyncService extracting richer data from C2 API (summary metrics + per-split breakdown). All sync paths (manual, webhook, background) use enhanced service.
-**Next Plan:** 37-02 (Testing infrastructure with C2 API mock and TDD test suite)
-**Last activity:** 2026-02-11 — Completed 37-01-PLAN.md (Enhanced C2 Sync Schema & Service)
+**Plan:** 4/8 complete
+**Status:** Plan 37-04 complete: Erg table enhanced with C2 badges, machine type indicators, source filtering, and user-level sync button in page header. Synced workouts visually distinguishable. Toast feedback on sync.
+**Next Plan:** 37-05 (Workout detail view with split table and summary)
+**Last activity:** 2026-02-11 — Completed 37-04-PLAN.md (Erg Table Enhancements for C2 Sync)
 
 ## Project Reference
 
@@ -73,7 +73,7 @@ v2.2 Progress: ░░░░░░░░░░░░░░ (0 phases complete)
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
-| 37 | Concept2 Workout Sync | In Progress | 1/8 |
+| 37 | Concept2 Workout Sync | In Progress | 4/8 |
 | 38 | Share Card Platform | Planned | TBD |
 | 39 | Strava Integration & Cross-Platform Sync | Planned | TBD |
 | 40 | Performance Analytics Engine | Planned | TBD |
@@ -309,6 +309,16 @@ Key architectural decisions carrying forward:
 | 13-12 | Cross-feature widgets pull from multiple domains | Dashboard widgets aggregate data from sessions, activity feed, and attendance for unified overview |
 | 13-12 | Edit mode toggle for dashboard customization | Separates view mode from edit mode, prevents accidental widget rearrangement during normal use |
 
+### Phase 37 Decisions
+
+| Plan | Decision | Rationale |
+|------|----------|-----------|
+| 37-03 | Historical import supports two modes: date range and browse/select | Date range mode imports all workouts in range, browse/select allows picking specific workouts - flexibility for different use cases |
+| 37-03 | Athlete-owned C2 connections take priority over coach-synced | If athlete has their own C2 connection, skip coach-synced version for that C2 user ID - athlete data is authoritative |
+| 37-03 | Auto-match uses concept2UserId not profile name | More reliable than name matching (avoids ambiguity from duplicate names), leverages existing concept2UserId field on athlete records |
+| 37-03 | Unmatched workouts stored with athleteId null for manual resolution | Coach can assign later via PUT /api/v1/concept2/assign-workout, avoids incorrect auto-assignment |
+| 37-03 | Batch processing with 50 records per page for historical import | Prevents memory bloat on large logbooks (5,000+ workouts), streams data instead of loading all at once |
+
 ### Phase 14 Decisions
 
 | Plan | Decision | Rationale |
@@ -525,10 +535,10 @@ Key architectural decisions carrying forward:
 
 ## Session Continuity
 
-**Last session:** 2026-02-11 15:52:42Z
-**Stopped at:** Phase 37-01 COMPLETE. Enhanced C2 sync schema with WorkoutSplit model and machineType field. Built split-aware c2SyncService extracting richer data from C2 API. All sync paths use enhanced service.
+**Last session:** 2026-02-11 16:03:12Z
+**Stopped at:** Phase 37-04 COMPLETE. Enhanced erg table with C2 badges, machine type badges, source filtering, and user-level sync button. Synced workouts visually distinguishable. Toast feedback on sync success/failure.
 **Resume file:** None
-**Resume with:** Continue Phase 37-02 (Testing infrastructure with C2 API mock and TDD test suite)
+**Resume with:** Continue Phase 37-05 (Workout detail view with split table and summary card)
 
 ## Roadmap Evolution
 
