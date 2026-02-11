@@ -1,142 +1,110 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import useAuthStore from '../store/authStore';
 
 /**
- * Hook for authentication - wraps authStore with navigation helpers
+ * DEPRECATED V1 Hook - Stub for legacy auth pages
+ *
+ * V1 authStore deleted in Phase 36.1-02.
+ * This stub exists only for legacy pages (LoginPage, RegisterPage, InviteClaimPage).
+ * V2 uses AuthContext from src/v2/contexts/AuthContext.tsx
+ *
+ * TODO(phase-37): Replace legacy pages with V2 Canvas auth pages and delete this stub.
  */
 export function useAuth() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const {
-    user,
-    teams,
-    activeTeamId,
-    activeTeamRole,
-    isAuthenticated,
-    isLoading,
-    error,
-    isInitialized,
-    login: storeLogin,
-    register: storeRegister,
-    logout: storeLogout,
-    switchTeam: storeSwitchTeam,
-    createTeam: storeCreateTeam,
-    joinTeamByCode: storeJoinTeamByCode,
-    initialize,
-    clearError,
-    getActiveTeam,
-    getAuthHeaders,
-    authenticatedFetch,
-  } = useAuthStore();
+  // Stub values - legacy pages use dev-login which bypasses this
+  const user = null;
+  const teams = [];
+  const activeTeamId = null;
+  const activeTeamRole = null;
+  const isAuthenticated = false;
+  const isInitialized = true;
 
-  // Initialize auth on mount
-  useEffect(() => {
-    if (!isInitialized) {
-      initialize();
-    }
-  }, [isInitialized, initialize]);
-
-  // Login with redirect
+  // Stub login - legacy pages use dev-login which directly navigates
   const login = useCallback(
     async (email, password) => {
-      const result = await storeLogin(email, password);
-
-      if (result.success) {
-        // Redirect to original destination or app
-        const from = location.state?.from?.pathname || '/app';
-        navigate(from, { replace: true });
+      setIsLoading(true);
+      setError(null);
+      try {
+        const res = await fetch('/api/v1/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email, password }),
+        });
+        const data = await res.json();
+        setIsLoading(false);
+        if (data.success) {
+          window.__rowlab_access_token = data.data.accessToken;
+          const from = location.state?.from?.pathname || '/app';
+          navigate(from, { replace: true });
+          return { success: true };
+        }
+        setError(data.error?.message || 'Login failed');
+        return { success: false, error: data.error };
+      } catch (err) {
+        setIsLoading(false);
+        setError('Network error');
+        return { success: false, error: { message: 'Network error' } };
       }
-
-      return result;
     },
-    [storeLogin, navigate, location]
+    [navigate, location]
   );
 
-  // Register with redirect to login
+  // Stub register
   const register = useCallback(
     async (data) => {
-      const result = await storeRegister(data);
-
-      if (result.success) {
-        navigate('/login', {
-          state: { message: 'Account created! Please log in.' },
+      setIsLoading(true);
+      setError(null);
+      try {
+        const res = await fetch('/api/v1/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
         });
+        const result = await res.json();
+        setIsLoading(false);
+        if (result.success) {
+          navigate('/login', {
+            state: { message: 'Account created! Please log in.' },
+          });
+          return { success: true };
+        }
+        setError(result.error?.message || 'Registration failed');
+        return { success: false, error: result.error };
+      } catch (err) {
+        setIsLoading(false);
+        setError('Network error');
+        return { success: false, error: { message: 'Network error' } };
       }
-
-      return result;
     },
-    [storeRegister, navigate]
+    [navigate]
   );
 
-  // Logout with redirect
+  // Stub logout
   const logout = useCallback(async () => {
-    await storeLogout();
+    delete window.__rowlab_access_token;
     navigate('/login', { replace: true });
-  }, [storeLogout, navigate]);
+  }, [navigate]);
 
-  // Switch team
-  const switchTeam = useCallback(
-    async (teamId) => {
-      const result = await storeSwitchTeam(teamId);
+  // Stub team functions
+  const switchTeam = useCallback(async () => ({ success: false }), []);
+  const createTeam = useCallback(async () => ({ success: false }), []);
+  const joinTeamByCode = useCallback(async () => ({ success: false }), []);
 
-      if (result.success) {
-        // Optionally refresh current page data
-        window.location.reload();
-      }
-
-      return result;
-    },
-    [storeSwitchTeam]
-  );
-
-  // Create team
-  const createTeam = useCallback(
-    async (data) => {
-      const result = await storeCreateTeam(data);
-
-      if (result.success) {
-        navigate('/app', { replace: true });
-      }
-
-      return result;
-    },
-    [storeCreateTeam, navigate]
-  );
-
-  // Join team by code
-  const joinTeamByCode = useCallback(
-    async (code) => {
-      const result = await storeJoinTeamByCode(code);
-
-      if (result.success) {
-        // Switch to the new team
-        await storeSwitchTeam(result.team.id);
-      }
-
-      return result;
-    },
-    [storeJoinTeamByCode, storeSwitchTeam]
-  );
-
-  // Check if user has specific role
-  const hasRole = useCallback(
-    (...roles) => {
-      return roles.includes(activeTeamRole);
-    },
-    [activeTeamRole]
-  );
-
-  // Check if user is coach or owner
-  const isCoachOrOwner = useCallback(() => {
-    return hasRole('OWNER', 'COACH');
-  }, [hasRole]);
-
-  // Check if user is team owner
-  const isOwner = useCallback(() => {
-    return hasRole('OWNER');
-  }, [hasRole]);
+  // Stub helpers
+  const hasRole = useCallback(() => false, []);
+  const isCoachOrOwner = useCallback(() => false, []);
+  const isOwner = useCallback(() => false, []);
+  const clearError = useCallback(() => setError(null), []);
+  const getAuthHeaders = useCallback(() => ({}), []);
+  const authenticatedFetch = useCallback(async () => {
+    throw new Error('V1 authenticatedFetch deprecated - use V2 api utility');
+  }, []);
 
   return {
     // State
@@ -144,7 +112,7 @@ export function useAuth() {
     teams,
     activeTeamId,
     activeTeamRole,
-    activeTeam: getActiveTeam(),
+    activeTeam: null,
     isAuthenticated,
     isLoading,
     error,
@@ -169,25 +137,23 @@ export function useAuth() {
 }
 
 /**
- * Hook for requiring authentication
- * Redirects to login if not authenticated
+ * Stub - Hook for requiring authentication
  */
 export function useRequireAuth() {
   const { isAuthenticated, isInitialized, isLoading } = useAuth();
-  const isInitializing = useAuthStore((s) => s.isInitializing);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    if (isInitialized && !isLoading && !isInitializing && !isAuthenticated) {
+    if (isInitialized && !isLoading && !isAuthenticated) {
       navigate('/login', {
         replace: true,
         state: { from: location },
       });
     }
-  }, [isAuthenticated, isInitialized, isInitializing, isLoading, navigate, location]);
+  }, [isAuthenticated, isInitialized, isLoading, navigate, location]);
 
-  return { isAuthenticated, isLoading: isLoading || !isInitialized || isInitializing };
+  return { isAuthenticated, isLoading };
 }
 
 /**
