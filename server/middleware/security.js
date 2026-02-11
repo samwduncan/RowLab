@@ -23,7 +23,13 @@ export const securityHeaders = helmet({
       fontSrc: ["'self'", 'fonts.gstatic.com'],
       imgSrc: ["'self'", 'data:', 'blob:', 'https:'],
       scriptSrc: ["'self'", "'unsafe-inline'"],
-      connectSrc: ["'self'", 'http://localhost:*', 'ws://localhost:*', 'http://100.86.4.57:*', 'https://api.ollama.ai'],
+      connectSrc: [
+        "'self'",
+        'http://localhost:*',
+        'ws://localhost:*',
+        'http://100.86.4.57:*',
+        'https://api.ollama.ai',
+      ],
       frameSrc: ["'none'"],
       objectSrc: ["'none'"],
       upgradeInsecureRequests: null, // Disable - server runs on HTTP
@@ -36,9 +42,20 @@ export const securityHeaders = helmet({
  * CORS configuration
  */
 export const corsOptions = cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? ['https://rowlab.net', 'https://www.rowlab.net', 'http://100.86.4.57:3001', 'http://10.0.0.17:3001']
-    : ['http://localhost:3001', 'http://localhost:3002', 'http://10.0.0.17:3001', 'http://100.86.4.57:3001'],
+  origin:
+    process.env.NODE_ENV === 'production'
+      ? [
+          'https://rowlab.net',
+          'https://www.rowlab.net',
+          'http://100.86.4.57:3001',
+          'http://10.0.0.17:3001',
+        ]
+      : [
+          'http://localhost:3001',
+          'http://localhost:3002',
+          'http://10.0.0.17:3001',
+          'http://100.86.4.57:3001',
+        ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
@@ -59,8 +76,13 @@ export const globalLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   skip: (req) => {
-    // Skip rate limiting for static assets
-    return req.path.startsWith('/assets') || req.path.endsWith('.js') || req.path.endsWith('.css');
+    // Skip rate limiting for static assets and dev-login
+    return (
+      req.path.startsWith('/assets') ||
+      req.path.endsWith('.js') ||
+      req.path.endsWith('.css') ||
+      req.path.includes('/dev-login')
+    );
   },
 });
 
@@ -77,6 +99,10 @@ export const authLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => {
+    // Dev-login is localhost-only and already IP-gated, skip rate limiting
+    return req.path === '/dev-login';
+  },
 });
 
 /**
@@ -103,7 +129,10 @@ export const aiChatLimiter = rateLimit({
   max: 10, // 10 chat requests per minute per user
   message: {
     success: false,
-    error: { code: 'RATE_LIMITED', message: 'Too many chat requests. Please wait before sending more.' },
+    error: {
+      code: 'RATE_LIMITED',
+      message: 'Too many chat requests. Please wait before sending more.',
+    },
   },
   standardHeaders: true,
   legacyHeaders: false,
