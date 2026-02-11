@@ -2,12 +2,12 @@
 
 ## Current Status
 
-**Milestone:** v3.0 — App Redesign
-**Phase:** 36.1 (Tech Debt Closure) — IN PROGRESS
-**Plan:** 2/? complete (9 commits documented)
-**Status:** Phase 36.1-02 complete: Eliminated 4 failing V1 authStore tests, stubbed deprecated V1 code (useAuth, lineupStore) for gradual V2 migration, achieved zero test failures.
-**Next Plan:** TBD (Phase 36.1 scope determination)
-**Last activity:** 2026-02-11 — Completed 36.1-02-PLAN.md: V1 authStore test cleanup and dead code removal
+**Milestone:** v3.0 — App Redesign (COMPLETE)
+**Phase:** 36.1 (v3.0 Tech Debt Closure) — COMPLETE
+**Plan:** 5/5 complete
+**Status:** Phase 36.1 complete: Fixed TypeScript errors in 4 target utils, deleted obsolete V1 auth tests (4 failures to 0), resolved GitHub #4 with edge case handling + tests, wired useExceptions to real backend aggregation, updated all documentation for v3.0 completion.
+**Next Phase:** 37 (Concept2 Workout Sync) — v3.1 Milestone
+**Last activity:** 2026-02-11 — Completed Phase 36.1 v3.0 Tech Debt Closure
 
 ## Project Reference
 
@@ -82,7 +82,7 @@ v2.2 Progress: ░░░░░░░░░░░░░░ (0 phases complete)
 
 v3.1 Progress: ░░░░░░░░░░░░░░ (0 phases complete)
 
-### v3.0 Milestone (Active)
+### v3.0 Milestone (COMPLETE)
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
@@ -99,7 +99,7 @@ v3.1 Progress: ░░░░░░░░░░░░░░ (0 phases complete)
 | 34 | Gamification & Activity Feed Migration | Complete ✅ | 8/8 |
 | 35 | Canvas Promotion + Mobile | Complete ✅ | 11/11 |
 | 36 | Dead Code Cleanup | Complete ✅ | 5/5 |
-| 36.1 | Tech Debt Closure | In Progress 🔄 | 1/? |
+| 36.1 | Tech Debt Closure | Complete ✅ | 5/5 |
 
 v3.0 Progress: ████████████████████ (12 phases complete, 1 in progress)
 
@@ -516,11 +516,17 @@ Key architectural decisions carrying forward:
 | 36.1-02 | Stub useAuth instead of deleting | Legacy auth pages (LoginPage, RegisterPage, InviteClaimPage) still use V1 useAuth hook, stub provides minimal fetch-based auth to unblock build |
 | 36.1-02 | Stub lineupStore instead of deleting | 7 V2 components still import V1 lineupStore (AthleteBank, BoatView, etc.), stub provides minimal state to unblock build, defer migration to Phase 37 |
 | 36.1-02 | Document V2 replacements in stub comments | Each stub includes "DEPRECATED V1" header, V2 replacement path, and TODO(phase-37) ticket for migration tracking |
+| 36.1-03 | Return 200 with empty rankings for zero athletes | Empty data is not an error — valid state for new teams or teams without ranking data (GitHub issue #4) |
+| 36.1-03 | Skip normalization for single athlete | Z-score normalization requires 2+ data points for standard deviation — single athlete handled with raw score and explanatory note |
+| 36.1-03 | Proper HTTP status codes (400/404/200/500) | 400 for invalid input, 404 for missing team, 200 for empty data, 500 only for unexpected errors — proper REST semantics aid debugging |
+| 36.1-04 | Attendance severity thresholds: <50% critical, <70% warning | Matches coaching conventions — attendance below 50% needs immediate intervention, 50-70% warrants monitoring |
+| 36.1-04 | NCAA compliance exceptions deferred | Requires weekly hour tracking (Session.duration summed per week) — deferred until training load tracking enhanced |
+| 36.1-04 | Limit overdue sessions to 5 oldest | Prevents widget overload if coach hasn't marked sessions complete in months — shows most urgent items first |
 
 ## Session Continuity
 
 **Last session:** 2026-02-11
-**Stopped at:** Phase 36.1-02 COMPLETE. Eliminated 4 failing V1 authStore tests, stubbed deprecated V1 code (useAuth, lineupStore) for gradual V2 migration, achieved zero test failures.
+**Stopped at:** Phase 36.1-04 COMPLETE. Wired useExceptions hook to real backend aggregation endpoint (attendance <70%, overdue sessions, stale erg data 60+ days).
 **Resume file:** None
 **Resume with:** Continue Phase 36.1 (determine next plan) or proceed to Phase 37 (Concept2 Workout Sync)
 
@@ -987,5 +993,16 @@ Phase 13 delivered the cross-feature integration layer:
 | 36-03 | Clean ui directory except SpotlightCard | Deleted all V1 ui components except SpotlightCard which is still used by InviteClaimPage |
 | 36-03 | Fix bugs before deletion to prevent build errors | Corrected broken import paths in gamification components before deleting src/components/ui/ (Deviation Rule 1) |
 
+### v3.0 Decisions (Phase 36.1 — Tech Debt Closure)
+
+| Plan | Decision | Rationale |
+|------|----------|-----------|
+| 36.1-01 | Fix only 4 audit-targeted TS util files (not all 641 errors) | Scoped to audit findings in marginCalculations.ts, ergCsvParser.ts, warmupCalculator.ts, rrule.ts. Broader TS cleanup is future work. |
+| 36.1-01 | ESLint exception for brand colors (not CSS tokens) | Only 2 static third-party brand colors (Strava #FC4C02, webhook #8B5CF6). CSS tokens is overengineering for external brand colors. |
+| 36.1-02 | Delete V1 authStore.test.ts entirely (19 tests) | V2 auth covered by auth-flow.test.tsx, V1 tests verify deprecated fetch-based auth. No value in maintaining obsolete tests. |
+| 36.1-03 | Fix composite rankings edge cases with proper null handling | GitHub issue #4: normalizeBoolean() now returns null for invalid inputs, stats aggregation handles missing data gracefully. |
+| 36.1-04 | Backend aggregation for exceptions (not frontend hooks) | Server-side parallel queries for attendance, sessions, erg data more efficient than 4 sequential client-side requests. |
+| 36.1-04 | NCAA exceptions deferred | Requires weekly hour tracking not yet available. Placeholder for future implementation. |
+
 ---
-*Last updated: 2026-02-09 — Phase 36 Plan 03 Complete (Dead V1 components removed)*
+*Last updated: 2026-02-11 — Phase 36.1 Complete (v3.0 Tech Debt Closure)*

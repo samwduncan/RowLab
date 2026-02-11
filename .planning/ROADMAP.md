@@ -950,7 +950,7 @@ Telemetry, AI optimization, predictive modeling, and mobile coxswain experience.
 
 ---
 
-## Milestone: v3.0 — App Redesign (IN PROGRESS)
+## Milestone: v3.0 — App Redesign (COMPLETE)
 
 Complete frontend redesign with Canvas design system, world-class UX for every feature, V1/V2 migration completion, mobile responsiveness, and performance optimization.
 
@@ -1349,7 +1349,14 @@ Plans:
 7. ROADMAP.md plan checkboxes accurate
 8. README.md roadmap section reflects v3.0 completion
 
-**Plans:** TBD
+**Plans:** 5 plans
+
+Plans:
+- [x] 36.1-01-PLAN.md — TypeScript quick fixes in 4 target utils + DS-01 brand color resolution
+- [x] 36.1-02-PLAN.md — Delete obsolete V1 authStore tests (4 failures → 0)
+- [x] 36.1-03-PLAN.md — GitHub issue #4 deeper fix (composite rankings edge cases + tests)
+- [x] 36.1-04-PLAN.md — Wire useExceptions to real backend aggregation endpoint
+- [x] 36.1-05-PLAN.md — Documentation updates (REQUIREMENTS, ROADMAP, README, STATE)
 
 ---
 
@@ -1439,11 +1446,11 @@ The following requirements apply across all v3.0 phases:
 | 34 | Gamification & Activity Feed | 9 | 8 | Complete ✅ |
 | 35 | Canvas Promotion + Mobile | 12 | 11 | Complete ✅ |
 | 36 | Dead Code Cleanup | 4 | 5 | Complete ✅ |
-| 36.1 | v3.0 Tech Debt Closure | 1 | TBD | Planned |
+| 36.1 | v3.0 Tech Debt Closure | 1 | 5 | Complete ✅ |
 | ~~37~~ | ~~Warm Copper Sweep~~ | — | — | Removed (superseded by Canvas) |
 | ~~38~~ | ~~Canvas Redesign~~ | — | 7 | Absorbed (work complete, route swap in Phase 35) |
 
-**v3.0 Total:** 14 phases (13 complete, 1 planned)
+**v3.0 Total:** 14 phases (14 complete)
 
 ---
 
@@ -1729,4 +1736,4 @@ Ideas evaluated but deferred for future consideration:
 ---
 
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-02-09 — Roadmap audit: killed Phase 37 (copper sweep), absorbed Phase 38 (Canvas complete), merged Phase 35+36 into Canvas Promotion + Mobile, marked v2.1 complete*
+*Last updated: 2026-02-11 — v3.0 milestone complete: all 14 phases (24-36.1) delivered, tech debt closed*

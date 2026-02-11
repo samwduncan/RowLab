@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-2.0-blue.svg" alt="Version">
+  <img src="https://img.shields.io/badge/version-3.0-blue.svg" alt="Version">
   <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
   <img src="https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg" alt="Node">
   <img src="https://img.shields.io/badge/react-18-61dafb.svg" alt="React">
@@ -659,15 +659,53 @@ Complete V1-to-V2 feature migration with "Precision Instrument" design philosoph
 - [x] Cross-feature integrations (global search, live erg, unified activity feed)
 - [x] Advanced seat racing analytics (Bradley-Terry model, matrix planner, passive Elo)
 
-### v2.1 — Feature Expansion (In Progress)
+### v2.1 — Feature Expansion ✅
 
 Feature toggles, gamification, design overhaul, and lineup improvements.
 
 - [x] Feature toggles and recruit visit management
 - [x] Gamification (achievements, PRs, team challenges, streaks)
 - [x] Lineup and boat configuration improvements (rigging, templates, comparison)
-- [ ] Complete design overhaul (warm color system, tactile interactions, mobile responsive)
-- [ ] Warm color design system and landing page rebuild
+- [x] Complete design overhaul (warm color system, superseded by Canvas)
+- [x] Warm color design system and landing page (superseded by Canvas)
+
+### v3.0 — App Redesign ✅
+
+Complete frontend redesign with Canvas design system, mobile responsiveness, and performance optimization.
+
+**Key deliverables:**
+- **Canvas Design System** — Bespoke design language with chamfered panels, ruled headers, log-tape layouts
+- **Mobile-First Responsive** — All 25 pages responsive from 375px to 1440px
+- **State Management Migration** — TanStack Query v5 for all server state
+- **Performance** — Route-based code splitting, <200KB initial bundle, Web Vitals optimized
+- **Dead Code Cleanup** — V1/V2 legacy code removed, 208 files deleted, 5.7% bundle reduction
+
+14 phases delivered:
+- Foundation & Design System (Phase 24)
+- State Management Migration (Phase 25)
+- Route & Navigation Cleanup (Phase 26)
+- Dashboard Rebuild (Phase 27)
+- Athletes Feature Migration (Phase 28)
+- Lineup Builder Migration (Phase 29)
+- Erg Data Migration (Phase 30)
+- Seat Racing Migration (Phase 31)
+- Training & Attendance Migration (Phase 32)
+- Regattas & Rankings Migration (Phase 33)
+- Gamification & Activity Feed (Phase 34)
+- Canvas Promotion + Mobile (Phase 35)
+- Dead Code Cleanup (Phase 36)
+- Tech Debt Closure (Phase 36.1)
+
+### v3.1 — Integrations, Analytics & Social Sharing (Planned)
+
+Connect to Concept2 Logbook, Strava, and Garmin. Build performance analytics, fitness intelligence, and share card generation.
+
+- [ ] Concept2 Workout Sync (Phase 37)
+- [ ] Share Card Platform (Phase 38)
+- [ ] Strava Integration & Cross-Platform Sync (Phase 39)
+- [ ] Performance Analytics Engine (Phase 40)
+- [ ] Fitness Intelligence & Training Load (Phase 41)
+- [ ] Garmin Connect & On-Water Data (Phase 42)
 
 ### v2.2 — Advanced Analytics (Planned)
 
