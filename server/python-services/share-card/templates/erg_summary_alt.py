@@ -1,7 +1,9 @@
 """
 Erg Summary Card - Design B (Fresh Direction)
 Editorial/artistic approach with full-bleed gradients and dynamic asymmetric layout.
-Handles all C2 workout types: JustRow, intervals, timed splits, etc.
+Handles all C2 workout types with type-aware presentation:
+- Steady-state (JustRow, FixedTimeSplits, FixedDistanceSplits): clean split table
+- Interval workouts: work/rest alternating rows with recovery HR
 """
 
 import math
@@ -40,6 +42,9 @@ MACHINE_LABELS = {
     'bikerg': 'BIKEERG',
 }
 
+# Muted teal for rest rows — distinct from gold/rose work accent
+REST_COLOR = (0.4, 0.6, 0.65)
+
 
 def safe_str(value, fallback='--'):
     """Safely convert value to string, handling None/missing"""
@@ -70,6 +75,18 @@ def format_pace_tenths(tenths):
     return f"{mins}:{secs:04.1f}"
 
 
+def format_rest_time(tenths):
+    """Format rest time from tenths of seconds to readable string"""
+    if not tenths:
+        return None
+    total_seconds = tenths / 10
+    mins = int(total_seconds // 60)
+    secs = int(total_seconds % 60)
+    if mins > 0:
+        return f"{mins}:{secs:02d}"
+    return f":{secs:02d}"
+
+
 def format_date(iso_date):
     """Format ISO date string to readable format"""
     try:
@@ -85,8 +102,39 @@ def build_title(data):
     machine = data.get('rawMachineType') or data.get('machineType') or 'rower'
     machine_label = MACHINE_LABELS.get(machine, 'ERG')
     type_label = WORKOUT_TYPE_LABELS.get(workout_type, 'Workout')
+    is_intervals = data.get('isInterval', False)
+    splits = data.get('splits', [])
 
     distance = data.get('distanceM')
+
+    # For interval workouts, build a descriptive title like "7x500m"
+    if is_intervals and splits:
+        n = len(splits)
+        # Check if all intervals have the same distance (fixed distance interval)
+        distances = [s.get('distanceM') for s in splits if s.get('distanceM')]
+        if distances and len(set(distances)) == 1:
+            d = distances[0]
+            rest_label = ''
+            rest_time = splits[0].get('restTime')
+            if rest_time:
+                rest_label = f"/{format_rest_time(rest_time)}r"
+            return f"{n}x{d}m{rest_label} {machine_label}"
+
+        # Check if all intervals have the same time (fixed time interval)
+        times = [s.get('timeSeconds') for s in splits if s.get('timeSeconds')]
+        if times and len(set(int(t) for t in times)) == 1:
+            t = format_time(times[0])
+            rest_label = ''
+            rest_time = splits[0].get('restTime')
+            if rest_time:
+                rest_label = f"/{format_rest_time(rest_time)}r"
+            return f"{n}x{t}{rest_label} {machine_label}"
+
+        # Variable intervals — show total
+        if distance and distance >= 1000:
+            return f"{distance / 1000:.0f}K {machine_label} {type_label}"
+
+    # Non-interval workouts
     if distance and distance >= 1000:
         return f"{distance / 1000:.0f}K {machine_label} {type_label}"
     elif distance:
@@ -96,14 +144,26 @@ def build_title(data):
 
 def is_interval_workout(data):
     """Check if this is an interval-type workout"""
-    wtype = (data.get('workoutType') or '').lower()
-    return 'interval' in wtype
+    return data.get('isInterval', False) or 'interval' in (data.get('workoutType') or '').lower()
+
+
+def compute_pace_stats(splits):
+    """Compute average pace and per-split deviation for coloring"""
+    paces = [s.get('paceTenths') for s in splits if s.get('paceTenths')]
+    if not paces:
+        return None, {}
+    avg = sum(paces) / len(paces)
+    deviations = {}
+    for i, split in enumerate(splits):
+        p = split.get('paceTenths')
+        if p and avg > 0:
+            # Negative = faster than avg (good), positive = slower
+            deviations[i] = (p - avg) / avg
+    return avg, deviations
 
 
 def draw_wave_pattern(ctx, width, height, color, opacity=0.08):
     """Draw abstract water-inspired wave curves"""
-    import cairocffi as cairo
-
     ctx.save()
     ctx.set_source_rgba(*color, opacity)
     ctx.set_line_width(3)
@@ -124,10 +184,29 @@ def draw_wave_pattern(ctx, width, height, color, opacity=0.08):
     ctx.restore()
 
 
+def draw_pace_dot(ctx, x, y, deviation, radius=8):
+    """Draw a small colored dot indicating pace relative to average.
+    deviation < 0 = faster (gold), deviation > 0 = slower (rose/muted)
+    """
+    if deviation is None:
+        return
+    if deviation < -0.005:
+        # Faster than average — gold
+        ctx.set_source_rgba(*GOLD, 0.8)
+    elif deviation > 0.005:
+        # Slower than average — rose/muted
+        ctx.set_source_rgba(*ROSE, 0.5)
+    else:
+        # Close to average — neutral
+        ctx.set_source_rgba(*TEXT_MUTED, 0.4)
+    ctx.arc(x, y, radius, 0, 2 * math.pi)
+    ctx.fill()
+
+
 def render_erg_summary_alt(format_key, workout_data, options):
     """
     Design B: Fresh Direction - Editorial/artistic approach.
-    Handles real C2 data with nullable fields and variable split counts.
+    Type-aware presentation for all C2 workout types.
     """
     width, height = DIMENSIONS[format_key]
     is_story = format_key == '9:16'
@@ -148,7 +227,7 @@ def render_erg_summary_alt(format_key, workout_data, options):
     # --- ABSTRACT WAVE PATTERN ---
     draw_wave_pattern(ctx, width, height, GOLD, opacity=0.06)
 
-    # --- Extract formatted values (use pre-formatted or compute) ---
+    # --- Extract formatted values ---
     formatted = workout_data.get('formatted', {})
     total_time = formatted.get('totalTime') or format_time(workout_data.get('durationSeconds'))
     avg_pace = formatted.get('avgPace') or format_pace_tenths(workout_data.get('avgPaceTenths'))
@@ -160,6 +239,9 @@ def render_erg_summary_alt(format_key, workout_data, options):
     drag_factor = workout_data.get('dragFactor')
     splits = workout_data.get('splits', [])
     is_intervals = is_interval_workout(workout_data)
+
+    # Compute pace stats for coloring
+    avg_pace_val, pace_deviations = compute_pace_stats(splits)
 
     # --- WORKOUT TITLE (offset left for asymmetry) ---
     title_x = 120
@@ -183,7 +265,7 @@ def render_erg_summary_alt(format_key, workout_data, options):
     hero_y = 400
 
     # Choose hero metric based on workout type
-    if distance_m and distance_m in (2000, 6000, 500, 1000):
+    if distance_m and distance_m in (2000, 6000, 500, 1000, 5000):
         # Standard test distances — show total time as hero
         hero_value = total_time or '--:--'
         hero_label = "TOTAL TIME"
@@ -262,7 +344,7 @@ def render_erg_summary_alt(format_key, workout_data, options):
         )
         y_offset += 200
 
-    # --- SPLITS TABLE (clean, spacious) ---
+    # --- SPLITS / INTERVALS TABLE ---
     if splits:
         splits_y = max(y_offset, metrics_y + 400) + 60
 
@@ -281,66 +363,177 @@ def render_erg_summary_alt(format_key, workout_data, options):
             width / 2, header_y, TEXT_PRIMARY, weight='Bold', align='center'
         )
 
-        # Calculate how many splits fit
+        # Calculate row heights — intervals need more space for rest rows
         splits_start_y = header_y + 100
-        available_height = height - splits_start_y - 200  # Leave room for branding
-        row_height = 90 if not is_story else 85
+        available_height = height - splits_start_y - 200  # Room for branding
 
-        max_splits = max(1, int(available_height / row_height))
-        splits_to_show = splits[:max_splits]
-        truncated = len(splits) > max_splits
+        if is_intervals:
+            # Work row + rest row for each interval
+            work_row_height = 80
+            rest_row_height = 50 if is_story else 40
+            combo_height = work_row_height + rest_row_height
+            max_intervals = max(1, int(available_height / combo_height))
+            splits_to_show = splits[:max_intervals]
+        else:
+            row_height = 90 if not is_story else 85
+            max_splits = max(1, int(available_height / row_height))
+            splits_to_show = splits[:max_splits]
+
+        truncated = len(splits) > len(splits_to_show)
+        current_y = splits_start_y
 
         for i, split in enumerate(splits_to_show):
-            row_y = splits_start_y + (i * row_height)
-
-            # Split number
-            split_num = split.get('splitNumber', i + 1)
-            draw_text(
-                ctx, f"#{split_num}", "IBM Plex Mono", 36,
-                240, row_y, TEXT_SECONDARY, weight='SemiBold', align='left'
-            )
-
-            # Pace (prominent) — use pre-formatted or format from tenths
             split_fmt = split.get('formatted', {})
-            split_pace = split_fmt.get('pace') or format_pace_tenths(split.get('paceTenths'))
-            draw_text(
-                ctx, split_pace or '--:--', "IBM Plex Mono", 44,
-                width / 2 - 100, row_y, TEXT_PRIMARY, weight='Bold', align='center'
-            )
 
-            # Watts (if available)
-            split_watts = split.get('watts')
-            if split_watts is not None:
+            if is_intervals:
+                # --- WORK ROW (prominent) ---
+                split_num = split.get('splitNumber', i + 1)
+
+                # Pace dot (color-coded relative to average)
+                deviation = pace_deviations.get(i)
+                if deviation is not None:
+                    draw_pace_dot(ctx, 180, current_y + 18, deviation)
+
+                # Split number
                 draw_text(
-                    ctx, f"{split_watts}w", "IBM Plex Mono", 32,
-                    width / 2 + 180, row_y, GOLD, weight='SemiBold', align='left'
+                    ctx, f"#{split_num}", "IBM Plex Mono", 36,
+                    210, current_y, TEXT_SECONDARY, weight='SemiBold', align='left'
                 )
 
-            # Stroke rate or HR (rightmost)
-            split_sr = split.get('strokeRate')
-            split_hr = split.get('heartRate')
-            if split_sr is not None:
+                # Interval target (distance or time)
+                interval_type = split.get('intervalType')
+                split_dist = split.get('distanceM')
+                if split_dist:
+                    target_label = f"{split_dist}m"
+                else:
+                    target_label = split_fmt.get('time') or format_time(split.get('timeSeconds'))
                 draw_text(
-                    ctx, f"{split_sr} spm", "IBM Plex Mono", 28,
-                    width - 200, row_y, TEXT_MUTED, weight='Regular', align='right'
+                    ctx, target_label, "IBM Plex Mono", 30,
+                    380, current_y, TEXT_MUTED, weight='Regular', align='left'
                 )
 
-            # In story format, add HR on second line
-            if is_story and split_hr is not None:
-                hr_y = row_y + 50
+                # Pace (prominent)
+                split_pace = split_fmt.get('pace') or format_pace_tenths(split.get('paceTenths'))
                 draw_text(
-                    ctx, f"HR: {split_hr}", "IBM Plex Mono", 24,
-                    width - 200, hr_y, ROSE, weight='Regular', align='right'
+                    ctx, split_pace or '--:--', "IBM Plex Mono", 44,
+                    width / 2, current_y, TEXT_PRIMARY, weight='Bold', align='center'
                 )
+
+                # Watts (if available)
+                split_watts = split.get('watts')
+                if split_watts is not None:
+                    draw_text(
+                        ctx, f"{split_watts}w", "IBM Plex Mono", 32,
+                        width / 2 + 250, current_y, GOLD, weight='SemiBold', align='left'
+                    )
+
+                # HR + stroke rate (right side)
+                split_hr = split.get('heartRate')
+                split_sr = split.get('strokeRate')
+                right_text_parts = []
+                if split_sr is not None:
+                    right_text_parts.append(f"{split_sr}spm")
+                if split_hr is not None:
+                    right_text_parts.append(f"{split_hr}bpm")
+                if right_text_parts:
+                    draw_text(
+                        ctx, " / ".join(right_text_parts), "IBM Plex Mono", 26,
+                        width - 160, current_y, TEXT_MUTED, weight='Regular', align='right'
+                    )
+
+                current_y += 80  # work row height
+
+                # --- REST ROW (muted, indented) ---
+                rest_time = split.get('restTime')
+                rest_hr = split.get('heartRateRest')
+                rest_dist = split.get('restDistance')
+
+                if rest_time or rest_hr:
+                    rest_parts = []
+                    if rest_time:
+                        rest_parts.append(f"rest {format_rest_time(rest_time)}")
+                    if rest_dist:
+                        rest_parts.append(f"{rest_dist}m")
+                    if rest_hr:
+                        rest_parts.append(f"HR {rest_hr}")
+                        # Show recovery delta if we have peak HR
+                        hr_ending = split.get('heartRateEnding')
+                        if hr_ending and rest_hr:
+                            delta = hr_ending - rest_hr
+                            if delta > 0:
+                                rest_parts.append(f"(-{delta})")
+
+                    rest_text = "  ".join(rest_parts)
+
+                    # Subtle rest indicator line
+                    ctx.set_source_rgba(*REST_COLOR, 0.15)
+                    ctx.rectangle(240, current_y - 5, width - 480, 1)
+                    ctx.fill()
+
+                    draw_text(
+                        ctx, rest_text, "IBM Plex Sans", 22,
+                        width / 2, current_y, REST_COLOR, weight='Regular', align='center'
+                    )
+
+                    current_y += (50 if is_story else 40)  # rest row height
+                else:
+                    current_y += 15  # small gap when no rest data
+
+            else:
+                # --- STEADY-STATE SPLIT ROW ---
+                split_num = split.get('splitNumber', i + 1)
+
+                # Pace dot
+                deviation = pace_deviations.get(i)
+                if deviation is not None:
+                    draw_pace_dot(ctx, 180, current_y + 18, deviation)
+
+                draw_text(
+                    ctx, f"#{split_num}", "IBM Plex Mono", 36,
+                    210, current_y, TEXT_SECONDARY, weight='SemiBold', align='left'
+                )
+
+                # Pace
+                split_pace = split_fmt.get('pace') or format_pace_tenths(split.get('paceTenths'))
+                draw_text(
+                    ctx, split_pace or '--:--', "IBM Plex Mono", 44,
+                    width / 2 - 100, current_y, TEXT_PRIMARY, weight='Bold', align='center'
+                )
+
+                # Watts
+                split_watts = split.get('watts')
+                if split_watts is not None:
+                    draw_text(
+                        ctx, f"{split_watts}w", "IBM Plex Mono", 32,
+                        width / 2 + 180, current_y, GOLD, weight='SemiBold', align='left'
+                    )
+
+                # Stroke rate or HR (rightmost)
+                split_sr = split.get('strokeRate')
+                split_hr = split.get('heartRate')
+                if split_sr is not None:
+                    draw_text(
+                        ctx, f"{split_sr} spm", "IBM Plex Mono", 28,
+                        width - 200, current_y, TEXT_MUTED, weight='Regular', align='right'
+                    )
+
+                # Story format: add HR on second line
+                if is_story and split_hr is not None:
+                    draw_text(
+                        ctx, f"HR: {split_hr}", "IBM Plex Mono", 24,
+                        width - 200, current_y + 50, ROSE, weight='Regular', align='right'
+                    )
+
+                current_y += (90 if not is_story else 85)
 
         # Show "and X more" if truncated
         if truncated:
-            more_y = splits_start_y + (len(splits_to_show) * row_height) + 20
-            remaining = len(splits) - max_splits
+            remaining = len(splits) - len(splits_to_show)
+            label = "interval" if is_intervals else "split"
             draw_text(
-                ctx, f"+ {remaining} more split{'s' if remaining != 1 else ''}",
+                ctx, f"+ {remaining} more {label}{'s' if remaining != 1 else ''}",
                 "IBM Plex Sans", 28,
-                width / 2, more_y, TEXT_MUTED, weight='Regular', align='center'
+                width / 2, current_y + 20, TEXT_MUTED, weight='Regular', align='center'
             )
 
     # --- ATHLETE NAME (if enabled) ---

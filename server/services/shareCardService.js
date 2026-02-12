@@ -257,6 +257,13 @@ function serializeWorkoutForPython(workout) {
   const avgPaceTenths = workout.avgPace ? parseFloat(workout.avgPace) : null;
   const durationSec = workout.durationSeconds ? parseFloat(workout.durationSeconds) : null;
   const rawData = workout.rawData || {};
+  const rawWorkout = rawData.workout || {};
+
+  // Determine if this is an interval workout (has rest data)
+  const isInterval = (rawData.workout_type || '').toLowerCase().includes('interval');
+
+  // Extract raw interval/split segments for enriching with rest data
+  const rawSegments = rawWorkout.intervals || rawWorkout.splits || [];
 
   return {
     id: workout.id,
@@ -274,6 +281,12 @@ function serializeWorkoutForPython(workout) {
     workoutType: rawData.workout_type || null,
     rawMachineType: rawData.type || null,
     source: workout.source,
+    isInterval,
+    // Workout-level rest totals (intervals only)
+    totalRestTime: rawData.rest_time || null,
+    totalRestDistance: rawData.rest_distance || null,
+    strokeCount: rawData.stroke_count || null,
+    verified: rawData.verified || false,
     // Pre-formatted display strings for the renderer
     formatted: {
       totalTime: formatDuration(durationSec),
@@ -281,9 +294,11 @@ function serializeWorkoutForPython(workout) {
       distance: workout.distanceM ? `${workout.distanceM.toLocaleString()}m` : null,
     },
     splits:
-      workout.splits?.map((split) => {
+      workout.splits?.map((split, index) => {
         const splitPaceTenths = split.pace ? parseFloat(split.pace) : null;
         const splitTimeSec = split.timeSeconds ? parseFloat(split.timeSeconds) : null;
+        // Enrich with raw C2 data for this segment (rest data, detailed HR)
+        const rawSeg = rawSegments[index] || {};
         return {
           splitNumber: split.splitNumber,
           distanceM: split.distanceM,
@@ -293,10 +308,20 @@ function serializeWorkoutForPython(workout) {
           strokeRate: split.strokeRate,
           heartRate: split.heartRate,
           calories: split.calories,
+          // Interval-specific rest data (null for steady-state splits)
+          intervalType: rawSeg.type || null,
+          restTime: rawSeg.rest_time || null,
+          restDistance: rawSeg.rest_distance || null,
+          // Detailed HR from raw C2 data
+          heartRateMax: rawSeg.heart_rate?.max || null,
+          heartRateMin: rawSeg.heart_rate?.min || null,
+          heartRateEnding: rawSeg.heart_rate?.ending || null,
+          heartRateRest: rawSeg.heart_rate?.rest || null,
           // Pre-formatted
           formatted: {
             time: formatDuration(splitTimeSec),
             pace: formatPaceTenths(splitPaceTenths),
+            restTime: rawSeg.rest_time ? formatDuration(rawSeg.rest_time / 10) : null,
           },
         };
       }) || [],

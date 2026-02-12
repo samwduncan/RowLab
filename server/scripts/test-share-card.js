@@ -1,7 +1,7 @@
 /**
  * Test share card rendering with real C2 workout data.
- * Fetches workouts from DB, serializes them, and sends to the Python service.
- * Saves output PNGs to $ncswd for Nextcloud viewing.
+ * Fetches workouts from DB, serializes them (matching shareCardService format),
+ * and sends to the Python service. Saves output PNGs to $ncswd for Nextcloud viewing.
  *
  * Usage: node --env-file=.env server/scripts/test-share-card.js
  */
@@ -32,10 +32,23 @@ function formatDuration(seconds) {
   return `${mins}:${secs.toFixed(1).padStart(4, '0')}`;
 }
 
+function formatRestTime(tenths) {
+  if (!tenths) return null;
+  const totalSeconds = tenths / 10;
+  const mins = Math.floor(totalSeconds / 60);
+  const secs = Math.floor(totalSeconds % 60);
+  if (mins > 0) return `${mins}:${String(secs).padStart(2, '0')}`;
+  return `:${String(secs).padStart(2, '0')}`;
+}
+
 function serializeWorkout(workout) {
   const avgPaceTenths = workout.avgPace ? parseFloat(workout.avgPace) : null;
   const durationSec = workout.durationSeconds ? parseFloat(workout.durationSeconds) : null;
   const rawData = workout.rawData || {};
+  const rawWorkout = rawData.workout || {};
+
+  const isInterval = (rawData.workout_type || '').toLowerCase().includes('interval');
+  const rawSegments = rawWorkout.intervals || rawWorkout.splits || [];
 
   return {
     id: workout.id,
@@ -52,15 +65,21 @@ function serializeWorkout(workout) {
     workoutType: rawData.workout_type || null,
     rawMachineType: rawData.type || null,
     source: workout.source,
+    isInterval,
+    totalRestTime: rawData.rest_time || null,
+    totalRestDistance: rawData.rest_distance || null,
+    strokeCount: rawData.stroke_count || null,
+    verified: rawData.verified || false,
     formatted: {
       totalTime: formatDuration(durationSec),
       avgPace: formatPaceTenths(avgPaceTenths),
       distance: workout.distanceM ? `${workout.distanceM.toLocaleString()}m` : null,
     },
     splits:
-      workout.splits?.map((split) => {
+      workout.splits?.map((split, index) => {
         const splitPaceTenths = split.pace ? parseFloat(split.pace) : null;
         const splitTimeSec = split.timeSeconds ? parseFloat(split.timeSeconds) : null;
+        const rawSeg = rawSegments[index] || {};
         return {
           splitNumber: split.splitNumber,
           distanceM: split.distanceM,
@@ -70,9 +89,17 @@ function serializeWorkout(workout) {
           strokeRate: split.strokeRate,
           heartRate: split.heartRate,
           calories: split.calories,
+          intervalType: rawSeg.type || null,
+          restTime: rawSeg.rest_time || null,
+          restDistance: rawSeg.rest_distance || null,
+          heartRateMax: rawSeg.heart_rate?.max || null,
+          heartRateMin: rawSeg.heart_rate?.min || null,
+          heartRateEnding: rawSeg.heart_rate?.ending || null,
+          heartRateRest: rawSeg.heart_rate?.rest || null,
           formatted: {
             time: formatDuration(splitTimeSec),
             pace: formatPaceTenths(splitPaceTenths),
+            restTime: rawSeg.rest_time ? formatDuration(rawSeg.rest_time / 10) : null,
           },
         };
       }) || [],
@@ -106,6 +133,8 @@ async function renderCard(workoutData, cardType, format, filename) {
 }
 
 async function main() {
+  await fs.mkdir(OUTPUT_DIR, { recursive: true });
+
   // Get diverse workout types for testing
   const workouts = await prisma.workout.findMany({
     where: { c2LogbookId: { not: null } },
@@ -117,14 +146,14 @@ async function main() {
     take: 21,
   });
 
-  // Pick representative workouts
+  // Pick representative workouts — one per type
   const byType = {};
   for (const w of workouts) {
     const wt = w.rawData?.workout_type || 'unknown';
     if (!byType[wt]) byType[wt] = w;
   }
 
-  const testCases = Object.entries(byType).slice(0, 5);
+  const testCases = Object.entries(byType);
   console.log(`Rendering ${testCases.length} test cards to ${OUTPUT_DIR}...\n`);
 
   for (const [wtype, workout] of testCases) {
@@ -133,11 +162,19 @@ async function main() {
     const label = `${wtype}_${machine}_${data.distanceM}m`;
     console.log(`${label}:`);
     console.log(
-      `  Type: ${wtype} | Machine: ${machine} | Distance: ${data.distanceM}m | Splits: ${data.splits.length}`
+      `  Type: ${wtype} | Machine: ${machine} | Distance: ${data.distanceM}m | Splits: ${data.splits.length} | Interval: ${data.isInterval}`
     );
     console.log(
       `  Pace: ${data.formatted.avgPace} | Watts: ${data.avgWatts || 'N/A'} | HR: ${data.avgHeartRate || 'N/A'}`
     );
+
+    // Show rest data for intervals
+    if (data.isInterval && data.splits.length > 0) {
+      const first = data.splits[0];
+      console.log(
+        `  Interval detail: restTime=${first.restTime} restDist=${first.restDistance} restHR=${first.heartRateRest}`
+      );
+    }
 
     try {
       await renderCard(data, 'erg_summary_alt', '1:1', `share-card-${label}.png`);
