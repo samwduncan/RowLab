@@ -120,8 +120,38 @@ def format_rest_tenths(tenths):
     return f":{secs:02d}"
 
 
+def format_time_coach(seconds):
+    """Format time in coach whiteboard style: 11:00→11', 1:30→1'30\", 0:45→45\".
+    Used for titles — how coaches actually write intervals.
+    """
+    if not seconds:
+        return '--'
+    seconds = float(seconds)
+    mins = int(seconds // 60)
+    secs = int(seconds % 60)
+    if mins > 0 and secs == 0:
+        return f"{mins}'"
+    if mins > 0:
+        return f"{mins}'{secs:02d}\""
+    return f"{secs}\""
+
+
+def format_rest_coach(tenths):
+    """Format rest tenths in coach style: 600→1'r, 300→30\"r, 900→1'30\"r"""
+    if not tenths:
+        return None
+    total_seconds = tenths / 10
+    mins = int(total_seconds // 60)
+    secs = int(total_seconds % 60)
+    if mins > 0 and secs == 0:
+        return f"{mins}'r"
+    if mins > 0:
+        return f"{mins}'{secs:02d}\"r"
+    return f"{secs}\"r"
+
+
 def format_distance(meters):
-    """Format distance: 10,000 → '10K', 2000 → '2,000m'"""
+    """Format distance: 10,000 → '10K', 2000 → '2K', 500 → '500m'"""
     if not meters:
         return '--'
     if meters >= 1000 and meters % 1000 == 0:
@@ -180,9 +210,9 @@ def has_valuable_rest_data(splits):
 # ─────────────────────────────────────────────
 
 def build_title(data):
-    """Build concise workout title without machine type.
+    """Build concise workout title in coach whiteboard style.
     Machine type is shown separately on the card.
-    Examples: '7x11:00 / 1:00r', '1,169m', '5x2K / ~:56r', '10:00'
+    Examples: "7x11' / 1'r", "1,169m", "5x2K / ~56\"r", "10'"
     """
     wtype = data.get('workoutType', '')
     splits = data.get('splits', [])
@@ -203,7 +233,7 @@ def build_title(data):
         if wtype == 'FixedTimeInterval':
             times = [s.get('timeSeconds') for s in splits if s.get('timeSeconds')]
             if times and len(set(int(t) for t in times)) == 1:
-                t = format_time_clean(times[0])
+                t = format_time_coach(times[0])
                 rest = _rest_label(splits)
                 return f"{n}x{t}{rest}"
 
@@ -220,31 +250,32 @@ def build_title(data):
 
     # ── Continuous pieces ──
     if wtype == 'FixedTimeSplits':
-        return format_time_clean(duration)
+        return format_time_coach(duration)
     if wtype == 'FixedDistanceSplits':
         return format_distance(distance)
     if distance:
         return format_distance(distance)
     if duration:
-        return format_time_clean(duration)
+        return format_time_coach(duration)
     return machine_label(data)
 
 
 def _rest_label(splits, approx=False):
-    """Build rest portion of title like '/1:00r' or '/~1:00r'.
+    """Build rest portion of title in coach style: ' / 1'r' or ' / ~56\"r'.
     Excludes last interval's rest (PM5 records cooldown, not a real rest).
     """
-    # Exclude last interval's rest — there's no rest after the final piece
     work_splits = splits[:-1] if len(splits) > 1 else splits
     rest_times = [s.get('restTime') for s in work_splits if s.get('restTime')]
     if not rest_times:
         return ''
     if len(set(rest_times)) == 1:
-        prefix = '/~' if approx else '/'
-        return f"{prefix}{format_rest_tenths(rest_times[0])}r"
+        formatted = format_rest_coach(rest_times[0])
+        if approx:
+            return f" / ~{formatted}"
+        return f" / {formatted}"
     # Variable rest — show approximate average
     avg_rest = sum(rest_times) / len(rest_times)
-    return f"/~{format_rest_tenths(avg_rest)}r"
+    return f" / ~{format_rest_coach(avg_rest)}"
 
 
 # ─────────────────────────────────────────────
