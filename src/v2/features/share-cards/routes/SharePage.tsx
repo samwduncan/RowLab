@@ -55,13 +55,13 @@ function CardNotFound() {
             />
           </svg>
         </div>
-        <h1 className="text-xl font-semibold text-text-primary mb-2">Share Card Not Found</h1>
-        <p className="text-text-secondary mb-6">
+        <h1 className="text-xl font-semibold text-txt-primary mb-2">Share Card Not Found</h1>
+        <p className="text-txt-secondary mb-6">
           This share card has expired or doesn&apos;t exist.
         </p>
         <a
           href="/"
-          className="inline-block px-6 py-3 bg-blade-blue text-white rounded-lg hover:bg-blade-blue/90 transition-colors"
+          className="inline-block px-6 py-3 bg-blade-blue text-white rounded-xl hover:bg-blade-blue/90 transition-colors"
         >
           Go to RowLab
         </a>
@@ -95,7 +95,7 @@ export default function SharePage() {
   }
 
   // Construct OpenGraph meta data
-  const baseUrl = process.env.REACT_APP_BASE_URL || 'https://rowlab.net';
+  const baseUrl = import.meta.env.VITE_BASE_URL || 'https://rowlab.net';
   const ogImageUrl = card.url.startsWith('http') ? card.url : `${baseUrl}${card.url}`;
   const ogUrl = `${baseUrl}/share/${shareId}`;
   const ogTitle = card.metadata?.athleteName
@@ -137,7 +137,11 @@ export default function SharePage() {
             animate="visible"
             transition={SPRING_CONFIG}
           >
-            <img src={card.url} alt="Workout share card" className="w-full rounded-xl shadow-2xl" />
+            <img
+              src={card.url}
+              alt="Workout share card"
+              className="w-full rounded-xl shadow-card-rest"
+            />
           </motion.div>
 
           {/* Workout Details */}
@@ -160,10 +164,10 @@ export default function SharePage() {
             transition={{ ...SPRING_CONFIG, delay: 0.2 }}
             className="text-center py-8"
           >
-            <p className="text-text-secondary mb-4">Track your rowing with RowLab</p>
+            <p className="text-txt-secondary mb-4">Track your rowing with RowLab</p>
             <a
               href="/"
-              className="inline-block px-6 py-3 bg-blade-blue text-white rounded-lg hover:bg-blade-blue/90 transition-colors shadow-lg hover:shadow-xl"
+              className="inline-block px-6 py-3 bg-blade-blue text-white rounded-xl hover:bg-blade-blue/90 transition-colors shadow-card-rest hover:shadow-card-hover"
             >
               Get Started
             </a>

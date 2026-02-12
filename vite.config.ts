@@ -48,6 +48,10 @@ export default defineConfig({
         changeOrigin: true,
         ws: true,
       },
+      '/uploads': {
+        target: 'http://localhost:3002',
+        changeOrigin: true,
+      },
     },
   },
   resolve: {

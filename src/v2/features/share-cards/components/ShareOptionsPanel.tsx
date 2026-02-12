@@ -12,7 +12,7 @@
  * Design: Canvas design system with segmented controls and toggle switches
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface Team {
   id: string;
@@ -60,7 +60,7 @@ function SegmentedControl({
             key={option.value}
             onClick={() => onChange(option.value)}
             className={`
-              px-4 py-2 rounded-lg text-sm font-medium transition-all
+              px-4 py-2 rounded-xl text-sm font-medium transition-all
               ${
                 value === option.value
                   ? 'bg-interactive-primary text-txt-inverse shadow-sm'
@@ -109,6 +109,17 @@ function ToggleSwitch({
       </button>
     </div>
   );
+}
+
+/**
+ * Auto-select single team via useEffect (avoids render-time side effects)
+ */
+function AutoSelectSingleTeam({ team, onSelect }: { team: Team; onSelect: (id: string) => void }) {
+  useEffect(() => {
+    onSelect(team.id);
+  }, [team.id, onSelect]);
+
+  return <div className="text-xs text-txt-tertiary">Using team: {team.name}</div>;
 }
 
 /**
@@ -188,14 +199,10 @@ export function ShareOptionsPanel({
 
       {/* Auto-select single team when switching to team branding */}
       {options.brandingType === 'team' && userTeams.length === 1 && !options.teamId && (
-        <div className="text-xs text-txt-tertiary">
-          Using team: {userTeams[0].name}
-          {/* Auto-set teamId on mount */}
-          {(() => {
-            setTimeout(() => onOptionsChange('teamId', userTeams[0].id), 0);
-            return null;
-          })()}
-        </div>
+        <AutoSelectSingleTeam
+          team={userTeams[0]}
+          onSelect={(id) => onOptionsChange('teamId', id)}
+        />
       )}
 
       {/* Link Back selector */}

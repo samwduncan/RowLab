@@ -17,7 +17,7 @@ const InviteClaimPage = lazy(() => import('./pages/auth/InviteClaimPage'));
 const Concept2CallbackPage = lazy(() => import('./pages/Concept2CallbackPage'));
 
 // Public share page (no auth required)
-const SharePage = lazy(() => import('./v2/features/share-cards/routes/SharePage'));
+const SharePage = lazy(() => import('./v2/features/share-cards/routes/SharePage.tsx'));
 
 // V2 Layout
 const V2Layout = lazy(() => import('@v2/layouts/V2Layout'));

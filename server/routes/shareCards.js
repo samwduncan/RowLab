@@ -4,6 +4,17 @@ import { generateShareCard, getShareCard, deleteShareCard } from '../services/sh
 
 const router = express.Router();
 
+/** Escape HTML special characters to prevent XSS in OG meta tags */
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 /**
  * POST /api/v1/share-cards/generate
  * Generate a new share card
@@ -23,6 +34,7 @@ router.post('/generate', authenticateToken, async (req, res) => {
 
     const validCardTypes = [
       'erg_summary',
+      'erg_summary_alt',
       'erg_charts',
       'pr_celebration',
       'regatta_result',
@@ -122,18 +134,20 @@ router.get('/og/:shareId', async (req, res) => {
 
     // Fetch card metadata
     const shareCard = await getShareCard(shareId);
-    const card = shareCard.data; // getShareCard returns { success: true, data: {...} }
+    const card = shareCard; // getShareCard returns the raw Prisma record
 
     // Construct URLs
     const baseUrl = process.env.BASE_URL || 'https://rowlab.net';
     const ogImageUrl = card.url.startsWith('http') ? card.url : `${baseUrl}${card.url}`;
     const ogUrl = `${baseUrl}/share/${card.id}`;
-    const ogTitle = card.metadata?.athleteName
-      ? `${card.metadata.athleteName} - ${card.metadata.workoutTitle || 'Workout'} | RowLab`
-      : 'Workout Share Card | RowLab';
-    const ogDescription =
-      card.metadata?.description ||
-      `Check out this ${card.cardType.replace(/_/g, ' ')} from RowLab`;
+    const ogTitle = escapeHtml(
+      card.metadata?.athleteName
+        ? `${card.metadata.athleteName} - ${card.metadata.workoutTitle || 'Workout'} | RowLab`
+        : 'Workout Share Card | RowLab'
+    );
+    const ogDescription = escapeHtml(
+      card.metadata?.description || `Check out this ${card.cardType.replace(/_/g, ' ')} from RowLab`
+    );
     const ogImageHeight = card.format === '1:1' ? '2160' : '3840';
 
     // Serve OG-tagged HTML with redirect to React SPA

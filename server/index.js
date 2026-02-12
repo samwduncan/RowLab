@@ -297,6 +297,9 @@ app.get('/share/:shareId', (req, res, next) => {
   next();
 });
 
+// Serve uploaded files (needed in both dev and production for share card images)
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+
 /**
  * In production, serve the built React app
  */
@@ -311,9 +314,6 @@ if (NODE_ENV === 'production') {
 
   // Serve images
   app.use('/images', express.static(path.join(__dirname, '..', 'public', 'images')));
-
-  // Serve uploaded files
-  app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
   // All other routes serve index.html (SPA)
   app.get('*', (req, res) => {

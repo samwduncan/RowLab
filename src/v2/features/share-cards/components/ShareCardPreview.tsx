@@ -124,14 +124,6 @@ export function ShareCardPreview({ workoutId, cardType, initialOptions }: ShareC
     }
   };
 
-  /**
-   * Placeholder Strava post (Phase 39)
-   */
-  const handleStravaPost = () => {
-    // TODO(phase-39): Implement Strava integration
-    console.log('Strava integration coming in Phase 39');
-  };
-
   const shareSupported = typeof navigator !== 'undefined' && !!navigator.share;
 
   return (
@@ -160,7 +152,7 @@ export function ShareCardPreview({ workoutId, cardType, initialOptions }: ShareC
               key={card.shareId}
               src={card.url}
               alt="Share card preview"
-              className="w-full rounded-xl shadow-lg"
+              className="w-full rounded-xl shadow-card-rest"
               variants={FADE_IN_VARIANTS}
               initial="hidden"
               animate="visible"
@@ -180,7 +172,7 @@ export function ShareCardPreview({ workoutId, cardType, initialOptions }: ShareC
 
         {/* Action buttons (sticky at bottom on mobile) */}
         {card && (
-          <div className="sticky bottom-4 left-0 right-0 flex flex-wrap gap-2 p-4 rounded-xl bg-bg-surface-elevated/95 backdrop-blur-sm border border-bdr-subtle shadow-lg">
+          <div className="sticky bottom-4 left-0 right-0 flex flex-wrap gap-2 p-4 rounded-xl bg-bg-surface-elevated/95 backdrop-blur-sm border border-bdr-subtle shadow-card-rest">
             {/* Copy Image */}
             {clipboardSupported && (
               <button
@@ -229,18 +221,7 @@ export function ShareCardPreview({ workoutId, cardType, initialOptions }: ShareC
               </button>
             )}
 
-            {/* Strava placeholder (full width) */}
-            <button
-              onClick={handleStravaPost}
-              disabled
-              title="Coming in Phase 39"
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-bg-surface-elevated/30 border border-bdr-subtle text-txt-tertiary font-medium cursor-not-allowed opacity-50"
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169" />
-              </svg>
-              Post to Strava (Coming Soon)
-            </button>
+            {/* TODO(phase-39): Add Strava integration button here */}
           </div>
         )}
       </div>
@@ -269,7 +250,7 @@ export function ShareCardPreview({ workoutId, cardType, initialOptions }: ShareC
               key={card.shareId}
               src={card.url}
               alt="Share card preview"
-              className="w-full rounded-xl shadow-lg"
+              className="w-full rounded-xl shadow-card-rest"
               variants={FADE_IN_VARIANTS}
               initial="hidden"
               animate="visible"
@@ -317,18 +298,7 @@ export function ShareCardPreview({ workoutId, cardType, initialOptions }: ShareC
                 Download PNG
               </button>
 
-              {/* Strava placeholder */}
-              <button
-                onClick={handleStravaPost}
-                disabled
-                title="Coming in Phase 39"
-                className="flex items-center gap-2 px-4 py-3 rounded-xl bg-bg-surface-elevated/30 border border-bdr-subtle text-txt-tertiary font-medium cursor-not-allowed opacity-50"
-              >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169" />
-                </svg>
-                Post to Strava (Coming Soon)
-              </button>
+              {/* TODO(phase-39): Add Strava integration button here */}
             </div>
           )}
 

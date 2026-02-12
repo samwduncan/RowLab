@@ -26,7 +26,7 @@ export function useGenerateShareCard() {
         format,
         options,
       });
-      return data.data; // { shareId, url, publicUrl }
+      return data; // { shareId, url, publicUrl }
     },
   });
 }
@@ -41,7 +41,7 @@ export function useShareCard(shareId) {
     queryKey: ['shareCard', shareId],
     queryFn: async () => {
       const { data } = await api.get(`/api/v1/share-cards/${shareId}`);
-      return data.data;
+      return data;
     },
     enabled: !!shareId,
     retry: false, // Don't retry on 404/410
