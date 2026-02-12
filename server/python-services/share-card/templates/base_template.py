@@ -17,6 +17,11 @@ ROSE = (0.79, 0.48, 0.48)     # #C97B7B
 TEXT_PRIMARY = (1.0, 1.0, 1.0)      # white
 TEXT_SECONDARY = (0.62, 0.63, 0.68) # #9FA0AD
 TEXT_MUTED = (0.35, 0.36, 0.42)     # #5A5B6A
+TEAL = (0.30, 0.70, 0.65)           # for stroke rate column
+WARM_WHITE = (0.95, 0.93, 0.88)     # for subtle warm text
+AMBER = (0.85, 0.65, 0.20)          # for accent highlights
+SLATE = (0.25, 0.27, 0.30)          # for subtle backgrounds
+DEEP_COPPER = (0.55, 0.35, 0.15)    # for darker accents
 
 
 def hex_to_rgb(hex_color):
@@ -199,6 +204,69 @@ def draw_grain_texture(ctx, width, height, opacity=0.03):
     ctx.paint()
 
 
+def draw_gradient_text(ctx, text, font_family, font_size, x, y, color_start, color_end):
+    """
+    Draw text with gradient fill
+
+    Args:
+        ctx: Cairo context
+        text: Text to render
+        font_family: 'IBM Plex Sans' or 'IBM Plex Mono'
+        font_size: Size in pixels
+        x, y: Position
+        color_start: RGB tuple for gradient start
+        color_end: RGB tuple for gradient end
+
+    Returns: (text_width, text_height)
+    """
+    # Create Pango layout
+    layout = pango.create_layout(ctx)
+    font_pt = int(font_size * 0.75)
+
+    if font_family == 'IBM Plex Mono':
+        font_desc_str = f"IBM Plex Mono Regular {font_pt}"
+    else:
+        font_desc_str = f"IBM Plex Sans Regular {font_pt}"
+
+    from pangocffi import pango as pango_lib, FontDescription
+    font_desc_ptr = pango_lib.pango_font_description_from_string(font_desc_str.encode('utf-8'))
+    font_desc = FontDescription(font_desc_ptr)
+    layout._set_font_description(font_desc)
+    layout._set_text(text)
+
+    width_units, height_units = layout.get_size()
+    PANGO_SCALE = 1024
+    text_width = width_units / PANGO_SCALE
+    text_height = height_units / PANGO_SCALE
+
+    # Create gradient
+    gradient = cairo.LinearGradient(x, y, x + text_width, y)
+    gradient.add_color_stop_rgb(0, *color_start)
+    gradient.add_color_stop_rgb(1, *color_end)
+
+    ctx.set_source(gradient)
+    ctx.move_to(x, y)
+    pango.show_layout(ctx, layout)
+
+    return text_width, text_height
+
+
+def draw_horizontal_rule(ctx, x, y, width, color, thickness=2):
+    """
+    Draw decorative horizontal line separator
+
+    Args:
+        ctx: Cairo context
+        x, y: Starting position (left edge)
+        width: Line width in pixels
+        color: RGB tuple
+        thickness: Line thickness in pixels (default 2)
+    """
+    ctx.set_source_rgb(*color)
+    ctx.rectangle(x, y, width, thickness)
+    ctx.fill()
+
+
 def draw_rowlab_branding(ctx, width, height, format_key, options):
     """
     Draw "Made with RowLab" attribution
@@ -223,7 +291,7 @@ def draw_rowlab_branding(ctx, width, height, format_key, options):
         ctx,
         "Made with RowLab",
         "IBM Plex Sans",
-        24,
+        28,
         x, y,
         TEXT_MUTED,
         weight='Regular',
