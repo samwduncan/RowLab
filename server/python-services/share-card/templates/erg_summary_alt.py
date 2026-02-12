@@ -180,9 +180,11 @@ def has_valuable_rest_data(splits):
 # ─────────────────────────────────────────────
 
 def build_title(data):
-    """Build title in rower language: '7x11:00/1:00r BIKEERG', '10K DYNAMIC', etc."""
+    """Build concise workout title without machine type.
+    Machine type is shown separately on the card.
+    Examples: '7x11:00 / 1:00r', '1,169m', '5x2K / ~:56r', '10:00'
+    """
     wtype = data.get('workoutType', '')
-    mlabel = machine_label(data)
     splits = data.get('splits', [])
     distance = data.get('distanceM')
     duration = data.get('durationSeconds')
@@ -191,54 +193,41 @@ def build_title(data):
     if is_interval(data) and splits:
         n = len(splits)
 
-        # Fixed-distance intervals: "5x2000m/1:00r ERG"
         if wtype == 'FixedDistanceInterval':
             distances = [s.get('distanceM') for s in splits if s.get('distanceM')]
             if distances and len(set(distances)) == 1:
                 d = distances[0]
                 rest = _rest_label(splits)
-                return f"{n}x{format_distance(d)}{rest} {mlabel}"
+                return f"{n}x{format_distance(d)}{rest}"
 
-        # Fixed-time intervals: "7x11:00/1:00r BIKEERG"
         if wtype == 'FixedTimeInterval':
             times = [s.get('timeSeconds') for s in splits if s.get('timeSeconds')]
             if times and len(set(int(t) for t in times)) == 1:
                 t = format_time_clean(times[0])
                 rest = _rest_label(splits)
-                return f"{n}x{t}{rest} {mlabel}"
+                return f"{n}x{t}{rest}"
 
-        # Variable intervals with same distance: "5x2000m/~1:00r DYNAMIC"
         if wtype in ('VariableInterval', 'VariableIntervalUndefinedRest'):
             distances = [s.get('distanceM') for s in splits if s.get('distanceM')]
             if distances and len(set(distances)) == 1:
                 d = distances[0]
                 rest = _rest_label(splits, approx=True)
-                return f"{n}x{format_distance(d)}{rest} {mlabel}"
-            # Mixed distances
-            return f"{n} pieces {mlabel}"
+                return f"{n}x{format_distance(d)}{rest}"
+            return f"{n} pieces"
 
-        # Fallback for unknown interval type
         rest = _rest_label(splits)
-        return f"{n} intervals{rest} {mlabel}"
+        return f"{n} intervals{rest}"
 
     # ── Continuous pieces ──
-
-    # FixedTimeSplits: show total time "10:00 DYNAMIC"
     if wtype == 'FixedTimeSplits':
-        return f"{format_time_clean(duration)} {mlabel}"
-
-    # FixedDistanceSplits: show total distance "6K ERG"
+        return format_time_clean(duration)
     if wtype == 'FixedDistanceSplits':
-        return f"{format_distance(distance)} {mlabel}"
-
-    # JustRow: show distance
+        return format_distance(distance)
     if distance:
-        return f"{format_distance(distance)} {mlabel}"
-
-    # Fallback
+        return format_distance(distance)
     if duration:
-        return f"{format_time_clean(duration)} {mlabel}"
-    return mlabel
+        return format_time_clean(duration)
+    return machine_label(data)
 
 
 def _rest_label(splits, approx=False):
@@ -397,7 +386,7 @@ def get_table_columns(data):
     def fmt_time(s):
         return format_time_clean(s.get('timeSeconds'))
     def fmt_pace(s):
-        return f"{format_pace(s.get('paceTenths'), data)}{pu}"
+        return format_pace(s.get('paceTenths'), data)
     def fmt_watts(s):
         w = s.get('watts')
         return f"{w}" if w else '--'
@@ -408,11 +397,13 @@ def get_table_columns(data):
         hr = s.get('heartRate')
         return f"{hr}" if hr is not None else '--'
 
+    pace_hdr = f'PACE ({pu})'
+
     if is_fixed_time_type(data):
         # Time is fixed → distance varies, no time column
         return [
             ('dist', 'DIST', fmt_dist, 'left'),
-            ('pace', f'PACE', fmt_pace, 'left'),
+            ('pace', pace_hdr, fmt_pace, 'left'),
             ('watts', 'WATTS', fmt_watts, 'right'),
             ('rate', rl.upper(), fmt_rate, 'right'),
             ('hr', 'HR', fmt_hr, 'right'),
@@ -421,7 +412,7 @@ def get_table_columns(data):
         # Distance is fixed → time varies, no distance column
         return [
             ('time', 'TIME', fmt_time, 'left'),
-            ('pace', f'PACE', fmt_pace, 'left'),
+            ('pace', pace_hdr, fmt_pace, 'left'),
             ('watts', 'WATTS', fmt_watts, 'right'),
             ('rate', rl.upper(), fmt_rate, 'right'),
             ('hr', 'HR', fmt_hr, 'right'),
@@ -431,7 +422,7 @@ def get_table_columns(data):
         return [
             ('dist', 'DIST', fmt_dist, 'left'),
             ('time', 'TIME', fmt_time, 'left'),
-            ('pace', f'PACE', fmt_pace, 'left'),
+            ('pace', pace_hdr, fmt_pace, 'left'),
             ('watts', 'WATTS', fmt_watts, 'right'),
             ('rate', rl.upper(), fmt_rate, 'right'),
             ('hr', 'HR', fmt_hr, 'right'),
@@ -439,7 +430,7 @@ def get_table_columns(data):
     else:
         # JustRow — pace is primary, show all
         return [
-            ('pace', f'PACE', fmt_pace, 'left'),
+            ('pace', pace_hdr, fmt_pace, 'left'),
             ('watts', 'WATTS', fmt_watts, 'right'),
             ('rate', rl.upper(), fmt_rate, 'right'),
             ('hr', 'HR', fmt_hr, 'right'),
@@ -467,34 +458,37 @@ def draw_table_header(ctx, columns, col_positions, y, width):
 
 def draw_data_row(ctx, split, i, data, columns, col_positions, pace_devs, y):
     """Draw a single data row (interval or split). Returns new y position."""
+    return draw_data_row_dynamic(ctx, split, i, data, columns, col_positions, pace_devs, y, 30, 66)
+
+
+def draw_data_row_dynamic(ctx, split, i, data, columns, col_positions, pace_devs, y, font_size, row_h):
+    """Draw a single data row with dynamic font size and row height."""
     split_num = split.get('splitNumber', i + 1)
-    FONT_SIZE = 30
 
     # Pace dot
     dev = pace_devs.get(i)
     if dev is not None:
-        draw_pace_dot(ctx, col_positions[0][0] - 100, y + 14, dev)
+        draw_pace_dot(ctx, col_positions[0][0] - 100, y + font_size * 0.5, dev)
 
     # #N
-    draw_text(ctx, f"{split_num}", "IBM Plex Mono", FONT_SIZE,
+    draw_text(ctx, f"{split_num}", "IBM Plex Mono", font_size,
               col_positions[0][0] - 80, y, TEXT_SECONDARY, weight='SemiBold', align='left')
 
     # Data columns
     for ci, (key, header, fmt_fn, align) in enumerate(columns):
         x = col_positions[ci][0]
         val = fmt_fn(split)
-        # First column is bold primary, rest are secondary
         if ci == 0:
-            draw_text(ctx, val, "IBM Plex Mono", FONT_SIZE + 2,
+            draw_text(ctx, val, "IBM Plex Mono", font_size + 2,
                       x, y, TEXT_PRIMARY, weight='Bold', align=align)
         elif key == 'watts':
-            draw_text(ctx, val, "IBM Plex Mono", FONT_SIZE,
+            draw_text(ctx, val, "IBM Plex Mono", font_size,
                       x, y, GOLD, weight='SemiBold', align=align)
         else:
-            draw_text(ctx, val, "IBM Plex Mono", FONT_SIZE,
+            draw_text(ctx, val, "IBM Plex Mono", font_size,
                       x, y, TEXT_SECONDARY, weight='Regular', align=align)
 
-    return y + 66
+    return y + row_h
 
 
 def draw_rest_row(ctx, split, col_positions, width, y):
@@ -561,17 +555,22 @@ def render_erg_summary_alt(format_key, workout_data, options):
 
     _, pace_devs = compute_pace_stats(splits)
 
-    # ── Date ──
+    # ── Date + Machine Label ──
     date_str = format_date(workout_data.get('date', ''))
+    mlabel = machine_label(workout_data)
     draw_text(ctx, date_str, "IBM Plex Sans", 28,
               120, 140, TEXT_MUTED, weight='Regular', align='left')
+    draw_text(ctx, mlabel, "IBM Plex Sans", 28,
+              width - 120, 140, TEXT_MUTED, weight='SemiBold', align='right')
 
-    # ── Hero: Workout Title ──
+    # ── Hero: Workout Title (no machine type) ──
     title = build_title(workout_data)
     hero_y = 300
-    # Auto-size: shorter titles get bigger text
+    # Auto-size based on title length
     title_len = len(title)
-    if title_len <= 16:
+    if title_len <= 12:
+        hero_font_size = 160
+    elif title_len <= 18:
         hero_font_size = 130
     elif title_len <= 24:
         hero_font_size = 100
@@ -581,7 +580,7 @@ def render_erg_summary_alt(format_key, workout_data, options):
               width / 2, hero_y, TEXT_PRIMARY, weight='Bold', align='center')
 
     # ── Secondary Metrics — 2x2 grid ──
-    metrics_y = hero_y + int(hero_font_size * 1.6)
+    metrics_y = hero_y + int(hero_font_size * 1.5)
     rl = rate_label(workout_data)
 
     # Build 4 summary stats — hero metric first, then complementary stats
@@ -590,11 +589,9 @@ def render_erg_summary_alt(format_key, workout_data, options):
     hero_is_watts = 'WATTS' in hero_label.upper()
     stats.append((hero_value, hero_label))
 
-    # Add watts only if not already the hero metric
     if not hero_is_watts and avg_watts is not None:
         stats.append((str(avg_watts), "WATTS"))
     elif hero_is_watts and avg_pace_tenths:
-        # Hero is watts — show pace as complement instead
         stats.append((format_pace(avg_pace_tenths, workout_data), f"AVG PACE {pace_unit(workout_data)}"))
     elif duration_sec:
         stats.append((format_time_clean(duration_sec), "TOTAL TIME"))
@@ -605,12 +602,14 @@ def render_erg_summary_alt(format_key, workout_data, options):
         stats.append((str(avg_hr), "AVG HR"))
 
     # Draw as 2x2 grid
+    stat_font = 56
+    stat_gap = 120
     if len(stats) >= 4:
         positions = [
             (240, metrics_y, 'left'),
             (width - 240, metrics_y, 'right'),
-            (240, metrics_y + 120, 'left'),
-            (width - 240, metrics_y + 120, 'right'),
+            (240, metrics_y + stat_gap, 'left'),
+            (width - 240, metrics_y + stat_gap, 'right'),
         ]
     else:
         positions = [(240 + i * 480, metrics_y, 'left') for i in range(len(stats))]
@@ -619,24 +618,26 @@ def render_erg_summary_alt(format_key, workout_data, options):
         if i < len(positions):
             x, y, align = positions[i]
             color = GOLD if i % 2 == 0 else ROSE
-            draw_text(ctx, val, "IBM Plex Mono", 56,
+            draw_text(ctx, val, "IBM Plex Mono", stat_font,
                       x, y, color, weight='Bold', align=align)
             draw_text(ctx, lbl, "IBM Plex Sans", 22,
                       x, y + 70, TEXT_MUTED, weight='SemiBold', align=align)
 
     # ── Splits / Intervals Table ──
     if splits:
-        table_y = metrics_y + 280
+        # Determine how much vertical space the header section used
+        stats_rows = 2 if len(stats) >= 4 else 1
+        table_start_y = metrics_y + stats_rows * stat_gap + 100
 
         # Gold accent bar
         bar_w = 200
         ctx.set_source_rgb(*GOLD)
-        ctx.rectangle((width - bar_w) / 2, table_y, bar_w, 3)
+        ctx.rectangle((width - bar_w) / 2, table_start_y, bar_w, 3)
         ctx.fill()
 
         # Section header with pattern description
         header_text = build_table_header(workout_data, splits)
-        header_y = table_y + 50
+        header_y = table_start_y + 50
         draw_text(ctx, header_text, "IBM Plex Sans", 30,
                   width / 2, header_y, TEXT_PRIMARY, weight='Bold', align='center')
 
@@ -646,7 +647,7 @@ def render_erg_summary_alt(format_key, workout_data, options):
 
         # Set up column positions
         columns = get_table_columns(workout_data)
-        margin = 180
+        margin = 140
         table_width = width - 2 * margin
         n_cols = len(columns)
 
@@ -670,26 +671,52 @@ def render_erg_summary_alt(format_key, workout_data, options):
         col_header_y = header_y + 60
         cy = draw_table_header(ctx, columns, col_positions, col_header_y, width)
 
-        # Calculate available space and max rows
-        avail = height - cy - 180
+        # ── Dynamic sizing: scale row height to fill available space ──
+        branding_reserve = 220  # athlete name + branding at bottom
+        avail_height = height - cy - branding_reserve
+
+        # Estimate total rows needed (data rows + rest rows)
+        n_data_rows = len(splits)
+        n_rest_rows = 0
         if intervals and show_rest_rows:
-            row_h = 66 + 36  # data + rest
-        elif intervals:
-            row_h = 66 + 8
+            n_rest_rows = max(0, n_data_rows - 1)  # no rest after last
+
+        # Calculate ideal row height to fill space
+        total_content_units = n_data_rows + n_rest_rows * 0.5  # rest rows are ~half height
+        if total_content_units > 0:
+            ideal_row_h = avail_height / total_content_units
         else:
-            row_h = 66 + 8
-        max_rows = max(1, int(avail / row_h))
+            ideal_row_h = 80
+
+        # Clamp row height between reasonable bounds
+        data_row_h = max(55, min(110, int(ideal_row_h)))
+        rest_row_h = max(30, min(55, int(ideal_row_h * 0.5)))
+
+        # Scale font size with row height
+        data_font = max(28, min(42, int(data_row_h * 0.42)))
+
+        # Check if all splits fit
+        total_h = n_data_rows * data_row_h + n_rest_rows * rest_row_h
+        if total_h > avail_height:
+            # Too many rows — shrink to fit or truncate
+            scale = avail_height / total_h
+            data_row_h = max(50, int(data_row_h * scale))
+            rest_row_h = max(26, int(rest_row_h * scale))
+            data_font = max(24, int(data_font * scale))
+
+        max_rows = max(1, int(avail_height / (data_row_h + (rest_row_h if show_rest_rows else 8))))
         show = splits[:max_rows]
         truncated = len(splits) > max_rows
 
         is_last_interval_in_workout = lambda idx: idx == len(splits) - 1
         for i, s in enumerate(show):
-            cy = draw_data_row(ctx, s, i, workout_data, columns, col_positions, pace_devs, cy)
-            # Rest rows for intervals (skip last interval's rest)
+            cy = draw_data_row_dynamic(ctx, s, i, workout_data, columns, col_positions,
+                                       pace_devs, cy, data_font, data_row_h)
             if intervals and show_rest_rows and not is_last_interval_in_workout(i):
                 cy = draw_rest_row(ctx, s, col_positions, width, cy)
+                cy += rest_row_h - 36  # adjust for rest_row's own 36px
             elif intervals:
-                cy += 8
+                cy += max(4, data_row_h - data_font * 2)
 
         if truncated:
             remaining = len(splits) - max_rows
