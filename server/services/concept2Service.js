@@ -204,8 +204,15 @@ export async function storeTokens(userId, c2UserId, tokens, username = null) {
 /**
  * Get valid access token (refresh if needed)
  * Handles decryption with lazy migration for plaintext tokens
+ * Supports CONCEPT2_PERSONAL_TOKEN for read-only testing against production API
  */
 export async function getValidToken(userId) {
+  // Personal token override: use read-only API key for testing
+  // before full OAuth production approval
+  if (process.env.CONCEPT2_PERSONAL_TOKEN) {
+    return process.env.CONCEPT2_PERSONAL_TOKEN;
+  }
+
   const auth = await prisma.concept2Auth.findUnique({
     where: { userId },
   });

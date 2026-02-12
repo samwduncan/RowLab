@@ -28,25 +28,65 @@ export function mapC2MachineType(c2Type) {
 }
 
 /**
- * Extract splits from C2 result data
+ * Calculate pace in tenths of seconds per 500m from time and distance
+ * C2 stores time in tenths of seconds; this returns tenths per 500m.
+ * @param {number} timeTenths - Time in tenths of seconds
+ * @param {number} distanceM - Distance in meters
+ * @returns {number|null} - Pace in tenths of seconds per 500m, or null
+ */
+export function calculatePace(timeTenths, distanceM) {
+  if (!timeTenths || !distanceM || distanceM <= 0) return null;
+  return Math.round(timeTenths / (distanceM / 500));
+}
+
+/**
+ * Calculate watts from time and distance using the C2 physics formula.
+ * watts = k / (seconds_per_meter)^3
+ * Rower/SkiErg/Slides: k = 2.80 (pace per 500m)
+ * BikeErg: k = 0.35 (pace per 1000m, same time at same watts)
+ * @param {number} timeTenths - Time in tenths of seconds
+ * @param {number} distanceM - Distance in meters
+ * @param {string} [machineType] - C2 type field (e.g., 'rower', 'bike', 'slides')
+ * @returns {number|null} - Watts, or null
+ */
+export function calculateWatts(timeTenths, distanceM, machineType) {
+  if (!timeTenths || !distanceM || distanceM <= 0) return null;
+  const k = machineType === 'bike' || machineType === 'bikerg' ? 0.35 : 2.8;
+  const timeSeconds = timeTenths / 10;
+  const pacePerMeter = timeSeconds / distanceM;
+  return Math.round(k / Math.pow(pacePerMeter, 3));
+}
+
+/**
+ * Extract splits from C2 result data.
+ * C2 API nests data under result.workout: interval workouts use "intervals",
+ * non-interval workouts (JustRow, FixedTimeSplits, etc.) use "splits".
  * @param {object} c2Result - C2 API result object
  * @returns {Array<object>} - Array of split objects
  */
 export function extractSplits(c2Result) {
-  // C2 results include 'intervals' array with per-split data
-  const intervals = c2Result.intervals || [];
+  const workout = c2Result.workout || {};
+  const machineType = c2Result.type || null;
+  // Prefer intervals (for interval workouts), fall back to splits (for steady-state)
+  const segments = workout.intervals || workout.splits || [];
 
-  return intervals.map((interval, index) => ({
-    splitNumber: index + 1, // 1-indexed
-    distanceM: interval.distance || null,
-    timeSeconds: interval.time ? interval.time / 10 : null, // C2 stores in tenths
-    pace: interval.stroke_data?.avg_pace || null, // Already in tenths
-    watts: interval.stroke_data?.avg_watts || null,
-    strokeRate: interval.stroke_data?.avg_stroke_rate || interval.stroke_rate || null,
-    heartRate: interval.heart_rate?.average || null,
-    dragFactor: interval.drag_factor || null,
-    calories: interval.calories_total || null,
-  }));
+  return segments.map((segment, index) => {
+    const timeTenths = segment.time || null;
+    const distanceM = segment.distance || null;
+    const timeSeconds = timeTenths ? timeTenths / 10 : null;
+
+    return {
+      splitNumber: index + 1,
+      distanceM,
+      timeSeconds,
+      pace: calculatePace(timeTenths, distanceM),
+      watts: calculateWatts(timeTenths, distanceM, machineType),
+      strokeRate: segment.stroke_rate || null,
+      heartRate: segment.heart_rate?.average || null,
+      dragFactor: null, // Not available per-segment in C2 API
+      calories: segment.calories_total || null,
+    };
+  });
 }
 
 /**
@@ -149,12 +189,12 @@ export async function syncUserWorkouts(userId, teamId) {
     // Extract machine type
     const machineType = mapC2MachineType(result.type || result.workout_type);
 
-    // Extract summary metrics
-    const avgPace = result.stroke_data?.avg_pace || null;
-    const avgWatts = result.stroke_data?.avg_watts || null;
+    // Compute summary metrics from time/distance (C2 doesn't provide them directly)
+    const avgPace = calculatePace(result.time, result.distance);
+    const avgWatts = calculateWatts(result.time, result.distance, result.type);
     const avgHeartRate = result.heart_rate?.average || null;
 
-    // Extract splits
+    // Extract splits from workout.intervals or workout.splits
     const splits = extractSplits(result);
 
     // Create Workout record with splits in a transaction
@@ -287,13 +327,13 @@ export async function fetchAndStoreResult(accessToken, c2UserId, resultId, athle
   // Fetch result from C2 API
   const result = await fetchResultWithStrokes(accessToken, c2UserId, resultId);
 
-  // Extract machine type and metrics
+  // Extract machine type and compute metrics
   const machineType = mapC2MachineType(result.type || result.workout_type);
-  const avgPace = result.stroke_data?.avg_pace || null;
-  const avgWatts = result.stroke_data?.avg_watts || null;
+  const avgPace = calculatePace(result.time, result.distance);
+  const avgWatts = calculateWatts(result.time, result.distance, result.type);
   const avgHeartRate = result.heart_rate?.average || null;
 
-  // Extract splits
+  // Extract splits from workout.intervals or workout.splits
   const splits = extractSplits(result);
 
   // Upsert Workout + WorkoutSplits atomically
@@ -554,13 +594,13 @@ export async function historicalImport(userId, teamId, options = {}) {
         continue;
       }
 
-      // Extract machine type and metrics
+      // Extract machine type and compute metrics
       const machineType = mapC2MachineType(result.type || result.workout_type);
-      const avgPace = result.stroke_data?.avg_pace || null;
-      const avgWatts = result.stroke_data?.avg_watts || null;
+      const avgPace = calculatePace(result.time, result.distance);
+      const avgWatts = calculateWatts(result.time, result.distance, result.type);
       const avgHeartRate = result.heart_rate?.average || null;
 
-      // Extract splits
+      // Extract splits from workout.intervals or workout.splits
       const splits = extractSplits(result);
 
       // Create Workout + WorkoutSplits atomically
@@ -689,13 +729,13 @@ export async function syncCoachWorkouts(userId, teamId) {
 
     let athleteId = matchedAthlete?.id || null;
 
-    // Extract machine type and metrics
+    // Extract machine type and compute metrics
     const machineType = mapC2MachineType(result.type || result.workout_type);
-    const avgPace = result.stroke_data?.avg_pace || null;
-    const avgWatts = result.stroke_data?.avg_watts || null;
+    const avgPace = calculatePace(result.time, result.distance);
+    const avgWatts = calculateWatts(result.time, result.distance, result.type);
     const avgHeartRate = result.heart_rate?.average || null;
 
-    // Extract splits
+    // Extract splits from workout.intervals or workout.splits
     const splits = extractSplits(result);
 
     // Create Workout + WorkoutSplits atomically

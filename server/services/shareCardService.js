@@ -225,30 +225,81 @@ export async function cleanupExpiredCards() {
 }
 
 /**
- * Convert Prisma workout to Python-friendly JSON
+ * Format tenths-of-seconds pace to MM:SS.T string
+ */
+function formatPaceTenths(tenths) {
+  if (!tenths) return null;
+  const totalSeconds = tenths / 10;
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${seconds.toFixed(1).padStart(4, '0')}`;
+}
+
+/**
+ * Format seconds to HH:MM:SS.T or MM:SS.T string
+ */
+function formatDuration(seconds) {
+  if (!seconds) return null;
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+  if (hrs > 0) {
+    return `${hrs}:${String(mins).padStart(2, '0')}:${secs.toFixed(1).padStart(4, '0')}`;
+  }
+  return `${mins}:${secs.toFixed(1).padStart(4, '0')}`;
+}
+
+/**
+ * Convert Prisma workout to Python-friendly JSON.
+ * Includes both raw numeric values and pre-formatted display strings.
  */
 function serializeWorkoutForPython(workout) {
+  const avgPaceTenths = workout.avgPace ? parseFloat(workout.avgPace) : null;
+  const durationSec = workout.durationSeconds ? parseFloat(workout.durationSeconds) : null;
+  const rawData = workout.rawData || {};
+
   return {
     id: workout.id,
     date: workout.date.toISOString(),
     distanceM: workout.distanceM,
-    durationSeconds: workout.durationSeconds ? parseFloat(workout.durationSeconds) : null,
-    avgPace: workout.avgPace ? parseFloat(workout.avgPace) : null,
+    durationSeconds: durationSec,
+    avgPaceTenths: avgPaceTenths,
     avgWatts: workout.avgWatts,
     avgHeartRate: workout.avgHeartRate,
     strokeRate: workout.strokeRate,
     calories: workout.calories,
+    dragFactor: workout.dragFactor,
     machineType: workout.machineType,
+    // Workout classification from C2 API
+    workoutType: rawData.workout_type || null,
+    rawMachineType: rawData.type || null,
+    source: workout.source,
+    // Pre-formatted display strings for the renderer
+    formatted: {
+      totalTime: formatDuration(durationSec),
+      avgPace: formatPaceTenths(avgPaceTenths),
+      distance: workout.distanceM ? `${workout.distanceM.toLocaleString()}m` : null,
+    },
     splits:
-      workout.splits?.map((split) => ({
-        splitNumber: split.splitNumber,
-        distanceM: split.distanceM,
-        timeSeconds: split.timeSeconds ? parseFloat(split.timeSeconds) : null,
-        pace: split.pace ? parseFloat(split.pace) : null,
-        watts: split.watts,
-        strokeRate: split.strokeRate,
-        heartRate: split.heartRate,
-      })) || [],
+      workout.splits?.map((split) => {
+        const splitPaceTenths = split.pace ? parseFloat(split.pace) : null;
+        const splitTimeSec = split.timeSeconds ? parseFloat(split.timeSeconds) : null;
+        return {
+          splitNumber: split.splitNumber,
+          distanceM: split.distanceM,
+          timeSeconds: splitTimeSec,
+          paceTenths: splitPaceTenths,
+          watts: split.watts,
+          strokeRate: split.strokeRate,
+          heartRate: split.heartRate,
+          calories: split.calories,
+          // Pre-formatted
+          formatted: {
+            time: formatDuration(splitTimeSec),
+            pace: formatPaceTenths(splitPaceTenths),
+          },
+        };
+      }) || [],
     telemetry: workout.telemetry
       ? {
           timeSeriesS: workout.telemetry.timeSeriesS?.map((t) => parseFloat(t)) || [],
@@ -318,14 +369,9 @@ function generateMetadata(cardType, workoutData, athleteName) {
 }
 
 /**
- * Format pace (seconds per 500m) as MM:SS.T
+ * Format pace (tenths of seconds per 500m) as MM:SS.T for metadata
  */
-function formatPace(paceSeconds) {
-  if (!paceSeconds) return '--:--';
-
-  const totalSeconds = parseFloat(paceSeconds);
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = (totalSeconds % 60).toFixed(1);
-
-  return `${minutes}:${seconds.padStart(4, '0')}`;
+function formatPace(paceTenths) {
+  if (!paceTenths) return '--:--';
+  return formatPaceTenths(parseFloat(paceTenths)) || '--:--';
 }
