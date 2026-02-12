@@ -688,18 +688,16 @@ def render_erg_summary_alt(format_key, workout_data, options):
         uniform_rest, uniform_rest_val = has_uniform_rest(splits)
         show_rest_rows = intervals and (not uniform_rest or has_valuable_rest_data(splits))
 
-        # Set up column positions
+        # Set up column positions with symmetric margins and near-equal widths
         columns = get_table_columns(workout_data)
-        margin = 140
+        margin = 160  # Symmetric margins (was asymmetric 140)
         table_width = width - 2 * margin
         n_cols = len(columns)
 
-        # Distribute columns: first col gets more space, rest equal
-        if n_cols <= 4:
-            col_widths = [table_width * 0.32] + [table_width * 0.68 / (n_cols - 1)] * (n_cols - 1)
-        else:
-            col_widths = [table_width * 0.22, table_width * 0.18] + \
-                         [table_width * 0.60 / (n_cols - 2)] * (n_cols - 2)
+        # Near-equal width distribution: first column gets 1.3x weight, others get 1x
+        weights = [1.3] + [1.0] * (n_cols - 1)
+        total_weight = sum(weights)
+        col_widths = [(table_width / total_weight) * w for w in weights]
 
         col_positions = []
         cx = margin
