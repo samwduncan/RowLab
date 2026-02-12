@@ -110,6 +110,83 @@ router.get('/:shareId', async (req, res) => {
 });
 
 /**
+ * GET /api/v1/share-cards/og/:shareId
+ * Get OpenGraph HTML for social crawlers
+ *
+ * Social crawlers (Facebook, Twitter, Slack, Discord, etc.) don't execute JavaScript,
+ * so we need to serve pre-rendered HTML with OG meta tags for link previews.
+ */
+router.get('/og/:shareId', async (req, res) => {
+  try {
+    const { shareId } = req.params;
+
+    // Fetch card metadata
+    const shareCard = await getShareCard(shareId);
+    const card = shareCard.data; // getShareCard returns { success: true, data: {...} }
+
+    // Construct URLs
+    const baseUrl = process.env.BASE_URL || 'https://rowlab.net';
+    const ogImageUrl = card.url.startsWith('http') ? card.url : `${baseUrl}${card.url}`;
+    const ogUrl = `${baseUrl}/share/${card.id}`;
+    const ogTitle = card.metadata?.athleteName
+      ? `${card.metadata.athleteName} - ${card.metadata.workoutTitle || 'Workout'} | RowLab`
+      : 'Workout Share Card | RowLab';
+    const ogDescription =
+      card.metadata?.description ||
+      `Check out this ${card.cardType.replace(/_/g, ' ')} from RowLab`;
+    const ogImageHeight = card.format === '1:1' ? '2160' : '3840';
+
+    // Serve OG-tagged HTML with redirect to React SPA
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${ogTitle}</title>
+  <meta name="description" content="${ogDescription}">
+
+  <!-- OpenGraph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="${ogTitle}" />
+  <meta property="og:description" content="${ogDescription}" />
+  <meta property="og:image" content="${ogImageUrl}" />
+  <meta property="og:image:width" content="2160" />
+  <meta property="og:image:height" content="${ogImageHeight}" />
+  <meta property="og:url" content="${ogUrl}" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${ogTitle}" />
+  <meta name="twitter:description" content="${ogDescription}" />
+  <meta name="twitter:image" content="${ogImageUrl}" />
+
+  <!-- Redirect to React SPA for real browsers -->
+  <meta http-equiv="refresh" content="0;url=/share/${card.id}" />
+</head>
+<body>
+  <p>Redirecting to share page...</p>
+  <a href="/share/${card.id}">Click here if not redirected</a>
+</body>
+</html>`;
+
+    res.setHeader('Content-Type', 'text/html');
+    res.send(html);
+  } catch (error) {
+    console.error('OG HTML generation error:', error);
+
+    if (error.message === 'Share card not found') {
+      return res.status(404).send('<h1>Share card not found</h1>');
+    }
+
+    if (error.message === 'Share card has expired') {
+      return res.status(410).send('<h1>Share card has expired</h1>');
+    }
+
+    res.status(500).send('<h1>Error loading share card</h1>');
+  }
+});
+
+/**
  * DELETE /api/v1/share-cards/:shareId
  * Delete a share card (requires ownership)
  */
