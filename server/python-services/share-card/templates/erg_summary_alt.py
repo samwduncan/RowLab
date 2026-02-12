@@ -380,69 +380,124 @@ def draw_pace_dot(ctx, x, y, deviation, radius=8):
 # Table Row Renderers
 # ─────────────────────────────────────────────
 
-def draw_interval_row(ctx, split, i, data, pace_devs, width, y):
-    """Draw a single interval work row. Returns new y position."""
+def get_table_columns(data):
+    """Return column definitions based on workout type.
+    Each column: (key, header_label, width_weight, align, format_fn)
+    Columns are laid out proportionally across the available width.
+    """
     wtype = data.get('workoutType', '')
+    pu = pace_unit_short(data)
+    rl = rate_label(data).lower()
+    bike = is_bike(data)
+
+    # Column key → (header, format_fn)
+    def fmt_dist(s):
+        d = s.get('distanceM')
+        return f"{d:,}m" if d else '--'
+    def fmt_time(s):
+        return format_time_clean(s.get('timeSeconds'))
+    def fmt_pace(s):
+        return f"{format_pace(s.get('paceTenths'), data)}{pu}"
+    def fmt_watts(s):
+        w = s.get('watts')
+        return f"{w}" if w else '--'
+    def fmt_rate(s):
+        sr = s.get('strokeRate')
+        return f"{sr}" if sr is not None else '--'
+    def fmt_hr(s):
+        hr = s.get('heartRate')
+        return f"{hr}" if hr is not None else '--'
+
+    if is_fixed_time_type(data):
+        # Time is fixed → distance varies, no time column
+        return [
+            ('dist', 'DIST', fmt_dist, 'left'),
+            ('pace', f'PACE', fmt_pace, 'left'),
+            ('watts', 'WATTS', fmt_watts, 'right'),
+            ('rate', rl.upper(), fmt_rate, 'right'),
+            ('hr', 'HR', fmt_hr, 'right'),
+        ]
+    elif is_fixed_dist_type(data):
+        # Distance is fixed → time varies, no distance column
+        return [
+            ('time', 'TIME', fmt_time, 'left'),
+            ('pace', f'PACE', fmt_pace, 'left'),
+            ('watts', 'WATTS', fmt_watts, 'right'),
+            ('rate', rl.upper(), fmt_rate, 'right'),
+            ('hr', 'HR', fmt_hr, 'right'),
+        ]
+    elif wtype in ('VariableInterval', 'VariableIntervalUndefinedRest'):
+        # Everything varies
+        return [
+            ('dist', 'DIST', fmt_dist, 'left'),
+            ('time', 'TIME', fmt_time, 'left'),
+            ('pace', f'PACE', fmt_pace, 'left'),
+            ('watts', 'WATTS', fmt_watts, 'right'),
+            ('rate', rl.upper(), fmt_rate, 'right'),
+            ('hr', 'HR', fmt_hr, 'right'),
+        ]
+    else:
+        # JustRow — pace is primary, show all
+        return [
+            ('pace', f'PACE', fmt_pace, 'left'),
+            ('watts', 'WATTS', fmt_watts, 'right'),
+            ('rate', rl.upper(), fmt_rate, 'right'),
+            ('hr', 'HR', fmt_hr, 'right'),
+        ]
+
+
+def draw_table_header(ctx, columns, col_positions, y, width):
+    """Draw column headers for the data table."""
+    # #N header
+    draw_text(ctx, "#", "IBM Plex Sans", 24,
+              col_positions[0][0] - 80, y, TEXT_MUTED, weight='SemiBold', align='left')
+
+    for i, (key, header, fmt_fn, align) in enumerate(columns):
+        x = col_positions[i][0]
+        draw_text(ctx, header, "IBM Plex Sans", 24,
+                  x, y, TEXT_MUTED, weight='SemiBold', align=align)
+
+    # Subtle divider line below headers
+    ctx.set_source_rgba(*TEXT_MUTED, 0.2)
+    ctx.rectangle(col_positions[0][0] - 90, y + 38, width - 2 * (col_positions[0][0] - 90), 1)
+    ctx.fill()
+
+    return y + 52
+
+
+def draw_data_row(ctx, split, i, data, columns, col_positions, pace_devs, y):
+    """Draw a single data row (interval or split). Returns new y position."""
     split_num = split.get('splitNumber', i + 1)
+    FONT_SIZE = 30
 
     # Pace dot
     dev = pace_devs.get(i)
     if dev is not None:
-        draw_pace_dot(ctx, 160, y + 18, dev)
+        draw_pace_dot(ctx, col_positions[0][0] - 100, y + 14, dev)
 
     # #N
-    draw_text(ctx, f"#{split_num}", "IBM Plex Mono", 36,
-              190, y, TEXT_SECONDARY, weight='SemiBold', align='left')
+    draw_text(ctx, f"{split_num}", "IBM Plex Mono", FONT_SIZE,
+              col_positions[0][0] - 80, y, TEXT_SECONDARY, weight='SemiBold', align='left')
 
-    # Primary variable metric (what varies for this interval type)
-    col_x = 320
-    if is_fixed_time_type(data):
-        # Time is fixed → show DISTANCE as primary
-        dist = split.get('distanceM')
-        draw_text(ctx, f"{dist:,}m" if dist else '--', "IBM Plex Mono", 38,
-                  col_x, y, TEXT_PRIMARY, weight='Bold', align='left')
-    elif is_fixed_dist_type(data):
-        # Distance is fixed → show TIME as primary
-        t = split.get('timeSeconds')
-        draw_text(ctx, format_time_clean(t), "IBM Plex Mono", 38,
-                  col_x, y, TEXT_PRIMARY, weight='Bold', align='left')
-    else:
-        # Variable: show both distance and time
-        dist = split.get('distanceM')
-        t = split.get('timeSeconds')
-        draw_text(ctx, f"{dist:,}m" if dist else '--', "IBM Plex Mono", 34,
-                  col_x, y, TEXT_PRIMARY, weight='Bold', align='left')
-        draw_text(ctx, format_time_clean(t), "IBM Plex Mono", 26,
-                  col_x + 240, y + 4, TEXT_MUTED, weight='Regular', align='left')
+    # Data columns
+    for ci, (key, header, fmt_fn, align) in enumerate(columns):
+        x = col_positions[ci][0]
+        val = fmt_fn(split)
+        # First column is bold primary, rest are secondary
+        if ci == 0:
+            draw_text(ctx, val, "IBM Plex Mono", FONT_SIZE + 2,
+                      x, y, TEXT_PRIMARY, weight='Bold', align=align)
+        elif key == 'watts':
+            draw_text(ctx, val, "IBM Plex Mono", FONT_SIZE,
+                      x, y, GOLD, weight='SemiBold', align=align)
+        else:
+            draw_text(ctx, val, "IBM Plex Mono", FONT_SIZE,
+                      x, y, TEXT_SECONDARY, weight='Regular', align=align)
 
-    # Pace
-    pace_str = format_pace(split.get('paceTenths'), data)
-    pu = pace_unit_short(data)
-    draw_text(ctx, f"{pace_str}{pu}", "IBM Plex Mono", 30,
-              width / 2 + 80, y, TEXT_SECONDARY, weight='SemiBold', align='left')
-
-    # Watts (if available)
-    w = split.get('watts')
-    if w:
-        draw_text(ctx, f"{w}w", "IBM Plex Mono", 30,
-                  width - 420, y, GOLD, weight='SemiBold', align='right')
-
-    # Rate + HR (right)
-    sr = split.get('strokeRate')
-    hr = split.get('heartRate')
-    right_parts = []
-    if sr is not None:
-        right_parts.append(f"{sr}{rate_label(data).lower()}")
-    if hr is not None:
-        right_parts.append(f"{hr}bpm")
-    if right_parts:
-        draw_text(ctx, " / ".join(right_parts), "IBM Plex Mono", 24,
-                  width - 160, y, TEXT_MUTED, weight='Regular', align='right')
-
-    return y + 78
+    return y + 66
 
 
-def draw_rest_row(ctx, split, width, y):
+def draw_rest_row(ctx, split, col_positions, width, y):
     """Draw a rest row with recovery data. Returns new y position."""
     rest_time = split.get('restTime')
     rest_hr = split.get('heartRateRest')
@@ -462,78 +517,12 @@ def draw_rest_row(ctx, split, width, y):
                 parts.append(f"(\u2193{delta})")
 
     if not parts:
-        return y + 10
+        return y + 8
 
-    # Subtle separator line
-    ctx.set_source_rgba(*REST_COLOR, 0.15)
-    ctx.rectangle(220, y - 5, width - 440, 1)
-    ctx.fill()
-
+    left_edge = col_positions[0][0] - 80
     draw_text(ctx, "  ".join(parts), "IBM Plex Sans", 22,
-              width / 2, y, REST_COLOR, weight='Regular', align='center')
-    return y + 42
-
-
-def draw_split_row(ctx, split, i, data, pace_devs, width, y, is_story):
-    """Draw a single continuous-piece split row. Returns new y position."""
-    wtype = data.get('workoutType', '')
-    split_num = split.get('splitNumber', i + 1)
-
-    # Pace dot
-    dev = pace_devs.get(i)
-    if dev is not None:
-        draw_pace_dot(ctx, 160, y + 18, dev)
-
-    # #N
-    draw_text(ctx, f"#{split_num}", "IBM Plex Mono", 36,
-              190, y, TEXT_SECONDARY, weight='SemiBold', align='left')
-
-    col_x = 320
-
-    if is_fixed_time_type(data):
-        # Time is fixed → show DISTANCE as the variable
-        dist = split.get('distanceM')
-        draw_text(ctx, f"{dist:,}m" if dist else '--', "IBM Plex Mono", 38,
-                  col_x, y, TEXT_PRIMARY, weight='Bold', align='left')
-    elif is_fixed_dist_type(data):
-        # Distance is fixed → show TIME as the variable
-        t = split.get('timeSeconds')
-        draw_text(ctx, format_time_clean(t), "IBM Plex Mono", 38,
-                  col_x, y, TEXT_PRIMARY, weight='Bold', align='left')
-    else:
-        # JustRow: pace is the primary metric — it's what rowers care about
-        pass  # Pace shown below covers it
-
-    # Pace with unit
-    pace_str = format_pace(split.get('paceTenths'), data)
-    pu = pace_unit_short(data)
-    pace_x = width / 2 + 40 if is_fixed_time_type(data) or is_fixed_dist_type(data) else col_x
-    pace_size = 30 if is_fixed_time_type(data) or is_fixed_dist_type(data) else 42
-    pace_color = TEXT_SECONDARY if is_fixed_time_type(data) or is_fixed_dist_type(data) else TEXT_PRIMARY
-    pace_weight = 'SemiBold' if is_fixed_time_type(data) or is_fixed_dist_type(data) else 'Bold'
-
-    draw_text(ctx, f"{pace_str}{pu}", "IBM Plex Mono", pace_size,
-              pace_x, y, pace_color, weight=pace_weight, align='left')
-
-    # Watts
-    w = split.get('watts')
-    if w:
-        draw_text(ctx, f"{w}w", "IBM Plex Mono", 30,
-                  width - 420, y, GOLD, weight='SemiBold', align='right')
-
-    # Rate + HR
-    sr = split.get('strokeRate')
-    hr = split.get('heartRate')
-    right_parts = []
-    if sr is not None:
-        right_parts.append(f"{sr}{rate_label(data).lower()}")
-    if hr is not None:
-        right_parts.append(f"{hr}bpm")
-    if right_parts:
-        draw_text(ctx, " / ".join(right_parts), "IBM Plex Mono", 24,
-                  width - 160, y, TEXT_MUTED, weight='Regular', align='right')
-
-    return y + (85 if is_story else 88)
+              left_edge, y, REST_COLOR, weight='Regular', align='left')
+    return y + 36
 
 
 # ─────────────────────────────────────────────
@@ -584,120 +573,129 @@ def render_erg_summary_alt(format_key, workout_data, options):
               title_x, title_y + 100, TEXT_MUTED, weight='Regular', align='left')
 
     # ── Hero Metric ──
-    hero_y = 400
+    hero_y = 380
     hero_value, hero_label = get_hero(workout_data)
 
-    draw_text(ctx, hero_value, "IBM Plex Mono", 200,
+    draw_text(ctx, hero_value, "IBM Plex Mono", 160,
               width / 2, hero_y, TEXT_PRIMARY, weight='Bold', align='center')
-    draw_text(ctx, hero_label, "IBM Plex Sans", 32,
-              width / 2, hero_y + 240, ROSE, weight='Bold', align='center')
+    draw_text(ctx, hero_label, "IBM Plex Sans", 30,
+              width / 2, hero_y + 195, ROSE, weight='Bold', align='center')
 
-    # ── Secondary Metrics ──
-    metrics_y = hero_y + 240 + 140
-    left_metrics = []
-    right_metrics = []
-
+    # ── Secondary Metrics — single row of 4 stats ──
+    metrics_y = hero_y + 280
     rl = rate_label(workout_data)
-
-    # When hero is watts (bike time intervals), don't duplicate watts — show pace + rate instead
     hero_is_watts = (workout_data.get('workoutType') == 'FixedTimeInterval'
                      and is_bike(workout_data) and avg_watts)
+
+    # Build 4 summary stats (matching C2 Strava layout: 2x2 grid)
+    stats = []
     if hero_is_watts:
-        left_metrics.append((format_pace(avg_pace_tenths, workout_data), f"AVG PACE {pace_unit(workout_data)}"))
-        if stroke_rate is not None:
-            left_metrics.append((str(stroke_rate), rl))
+        stats.append((format_pace(avg_pace_tenths, workout_data), f"AVG PACE {pace_unit(workout_data)}"))
     elif avg_watts is not None:
-        left_metrics.append((str(avg_watts), "WATTS"))
-        if stroke_rate is not None:
-            left_metrics.append((str(stroke_rate), rl))
-    else:
-        if stroke_rate is not None:
-            left_metrics.append((str(stroke_rate), rl))
-    if calories is not None and not left_metrics:
-        left_metrics.append((str(calories), "CALORIES"))
+        stats.append((str(avg_watts), "WATTS"))
+    elif duration_sec:
+        stats.append((format_time_clean(duration_sec), "TOTAL TIME"))
 
+    if stroke_rate is not None:
+        stats.append((str(stroke_rate), rl))
     if avg_hr is not None:
-        right_metrics.append((str(avg_hr), "AVG HR"))
+        stats.append((str(avg_hr), "AVG HR"))
     if distance_m is not None:
-        right_metrics.append((f"{distance_m:,}m", "DISTANCE"))
-    if drag_factor is not None and len(right_metrics) < 2:
-        right_metrics.append((str(drag_factor), "DRAG FACTOR"))
+        stats.append((f"{distance_m:,}m", "DISTANCE"))
 
-    # Fallback if no watts (some short JustRows)
-    if not left_metrics:
-        left_metrics.append((format_time_clean(duration_sec) or '--:--', "TOTAL TIME"))
-        if calories is not None:
-            left_metrics.append((str(calories), "CALORIES"))
+    # Draw as 2x2 grid
+    if len(stats) >= 4:
+        positions = [
+            (240, metrics_y, 'left'),
+            (width - 240, metrics_y, 'right'),
+            (240, metrics_y + 120, 'left'),
+            (width - 240, metrics_y + 120, 'right'),
+        ]
+    else:
+        positions = [(240 + i * 480, metrics_y, 'left') for i in range(len(stats))]
 
-    left_x, right_x = 240, width - 240
-    y_off = metrics_y
-    for val, lbl in left_metrics:
-        draw_text(ctx, val, "IBM Plex Mono", 72,
-                  left_x, y_off, GOLD, weight='Bold', align='left')
-        draw_text(ctx, lbl, "IBM Plex Sans", 24,
-                  left_x, y_off + 90, TEXT_MUTED, weight='SemiBold', align='left')
-        y_off += 200
-
-    y_off = metrics_y
-    for val, lbl in right_metrics:
-        draw_text(ctx, val, "IBM Plex Mono", 72,
-                  right_x, y_off, ROSE, weight='Bold', align='right')
-        draw_text(ctx, lbl, "IBM Plex Sans", 24,
-                  right_x, y_off + 90, TEXT_MUTED, weight='SemiBold', align='right')
-        y_off += 200
+    for i, (val, lbl) in enumerate(stats[:4]):
+        if i < len(positions):
+            x, y, align = positions[i]
+            color = GOLD if i % 2 == 0 else ROSE
+            draw_text(ctx, val, "IBM Plex Mono", 56,
+                      x, y, color, weight='Bold', align=align)
+            draw_text(ctx, lbl, "IBM Plex Sans", 22,
+                      x, y + 70, TEXT_MUTED, weight='SemiBold', align=align)
 
     # ── Splits / Intervals Table ──
     if splits:
-        table_y = max(y_off, metrics_y + 400) + 60
+        table_y = metrics_y + 280
 
         # Gold accent bar
         bar_w = 200
         ctx.set_source_rgb(*GOLD)
-        ctx.rectangle((width - bar_w) / 2, table_y, bar_w, 4)
+        ctx.rectangle((width - bar_w) / 2, table_y, bar_w, 3)
         ctx.fill()
 
         # Section header with pattern description
         header_text = build_table_header(workout_data, splits)
-        header_y = table_y + 60
-        draw_text(ctx, header_text, "IBM Plex Sans", 32,
+        header_y = table_y + 50
+        draw_text(ctx, header_text, "IBM Plex Sans", 30,
                   width / 2, header_y, TEXT_PRIMARY, weight='Bold', align='center')
 
         # Decide rest row strategy for intervals
         uniform_rest, uniform_rest_val = has_uniform_rest(splits)
         show_rest_rows = intervals and (not uniform_rest or has_valuable_rest_data(splits))
 
-        # Calculate available space and max rows
-        start_y = header_y + 90
-        avail = height - start_y - 200
-        if intervals and show_rest_rows:
-            row_h = 78 + 42  # work + rest
-        elif intervals:
-            row_h = 78 + 12  # work + small gap
+        # Set up column positions
+        columns = get_table_columns(workout_data)
+        margin = 180
+        table_width = width - 2 * margin
+        n_cols = len(columns)
+
+        # Distribute columns: first col gets more space, rest equal
+        if n_cols <= 4:
+            col_widths = [table_width * 0.32] + [table_width * 0.68 / (n_cols - 1)] * (n_cols - 1)
         else:
-            row_h = 85 if is_story else 88
+            col_widths = [table_width * 0.22, table_width * 0.18] + \
+                         [table_width * 0.60 / (n_cols - 2)] * (n_cols - 2)
+
+        col_positions = []
+        cx = margin
+        for ci, (key, header, fmt_fn, align) in enumerate(columns):
+            if align == 'right':
+                col_positions.append((cx + col_widths[ci] - 10,))
+            else:
+                col_positions.append((cx,))
+            cx += col_widths[ci]
+
+        # Column headers
+        col_header_y = header_y + 60
+        cy = draw_table_header(ctx, columns, col_positions, col_header_y, width)
+
+        # Calculate available space and max rows
+        avail = height - cy - 180
+        if intervals and show_rest_rows:
+            row_h = 66 + 36  # data + rest
+        elif intervals:
+            row_h = 66 + 8
+        else:
+            row_h = 66 + 8
         max_rows = max(1, int(avail / row_h))
         show = splits[:max_rows]
         truncated = len(splits) > max_rows
 
-        cy = start_y
         is_last_interval_in_workout = lambda idx: idx == len(splits) - 1
         for i, s in enumerate(show):
-            if intervals:
-                cy = draw_interval_row(ctx, s, i, workout_data, pace_devs, width, cy)
-                # Skip rest row for the last interval (no real rest after final piece)
-                if show_rest_rows and not is_last_interval_in_workout(i):
-                    cy = draw_rest_row(ctx, s, width, cy)
-                else:
-                    cy += 12
-            else:
-                cy = draw_split_row(ctx, s, i, workout_data, pace_devs, width, cy, is_story)
+            cy = draw_data_row(ctx, s, i, workout_data, columns, col_positions, pace_devs, cy)
+            # Rest rows for intervals (skip last interval's rest)
+            if intervals and show_rest_rows and not is_last_interval_in_workout(i):
+                cy = draw_rest_row(ctx, s, col_positions, width, cy)
+            elif intervals:
+                cy += 8
 
         if truncated:
             remaining = len(splits) - max_rows
             word = "interval" if intervals else "split"
             draw_text(ctx, f"+ {remaining} more {word}{'s' if remaining != 1 else ''}",
-                      "IBM Plex Sans", 28,
-                      width / 2, cy + 20, TEXT_MUTED, weight='Regular', align='center')
+                      "IBM Plex Sans", 26,
+                      width / 2, cy + 10, TEXT_MUTED, weight='Regular', align='center')
 
     # ── Athlete Name ──
     if options.get('showName', True):
