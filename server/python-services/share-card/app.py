@@ -14,6 +14,8 @@ from templates.erg_summary import render_erg_summary
 from templates.erg_summary_alt import render_erg_summary_alt
 from templates.regatta_result import render_regatta_result
 from templates.regatta_summary import render_regatta_summary
+from templates.season_recap import render_season_recap
+from templates.team_leaderboard import render_team_leaderboard
 
 app = Flask(__name__)
 
@@ -30,6 +32,8 @@ CARD_RENDERERS = {
     'erg_summary_alt': render_erg_summary_alt,  # Design B - Fresh Direction
     'regatta_result': render_regatta_result,  # Single race result
     'regatta_summary': render_regatta_summary,  # Full regatta summary
+    'season_recap': render_season_recap,  # Spotify Wrapped style year-in-review
+    'team_leaderboard': render_team_leaderboard,  # Team rankings snapshot
 }
 
 
