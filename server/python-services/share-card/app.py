@@ -12,6 +12,8 @@ import traceback
 from templates.base_template import render_test_card
 from templates.erg_summary import render_erg_summary
 from templates.erg_summary_alt import render_erg_summary_alt
+from templates.regatta_result import render_regatta_result
+from templates.regatta_summary import render_regatta_summary
 
 app = Flask(__name__)
 
@@ -26,6 +28,8 @@ CARD_RENDERERS = {
     'test': render_test_card,
     'erg_summary': render_erg_summary,  # Design A - Evolved v5
     'erg_summary_alt': render_erg_summary_alt,  # Design B - Fresh Direction
+    'regatta_result': render_regatta_result,  # Single race result
+    'regatta_summary': render_regatta_summary,  # Full regatta summary
 }
 
 
