@@ -337,7 +337,7 @@ export async function fetchAndStoreResult(accessToken, c2UserId, resultId, athle
   const splits = extractSplits(result);
 
   // Upsert Workout + WorkoutSplits atomically
-  await prisma.$transaction(async (tx) => {
+  const workout = await prisma.$transaction(async (tx) => {
     // Upsert workout
     const workout = await tx.workout.upsert({
       where: { c2LogbookId: String(resultId) },
@@ -385,7 +385,36 @@ export async function fetchAndStoreResult(accessToken, c2UserId, resultId, athle
         })),
       });
     }
+
+    return workout;
   });
+
+  // Run workout inference (non-blocking - errors logged but don't fail sync)
+  try {
+    const { inferWorkoutPattern } = await import('./workoutInferenceService.js');
+
+    // Fetch splits from DB
+    const workoutSplits = await prisma.workoutSplit.findMany({
+      where: { workoutId: workout.id },
+      orderBy: { splitNumber: 'asc' },
+    });
+
+    // Run inference
+    const inference = inferWorkoutPattern(workout, workoutSplits);
+
+    // Update workout if patterns detected
+    if (inference) {
+      await prisma.workout.update({
+        where: { id: workout.id },
+        data: { inferredPattern: inference },
+      });
+    }
+  } catch (err) {
+    logger.error('Workout inference failed (non-blocking)', {
+      error: err.message,
+      workoutId: workout.id,
+    });
+  }
 }
 
 /**
