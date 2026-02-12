@@ -441,7 +441,7 @@ function inferWorkoutPattern(workout, splits) {
   return result;
 }
 
-module.exports = {
+export {
   inferWorkoutPattern,
   // Export detectors for testing
   detectRatePyramid,
