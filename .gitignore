@@ -135,3 +135,13 @@ yarn-error.log*
 *.png
 !public/**/*.png
 !src/**/*.png
+
+# ===========================================
+# PYTHON SERVICES
+# ===========================================
+
+# Python virtual environments
+server/python-services/*/venv/
+
+# Font files (too large for git, downloaded at build time)
+server/python-services/share-card/fonts/*.ttf
