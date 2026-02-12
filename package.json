@@ -87,6 +87,7 @@
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.400.0",
     "multer": "^2.0.2",
+    "nanoid": "^5.1.6",
     "node-cron": "^4.2.1",
     "optimization-js": "^1.5.0",
     "papaparse": "^5.4.1",
