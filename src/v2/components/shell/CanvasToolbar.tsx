@@ -133,6 +133,7 @@ function getZoneSubNav(zoneId: string, isCoach: boolean): SubNavItem[] {
       case 'analysis':
         return [
           { label: 'Erg Tests', route: '/app/erg-tests', icon: Timer },
+          { label: 'Workouts', route: '/app/workouts', icon: Dumbbell },
           {
             label: 'Advanced Rankings',
             route: '/app/coach/seat-racing/advanced-rankings',

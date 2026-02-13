@@ -45,6 +45,9 @@ const CanvasSeatRacingPage = lazy(() =>
 const CanvasErgTestsPage = lazy(() =>
   import('./v2/pages/canvas/CanvasErgTestsPage').then((m) => ({ default: m.CanvasErgTestsPage }))
 );
+const CanvasWorkoutsPage = lazy(() =>
+  import('./v2/pages/canvas/CanvasWorkoutsPage').then((m) => ({ default: m.CanvasWorkoutsPage }))
+);
 const CanvasRegattasPage = lazy(() =>
   import('./v2/pages/canvas/CanvasRegattasPage').then((m) => ({ default: m.CanvasRegattasPage }))
 );
@@ -372,6 +375,18 @@ function App() {
                       }
                     >
                       <CanvasErgTestsPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="workouts"
+                  element={
+                    <Suspense
+                      fallback={
+                        <LoadingFallback variant="component" message="Loading workouts..." />
+                      }
+                    >
+                      <CanvasWorkoutsPage />
                     </Suspense>
                   }
                 />
