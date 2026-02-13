@@ -23,6 +23,7 @@ import {
   CanvasButton,
   CanvasConsoleReadout,
 } from '@v2/components/canvas';
+import { IntegrationsSection } from '@v2/features/settings/components/IntegrationsSection';
 import type { SettingsTab, UserProfile, UserPreferences } from '@v2/types/settings';
 
 const validTabs: SettingsTab[] = [
@@ -382,11 +383,7 @@ export const CanvasSettingsPage: React.FC = () => {
           {/* ============================================ */}
           {/* OTHER TABS - placeholder */}
           {/* ============================================ */}
-          {activeTab === 'integrations' && (
-            <CanvasConsoleReadout
-              items={[{ label: 'STATUS', value: 'NO INTEGRATIONS CONFIGURED' }]}
-            />
-          )}
+          {activeTab === 'integrations' && <IntegrationsSection />}
           {activeTab === 'notifications' && (
             <CanvasConsoleReadout items={[{ label: 'STATUS', value: 'NOTIFICATION SETTINGS' }]} />
           )}

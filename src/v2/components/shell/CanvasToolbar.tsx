@@ -7,7 +7,7 @@
  * Design: design/canvas branch prototype
  */
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -35,7 +35,9 @@ import {
   Settings,
   Award,
   Target,
+  Gauge,
 } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 import type { ZoneConfig } from './CanvasDock';
 
 // ============================================
@@ -79,56 +81,79 @@ interface SubNavItem {
   label: string;
   route: string;
   icon: typeof Plus;
+  coachOnly?: boolean;
 }
 
-function getZoneSubNav(zoneId: string): SubNavItem[] {
-  switch (zoneId) {
-    case 'home':
-      return [
-        { label: 'Dashboard', route: '/app', icon: LayoutGrid },
-        { label: 'Achievements', route: '/app/achievements', icon: Award },
-        { label: 'Challenges', route: '/app/challenges', icon: Target },
-      ];
-    case 'team':
-      return [
-        { label: 'Athletes', route: '/app/athletes', icon: Users },
-        { label: 'Attendance', route: '/app/attendance', icon: UserCheck },
-        { label: 'Whiteboard', route: '/app/coach/whiteboard', icon: ClipboardList },
-        { label: 'Fleet', route: '/app/coach/fleet', icon: Ship },
-        { label: 'Availability', route: '/app/coach/availability', icon: CalendarRange },
-        { label: 'Recruiting', route: '/app/recruiting', icon: Briefcase },
-      ];
-    case 'training':
-      return [
-        { label: 'Calendar', route: '/app/coach/training', icon: Calendar },
-        { label: 'Sessions', route: '/app/training/sessions', icon: Dumbbell },
-        { label: 'Lineup Builder', route: '/app/coach/lineup-builder', icon: LayoutGrid },
-      ];
-    case 'racing':
-      return [
-        { label: 'Regattas', route: '/app/regattas', icon: Flag },
-        { label: 'Rankings', route: '/app/rankings', icon: BarChart2 },
-        { label: 'Seat Racing', route: '/app/coach/seat-racing', icon: Trophy },
-      ];
-    case 'analysis':
-      return [
-        { label: 'Erg Tests', route: '/app/erg-tests', icon: Timer },
-        {
-          label: 'Advanced Rankings',
-          route: '/app/coach/seat-racing/advanced-rankings',
-          icon: Swords,
-        },
-        {
-          label: 'Matrix Planner',
-          route: '/app/coach/seat-racing/matrix-planner',
-          icon: Grid3X3,
-        },
-      ];
-    case 'settings':
-      return [{ label: 'Settings', route: '/app/settings', icon: Settings }];
-    default:
-      return [];
-  }
+function getZoneSubNav(zoneId: string, isCoach: boolean): SubNavItem[] {
+  const all: SubNavItem[] = (() => {
+    switch (zoneId) {
+      case 'home':
+        return [
+          { label: 'Dashboard', route: '/app', icon: LayoutGrid },
+          { label: 'Coach Dashboard', route: '/app/coach/dashboard', icon: Gauge, coachOnly: true },
+          { label: 'Achievements', route: '/app/achievements', icon: Award },
+          { label: 'Challenges', route: '/app/challenges', icon: Target },
+        ];
+      case 'team':
+        return [
+          { label: 'Athletes', route: '/app/athletes', icon: Users },
+          { label: 'Attendance', route: '/app/attendance', icon: UserCheck },
+          {
+            label: 'Whiteboard',
+            route: '/app/coach/whiteboard',
+            icon: ClipboardList,
+            coachOnly: true,
+          },
+          { label: 'Fleet', route: '/app/coach/fleet', icon: Ship, coachOnly: true },
+          {
+            label: 'Availability',
+            route: '/app/coach/availability',
+            icon: CalendarRange,
+            coachOnly: true,
+          },
+          { label: 'Recruiting', route: '/app/recruiting', icon: Briefcase, coachOnly: true },
+        ];
+      case 'training':
+        return [
+          { label: 'Calendar', route: '/app/coach/training', icon: Calendar, coachOnly: true },
+          { label: 'Sessions', route: '/app/training/sessions', icon: Dumbbell },
+          {
+            label: 'Lineup Builder',
+            route: '/app/coach/lineup-builder',
+            icon: LayoutGrid,
+            coachOnly: true,
+          },
+        ];
+      case 'racing':
+        return [
+          { label: 'Regattas', route: '/app/regattas', icon: Flag },
+          { label: 'Rankings', route: '/app/rankings', icon: BarChart2 },
+          { label: 'Seat Racing', route: '/app/coach/seat-racing', icon: Trophy, coachOnly: true },
+        ];
+      case 'analysis':
+        return [
+          { label: 'Erg Tests', route: '/app/erg-tests', icon: Timer },
+          {
+            label: 'Advanced Rankings',
+            route: '/app/coach/seat-racing/advanced-rankings',
+            icon: Swords,
+            coachOnly: true,
+          },
+          {
+            label: 'Matrix Planner',
+            route: '/app/coach/seat-racing/matrix-planner',
+            icon: Grid3X3,
+            coachOnly: true,
+          },
+        ];
+      case 'settings':
+        return [{ label: 'Settings', route: '/app/settings', icon: Settings }];
+      default:
+        return [];
+    }
+  })();
+
+  return isCoach ? all : all.filter((item) => !item.coachOnly);
 }
 
 // ============================================
@@ -143,8 +168,11 @@ export function CanvasToolbar({ zone }: CanvasToolbarProps) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [searchOpen, setSearchOpen] = useState(false);
+  const { activeTeamRole, user } = useAuth();
+  const isCoach =
+    activeTeamRole === 'OWNER' || activeTeamRole === 'ADMIN' || activeTeamRole === 'COACH';
   const actions = getZoneActions(zone.id);
-  const subNav = getZoneSubNav(zone.id);
+  const subNav = useMemo(() => getZoneSubNav(zone.id, isCoach), [zone.id, isCoach]);
   const ZoneIcon = zone.icon;
 
   return (
