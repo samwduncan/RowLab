@@ -60,6 +60,7 @@ import riggingRoutes from './routes/rigging.js';
 import lineupTemplateRoutes from './routes/lineupTemplates.js';
 import dashboardExceptionsRoutes from './routes/dashboardExceptions.js';
 import shareCardRoutes from './routes/shareCards.js';
+import notificationRoutes from './routes/notifications.js';
 import { getStorageInfo } from './utils/storageMonitor.js';
 import { startBackgroundSync } from './services/backgroundSyncService.js';
 import { verifyToken, authenticateToken } from './middleware/auth.js';
@@ -162,6 +163,7 @@ app.use('/api/v1/equipment', apiLimiter, equipmentRoutes);
 app.use('/api/v1/rigging', apiLimiter, riggingRoutes);
 app.use('/api/v1/dashboard', apiLimiter, dashboardExceptionsRoutes);
 app.use('/api/v1/share-cards', apiLimiter, shareCardRoutes);
+app.use('/api/v1/notifications', apiLimiter, notificationRoutes);
 
 // Legacy API Routes (will be migrated to v1)
 app.use('/api/auth', authLimiter, authRoutes); // Keep for backward compatibility

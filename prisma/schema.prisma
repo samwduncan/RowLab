@@ -41,6 +41,7 @@ model User {
   createdRecruitVisits   RecruitVisit[]
   draftedLineups         Lineup[]              @relation("lineupDrafts")
   shareCards             ShareCard[]
+  notifications          Notification[]
 
   @@map("users")
 }
@@ -1572,4 +1573,25 @@ model ShareCard {
   @@index([workoutId])
   @@index([expiresAt]) // For cleanup cron
   @@map("share_cards")
+}
+
+// ============================================
+// NOTIFICATIONS: User notifications
+// ============================================
+
+model Notification {
+  id        String    @id @default(uuid())
+  userId    String
+  type      String    // 'system', 'invite', 'team_activity', 'sync_status', 'announcement'
+  title     String
+  body      String?
+  metadata  Json?     // Flexible: { targetUrl?, teamId?, inviteId?, etc. }
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+  @@index([userId, createdAt])
+  @@map("notifications")
 }
