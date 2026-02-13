@@ -21,4 +21,10 @@ export const queryKeys = {
     all: ['athletes'] as const,
     search: (query: string) => [...queryKeys.athletes.all, 'search', query] as const,
   },
+  dashboard: {
+    all: ['dashboard'] as const,
+    stats: (range?: string) => [...queryKeys.dashboard.all, 'stats', range] as const,
+    workouts: (limit?: number) => [...queryKeys.dashboard.all, 'workouts', limit] as const,
+    prs: () => [...queryKeys.dashboard.all, 'prs'] as const,
+  },
 } as const;
