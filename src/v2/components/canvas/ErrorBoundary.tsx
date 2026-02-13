@@ -11,7 +11,7 @@
  */
 
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertTriangle } from '@phosphor-icons/react';
+import { Warning } from '@phosphor-icons/react';
 
 interface Props {
   children: ReactNode;
@@ -57,7 +57,7 @@ export class CanvasErrorBoundary extends Component<Props, State> {
                   clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%)',
                 }}
               >
-                <AlertTriangle className="w-6 h-6 text-data-warning" weight="fill" />
+                <Warning className="w-6 h-6 text-data-warning" weight="fill" />
               </div>
               <h2 className="text-xl font-semibold text-ink-bright tracking-tight">
                 Something went wrong
