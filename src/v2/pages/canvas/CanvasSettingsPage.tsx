@@ -24,6 +24,10 @@ import {
   CanvasConsoleReadout,
 } from '@v2/components/canvas';
 import { IntegrationsSection } from '@v2/features/settings/components/IntegrationsSection';
+import { SecuritySection } from '@v2/features/settings/components/SecuritySection';
+import { NotificationsSection } from '@v2/features/settings/components/NotificationsSection';
+import { TeamSection } from '@v2/features/settings/components/TeamSection';
+import { BillingSection } from '@v2/features/settings/components/BillingSection';
 import type { SettingsTab, UserProfile, UserPreferences } from '@v2/types/settings';
 
 const validTabs: SettingsTab[] = [
@@ -187,8 +191,8 @@ export const CanvasSettingsPage: React.FC = () => {
           </h1>
         </div>
 
-        {/* Save button - shown for profile, preferences, security */}
-        {(activeTab === 'profile' || activeTab === 'preferences' || activeTab === 'security') && (
+        {/* Save button - shown for profile and preferences only (other tabs handle their own saves) */}
+        {(activeTab === 'profile' || activeTab === 'preferences') && (
           <div className="flex gap-3">
             <CanvasButton
               variant="primary"
@@ -344,63 +348,39 @@ export const CanvasSettingsPage: React.FC = () => {
           {/* SECURITY TAB */}
           {/* ============================================ */}
           {activeTab === 'security' && profile && (
-            <>
-              <div>
-                <RuledHeader>Password</RuledHeader>
-                <div className="space-y-4 mt-4">
-                  <CanvasFormField
-                    label="Current Password"
-                    type="password"
-                    value=""
-                    onChange={() => {}}
-                  />
-                  <CanvasFormField
-                    label="New Password"
-                    type="password"
-                    value=""
-                    onChange={() => {}}
-                  />
-                  <CanvasFormField
-                    label="Confirm New Password"
-                    type="password"
-                    value=""
-                    onChange={() => {}}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <RuledHeader>Account Actions</RuledHeader>
-                <div className="space-y-3 mt-4">
-                  <CanvasButton variant="ghost" onClick={logout}>
-                    Sign Out
-                  </CanvasButton>
-                </div>
-              </div>
-            </>
-          )}
-
-          {/* ============================================ */}
-          {/* OTHER TABS - placeholder */}
-          {/* ============================================ */}
-          {activeTab === 'integrations' && <IntegrationsSection />}
-          {activeTab === 'notifications' && (
-            <CanvasConsoleReadout items={[{ label: 'STATUS', value: 'NOTIFICATION SETTINGS' }]} />
-          )}
-          {activeTab === 'features' && (
-            <CanvasConsoleReadout items={[{ label: 'STATUS', value: 'FEATURE FLAGS' }]} />
-          )}
-          {activeTab === 'team' && isOwner && (
-            <CanvasConsoleReadout items={[{ label: 'STATUS', value: 'TEAM SETTINGS' }]} />
-          )}
-          {activeTab === 'team' && !isOwner && (
-            <CanvasConsoleReadout
-              items={[{ label: 'ACCESS', value: 'TEAM SETTINGS - OWNER ONLY' }]}
+            <SecuritySection
+              email={profile.email}
+              onEmailChange={(email) => handleProfileChange('email', email)}
+              onSignOut={logout}
             />
           )}
-          {activeTab === 'billing' && (
-            <CanvasConsoleReadout items={[{ label: 'STATUS', value: 'BILLING SETTINGS' }]} />
+
+          {/* ============================================ */}
+          {/* OTHER TABS */}
+          {/* ============================================ */}
+          {activeTab === 'integrations' && <IntegrationsSection />}
+
+          {activeTab === 'notifications' && <NotificationsSection />}
+
+          {activeTab === 'features' && (
+            <CanvasConsoleReadout
+              items={[
+                {
+                  label: 'FEATURE FLAGS',
+                  value: 'Configure feature toggles via admin panel at /app/admin',
+                },
+              ]}
+            />
           )}
+
+          {activeTab === 'team' && isOwner && <TeamSection isOwner={isOwner} />}
+          {activeTab === 'team' && !isOwner && (
+            <CanvasConsoleReadout
+              items={[{ label: 'ACCESS', value: 'TEAM SETTINGS — OWNER ONLY' }]}
+            />
+          )}
+
+          {activeTab === 'billing' && <BillingSection isOwner={isOwner} />}
         </motion.div>
       </motion.div>
 
