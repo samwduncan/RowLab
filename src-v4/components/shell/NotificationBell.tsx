@@ -4,13 +4,16 @@
  */
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Bell } from 'lucide-react';
-import { useUnreadCount } from '@/features/notifications/useNotifications';
+import { useUnreadCount, useNotificationSocket } from '@/features/notifications/useNotifications';
 import { NotificationPanel } from './NotificationPanel';
 
 export function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { data: unreadCount = 0 } = useUnreadCount();
+
+  // Initialize Socket.IO listener for real-time badge updates (graceful degradation to polling)
+  useNotificationSocket();
 
   const toggle = useCallback(() => setIsOpen((prev) => !prev), []);
 
