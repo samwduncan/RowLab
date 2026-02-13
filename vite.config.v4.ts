@@ -8,14 +8,23 @@ import fs from 'fs';
 /**
  * Serve index-v4.html instead of index.html for the dev server.
  * This allows v4 to coexist with the existing frontend during development.
+ * Rewrites ALL HTML navigation requests so SPA routing works correctly.
  */
 function v4HtmlPlugin(): Plugin {
   return {
     name: 'v4-html',
     configureServer(server) {
       server.middlewares.use((req, _res, next) => {
-        // Rewrite root requests to index-v4.html
-        if (req.url === '/' || req.url === '/index.html') {
+        const url = req.url || '';
+        const isHtmlRequest = req.headers.accept?.includes('text/html');
+        const isInternalOrAsset =
+          url.startsWith('/api') ||
+          url.startsWith('/socket.io') ||
+          url.startsWith('/uploads') ||
+          url.startsWith('/@') ||
+          url.startsWith('/node_modules') ||
+          url.includes('.');
+        if (isHtmlRequest && !isInternalOrAsset) {
           req.url = '/index-v4.html';
         }
         next();

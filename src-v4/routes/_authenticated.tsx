@@ -14,11 +14,11 @@ import { BottomTabs } from '@/components/shell/BottomTabs';
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: ({ context, location }) => {
     // Wait for auth initialization before making redirect decisions
-    if (!context.auth.isInitialized) {
+    if (!context.auth?.isInitialized) {
       return;
     }
 
-    if (!context.auth.isAuthenticated) {
+    if (!context.auth?.isAuthenticated) {
       throw redirect({
         to: '/login',
         search: {

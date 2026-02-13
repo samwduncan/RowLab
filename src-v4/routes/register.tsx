@@ -18,7 +18,7 @@ const registerSearchSchema = z.object({
 export const Route = createFileRoute('/register')({
   validateSearch: zodValidator(registerSearchSchema),
   beforeLoad: ({ context }) => {
-    if (context.auth.isInitialized && context.auth.isAuthenticated) {
+    if (context.auth?.isInitialized && context.auth?.isAuthenticated) {
       throw redirect({ to: '/' });
     }
   },
