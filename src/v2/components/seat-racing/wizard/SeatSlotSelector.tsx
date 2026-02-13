@@ -45,10 +45,7 @@ export function SeatSlotSelector({
   placeholder = 'Select athlete',
 }: SeatSlotSelectorProps) {
   // Find selected athlete
-  const selectedAthlete = useMemo(
-    () => athletes.find((a) => a.id === value),
-    [athletes, value]
-  );
+  const selectedAthlete = useMemo(() => athletes.find((a) => a.id === value), [athletes, value]);
 
   // Sort athletes by side match and name
   const sortedAthletes = useMemo(() => {
@@ -149,9 +146,7 @@ export function SeatSlotSelector({
                           {athlete.firstName} {athlete.lastName}
                         </span>
                         <SideBadge side={athlete.side} size="sm" />
-                        {!matches && (
-                          <span className="text-xs text-orange-500">(wrong side)</span>
-                        )}
+                        {!matches && <span className="text-xs text-orange-500">(wrong side)</span>}
                         {isDisabled && (
                           <span className="text-xs text-txt-tertiary">(assigned)</span>
                         )}
@@ -163,9 +158,7 @@ export function SeatSlotSelector({
 
               {/* Empty state */}
               {sortedAthletes.length === 0 && (
-                <div className="py-2 pl-3 text-txt-tertiary text-sm">
-                  No athletes available
-                </div>
+                <div className="py-2 pl-3 text-txt-tertiary text-sm">No athletes available</div>
               )}
             </Listbox.Options>
           </Transition>
@@ -208,16 +201,13 @@ function SideBadge({ side, size = 'md' }: SideBadgeProps) {
   const sizeClasses = size === 'sm' ? 'text-xs px-1.5 py-0.5' : 'text-xs px-2 py-1';
 
   // Use same colors as AthletesTable for consistency
-  const colorClasses = {
-    Port: 'bg-red-500/10 text-red-600',
-    Starboard: 'bg-green-500/10 text-green-600',
-    Both: 'bg-blue-500/10 text-blue-600',
-    Cox: 'bg-purple-500/10 text-purple-600',
-  }[side] || 'bg-gray-500/10 text-gray-600';
+  const colorClasses =
+    {
+      Port: 'bg-red-500/10 text-red-600',
+      Starboard: 'bg-green-500/10 text-green-600',
+      Both: 'bg-blue-500/10 text-blue-600',
+      Cox: 'bg-purple-500/10 text-purple-600',
+    }[side] || 'bg-bg-surface-elevated/30 text-txt-secondary';
 
-  return (
-    <span className={`rounded-full font-medium ${sizeClasses} ${colorClasses}`}>
-      {side}
-    </span>
-  );
+  return <span className={`rounded-full font-medium ${sizeClasses} ${colorClasses}`}>{side}</span>;
 }

@@ -87,7 +87,7 @@ export function SeatRaceActivityCard({ activity }: SeatRaceActivityCardProps) {
                 ? 'bg-green-400/10 text-green-400 border border-green-400/20'
                 : isNegative
                   ? 'bg-red-400/10 text-red-400 border border-red-400/20'
-                  : 'bg-gray-400/10 text-gray-400 border border-gray-400/20'
+                  : 'bg-bg-surface-elevated/30 text-txt-tertiary border border-bdr-default/20'
             }`}
           >
             {isPositive ? (

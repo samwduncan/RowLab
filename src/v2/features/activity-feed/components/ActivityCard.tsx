@@ -43,8 +43,8 @@ function GenericActivityCard({ activity }: { activity: AnyActivity }) {
     >
       <div className="flex items-start gap-3">
         {/* Icon */}
-        <div className="w-10 h-10 rounded-full bg-gray-400/10 flex items-center justify-center shrink-0">
-          <Question className="w-5 h-5 text-gray-400" weight="duotone" />
+        <div className="w-10 h-10 rounded-full bg-bg-surface-elevated/30 flex items-center justify-center shrink-0">
+          <Question className="w-5 h-5 text-txt-tertiary" weight="duotone" />
         </div>
 
         {/* Content */}
@@ -64,7 +64,7 @@ function GenericActivityCard({ activity }: { activity: AnyActivity }) {
 
           {/* Type badge */}
           <div className="mt-2">
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-400/10 text-gray-400">
+            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-bg-surface-elevated/30 text-txt-tertiary">
               {ACTIVITY_TYPE_LABELS[activity.type] || 'Activity'}
             </span>
           </div>

@@ -26,22 +26,36 @@ export function OarsTable({ oarSets, canEdit, onEdit, onDelete }: OarsTableProps
             <th className="text-left py-3 px-4 text-sm font-medium text-txt-secondary">Type</th>
             <th className="text-left py-3 px-4 text-sm font-medium text-txt-secondary">Count</th>
             <th className="text-left py-3 px-4 text-sm font-medium text-txt-secondary">Status</th>
-            {canEdit && <th className="text-right py-3 px-4 text-sm font-medium text-txt-secondary">Actions</th>}
+            {canEdit && (
+              <th className="text-right py-3 px-4 text-sm font-medium text-txt-secondary">
+                Actions
+              </th>
+            )}
           </tr>
         </thead>
         <tbody>
           {oarSets.map((oarSet) => (
-            <tr key={oarSet.id} className="border-b border-bdr-primary/50 hover:bg-surface-hover transition-colors">
+            <tr
+              key={oarSet.id}
+              className="border-b border-bdr-primary/50 hover:bg-surface-hover transition-colors"
+            >
               <td className="py-3 px-4 text-txt-primary font-medium">{oarSet.name}</td>
-              <td className="py-3 px-4 text-txt-secondary capitalize">{oarSet.type.toLowerCase()}</td>
+              <td className="py-3 px-4 text-txt-secondary capitalize">
+                {oarSet.type.toLowerCase()}
+              </td>
               <td className="py-3 px-4 text-txt-secondary">{oarSet.count}</td>
               <td className="py-3 px-4">
-                <span className={`inline-flex px-2 py-0.5 text-xs rounded-full ${
-                  oarSet.status === 'AVAILABLE' ? 'bg-green-500/20 text-green-400' :
-                  oarSet.status === 'IN_USE' ? 'bg-blue-500/20 text-blue-400' :
-                  oarSet.status === 'MAINTENANCE' ? 'bg-yellow-500/20 text-yellow-400' :
-                  'bg-gray-500/20 text-gray-400'
-                }`}>
+                <span
+                  className={`inline-flex px-2 py-0.5 text-xs rounded-full ${
+                    oarSet.status === 'AVAILABLE'
+                      ? 'bg-green-500/20 text-green-400'
+                      : oarSet.status === 'IN_USE'
+                        ? 'bg-blue-500/20 text-blue-400'
+                        : oarSet.status === 'MAINTENANCE'
+                          ? 'bg-yellow-500/20 text-yellow-400'
+                          : 'bg-bg-surface-elevated/40 text-txt-tertiary'
+                  }`}
+                >
                   {oarSet.status.replace('_', ' ')}
                 </span>
               </td>

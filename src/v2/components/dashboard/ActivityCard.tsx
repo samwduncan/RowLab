@@ -22,8 +22,8 @@ const SOURCE_STYLES: Record<ActivitySource, { bg: string; text: string; label: s
     label: 'Strava',
   },
   MANUAL: {
-    bg: 'bg-gray-600/20',
-    text: 'text-gray-400',
+    bg: 'bg-bg-surface-elevated/40',
+    text: 'text-txt-tertiary',
     label: 'Manual',
   },
 };
@@ -88,24 +88,16 @@ export function ActivityCard({ activity }: ActivityCardProps) {
             <h4 className="text-txt-primary font-medium truncate">
               {activity.title || getActivityTypeName(activity.activityType)}
             </h4>
-            <p className="text-txt-secondary text-sm">
-              {formatActivityDate(activity.date)}
-            </p>
+            <p className="text-txt-secondary text-sm">{formatActivityDate(activity.date)}</p>
           </div>
         </div>
 
         {/* Core metrics (always visible) */}
         <div className="flex items-center gap-4 text-sm">
           {distance && (
-            <span className="text-txt-primary font-medium">
-              {formatDistance(distance)}
-            </span>
+            <span className="text-txt-primary font-medium">{formatDistance(distance)}</span>
           )}
-          {duration && (
-            <span className="text-txt-secondary">
-              {formatDuration(duration)}
-            </span>
-          )}
+          {duration && <span className="text-txt-secondary">{formatDuration(duration)}</span>}
 
           {/* Expand indicator */}
           <svg
@@ -117,12 +109,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </div>
       </div>
@@ -131,7 +118,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
       {activity.duplicates && activity.duplicates.length > 0 && (
         <div className="mt-2 text-xs text-txt-secondary">
           Also tracked on:{' '}
-          {activity.duplicates.map(d => SOURCE_STYLES[d.source].label).join(', ')}
+          {activity.duplicates.map((d) => SOURCE_STYLES[d.source].label).join(', ')}
         </div>
       )}
 
@@ -171,9 +158,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
                 {activity.data?.strokeRate && (
                   <div>
                     <dt className="text-txt-secondary">Stroke Rate</dt>
-                    <dd className="text-txt-primary font-medium">
-                      {activity.data.strokeRate} spm
-                    </dd>
+                    <dd className="text-txt-primary font-medium">{activity.data.strokeRate} spm</dd>
                   </div>
                 )}
 
@@ -181,9 +166,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
                 {activity.data?.watts && (
                   <div>
                     <dt className="text-txt-secondary">Power</dt>
-                    <dd className="text-txt-primary font-medium">
-                      {activity.data.watts}W
-                    </dd>
+                    <dd className="text-txt-primary font-medium">{activity.data.watts}W</dd>
                   </div>
                 )}
 
@@ -191,9 +174,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
                 {activity.data?.calories && (
                   <div>
                     <dt className="text-txt-secondary">Calories</dt>
-                    <dd className="text-txt-primary font-medium">
-                      {activity.data.calories} kcal
-                    </dd>
+                    <dd className="text-txt-primary font-medium">{activity.data.calories} kcal</dd>
                   </div>
                 )}
 
@@ -201,18 +182,14 @@ export function ActivityCard({ activity }: ActivityCardProps) {
                 {activity.data?.dragFactor && (
                   <div>
                     <dt className="text-txt-secondary">Drag</dt>
-                    <dd className="text-txt-primary font-medium">
-                      {activity.data.dragFactor}
-                    </dd>
+                    <dd className="text-txt-primary font-medium">{activity.data.dragFactor}</dd>
                   </div>
                 )}
               </div>
 
               {/* Description */}
               {activity.description && (
-                <p className="mt-4 text-txt-secondary text-sm">
-                  {activity.description}
-                </p>
+                <p className="mt-4 text-txt-secondary text-sm">{activity.description}</p>
               )}
             </div>
           </motion.div>

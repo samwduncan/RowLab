@@ -7,7 +7,7 @@ import type { WidgetProps } from '../../types';
 import type { AchievementRarity } from '../../../../types/gamification';
 
 const RARITY_COLORS: Record<AchievementRarity, string> = {
-  Common: 'bg-gray-500/10 text-gray-400',
+  Common: 'bg-bg-surface-elevated/30 text-txt-tertiary',
   Rare: 'bg-blue-500/10 text-blue-400',
   Epic: 'bg-purple-500/10 text-purple-400',
   Legendary: 'bg-amber-500/10 text-amber-400',

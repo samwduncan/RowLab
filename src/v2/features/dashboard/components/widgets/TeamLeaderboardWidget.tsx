@@ -8,7 +8,7 @@ const TOP_COUNT = 10;
 
 const RANK_MEDAL_COLORS: Record<number, string> = {
   1: 'text-amber-500',
-  2: 'text-gray-400',
+  2: 'text-txt-tertiary',
   3: 'text-amber-700',
 };
 

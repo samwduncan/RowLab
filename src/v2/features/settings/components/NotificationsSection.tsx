@@ -32,7 +32,7 @@ export function NotificationsSection() {
       <section>
         <h3 className="text-lg font-semibold text-txt-primary mb-4">Notification Channels</h3>
         <div className="grid gap-4 sm:grid-cols-3">
-          {(Object.keys(channels) as NotificationChannel[]).map(channel => {
+          {(Object.keys(channels) as NotificationChannel[]).map((channel) => {
             const Icon = CHANNEL_ICONS[channel];
             return (
               <div
@@ -50,7 +50,7 @@ export function NotificationsSection() {
                     onChange={(e) => setChannelEnabled(channel, e.target.checked)}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-interactive-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-interactive-primary"></div>
+                  <div className="w-11 h-6 bg-bg-surface-elevated/50 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-interactive-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-interactive-primary"></div>
                 </label>
               </div>
             );
@@ -125,7 +125,7 @@ export function NotificationsSection() {
       <section>
         <h3 className="text-lg font-semibold text-txt-primary mb-4">Notification Types</h3>
         <div className="space-y-3">
-          {NOTIFICATION_FEATURES.map(feature => (
+          {NOTIFICATION_FEATURES.map((feature) => (
             <div
               key={feature.id}
               className="flex items-center justify-between p-4 bg-surface-elevated rounded-xl border border-bdr"
@@ -134,7 +134,7 @@ export function NotificationsSection() {
                 <p className="font-medium text-txt-primary">{feature.name}</p>
                 <p className="text-sm text-txt-secondary">{feature.description}</p>
                 <div className="flex items-center gap-2 mt-2">
-                  {feature.channels.map(channel => {
+                  {feature.channels.map((channel) => {
                     const Icon = CHANNEL_ICONS[channel];
                     return (
                       <span
