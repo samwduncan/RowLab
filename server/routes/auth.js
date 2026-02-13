@@ -1,4 +1,6 @@
 import express from 'express';
+import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 import { body, validationResult } from 'express-validator';
 import rateLimit from 'express-rate-limit';
 import {
@@ -360,5 +362,168 @@ router.post('/dev-login', async (req, res) => {
     });
   }
 });
+
+// Rate limiter for forgot-password (3 requests per email per hour)
+const forgotPasswordLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 3,
+  keyGenerator: (req) => req.body.email || req.ip,
+  message: {
+    success: false,
+    error: { code: 'RATE_LIMITED', message: 'Too many password reset requests, try again later' },
+  },
+});
+
+/**
+ * POST /api/v1/auth/forgot-password
+ * Request a password reset token
+ * Always returns 200 regardless of email existence (security)
+ */
+router.post(
+  '/forgot-password',
+  forgotPasswordLimiter,
+  [body('email').isEmail().normalizeEmail()],
+  validateRequest,
+  async (req, res) => {
+    const genericMessage =
+      'If an account exists with that email, you will receive a password reset link';
+
+    try {
+      const { email } = req.body;
+
+      // Look up user by email (case-insensitive)
+      const user = await prisma.user.findFirst({
+        where: { email: { equals: email, mode: 'insensitive' } },
+      });
+
+      if (!user) {
+        // Security: don't reveal whether email exists
+        logger.info('Forgot-password for non-existent email', { email });
+        return res.json({ success: true, message: genericMessage });
+      }
+
+      // Generate a random reset token
+      const token = crypto.randomBytes(32).toString('hex');
+      const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
+
+      // Store the token
+      await prisma.passwordResetToken.create({
+        data: {
+          userId: user.id,
+          token,
+          expiresAt,
+        },
+      });
+
+      // In dev, log the reset URL (no email service yet)
+      const resetUrl = `${req.protocol}://${req.get('host')}/reset-password?token=${token}`;
+      logger.info('Password reset token generated', {
+        userId: user.id,
+        email: user.email,
+        resetUrl,
+        expiresAt: expiresAt.toISOString(),
+      });
+
+      // TODO(phase-53): Send actual email with reset link
+      console.log(`[DEV] Password reset URL: ${resetUrl}`);
+
+      res.json({ success: true, message: genericMessage });
+    } catch (error) {
+      logger.error('Forgot-password error', { error: error.message });
+      // Still return 200 to avoid leaking info
+      res.json({ success: true, message: genericMessage });
+    }
+  }
+);
+
+/**
+ * POST /api/v1/auth/reset-password
+ * Reset password using a valid token
+ */
+router.post(
+  '/reset-password',
+  authLimiter,
+  [
+    body('token').notEmpty().withMessage('Reset token is required'),
+    body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
+  ],
+  validateRequest,
+  async (req, res) => {
+    try {
+      const { token, password } = req.body;
+
+      // Find the token
+      const resetToken = await prisma.passwordResetToken.findUnique({
+        where: { token },
+        include: { user: true },
+      });
+
+      if (!resetToken) {
+        return res.status(400).json({
+          success: false,
+          error: { code: 'INVALID_TOKEN', message: 'Invalid or expired reset token' },
+        });
+      }
+
+      // Check if token is expired
+      if (resetToken.expiresAt < new Date()) {
+        return res.status(400).json({
+          success: false,
+          error: { code: 'TOKEN_EXPIRED', message: 'Reset token has expired' },
+        });
+      }
+
+      // Check if token has already been used
+      if (resetToken.usedAt) {
+        return res.status(400).json({
+          success: false,
+          error: { code: 'TOKEN_USED', message: 'Reset token has already been used' },
+        });
+      }
+
+      // Hash the new password
+      const passwordHash = await bcrypt.hash(password, 12);
+
+      // Update user password and mark token as used in a transaction
+      await prisma.$transaction([
+        // Update the user's password
+        prisma.user.update({
+          where: { id: resetToken.userId },
+          data: { passwordHash },
+        }),
+        // Mark this token as used
+        prisma.passwordResetToken.update({
+          where: { id: resetToken.id },
+          data: { usedAt: new Date() },
+        }),
+        // Invalidate all other unused reset tokens for this user
+        prisma.passwordResetToken.updateMany({
+          where: {
+            userId: resetToken.userId,
+            id: { not: resetToken.id },
+            usedAt: null,
+          },
+          data: { usedAt: new Date() },
+        }),
+      ]);
+
+      logger.info('Password reset successful', {
+        userId: resetToken.userId,
+        email: resetToken.user.email,
+      });
+
+      res.json({
+        success: true,
+        message: 'Password has been reset successfully. Please log in with your new password.',
+      });
+    } catch (error) {
+      logger.error('Reset-password error', { error: error.message });
+      res.status(500).json({
+        success: false,
+        error: { code: 'SERVER_ERROR', message: 'Password reset failed' },
+      });
+    }
+  }
+);
 
 export default router;
