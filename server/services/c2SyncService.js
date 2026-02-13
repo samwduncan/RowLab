@@ -418,15 +418,19 @@ export async function fetchAndStoreResult(accessToken, c2UserId, resultId, athle
 }
 
 /**
- * Determine test type from distance
+ * Determine test type from distance using tolerance ranges.
+ * Real C2 workouts may end slightly off from exact distances due to
+ * stroke timing, so we use +/- tolerance for matching.
+ *
  * @param {number} distance - Distance in meters
  * @returns {string|null} - Test type or null if not a standard test
  */
 function determineTestType(distance) {
-  if (distance === 2000) return '2k';
-  if (distance === 6000) return '6k';
-  if (distance === 500) return '500m';
-  if (distance === 1000) return '1k';
+  if (distance >= 475 && distance <= 525) return '500m';
+  if (distance >= 950 && distance <= 1050) return '1k';
+  if (distance >= 1950 && distance <= 2050) return '2k';
+  if (distance >= 4950 && distance <= 5050) return '5k';
+  if (distance >= 5900 && distance <= 6100) return '6k';
   return null;
 }
 

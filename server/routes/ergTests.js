@@ -36,7 +36,7 @@ router.get(
   teamIsolation,
   [
     query('athleteId').optional().isUUID(),
-    query('testType').optional().isIn(['2k', '6k', '30min', '500m']),
+    query('testType').optional().isIn(['500m', '1k', '2k', '5k', '6k', '30min']),
     query('fromDate').optional().isISO8601(),
     query('toDate').optional().isISO8601(),
   ],
@@ -67,18 +67,16 @@ router.get(
   authenticateToken,
   teamIsolation,
   [
-    query('testType').isIn(['2k', '6k', '30min', '500m']),
+    query('testType').isIn(['500m', '1k', '2k', '5k', '6k', '30min']),
     query('limit').optional().isInt({ min: 1, max: 100 }),
   ],
   validateRequest,
   async (req, res) => {
     try {
       const { testType, limit } = req.query;
-      const leaderboard = await getTeamLeaderboard(
-        req.user.activeTeamId,
-        testType,
-        { limit: limit ? parseInt(limit) : 20 }
-      );
+      const leaderboard = await getTeamLeaderboard(req.user.activeTeamId, testType, {
+        limit: limit ? parseInt(limit) : 20,
+      });
       res.json({
         success: true,
         data: { leaderboard },
@@ -105,10 +103,7 @@ router.get(
   validateRequest,
   async (req, res) => {
     try {
-      const history = await getAthleteTestHistory(
-        req.user.activeTeamId,
-        req.params.athleteId
-      );
+      const history = await getAthleteTestHistory(req.user.activeTeamId, req.params.athleteId);
       res.json({
         success: true,
         data: history,
@@ -167,7 +162,7 @@ router.post(
   requireRole('OWNER', 'COACH'),
   [
     body('athleteId').isUUID(),
-    body('testType').isIn(['2k', '6k', '30min', '500m']),
+    body('testType').isIn(['500m', '1k', '2k', '5k', '6k', '30min']),
     body('testDate').isISO8601(),
     body('timeSeconds').isFloat({ min: 0 }),
     body('distanceM').optional().isInt({ min: 0 }),
@@ -207,7 +202,7 @@ router.post(
   [
     body('tests').isArray({ min: 1, max: 500 }),
     body('tests.*.athleteId').isUUID(),
-    body('tests.*.testType').isIn(['2k', '6k', '30min', '500m']),
+    body('tests.*.testType').isIn(['500m', '1k', '2k', '5k', '6k', '30min']),
     body('tests.*.testDate').isISO8601(),
     body('tests.*.timeSeconds').isFloat({ min: 0 }),
   ],
@@ -240,7 +235,7 @@ router.patch(
   requireRole('OWNER', 'COACH'),
   [
     param('id').isUUID(),
-    body('testType').optional().isIn(['2k', '6k', '30min', '500m']),
+    body('testType').optional().isIn(['500m', '1k', '2k', '5k', '6k', '30min']),
     body('testDate').optional().isISO8601(),
     body('timeSeconds').optional().isFloat({ min: 0 }),
     body('distanceM').optional().isInt({ min: 0 }),
