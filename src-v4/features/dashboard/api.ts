@@ -169,16 +169,13 @@ const MOCK_PRS: PRsData = {
 // Query option factories
 // ---------------------------------------------------------------------------
 
-function isFallbackError(error: unknown): boolean {
-  if (typeof error === 'object' && error !== null && 'response' in error) {
-    const status = (error as { response?: { status?: number } }).response?.status;
-    return status === 404 || status === 501;
-  }
-  // Network errors, ECONNREFUSED, etc.
-  if (typeof error === 'object' && error !== null && 'code' in error) {
-    return true;
-  }
-  return false;
+/**
+ * Returns true for any error that should fall back to mock data.
+ * Currently catches ALL errors because Phase 45 /me/* endpoints don't exist yet.
+ * TODO(phase-45): Narrow to only 404/501 once endpoints ship.
+ */
+function isFallbackError(_error: unknown): boolean {
+  return true;
 }
 
 export function statsQueryOptions(range?: string) {
