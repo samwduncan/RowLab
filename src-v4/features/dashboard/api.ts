@@ -170,12 +170,16 @@ const MOCK_PRS: PRsData = {
 // ---------------------------------------------------------------------------
 
 /**
- * Returns true for any error that should fall back to mock data.
- * Currently catches ALL errors because Phase 45 /me/* endpoints don't exist yet.
- * TODO(phase-45): Narrow to only 404/501 once endpoints ship.
+ * Safely extract `res.data.data` from an API response.
+ * Returns undefined if the response is not the expected JSON envelope
+ * (e.g. backend SPA fallback returns 200 HTML for unknown routes).
+ * TODO(phase-45): Remove this guard when /me/* endpoints ship.
  */
-function isFallbackError(_error: unknown): boolean {
-  return true;
+function extractData<T>(res: { data: unknown }): T | undefined {
+  if (typeof res.data === 'object' && res.data !== null && 'data' in res.data) {
+    return (res.data as { data: T }).data;
+  }
+  return undefined;
 }
 
 export function statsQueryOptions(range?: string) {
@@ -186,15 +190,10 @@ export function statsQueryOptions(range?: string) {
       // TODO(phase-45): Remove mock fallback when /me/stats endpoint ships
       try {
         const params = range ? { range } : undefined;
-        const res = await api.get<{ data: StatsData }>('/api/v1/me/stats', {
-          params,
-        });
-        return res.data.data;
-      } catch (error) {
-        if (isFallbackError(error)) {
-          return MOCK_STATS;
-        }
-        throw error;
+        const res = await api.get('/api/v1/me/stats', { params });
+        return extractData<StatsData>(res) ?? MOCK_STATS;
+      } catch {
+        return MOCK_STATS;
       }
     },
   });
@@ -207,15 +206,10 @@ export function recentWorkoutsQueryOptions(limit = 5) {
     queryFn: async () => {
       // TODO(phase-45): Remove mock fallback when /me/workouts endpoint ships
       try {
-        const res = await api.get<{ data: WorkoutsData }>('/api/v1/me/workouts', {
-          params: { limit },
-        });
-        return res.data.data;
-      } catch (error) {
-        if (isFallbackError(error)) {
-          return MOCK_WORKOUTS;
-        }
-        throw error;
+        const res = await api.get('/api/v1/me/workouts', { params: { limit } });
+        return extractData<WorkoutsData>(res) ?? MOCK_WORKOUTS;
+      } catch {
+        return MOCK_WORKOUTS;
       }
     },
   });
@@ -228,13 +222,10 @@ export function prsQueryOptions() {
     queryFn: async () => {
       // TODO(phase-45): Remove mock fallback when /me/prs endpoint ships
       try {
-        const res = await api.get<{ data: PRsData }>('/api/v1/me/prs');
-        return res.data.data;
-      } catch (error) {
-        if (isFallbackError(error)) {
-          return MOCK_PRS;
-        }
-        throw error;
+        const res = await api.get('/api/v1/me/prs');
+        return extractData<PRsData>(res) ?? MOCK_PRS;
+      } catch {
+        return MOCK_PRS;
       }
     },
   });
