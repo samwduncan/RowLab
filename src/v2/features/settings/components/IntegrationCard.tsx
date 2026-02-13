@@ -1,5 +1,6 @@
 import React from 'react';
 import { CheckCircle2, Loader2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 /**
  * Props for IntegrationCard
@@ -19,6 +20,10 @@ export interface IntegrationCardProps {
   username?: string;
   /** Last synced timestamp (ISO string or null) */
   lastSynced?: string | null;
+  /** Stats line shown below username when connected (e.g., "21 workouts synced") */
+  statsLine?: string;
+  /** Action link shown when connected (e.g., "View Workouts") */
+  actionLink?: { label: string; to: string };
   /** Handler for connect action */
   onConnect: () => void;
   /** Handler for disconnect action */
@@ -77,6 +82,8 @@ export function IntegrationCard({
   connected,
   username,
   lastSynced,
+  statsLine,
+  actionLink,
   onConnect,
   onDisconnect,
   onSync,
@@ -109,6 +116,15 @@ export function IntegrationCard({
               </div>
               {lastSynced && (
                 <p className="text-xs text-txt-tertiary">{formatLastSynced(lastSynced)}</p>
+              )}
+              {statsLine && <p className="text-xs text-txt-secondary">{statsLine}</p>}
+              {actionLink && (
+                <Link
+                  to={actionLink.to}
+                  className="text-xs text-interactive-primary hover:underline inline-block"
+                >
+                  {actionLink.label}
+                </Link>
               )}
             </div>
           ) : (

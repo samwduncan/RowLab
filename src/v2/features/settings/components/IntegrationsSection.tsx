@@ -142,6 +142,10 @@ export function IntegrationsSection() {
           connected={c2Connected}
           username={c2Status?.username}
           lastSynced={c2Status?.lastSyncedAt}
+          statsLine={
+            c2Status?.workoutCount != null ? `${c2Status.workoutCount} workouts synced` : undefined
+          }
+          actionLink={c2Connected ? { label: 'View Workouts →', to: '/app/workouts' } : undefined}
           onConnect={handleConnectC2}
           onDisconnect={() => disconnectC2()}
           onSync={() => syncC2()}

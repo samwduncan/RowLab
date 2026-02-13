@@ -64,7 +64,12 @@ export interface IntegrationStatus {
 /**
  * Concept2 status extends base integration
  */
-export interface C2Status extends IntegrationStatus {}
+export interface C2Status extends IntegrationStatus {
+  /** Number of workouts synced from Concept2 */
+  workoutCount?: number;
+  /** Date of the most recently synced workout */
+  lastSyncedWorkoutDate?: string | null;
+}
 
 /**
  * Strava status extends base integration
@@ -125,7 +130,15 @@ export interface UsageStats {
 /**
  * Settings tab type
  */
-export type SettingsTab = 'profile' | 'preferences' | 'security' | 'integrations' | 'notifications' | 'features' | 'team' | 'billing';
+export type SettingsTab =
+  | 'profile'
+  | 'preferences'
+  | 'security'
+  | 'integrations'
+  | 'notifications'
+  | 'features'
+  | 'team'
+  | 'billing';
 
 /**
  * API response wrapper for settings endpoints
