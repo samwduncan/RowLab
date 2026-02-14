@@ -640,102 +640,312 @@ export async function getUserWorkouts(userId, options = {}) {
 // ============================================
 
 /**
- * Get user personal records across all teams.
- * Returns best time per distance per machine type with last 3 attempts.
- * Always includes all 8 standard C2 distances even if empty.
+ * Map standard distance labels to meters for workout matching.
+ */
+const DISTANCE_METERS = {
+  '500m': 500,
+  '1k': 1000,
+  '2k': 2000,
+  '5k': 5000,
+  '6k': 6000,
+  '10k': 10000,
+  hm: 21097,
+  fm: 42195,
+};
+
+/**
+ * Compute watts from pace (tenths of seconds per 500m) using the standard formula.
+ * k / (seconds_per_meter)^3 where k = 2.80 for rower/skierg/slides, 0.35 for bikerg.
+ *
+ * @param {number} paceTenths - Pace in tenths of seconds per 500m
+ * @param {string} machineType - 'rower' | 'skierg' | 'bikerg'
+ * @returns {number|null}
+ */
+function wattsFromPace(paceTenths, machineType) {
+  if (!paceTenths || paceTenths <= 0) return null;
+  const paceSeconds = paceTenths / 10; // seconds per 500m
+  const secPerMeter = paceSeconds / 500;
+  const k = machineType === 'bikerg' ? 0.35 : 2.8;
+  return Math.round(k / Math.pow(secPerMeter, 3));
+}
+
+/**
+ * Build a PR record from a list of attempts for a given testType.
+ *
+ * @param {string} testType
+ * @param {string} machineType
+ * @param {{ time: number, date: string, watts: number|null }[]} attempts - Sorted by date desc
+ * @returns {object}
+ */
+function buildPRRecord(testType, machineType, attempts) {
+  if (attempts.length === 0) {
+    return {
+      testType,
+      machineType,
+      bestTime: null,
+      bestDate: null,
+      avgWatts: null,
+      previousBest: null,
+      improvement: null,
+      recentAttempts: [],
+    };
+  }
+
+  const sortedByTime = [...attempts].sort((a, b) => a.time - b.time);
+  const best = sortedByTime[0];
+  const previousBest = sortedByTime.length > 1 ? sortedByTime[1].time : null;
+  const improvement = previousBest !== null ? previousBest - best.time : null;
+
+  return {
+    testType,
+    machineType,
+    bestTime: best.time,
+    bestDate: best.date,
+    avgWatts: best.watts,
+    previousBest,
+    improvement,
+    recentAttempts: attempts.slice(0, 3).map((t) => ({
+      time: t.time,
+      date: t.date,
+    })),
+  };
+}
+
+/**
+ * Get user personal records across all teams, grouped by machine type.
+ * Derives PRs from both ErgTest (rower) and Workout (all machines) models.
+ * Returns both byMachine grouped format and flat records array for backward compat.
  *
  * @param {string} userId
  * @returns {Promise<object>}
  */
 export async function getUserPRs(userId) {
   const athleteIds = await getAllUserAthleteIds(userId);
+  const baseWhere = buildUserWorkoutWhere(userId, athleteIds);
 
-  if (athleteIds.length === 0) {
-    // No athlete records -> return empty standard distances
-    return {
-      records: STANDARD_DISTANCES.map((testType) => ({
-        testType,
-        machineType: 'rower',
-        bestTime: null,
-        bestDate: null,
-        previousBest: null,
-        improvement: null,
-        recentAttempts: [],
-      })),
-    };
+  // Initialize byMachine with all standard distances empty
+  const MACHINE_TYPES = ['rower', 'skierg', 'bikerg'];
+  const byMachine = {};
+  for (const mt of MACHINE_TYPES) {
+    byMachine[mt] = {};
+    for (const dist of STANDARD_DISTANCES) {
+      byMachine[mt][dist] = []; // accumulate attempts
+    }
   }
 
-  // Query all erg tests for these athletes
-  const ergTests = await prisma.ergTest.findMany({
-    where: { athleteId: { in: athleteIds } },
-    select: {
-      testType: true,
-      testDate: true,
-      timeSeconds: true,
+  // 1. Query ErgTest records (rower only, from athlete records)
+  if (athleteIds.length > 0) {
+    const ergTests = await prisma.ergTest.findMany({
+      where: { athleteId: { in: athleteIds } },
+      select: {
+        testType: true,
+        testDate: true,
+        timeSeconds: true,
+        watts: true,
+      },
+      orderBy: { testDate: 'desc' },
+    });
+
+    for (const test of ergTests) {
+      const tt = test.testType;
+      if (!byMachine.rower[tt]) {
+        byMachine.rower[tt] = [];
+      }
+      const timeTenths = Math.round(Number(test.timeSeconds) * 10);
+      const watts = test.watts || wattsFromPace(timeTenths, 'rower');
+      byMachine.rower[tt].push({
+        time: timeTenths,
+        date: test.testDate.toISOString(),
+        watts,
+      });
+    }
+  }
+
+  // 2. Query Workout records for erg-type workouts with exact standard distances
+  const ergWorkouts = await prisma.workout.findMany({
+    where: {
+      AND: [
+        baseWhere,
+        { type: 'erg' },
+        { distanceM: { in: Object.values(DISTANCE_METERS) } },
+        { durationSeconds: { not: null } },
+      ],
     },
-    orderBy: { testDate: 'desc' },
+    select: {
+      distanceM: true,
+      durationSeconds: true,
+      avgPace: true,
+      avgWatts: true,
+      machineType: true,
+      date: true,
+    },
+    orderBy: { date: 'desc' },
   });
 
-  // Group by testType
-  const byType = {};
-  for (const test of ergTests) {
-    if (!byType[test.testType]) {
-      byType[test.testType] = [];
-    }
-    byType[test.testType].push(test);
+  // Reverse lookup: meters -> testType label
+  const metersToLabel = {};
+  for (const [label, meters] of Object.entries(DISTANCE_METERS)) {
+    metersToLabel[meters] = label;
   }
 
-  // Build records for all standard distances + any custom ones
-  const allTypes = new Set([...STANDARD_DISTANCES, ...Object.keys(byType)]);
-  const records = [];
+  for (const w of ergWorkouts) {
+    const label = metersToLabel[w.distanceM];
+    if (!label) continue;
 
-  for (const testType of allTypes) {
-    const tests = byType[testType] || [];
-
-    if (tests.length === 0) {
-      records.push({
-        testType,
-        machineType: 'rower',
-        bestTime: null,
-        bestDate: null,
-        previousBest: null,
-        improvement: null,
-        recentAttempts: [],
-      });
-      continue;
+    const mt = w.machineType || 'rower';
+    if (!byMachine[mt]) {
+      byMachine[mt] = {};
+      for (const dist of STANDARD_DISTANCES) {
+        byMachine[mt][dist] = [];
+      }
+    }
+    if (!byMachine[mt][label]) {
+      byMachine[mt][label] = [];
     }
 
-    // Convert timeSeconds (Decimal, seconds with 1 decimal) to tenths of seconds
-    const testsWithTenths = tests.map((t) => ({
-      time: Math.round(Number(t.timeSeconds) * 10),
-      date: t.testDate.toISOString(),
-    }));
+    // Convert durationSeconds to tenths
+    const timeTenths = Math.round(Number(w.durationSeconds) * 10);
+    const watts =
+      w.avgWatts ||
+      (w.avgPace ? wattsFromPace(Number(w.avgPace), mt) : wattsFromPace(timeTenths, mt));
 
-    // Sort by time ascending to find best and second best
-    const sortedByTime = [...testsWithTenths].sort((a, b) => a.time - b.time);
-    const bestTime = sortedByTime[0].time;
-    const bestDate = sortedByTime[0].date;
-    const previousBest = sortedByTime.length > 1 ? sortedByTime[1].time : null;
-    const improvement = previousBest !== null ? previousBest - bestTime : null;
-
-    // Last 3 attempts (already sorted by testDate desc from query)
-    const recentAttempts = testsWithTenths.slice(0, 3).map((t) => ({
-      time: t.time,
-      date: t.date,
-    }));
-
-    records.push({
-      testType,
-      machineType: 'rower', // All erg tests are on the rower by convention
-      bestTime,
-      bestDate,
-      previousBest,
-      improvement,
-      recentAttempts,
+    byMachine[mt][label].push({
+      time: timeTenths,
+      date: w.date.toISOString(),
+      watts,
     });
   }
 
-  return { records };
+  // 3. Build final byMachine structure with PR records
+  const result = {};
+  for (const mt of Object.keys(byMachine)) {
+    result[mt] = [];
+    for (const testType of STANDARD_DISTANCES) {
+      const attempts = byMachine[mt][testType] || [];
+      // Deduplicate by date+time (ErgTest and Workout might overlap for rower)
+      const seen = new Set();
+      const deduped = [];
+      for (const a of attempts) {
+        const key = `${a.date}-${a.time}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          deduped.push(a);
+        }
+      }
+      // Sort by date desc for recentAttempts
+      deduped.sort((a, b) => (a.date > b.date ? -1 : 1));
+      result[mt].push(buildPRRecord(testType, mt, deduped));
+    }
+
+    // Add any non-standard distances that exist for this machine
+    for (const testType of Object.keys(byMachine[mt])) {
+      if (!STANDARD_DISTANCES.includes(testType)) {
+        const attempts = byMachine[mt][testType];
+        const seen = new Set();
+        const deduped = [];
+        for (const a of attempts) {
+          const key = `${a.date}-${a.time}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            deduped.push(a);
+          }
+        }
+        deduped.sort((a, b) => (a.date > b.date ? -1 : 1));
+        result[mt].push(buildPRRecord(testType, mt, deduped));
+      }
+    }
+  }
+
+  // 4. Backward-compatible flat records array (rower PRs only, same shape as before)
+  const records = (result.rower || []).map((pr) => ({
+    testType: pr.testType,
+    machineType: 'rower',
+    bestTime: pr.bestTime,
+    bestDate: pr.bestDate,
+    previousBest: pr.previousBest,
+    improvement: pr.improvement,
+    recentAttempts: pr.recentAttempts,
+  }));
+
+  return { records, byMachine: result };
+}
+
+// ============================================
+// getUserTrends
+// ============================================
+
+/**
+ * Get weekly-bucketed workout volume trends for a user.
+ *
+ * @param {string} userId
+ * @param {string} range - '7d' | '30d' | '90d' | '1y' | 'all' (default '90d')
+ * @returns {Promise<object>}
+ */
+export async function getUserTrends(userId, range = '90d') {
+  const athleteIds = await getAllUserAthleteIds(userId);
+  const baseWhere = buildUserWorkoutWhere(userId, athleteIds);
+
+  const dateFilter = getDateFilter(range);
+
+  const workouts = await prisma.workout.findMany({
+    where: {
+      AND: [baseWhere, ...(dateFilter ? [{ date: dateFilter }] : [])],
+    },
+    select: {
+      date: true,
+      distanceM: true,
+      durationSeconds: true,
+      type: true,
+      machineType: true,
+    },
+    orderBy: { date: 'asc' },
+  });
+
+  // Bucket by ISO week
+  const bucketMap = new Map();
+
+  for (const w of workouts) {
+    const weekKey = getISOWeekKey(w.date);
+    if (!bucketMap.has(weekKey)) {
+      bucketMap.set(weekKey, {
+        week: weekKey,
+        meters: 0,
+        workouts: 0,
+        durationSeconds: 0,
+        byType: {},
+      });
+    }
+    const bucket = bucketMap.get(weekKey);
+    const meters = w.distanceM || 0;
+    bucket.meters += meters;
+    bucket.workouts += 1;
+    bucket.durationSeconds += Number(w.durationSeconds) || 0;
+
+    const wType = w.type || 'other';
+    if (!bucket.byType[wType]) {
+      bucket.byType[wType] = 0;
+    }
+    bucket.byType[wType] += meters;
+  }
+
+  const buckets = [...bucketMap.values()];
+
+  return { buckets };
+}
+
+/**
+ * Get ISO week key (YYYY-Www) for a date.
+ * @param {Date} date
+ * @returns {string}
+ */
+function getISOWeekKey(date) {
+  const d = new Date(date);
+  d.setUTCHours(0, 0, 0, 0);
+  // ISO week: Thursday determines the week's year
+  d.setUTCDate(d.getUTCDate() + 3 - ((d.getUTCDay() + 6) % 7));
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 4));
+  const weekNum = Math.ceil(((d - yearStart) / 86400000 + yearStart.getUTCDay() + 1 - 4) / 7);
+  return `${d.getUTCFullYear()}-W${String(weekNum).padStart(2, '0')}`;
 }
 
 // ============================================

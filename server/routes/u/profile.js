@@ -1,6 +1,7 @@
 import express from 'express';
 import { prisma } from '../../db/connection.js';
 import { ApiError } from '../../middleware/rfc7807.js';
+import { getUserTrends } from '../../services/userScopedService.js';
 
 const router = express.Router();
 
@@ -194,6 +195,29 @@ router.patch('/', async (req, res, next) => {
         createdAt: user.createdAt.toISOString(),
       },
     });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ============================================
+// GET /api/u/profile/trends
+// ============================================
+
+const VALID_TREND_RANGES = ['7d', '30d', '90d', '1y', 'all'];
+
+router.get('/trends', async (req, res, next) => {
+  try {
+    const range = req.query.range || '90d';
+    if (!VALID_TREND_RANGES.includes(range)) {
+      throw new ApiError(
+        400,
+        'invalid-range',
+        `Invalid range: ${range}. Must be one of: ${VALID_TREND_RANGES.join(', ')}`
+      );
+    }
+    const data = await getUserTrends(req.user.id, range);
+    res.json({ success: true, data });
   } catch (err) {
     next(err);
   }
