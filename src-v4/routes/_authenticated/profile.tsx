@@ -1,27 +1,60 @@
 /**
- * Profile page stub. Full implementation in Phase 48.
+ * /profile route -- user profile page with URL-persisted tab state.
+ *
+ * Prefetches profile data, stats, and PRs in the loader.
+ * Tab state is persisted in ?tab= search param.
  */
+import { Suspense } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
-import { useAuth } from '@/features/auth/useAuth';
+import { zodValidator } from '@tanstack/zod-adapter';
+import { z } from 'zod';
+import { queryClient } from '@/lib/queryClient';
+import {
+  profileQueryOptions,
+  profileStatsQueryOptions,
+  profilePRsQueryOptions,
+} from '@/features/profile/api';
+import { ProfilePage } from '@/features/profile/components/ProfilePage';
+import { ProfileSkeleton } from '@/features/profile/components/ProfileSkeleton';
+
+/* ------------------------------------------------------------------ */
+/* Search schema                                                       */
+/* ------------------------------------------------------------------ */
+
+const profileSearchSchema = z.object({
+  tab: z.enum(['overview', 'training-log', 'prs', 'achievements']).catch('overview'),
+});
+
+export type ProfileSearch = z.infer<typeof profileSearchSchema>;
+
+/* ------------------------------------------------------------------ */
+/* Route definition                                                    */
+/* ------------------------------------------------------------------ */
 
 export const Route = createFileRoute('/_authenticated/profile')({
-  component: ProfilePage,
+  validateSearch: zodValidator(profileSearchSchema),
   staticData: {
     breadcrumb: 'Profile',
   },
+  loader: async () => {
+    await Promise.allSettled([
+      queryClient.ensureQueryData(profileQueryOptions()),
+      queryClient.ensureQueryData(profileStatsQueryOptions()),
+      queryClient.ensureQueryData(profilePRsQueryOptions()),
+    ]);
+    return {};
+  },
+  component: ProfilePageRoute,
 });
 
-function ProfilePage() {
-  const { user } = useAuth();
+/* ------------------------------------------------------------------ */
+/* Component                                                           */
+/* ------------------------------------------------------------------ */
 
+function ProfilePageRoute() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-ink-deep p-8">
-      <div className="max-w-lg text-center">
-        <h1 className="text-2xl font-semibold text-ink-primary">{user?.name ?? 'Your Profile'}</h1>
-        <p className="mt-2 text-ink-secondary">
-          Profile and personal stats will be available in Phase 48.
-        </p>
-      </div>
-    </div>
+    <Suspense fallback={<ProfileSkeleton />}>
+      <ProfilePage />
+    </Suspense>
   );
 }
