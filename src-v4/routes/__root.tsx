@@ -40,6 +40,7 @@ function InnerRoot() {
           isAuthenticated: auth.isAuthenticated,
           isInitialized: auth.isInitialized,
           user: auth.user,
+          teams: auth.teams,
           activeTeamId: auth.activeTeamId,
           activeTeamRole: auth.activeTeamRole,
         },
@@ -50,6 +51,7 @@ function InnerRoot() {
     auth.isAuthenticated,
     auth.isInitialized,
     auth.user,
+    auth.teams,
     auth.activeTeamId,
     auth.activeTeamRole,
   ]);
