@@ -12,6 +12,10 @@ import { motion } from 'motion/react';
 import { profileQueryOptions, profileStatsQueryOptions } from '../api';
 import { ProfileHero } from './ProfileHero';
 import { ProfileTabs } from './ProfileTabs';
+import { OverviewTab } from './OverviewTab';
+import { TrainingLogTab } from './TrainingLogTab';
+import { PRsTab } from './PRsTab';
+import { AchievementsTab } from './AchievementsTab';
 import { fadeIn } from '@/lib/animations';
 import { Route } from '@/routes/_authenticated/profile';
 import type { ProfileTab } from '../types';
@@ -39,30 +43,10 @@ export function ProfilePage() {
 
       {/* Tab content */}
       <div className="px-4 py-6" role="tabpanel" aria-label={`${tab} tab content`}>
-        {tab === 'overview' && (
-          <div className="glass rounded-xl p-6 text-center">
-            <p className="text-ink-secondary text-sm">Overview tab content coming in Plan 03.</p>
-          </div>
-        )}
-        {tab === 'training-log' && (
-          <div className="glass rounded-xl p-6 text-center">
-            <p className="text-ink-secondary text-sm">
-              Training Log tab content coming in Plan 03.
-            </p>
-          </div>
-        )}
-        {tab === 'prs' && (
-          <div className="glass rounded-xl p-6 text-center">
-            <p className="text-ink-secondary text-sm">PRs tab content coming in Plan 04.</p>
-          </div>
-        )}
-        {tab === 'achievements' && (
-          <div className="glass rounded-xl p-6 text-center">
-            <p className="text-ink-secondary text-sm">
-              Achievements tab content coming in Plan 04.
-            </p>
-          </div>
-        )}
+        {tab === 'overview' && <OverviewTab profile={profile} />}
+        {tab === 'training-log' && <TrainingLogTab />}
+        {tab === 'prs' && <PRsTab />}
+        {tab === 'achievements' && <AchievementsTab />}
       </div>
     </motion.div>
   );
