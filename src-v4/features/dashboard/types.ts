@@ -21,6 +21,17 @@ export interface StatsData {
     longest: number;
     lastActivityDate: string | null;
   };
+  byTeam?: Record<string, { totalMeters: number; workoutCount: number }>;
+}
+
+export interface WorkoutSplit {
+  splitNumber: number;
+  distanceM: number | null;
+  timeSeconds: number | null;
+  pace: number | null;
+  watts: number | null;
+  strokeRate: number | null;
+  heartRate: number | null;
 }
 
 export interface Workout {
@@ -34,8 +45,11 @@ export interface Workout {
   avgPace: number | null; // tenths of seconds per 500m
   avgWatts: number | null;
   strokeRate: number | null;
+  avgHeartRate?: number | null;
   teamId: string | null;
   notes: string | null;
+  splits?: WorkoutSplit[];
+  createdAt?: string;
 }
 
 export interface WorkoutsData {
