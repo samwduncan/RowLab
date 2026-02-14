@@ -89,7 +89,7 @@ type ResolvedInvite =
 async function resolveInvite(code: string): Promise<ResolvedInvite> {
   // Try new TeamInviteCode system first via validate endpoint
   try {
-    const res = await api.get(`/api/u/teams/invite-codes/validate/${encodeURIComponent(code)}`);
+    const res = await api.get(`/api/v1/teams/invite-codes/validate/${encodeURIComponent(code)}`);
     const data = res.data.data as { teamName: string; role: string; code: string };
     return {
       system: 'new',

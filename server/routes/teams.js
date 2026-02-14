@@ -43,6 +43,71 @@ const validateRequest = (req, res, next) => {
 };
 
 /**
+ * GET /api/v1/teams/invite-codes/validate/:code
+ * Validate an invite code without joining (no auth required).
+ * Returns team name, role, and code validity for the invite preview page.
+ */
+router.get(
+  '/invite-codes/validate/:code',
+  [param('code').trim().isLength({ min: 1 })],
+  validateRequest,
+  async (req, res) => {
+    try {
+      const { prisma } = await import('../db/connection.js');
+      const inviteCode = await prisma.teamInviteCode.findUnique({
+        where: { code: req.params.code },
+        include: {
+          team: { select: { name: true } },
+        },
+      });
+
+      if (!inviteCode) {
+        return res.status(404).json({
+          success: false,
+          error: { code: 'NOT_FOUND', message: 'Invalid invite code' },
+        });
+      }
+
+      if (inviteCode.revokedAt) {
+        return res.status(410).json({
+          success: false,
+          error: { code: 'REVOKED', message: 'Invite code has been revoked' },
+        });
+      }
+
+      if (inviteCode.expiresAt && inviteCode.expiresAt < new Date()) {
+        return res.status(410).json({
+          success: false,
+          error: { code: 'EXPIRED', message: 'Invite code has expired' },
+        });
+      }
+
+      if (inviteCode.maxUses && inviteCode.usesCount >= inviteCode.maxUses) {
+        return res.status(410).json({
+          success: false,
+          error: { code: 'MAX_USES', message: 'Invite code has reached maximum uses' },
+        });
+      }
+
+      res.json({
+        success: true,
+        data: {
+          teamName: inviteCode.team.name,
+          role: inviteCode.role,
+          code: req.params.code,
+        },
+      });
+    } catch (error) {
+      logger.error('Validate invite code error', { error: error.message });
+      res.status(500).json({
+        success: false,
+        error: { code: 'SERVER_ERROR', message: 'Failed to validate invite code' },
+      });
+    }
+  }
+);
+
+/**
  * POST /api/v1/teams
  * Create a new team
  */

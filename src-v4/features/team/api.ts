@@ -40,17 +40,17 @@ export const teamKeys = {
 
 export async function fetchTeamByIdentifier(identifier: string): Promise<TeamDetail> {
   const res = await api.get(`/api/u/teams/by-identifier/${encodeURIComponent(identifier)}`);
-  return res.data.data as TeamDetail;
+  return res.data.data.team as TeamDetail;
 }
 
 export async function fetchTeamOverview(teamId: string): Promise<TeamOverview> {
   const res = await api.get(`/api/u/teams/${teamId}/overview`);
-  return res.data.data as TeamOverview;
+  return res.data.data.overview as TeamOverview;
 }
 
 export async function fetchTeamRoster(teamId: string): Promise<RosterMember[]> {
   const res = await api.get(`/api/u/teams/${teamId}/roster`);
-  return res.data.data as RosterMember[];
+  return res.data.data.roster as RosterMember[];
 }
 
 export async function fetchTeamActivity(
@@ -65,19 +65,19 @@ export async function fetchTeamActivity(
 
 export async function fetchTeamAnnouncements(teamId: string): Promise<Announcement[]> {
   const res = await api.get(`/api/u/teams/${teamId}/announcements`);
-  return res.data.data as Announcement[];
+  return res.data.data.announcements as Announcement[];
 }
 
 export async function fetchInviteCodes(teamId: string): Promise<InviteCode[]> {
   const res = await api.get(`/api/u/teams/${teamId}/invite-codes`);
-  return res.data.data as InviteCode[];
+  return res.data.data.inviteCodes as InviteCode[];
 }
 
 export async function checkSlugAvailability(
   teamId: string,
   slug: string
 ): Promise<{ available: boolean }> {
-  const res = await api.get(`/api/u/teams/${teamId}/slug-check`, { params: { slug } });
+  const res = await api.get(`/api/u/teams/${teamId}/slug-check/${encodeURIComponent(slug)}`);
   return res.data.data as { available: boolean };
 }
 
@@ -87,18 +87,18 @@ export async function checkSlugAvailability(
 
 export async function createTeam(input: CreateTeamInput): Promise<TeamDetail> {
   const res = await api.post('/api/u/teams', input);
-  return res.data.data as TeamDetail;
+  return res.data.data.team as TeamDetail;
 }
 
 export async function joinTeamByCode(
   code: string
 ): Promise<{ team: TeamDetail; role: string; welcomeMessage?: string }> {
-  const res = await api.post(`/api/u/teams/join`, { code });
+  const res = await api.post(`/api/u/teams/join/${encodeURIComponent(code)}`);
   return res.data.data as { team: TeamDetail; role: string; welcomeMessage?: string };
 }
 
 export async function leaveTeam(teamId: string): Promise<void> {
-  await api.post(`/api/u/teams/${teamId}/leave`);
+  await api.delete(`/api/u/teams/${teamId}/leave`);
 }
 
 export async function deleteTeam(teamId: string): Promise<void> {
@@ -110,7 +110,7 @@ export async function createAnnouncement(
   input: { title: string; content: string; isPinned?: boolean }
 ): Promise<Announcement> {
   const res = await api.post(`/api/u/teams/${teamId}/announcements`, input);
-  return res.data.data as Announcement;
+  return res.data.data.announcement as Announcement;
 }
 
 export async function generateInviteCode(
@@ -118,7 +118,7 @@ export async function generateInviteCode(
   input: GenerateInviteCodeInput
 ): Promise<InviteCode> {
   const res = await api.post(`/api/u/teams/${teamId}/invite-codes`, input);
-  return res.data.data as InviteCode;
+  return res.data.data.inviteCode as InviteCode;
 }
 
 export async function revokeInviteCode(teamId: string, codeId: string): Promise<void> {
@@ -129,8 +129,8 @@ export async function updateTeamSettings(
   teamId: string,
   input: UpdateTeamInput
 ): Promise<TeamDetail> {
-  const res = await api.patch(`/api/u/teams/${teamId}/settings`, input);
-  return res.data.data as TeamDetail;
+  const res = await api.patch(`/api/u/teams/${teamId}`, input);
+  return res.data.data.team as TeamDetail;
 }
 
 export async function updateMemberRole(
@@ -138,7 +138,7 @@ export async function updateMemberRole(
   userId: string,
   role: string
 ): Promise<void> {
-  await api.patch(`/api/u/teams/${teamId}/members/${userId}/role`, { role });
+  await api.patch(`/api/u/teams/${teamId}/members/${userId}`, { role });
 }
 
 export async function removeMember(teamId: string, userId: string): Promise<void> {
