@@ -68,6 +68,16 @@
   --radius-2xl: 1.25rem;
 }
 
+/* === SLIDE-UP KEYFRAME (bottom sheets) === */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 /* === SHIMMER KEYFRAMES === */
 @keyframes shimmer {
   0% {
