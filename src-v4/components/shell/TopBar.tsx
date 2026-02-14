@@ -1,5 +1,5 @@
 /**
- * Top bar: breadcrumbs on left, action buttons on right.
+ * Top bar: team switcher + breadcrumbs on left, action buttons on right.
  * Height: h-14 (--spacing-topbar).
  * On mobile: hides breadcrumbs (bottom tabs handle navigation), shows only actions.
  *
@@ -8,6 +8,7 @@
 import { Search } from 'lucide-react';
 import { useIsMobile } from '@/hooks/useBreakpoint';
 import { Breadcrumbs } from './Breadcrumbs';
+import { TeamSwitcher } from './TeamSwitcher';
 import { UserMenu } from './UserMenu';
 import { NotificationBell } from './NotificationBell';
 import { CommandPalette } from '@/components/search/CommandPalette';
@@ -35,9 +36,17 @@ export function TopBar() {
 
   return (
     <>
-      <header className="flex h-14 shrink-0 items-center justify-between border-b border-ink-border/50 px-4">
-        {/* Left: breadcrumbs (hidden on mobile) */}
-        <div className="flex-1 min-w-0">{!isMobile && <Breadcrumbs />}</div>
+      <header className="flex h-14 shrink-0 items-center border-b border-ink-border/50 px-4">
+        {/* Left: team switcher + breadcrumbs */}
+        <div className="flex flex-1 items-center gap-3 min-w-0">
+          <TeamSwitcher />
+          {!isMobile && (
+            <>
+              <div className="h-4 w-px bg-ink-border/50" />
+              <Breadcrumbs />
+            </>
+          )}
+        </div>
 
         {/* Right: action buttons */}
         <div className="flex items-center gap-1">

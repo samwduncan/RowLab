@@ -12,7 +12,6 @@ import { useIsDesktop, useIsTablet } from '@/hooks/useBreakpoint';
 import { useAuth } from '@/features/auth/useAuth';
 import { getNavConfig, sidebarFooterItems } from '@/config/navigation';
 import { useFavorites } from '@/hooks/useFavorites';
-import { TeamSwitcher } from './TeamSwitcher';
 import type { NavItem } from '@/types/navigation';
 
 export function Sidebar() {
@@ -52,9 +51,6 @@ export function Sidebar() {
           <span className="text-base font-bold text-accent-copper">R</span>
         </div>
 
-        {/* Team switcher (collapsed) */}
-        <TeamSwitcher collapsed />
-
         {/* Nav items (icon only) */}
         <nav className="flex-1 space-y-1 overflow-y-auto px-2 py-2">
           {navConfig.sections.flatMap((section) =>
@@ -84,9 +80,6 @@ export function Sidebar() {
             Row<span className="text-accent-copper">Lab</span>
           </span>
         </div>
-
-        {/* Team switcher */}
-        <TeamSwitcher />
 
         {/* Scrollable nav area */}
         <nav className="flex-1 overflow-y-auto px-3 py-2">
