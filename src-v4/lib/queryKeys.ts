@@ -34,4 +34,12 @@ export const queryKeys = {
     detail: (id: string) => [...queryKeys.workouts.all, 'detail', id] as const,
     calendar: (month: string) => [...queryKeys.workouts.all, 'calendar', month] as const,
   },
+  profile: {
+    all: ['profile'] as const,
+    data: () => [...queryKeys.profile.all, 'data'] as const,
+    stats: (range?: string) => [...queryKeys.profile.all, 'stats', range] as const,
+    trends: (range: string) => [...queryKeys.profile.all, 'trends', range] as const,
+    achievements: () => [...queryKeys.profile.all, 'achievements'] as const,
+    prs: () => [...queryKeys.profile.all, 'prs'] as const,
+  },
 } as const;
