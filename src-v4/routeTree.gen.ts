@@ -34,6 +34,7 @@ import { Route as AuthenticatedTeamIdentifierSettingsRouteImport } from './route
 import { Route as AuthenticatedTeamIdentifierDashboardRouteImport } from './routes/_authenticated/team/$identifier/dashboard'
 import { Route as AuthenticatedCoachTrainingSessionsRouteImport } from './routes/_authenticated/_coach/training_.sessions'
 import { Route as AuthenticatedCoachTrainingSessionsSessionIdRouteImport } from './routes/_authenticated/_coach/training_.sessions.$sessionId'
+import { Route as AuthenticatedCoachTrainingSessionsSessionIdLiveRouteImport } from './routes/_authenticated/_coach/training_.sessions.$sessionId.live'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -169,6 +170,12 @@ const AuthenticatedCoachTrainingSessionsSessionIdRoute =
     path: '/$sessionId',
     getParentRoute: () => AuthenticatedCoachTrainingSessionsRoute,
   } as any)
+const AuthenticatedCoachTrainingSessionsSessionIdLiveRoute =
+  AuthenticatedCoachTrainingSessionsSessionIdLiveRouteImport.update({
+    id: '/live',
+    path: '/live',
+    getParentRoute: () => AuthenticatedCoachTrainingSessionsSessionIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
@@ -192,7 +199,8 @@ export interface FileRoutesByFullPath {
   '/training/sessions': typeof AuthenticatedCoachTrainingSessionsRouteWithChildren
   '/team/$identifier/dashboard': typeof AuthenticatedTeamIdentifierDashboardRoute
   '/team/$identifier/settings': typeof AuthenticatedTeamIdentifierSettingsRoute
-  '/training/sessions/$sessionId': typeof AuthenticatedCoachTrainingSessionsSessionIdRoute
+  '/training/sessions/$sessionId': typeof AuthenticatedCoachTrainingSessionsSessionIdRouteWithChildren
+  '/training/sessions/$sessionId/live': typeof AuthenticatedCoachTrainingSessionsSessionIdLiveRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -215,7 +223,8 @@ export interface FileRoutesByTo {
   '/training/sessions': typeof AuthenticatedCoachTrainingSessionsRouteWithChildren
   '/team/$identifier/dashboard': typeof AuthenticatedTeamIdentifierDashboardRoute
   '/team/$identifier/settings': typeof AuthenticatedTeamIdentifierSettingsRoute
-  '/training/sessions/$sessionId': typeof AuthenticatedCoachTrainingSessionsSessionIdRoute
+  '/training/sessions/$sessionId': typeof AuthenticatedCoachTrainingSessionsSessionIdRouteWithChildren
+  '/training/sessions/$sessionId/live': typeof AuthenticatedCoachTrainingSessionsSessionIdLiveRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -243,7 +252,8 @@ export interface FileRoutesById {
   '/_authenticated/_coach/training_/sessions': typeof AuthenticatedCoachTrainingSessionsRouteWithChildren
   '/_authenticated/team/$identifier/dashboard': typeof AuthenticatedTeamIdentifierDashboardRoute
   '/_authenticated/team/$identifier/settings': typeof AuthenticatedTeamIdentifierSettingsRoute
-  '/_authenticated/_coach/training_/sessions/$sessionId': typeof AuthenticatedCoachTrainingSessionsSessionIdRoute
+  '/_authenticated/_coach/training_/sessions/$sessionId': typeof AuthenticatedCoachTrainingSessionsSessionIdRouteWithChildren
+  '/_authenticated/_coach/training_/sessions/$sessionId/live': typeof AuthenticatedCoachTrainingSessionsSessionIdLiveRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -270,6 +280,7 @@ export interface FileRouteTypes {
     | '/team/$identifier/dashboard'
     | '/team/$identifier/settings'
     | '/training/sessions/$sessionId'
+    | '/training/sessions/$sessionId/live'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -293,6 +304,7 @@ export interface FileRouteTypes {
     | '/team/$identifier/dashboard'
     | '/team/$identifier/settings'
     | '/training/sessions/$sessionId'
+    | '/training/sessions/$sessionId/live'
   id:
     | '__root__'
     | '/_authenticated'
@@ -320,6 +332,7 @@ export interface FileRouteTypes {
     | '/_authenticated/team/$identifier/dashboard'
     | '/_authenticated/team/$identifier/settings'
     | '/_authenticated/_coach/training_/sessions/$sessionId'
+    | '/_authenticated/_coach/training_/sessions/$sessionId/live'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -506,17 +519,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCoachTrainingSessionsSessionIdRouteImport
       parentRoute: typeof AuthenticatedCoachTrainingSessionsRoute
     }
+    '/_authenticated/_coach/training_/sessions/$sessionId/live': {
+      id: '/_authenticated/_coach/training_/sessions/$sessionId/live'
+      path: '/live'
+      fullPath: '/training/sessions/$sessionId/live'
+      preLoaderRoute: typeof AuthenticatedCoachTrainingSessionsSessionIdLiveRouteImport
+      parentRoute: typeof AuthenticatedCoachTrainingSessionsSessionIdRoute
+    }
   }
 }
 
+interface AuthenticatedCoachTrainingSessionsSessionIdRouteChildren {
+  AuthenticatedCoachTrainingSessionsSessionIdLiveRoute: typeof AuthenticatedCoachTrainingSessionsSessionIdLiveRoute
+}
+
+const AuthenticatedCoachTrainingSessionsSessionIdRouteChildren: AuthenticatedCoachTrainingSessionsSessionIdRouteChildren =
+  {
+    AuthenticatedCoachTrainingSessionsSessionIdLiveRoute:
+      AuthenticatedCoachTrainingSessionsSessionIdLiveRoute,
+  }
+
+const AuthenticatedCoachTrainingSessionsSessionIdRouteWithChildren =
+  AuthenticatedCoachTrainingSessionsSessionIdRoute._addFileChildren(
+    AuthenticatedCoachTrainingSessionsSessionIdRouteChildren,
+  )
+
 interface AuthenticatedCoachTrainingSessionsRouteChildren {
-  AuthenticatedCoachTrainingSessionsSessionIdRoute: typeof AuthenticatedCoachTrainingSessionsSessionIdRoute
+  AuthenticatedCoachTrainingSessionsSessionIdRoute: typeof AuthenticatedCoachTrainingSessionsSessionIdRouteWithChildren
 }
 
 const AuthenticatedCoachTrainingSessionsRouteChildren: AuthenticatedCoachTrainingSessionsRouteChildren =
   {
     AuthenticatedCoachTrainingSessionsSessionIdRoute:
-      AuthenticatedCoachTrainingSessionsSessionIdRoute,
+      AuthenticatedCoachTrainingSessionsSessionIdRouteWithChildren,
   }
 
 const AuthenticatedCoachTrainingSessionsRouteWithChildren =
