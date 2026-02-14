@@ -1,5 +1,11 @@
 import express from 'express';
-import { getUserWorkouts } from '../../services/userScopedService.js';
+import {
+  getUserWorkouts,
+  getUserWorkoutById,
+  createUserWorkout,
+  updateUserWorkout,
+  deleteUserWorkout,
+} from '../../services/userScopedService.js';
 import { ApiError } from '../../middleware/rfc7807.js';
 
 const router = express.Router();
@@ -67,6 +73,46 @@ router.get('/', async (req, res, next) => {
       q,
     });
 
+    res.json({ success: true, data });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET /api/u/workouts/:id — Single workout with splits, telemetry, and prev/next IDs
+router.get('/:id', async (req, res, next) => {
+  try {
+    const data = await getUserWorkoutById(req.user.id, req.params.id);
+    res.json({ success: true, data });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST /api/u/workouts — Create a manual workout
+router.post('/', async (req, res, next) => {
+  try {
+    const data = await createUserWorkout(req.user.id, req.body);
+    res.status(201).json({ success: true, data });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// PATCH /api/u/workouts/:id — Update a user-owned workout
+router.patch('/:id', async (req, res, next) => {
+  try {
+    const data = await updateUserWorkout(req.user.id, req.params.id, req.body);
+    res.json({ success: true, data });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// DELETE /api/u/workouts/:id — Delete a manual-source workout
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const data = await deleteUserWorkout(req.user.id, req.params.id);
     res.json({ success: true, data });
   } catch (err) {
     next(err);

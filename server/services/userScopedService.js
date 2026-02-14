@@ -133,6 +133,261 @@ function calculateStreak(dates) {
 }
 
 // ============================================
+// getUserWorkoutById
+// ============================================
+
+/**
+ * Get a single workout by ID, owned by the given user.
+ * Includes splits (ordered by splitNumber asc), telemetry, and adjacent workout IDs.
+ *
+ * @param {string} userId
+ * @param {string} workoutId
+ * @returns {Promise<object>}
+ */
+export async function getUserWorkoutById(userId, workoutId) {
+  const athleteIds = await getAllUserAthleteIds(userId);
+  const baseWhere = buildUserWorkoutWhere(userId, athleteIds);
+
+  const workout = await prisma.workout.findFirst({
+    where: { AND: [baseWhere, { id: workoutId }] },
+    include: {
+      splits: { orderBy: { splitNumber: 'asc' } },
+      telemetry: true,
+    },
+  });
+
+  if (!workout) {
+    throw new ApiError(404, 'not-found', 'Workout not found');
+  }
+
+  // Get adjacent workout IDs for prev/next navigation
+  const [prev, next] = await Promise.all([
+    prisma.workout.findFirst({
+      where: { AND: [baseWhere, { date: { lt: workout.date } }] },
+      orderBy: { date: 'desc' },
+      select: { id: true },
+    }),
+    prisma.workout.findFirst({
+      where: { AND: [baseWhere, { date: { gt: workout.date } }] },
+      orderBy: { date: 'asc' },
+      select: { id: true },
+    }),
+  ]);
+
+  // Format telemetry
+  const telemetry = workout.telemetry
+    ? {
+        timeSeriesS: workout.telemetry.timeSeriesS.map(Number),
+        wattsSeries: workout.telemetry.wattsSeries,
+        heartRateSeries: workout.telemetry.heartRateSeries,
+        strokeRateSeries: workout.telemetry.strokeRateSeries,
+        forceCurves: workout.telemetry.forceCurves,
+      }
+    : null;
+
+  return {
+    id: workout.id,
+    date: workout.date.toISOString(),
+    source: mapSourceForApi(workout.source),
+    type: workout.type || null,
+    machineType: workout.machineType || null,
+    distanceM: workout.distanceM,
+    durationSeconds: workout.durationSeconds ? Number(workout.durationSeconds) : null,
+    avgPace: workout.avgPace ? Number(workout.avgPace) : null,
+    avgWatts: workout.avgWatts,
+    strokeRate: workout.strokeRate,
+    avgHeartRate: workout.avgHeartRate,
+    teamId: workout.teamId,
+    notes: workout.notes || null,
+    c2LogbookId: workout.c2LogbookId || null,
+    splits: (workout.splits || []).map((s) => ({
+      splitNumber: s.splitNumber,
+      distanceM: s.distanceM,
+      timeSeconds: s.timeSeconds ? Number(s.timeSeconds) : null,
+      pace: s.pace ? Number(s.pace) : null,
+      watts: s.watts,
+      strokeRate: s.strokeRate,
+      heartRate: s.heartRate,
+    })),
+    telemetry,
+    createdAt: workout.createdAt.toISOString(),
+    prevWorkoutId: prev?.id || null,
+    nextWorkoutId: next?.id || null,
+  };
+}
+
+// ============================================
+// createUserWorkout
+// ============================================
+
+/**
+ * Create a manual workout owned by the authenticated user.
+ *
+ * @param {string} userId
+ * @param {object} data
+ * @param {string} data.type - Workout type (required)
+ * @param {string} [data.machineType] - Machine type
+ * @param {string} data.date - ISO date string (required)
+ * @param {number} [data.distanceM] - Distance in meters
+ * @param {number} [data.durationSeconds] - Duration in seconds
+ * @param {number} [data.avgPace] - Average pace in tenths of seconds per 500m
+ * @param {number} [data.avgWatts] - Average watts
+ * @param {string} [data.notes] - User notes
+ * @returns {Promise<object>}
+ */
+export async function createUserWorkout(userId, data) {
+  const { type, machineType, date, distanceM, durationSeconds, avgPace, avgWatts, notes } = data;
+
+  if (!type || !date) {
+    throw new ApiError(400, 'missing-fields', 'Type and date are required');
+  }
+
+  const workout = await prisma.workout.create({
+    data: {
+      userId,
+      source: 'manual',
+      type,
+      machineType: machineType || null,
+      date: new Date(date),
+      distanceM: distanceM || null,
+      durationSeconds: durationSeconds || null,
+      avgPace: avgPace || null,
+      avgWatts: avgWatts || null,
+      notes: notes || null,
+    },
+  });
+
+  return {
+    id: workout.id,
+    date: workout.date.toISOString(),
+    source: mapSourceForApi(workout.source),
+    type: workout.type || null,
+    machineType: workout.machineType || null,
+    distanceM: workout.distanceM,
+    durationSeconds: workout.durationSeconds ? Number(workout.durationSeconds) : null,
+    avgPace: workout.avgPace ? Number(workout.avgPace) : null,
+    avgWatts: workout.avgWatts,
+    strokeRate: workout.strokeRate,
+    avgHeartRate: workout.avgHeartRate,
+    teamId: workout.teamId,
+    notes: workout.notes || null,
+    splits: [],
+    createdAt: workout.createdAt.toISOString(),
+  };
+}
+
+// ============================================
+// updateUserWorkout
+// ============================================
+
+/**
+ * Update a workout owned by the authenticated user.
+ * Only provided fields are updated.
+ *
+ * @param {string} userId
+ * @param {string} workoutId
+ * @param {object} data - Fields to update
+ * @returns {Promise<object>}
+ */
+export async function updateUserWorkout(userId, workoutId, data) {
+  const athleteIds = await getAllUserAthleteIds(userId);
+  const baseWhere = buildUserWorkoutWhere(userId, athleteIds);
+
+  const existing = await prisma.workout.findFirst({
+    where: { AND: [baseWhere, { id: workoutId }] },
+  });
+
+  if (!existing) {
+    throw new ApiError(404, 'not-found', 'Workout not found');
+  }
+
+  // Build update object from provided fields only
+  const updateData = {};
+  const allowedFields = [
+    'distanceM',
+    'durationSeconds',
+    'avgPace',
+    'avgWatts',
+    'notes',
+    'type',
+    'machineType',
+    'date',
+  ];
+  for (const field of allowedFields) {
+    if (data[field] !== undefined) {
+      updateData[field] = field === 'date' ? new Date(data[field]) : data[field];
+    }
+  }
+
+  const workout = await prisma.workout.update({
+    where: { id: workoutId },
+    data: updateData,
+    include: {
+      splits: { orderBy: { splitNumber: 'asc' } },
+    },
+  });
+
+  return {
+    id: workout.id,
+    date: workout.date.toISOString(),
+    source: mapSourceForApi(workout.source),
+    type: workout.type || null,
+    machineType: workout.machineType || null,
+    distanceM: workout.distanceM,
+    durationSeconds: workout.durationSeconds ? Number(workout.durationSeconds) : null,
+    avgPace: workout.avgPace ? Number(workout.avgPace) : null,
+    avgWatts: workout.avgWatts,
+    strokeRate: workout.strokeRate,
+    avgHeartRate: workout.avgHeartRate,
+    teamId: workout.teamId,
+    notes: workout.notes || null,
+    splits: (workout.splits || []).map((s) => ({
+      splitNumber: s.splitNumber,
+      distanceM: s.distanceM,
+      timeSeconds: s.timeSeconds ? Number(s.timeSeconds) : null,
+      pace: s.pace ? Number(s.pace) : null,
+      watts: s.watts,
+      strokeRate: s.strokeRate,
+      heartRate: s.heartRate,
+    })),
+    createdAt: workout.createdAt.toISOString(),
+  };
+}
+
+// ============================================
+// deleteUserWorkout
+// ============================================
+
+/**
+ * Delete a manually-created workout owned by the authenticated user.
+ * Rejects deletion of non-manual source workouts (e.g., C2-synced).
+ *
+ * @param {string} userId
+ * @param {string} workoutId
+ * @returns {Promise<{ deleted: boolean }>}
+ */
+export async function deleteUserWorkout(userId, workoutId) {
+  const athleteIds = await getAllUserAthleteIds(userId);
+  const baseWhere = buildUserWorkoutWhere(userId, athleteIds);
+
+  const workout = await prisma.workout.findFirst({
+    where: { AND: [baseWhere, { id: workoutId }] },
+  });
+
+  if (!workout) {
+    throw new ApiError(404, 'not-found', 'Workout not found');
+  }
+
+  if (mapSourceForApi(workout.source) !== 'manual') {
+    throw new ApiError(403, 'delete-forbidden', 'Only manually created workouts can be deleted');
+  }
+
+  await prisma.workout.delete({ where: { id: workoutId } });
+
+  return { deleted: true };
+}
+
+// ============================================
 // getUserStats
 // ============================================
 
