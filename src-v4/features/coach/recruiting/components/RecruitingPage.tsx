@@ -1,0 +1,344 @@
+/**
+ * RecruitingPage: main recruiting view with status filter tabs and CRUD.
+ *
+ * Displays recruit visits as a filterable list with tabs for status.
+ * Create/edit uses inline modal (dialog). Read-only hides mutations.
+ * Uses usePermissions() for role-based access.
+ */
+
+import { useState, useCallback } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { motion, AnimatePresence } from 'motion/react';
+import { UserPlus, GraduationCap, X } from 'lucide-react';
+import { fadeIn, scaleIn, listContainerVariants } from '@/lib/animations';
+import { Button } from '@/components/ui/Button';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { ReadOnlyBadge } from '@/components/ui/ReadOnlyBadge';
+import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
+import { usePermissions } from '@/features/permissions';
+
+import { recruitVisitsOptions, recruitKeys, createVisit, updateVisit, deleteVisit } from '../api';
+import type { RecruitVisit, VisitStatus, CreateVisitInput, UpdateVisitInput } from '../types';
+import { VisitCard } from './VisitCard';
+import { VisitForm } from './VisitForm';
+
+// ---------------------------------------------------------------------------
+// Filter tabs
+// ---------------------------------------------------------------------------
+
+type TabValue = 'all' | VisitStatus;
+
+const TABS: { value: TabValue; label: string }[] = [
+  { value: 'all', label: 'All' },
+  { value: 'scheduled', label: 'Scheduled' },
+  { value: 'completed', label: 'Completed' },
+  { value: 'cancelled', label: 'Cancelled' },
+];
+
+// ---------------------------------------------------------------------------
+// Modal modes
+// ---------------------------------------------------------------------------
+
+type ModalMode = { type: 'create' } | { type: 'edit'; visit: RecruitVisit } | null;
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
+
+export function RecruitingPage() {
+  const [activeTab, setActiveTab] = useState<TabValue>('all');
+  const [modal, setModal] = useState<ModalMode>(null);
+  const [selectedVisit, setSelectedVisit] = useState<RecruitVisit | null>(null);
+
+  const { isReadOnly: isReadOnlyFn } = usePermissions();
+  const readOnly = isReadOnlyFn('recruiting');
+
+  const queryClient = useQueryClient();
+
+  // Fetch all visits (filter client-side for simplicity)
+  const { data, isLoading, error } = useQuery(recruitVisitsOptions());
+
+  const visits = data?.visits ?? [];
+  const filteredVisits =
+    activeTab === 'all' ? visits : visits.filter((v) => v.status === activeTab);
+
+  // Mutations
+  const createMut = useMutation({
+    mutationFn: createVisit,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: recruitKeys.all });
+      setModal(null);
+    },
+  });
+
+  const updateMut = useMutation({
+    mutationFn: (data: { id: string; input: UpdateVisitInput }) => updateVisit(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: recruitKeys.all });
+      setModal(null);
+      setSelectedVisit(null);
+    },
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: deleteVisit,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: recruitKeys.all });
+      setSelectedVisit(null);
+    },
+  });
+
+  const handleCreate = useCallback(
+    async (data: CreateVisitInput) => {
+      await createMut.mutateAsync(data);
+    },
+    [createMut]
+  );
+
+  const handleUpdate = useCallback(
+    async (data: CreateVisitInput & { status?: VisitStatus }) => {
+      if (!modal || modal.type !== 'edit') return;
+      await updateMut.mutateAsync({ id: modal.visit.id, input: data });
+    },
+    [modal, updateMut]
+  );
+
+  const handleDelete = useCallback(
+    async (visit: RecruitVisit) => {
+      if (!confirm(`Delete visit for ${visit.recruitName}?`)) return;
+      await deleteMut.mutateAsync(visit.id);
+    },
+    [deleteMut]
+  );
+
+  // ---------------------------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------------------------
+
+  return (
+    <motion.div {...fadeIn} className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-semibold text-ink-primary">Recruiting</h1>
+          <p className="text-sm text-ink-secondary mt-0.5">
+            Track recruit visits and schedule campus tours
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          {readOnly && <ReadOnlyBadge />}
+          {!readOnly && (
+            <Button size="sm" onClick={() => setModal({ type: 'create' })}>
+              <UserPlus className="h-4 w-4" aria-hidden="true" />
+              New Visit
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* Filter tabs */}
+      <div className="flex items-center gap-1 p-1 bg-ink-well rounded-xl w-fit">
+        {TABS.map((tab) => (
+          <button
+            key={tab.value}
+            type="button"
+            onClick={() => setActiveTab(tab.value)}
+            className={`
+              px-3 py-1.5 text-sm font-medium rounded-lg transition-colors duration-150
+              ${
+                activeTab === tab.value
+                  ? 'bg-ink-raised text-ink-primary shadow-sm'
+                  : 'text-ink-secondary hover:text-ink-primary'
+              }
+            `.trim()}
+          >
+            {tab.label}
+            {!isLoading && tab.value !== 'all' && (
+              <span className="ml-1.5 text-xs text-ink-muted">
+                {visits.filter((v) => v.status === tab.value).length}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Content */}
+      {isLoading ? (
+        <SkeletonGroup className="gap-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} height="5rem" rounded="lg" />
+          ))}
+        </SkeletonGroup>
+      ) : error ? (
+        <GlassCard padding="lg">
+          <p className="text-data-poor text-sm">Failed to load visits. Please try again.</p>
+        </GlassCard>
+      ) : filteredVisits.length === 0 ? (
+        <div className="py-16">
+          <EmptyState
+            icon={GraduationCap}
+            title={activeTab === 'all' ? 'No recruit visits yet' : `No ${activeTab} visits`}
+            description={
+              activeTab === 'all'
+                ? 'Create your first recruit visit to start tracking campus tours.'
+                : `No visits with ${activeTab} status.`
+            }
+            action={
+              !readOnly && activeTab === 'all'
+                ? { label: 'New Visit', onClick: () => setModal({ type: 'create' }) }
+                : undefined
+            }
+          />
+        </div>
+      ) : (
+        <motion.div
+          variants={listContainerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid gap-3"
+        >
+          {filteredVisits.map((visit) => (
+            <VisitCard key={visit.id} visit={visit} onClick={() => setSelectedVisit(visit)} />
+          ))}
+        </motion.div>
+      )}
+
+      {/* Detail panel (selected visit) */}
+      <AnimatePresence>
+        {selectedVisit && !modal && (
+          <motion.div
+            key="detail"
+            {...scaleIn}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+          >
+            <div className="glass rounded-2xl shadow-card-hover w-full max-w-lg max-h-[80vh] overflow-y-auto">
+              <div className="p-5 space-y-4">
+                {/* Header */}
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h2 className="text-lg font-semibold text-ink-primary">
+                      {selectedVisit.recruitName}
+                    </h2>
+                    <p className="text-sm text-ink-secondary">
+                      {selectedVisit.date?.split('T')[0]} {selectedVisit.startTime}
+                      {' - '}
+                      {selectedVisit.endTime}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedVisit(null)}
+                    className="text-ink-muted hover:text-ink-primary transition-colors p-1"
+                    aria-label="Close detail panel"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+
+                {/* Fields */}
+                <dl className="grid grid-cols-2 gap-3 text-sm">
+                  {selectedVisit.recruitEmail && (
+                    <div>
+                      <dt className="text-ink-muted text-xs">Email</dt>
+                      <dd className="text-ink-primary">{selectedVisit.recruitEmail}</dd>
+                    </div>
+                  )}
+                  {selectedVisit.recruitPhone && (
+                    <div>
+                      <dt className="text-ink-muted text-xs">Phone</dt>
+                      <dd className="text-ink-primary">{selectedVisit.recruitPhone}</dd>
+                    </div>
+                  )}
+                  {selectedVisit.recruitSchool && (
+                    <div>
+                      <dt className="text-ink-muted text-xs">School</dt>
+                      <dd className="text-ink-primary">{selectedVisit.recruitSchool}</dd>
+                    </div>
+                  )}
+                  {selectedVisit.recruitGradYear && (
+                    <div>
+                      <dt className="text-ink-muted text-xs">Grad Year</dt>
+                      <dd className="text-ink-primary">{selectedVisit.recruitGradYear}</dd>
+                    </div>
+                  )}
+                  <div>
+                    <dt className="text-ink-muted text-xs">Status</dt>
+                    <dd className="text-ink-primary capitalize">{selectedVisit.status}</dd>
+                  </div>
+                </dl>
+
+                {/* Notes */}
+                {selectedVisit.notes && (
+                  <div>
+                    <h4 className="text-xs text-ink-muted mb-1">Notes</h4>
+                    <p className="text-sm text-ink-body whitespace-pre-wrap">
+                      {selectedVisit.notes}
+                    </p>
+                  </div>
+                )}
+
+                {/* Actions (coach only) */}
+                {!readOnly && (
+                  <div className="flex items-center gap-2 pt-3 border-t border-ink-border">
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        setModal({ type: 'edit', visit: selectedVisit });
+                      }}
+                    >
+                      Edit Visit
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleDelete(selectedVisit)}
+                      className="text-data-poor hover:text-data-poor"
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Create / Edit modal */}
+      <AnimatePresence>
+        {modal && (
+          <motion.div
+            key="form-modal"
+            {...scaleIn}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+          >
+            <div className="glass rounded-2xl shadow-card-hover w-full max-w-lg max-h-[85vh] overflow-y-auto">
+              <div className="p-5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-ink-primary">
+                    {modal.type === 'create' ? 'New Recruit Visit' : 'Edit Visit'}
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setModal(null)}
+                    className="text-ink-muted hover:text-ink-primary transition-colors p-1"
+                    aria-label="Close form"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+                <VisitForm
+                  visit={modal.type === 'edit' ? modal.visit : undefined}
+                  onSubmit={modal.type === 'create' ? handleCreate : handleUpdate}
+                  onCancel={() => setModal(null)}
+                  isPending={createMut.isPending || updateMut.isPending}
+                />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
