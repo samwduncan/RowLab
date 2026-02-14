@@ -1,6 +1,6 @@
 # Contributing to RowLab
 
-Thank you for your interest in contributing to RowLab! We welcome contributions from the community and are grateful for your support in making RowLab better for coaches and athletes worldwide.
+Thank you for your interest in contributing to RowLab! We welcome contributions from the community and are grateful for your support in making RowLab better for athletes and coaches worldwide.
 
 ## Table of Contents
 
@@ -26,9 +26,10 @@ This project adheres to a Code of Conduct that all contributors are expected to 
 Before you begin:
 
 - Ensure you have [Node.js 18+](https://nodejs.org/) installed
-- Familiarize yourself with [React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), and [Express.js](https://expressjs.com/)
+- Familiarize yourself with [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [TanStack Router](https://tanstack.com/router/latest), and [Express.js](https://expressjs.com/)
 - Read through the [README](README.md) to understand the project's purpose and architecture
 - Check the [existing issues](https://github.com/swdrow/RowLab/issues) to see if your contribution is already being discussed
+- For v4.0 work, familiarize yourself with our design system in `.claude/design-standard.md`
 
 ## How to Contribute
 
@@ -60,8 +61,8 @@ We love hearing ideas for new features and improvements!
 
 **Before suggesting a feature:**
 
-- Check [existing issues](https://github.com/swdrow/RowLab/issues) and the [roadmap](ROADMAP.md) to see if it's already planned
-- Consider whether the feature aligns with RowLab's core mission of data-driven lineup optimization
+- Check [existing issues](https://github.com/swdrow/RowLab/issues) and the [roadmap](.planning/ROADMAP.md) to see if it's already planned
+- Consider whether the feature aligns with RowLab's core mission of data-driven rowing for athletes and coaches
 
 **How to suggest a feature:**
 
@@ -95,6 +96,7 @@ We welcome code contributions! Whether it's fixing a bug, implementing a feature
 - **PostgreSQL** 14 or higher (or use Docker)
 - **Git** for version control
 - **Ollama** (optional, for AI features)
+- Familiarity with React 19, TanStack Router, and Tailwind CSS v4 for v4.0 work
 
 ### Setup Steps
 
@@ -276,13 +278,14 @@ export function AthleteCard({ athlete, onSelect }: AthleteCardProps) {
 
 ### Design System
 
-RowLab uses a custom "Precision Instrument" design system:
+RowLab (v4.0) uses Tailwind CSS v4 with a custom "Precision Instrument" design system:
 
 - Use existing components from `src/components/ui/` where possible
-- Follow the color palette defined in `src/theme/`
-- Maintain the dark theme aesthetic (void-deep backgrounds)
-- Use blade blue (#0070F3) for primary actions
-- Follow port/starboard color semantics (red/green)
+- Follow the design tokens and CSS variables in `.claude/design-standard.md`
+- Maintain the dark theme aesthetic with glass card components
+- Use port/starboard color semantics (red/green) for rowing context
+- All animations use spring physics via `src/v2/lib/animations.ts`
+- Use skeleton loaders for loading states, never spinners
 
 ### API Design
 
