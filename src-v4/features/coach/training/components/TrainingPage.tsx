@@ -1,0 +1,254 @@
+/**
+ * TrainingPage -- Tabbed training management page.
+ *
+ * Three tabs: Calendar | Compliance | Plans.
+ * Calendar tab integrates CalendarView with plan filter and workout creation.
+ * Keyboard shortcuts: N = new workout, Escape = close modal.
+ */
+import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Calendar as CalendarIcon, Shield, ClipboardList, Plus } from 'lucide-react';
+import { ReadOnlyBadge } from '@/components/ui/ReadOnlyBadge';
+import { Button } from '@/components/ui/Button';
+import { plansOptions } from '../api';
+import CalendarView from './CalendarView';
+import { ComplianceDashboard } from './ComplianceDashboard';
+import { PlansList } from './PlansList';
+import { WorkoutFormModal } from './WorkoutFormModal';
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
+type Tab = 'calendar' | 'compliance' | 'plans';
+
+interface TrainingPageProps {
+  teamId: string;
+  readOnly: boolean;
+}
+
+const TABS: { key: Tab; label: string; icon: typeof CalendarIcon }[] = [
+  { key: 'calendar', label: 'Calendar', icon: CalendarIcon },
+  { key: 'compliance', label: 'Compliance', icon: Shield },
+  { key: 'plans', label: 'Plans', icon: ClipboardList },
+];
+
+// ---------------------------------------------------------------------------
+// TrainingPage
+// ---------------------------------------------------------------------------
+
+export function TrainingPage({ teamId, readOnly }: TrainingPageProps) {
+  const [activeTab, setActiveTab] = useState<Tab>('calendar');
+  const [showWorkoutModal, setShowWorkoutModal] = useState(false);
+  const [workoutInitialDate, setWorkoutInitialDate] = useState<Date | undefined>(undefined);
+
+  // Fetch plans for filter dropdown and plan ID for workout creation
+  const { data: plans = [] } = useQuery(plansOptions());
+  const [selectedPlanId, setSelectedPlanId] = useState<string | ''>('');
+
+  // Default to first plan when plans load
+  useEffect(() => {
+    if (plans.length > 0 && !selectedPlanId) {
+      const firstActive = plans.find((p) => !p.isTemplate);
+      if (firstActive) setSelectedPlanId(firstActive.id);
+    }
+  }, [plans, selectedPlanId]);
+
+  // Plan stats for Plans tab sidebar
+  const planStats = useMemo(() => {
+    const activePlans = plans.filter((p) => !p.isTemplate);
+    const templates = plans.filter((p) => p.isTemplate);
+    return { active: activePlans.length, templates: templates.length };
+  }, [plans]);
+
+  // Handlers
+  const openWorkoutModal = useCallback((date?: Date) => {
+    setWorkoutInitialDate(date);
+    setShowWorkoutModal(true);
+  }, []);
+
+  const closeWorkoutModal = useCallback(() => {
+    setShowWorkoutModal(false);
+    setWorkoutInitialDate(undefined);
+  }, []);
+
+  const handleCalendarSlotSelect = useCallback(
+    (slotInfo: { start: Date; end: Date }) => {
+      if (!readOnly) {
+        openWorkoutModal(slotInfo.start);
+      }
+    },
+    [readOnly, openWorkoutModal]
+  );
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      // Guard: skip if focus is inside input, textarea, select, or contentEditable
+      const target = e.target as HTMLElement;
+      if (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.tagName === 'SELECT' ||
+        target.isContentEditable
+      ) {
+        return;
+      }
+
+      if (e.key === 'n' || e.key === 'N') {
+        if (!readOnly && !showWorkoutModal) {
+          e.preventDefault();
+          openWorkoutModal();
+        }
+      }
+
+      if (e.key === 'Escape') {
+        if (showWorkoutModal) {
+          e.preventDefault();
+          closeWorkoutModal();
+        }
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [readOnly, showWorkoutModal, openWorkoutModal, closeWorkoutModal]);
+
+  return (
+    <div className="mx-auto max-w-6xl p-4 pb-24 md:p-6">
+      {/* Page header */}
+      <div className="mb-6">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-muted mb-1">
+          COACH
+        </p>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-semibold text-ink-primary tracking-tight lg:text-3xl">
+            Training
+          </h1>
+          {readOnly && <ReadOnlyBadge />}
+        </div>
+        <p className="mt-1 text-sm text-ink-secondary">
+          Plan, schedule, and track training sessions
+        </p>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-1 rounded-xl bg-ink-well/50 p-1 mb-6">
+        {TABS.map(({ key, label, icon: Icon }) => (
+          <button
+            key={key}
+            onClick={() => setActiveTab(key)}
+            className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+              activeTab === key
+                ? 'bg-ink-raised text-ink-primary shadow-sm'
+                : 'text-ink-secondary hover:text-ink-primary'
+            }`}
+          >
+            <span className="flex items-center justify-center gap-2">
+              <Icon className="h-4 w-4" />
+              {label}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {/* Tab content */}
+      {activeTab === 'calendar' && (
+        <CalendarTab
+          teamId={teamId}
+          readOnly={readOnly}
+          plans={plans}
+          selectedPlanId={selectedPlanId}
+          onSelectPlan={setSelectedPlanId}
+          onAddWorkout={() => openWorkoutModal()}
+          onSelectSlot={handleCalendarSlotSelect}
+        />
+      )}
+
+      {activeTab === 'compliance' && <ComplianceDashboard teamId={teamId} />}
+
+      {activeTab === 'plans' && (
+        <PlansList
+          teamId={teamId}
+          readOnly={readOnly}
+          onSelectPlan={(id) => setSelectedPlanId(id)}
+        />
+      )}
+
+      {/* Workout modal */}
+      <WorkoutFormModal
+        isOpen={showWorkoutModal}
+        onClose={closeWorkoutModal}
+        teamId={teamId}
+        planId={selectedPlanId || undefined}
+        initialDate={workoutInitialDate}
+      />
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Calendar tab
+// ---------------------------------------------------------------------------
+
+interface CalendarTabProps {
+  teamId: string;
+  readOnly: boolean;
+  plans: Array<{ id: string; name: string; isTemplate: boolean }>;
+  selectedPlanId: string;
+  onSelectPlan: (id: string) => void;
+  onAddWorkout: () => void;
+  onSelectSlot: (slotInfo: { start: Date; end: Date }) => void;
+}
+
+function CalendarTab({
+  teamId,
+  readOnly,
+  plans,
+  selectedPlanId,
+  onSelectPlan,
+  onAddWorkout,
+  onSelectSlot,
+}: CalendarTabProps) {
+  const activePlans = useMemo(() => plans.filter((p) => !p.isTemplate), [plans]);
+
+  return (
+    <div className="space-y-4">
+      {/* Controls bar */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          {/* Plan filter */}
+          {activePlans.length > 0 && (
+            <select
+              value={selectedPlanId}
+              onChange={(e) => onSelectPlan(e.target.value)}
+              className="rounded-lg border border-white/[0.06] bg-ink-raised px-3 py-2 text-sm text-ink-primary transition-colors focus:border-accent-copper/50 focus:outline-none"
+            >
+              <option value="">All Plans</option>
+              {activePlans.map((plan) => (
+                <option key={plan.id} value={plan.id}>
+                  {plan.name}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+
+        {!readOnly && (
+          <Button variant="primary" size="sm" onClick={onAddWorkout}>
+            <Plus className="h-4 w-4" />
+            Add Workout
+            <kbd className="ml-1.5 hidden rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px] sm:inline-block">
+              N
+            </kbd>
+          </Button>
+        )}
+      </div>
+
+      {/* Calendar */}
+      <CalendarView onSelectSlot={readOnly ? undefined : onSelectSlot} className="min-h-[600px]" />
+    </div>
+  );
+}
+
+export default TrainingPage;
