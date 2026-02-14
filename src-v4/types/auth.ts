@@ -15,7 +15,9 @@ export interface Team {
   id: string;
   name: string;
   slug: string;
+  generatedId?: string;
   role: string;
+  memberCount?: number;
 }
 
 export interface AuthState {
