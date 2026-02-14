@@ -4,7 +4,7 @@
  *
  * - personal: always visible (workouts, profile)
  * - team: visible when user has an active team
- * - coach: visible when activeTeamRole is COACH or OWNER (uppercase from backend)
+ * - coach: visible when activeTeamRole is COACH, ADMIN, or OWNER (uppercase from backend)
  */
 import {
   LayoutDashboard,
@@ -16,6 +16,10 @@ import {
   Warehouse,
   Settings,
   User,
+  CalendarDays,
+  ClipboardCheck,
+  NotebookPen,
+  UserPlus,
 } from 'lucide-react';
 import { isCoachOrAbove } from '@/features/team/types';
 import type { NavConfig, NavItem, NavSection } from '@/types/navigation';
@@ -67,6 +71,34 @@ const coachSection: NavSection = {
       zone: 'coach',
     },
     { id: 'fleet', label: 'Fleet', icon: Warehouse, path: '/team/coach/fleet', zone: 'coach' },
+    {
+      id: 'training',
+      label: 'Training',
+      icon: CalendarDays,
+      path: '/team/coach/training',
+      zone: 'coach',
+    },
+    {
+      id: 'attendance',
+      label: 'Attendance',
+      icon: ClipboardCheck,
+      path: '/team/coach/attendance',
+      zone: 'coach',
+    },
+    {
+      id: 'whiteboard',
+      label: 'Whiteboard',
+      icon: NotebookPen,
+      path: '/team/coach/whiteboard',
+      zone: 'coach',
+    },
+    {
+      id: 'recruiting',
+      label: 'Recruiting',
+      icon: UserPlus,
+      path: '/team/coach/recruiting',
+      zone: 'coach',
+    },
   ],
 };
 

@@ -19,11 +19,13 @@ import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedCreateTeamRouteImport } from './routes/_authenticated/create-team'
 import { Route as AuthenticatedTeamRouteImport } from './routes/_authenticated/_team'
+import { Route as AuthenticatedCoachRouteImport } from './routes/_authenticated/_coach'
 import { Route as AuthenticatedWorkoutsIndexRouteImport } from './routes/_authenticated/workouts.index'
 import { Route as AuthenticatedTeamIndexRouteImport } from './routes/_authenticated/team/index'
 import { Route as AuthenticatedWorkoutsWorkoutIdRouteImport } from './routes/_authenticated/workouts.$workoutId'
 import { Route as AuthenticatedTeamIdentifierRouteImport } from './routes/_authenticated/team/$identifier'
 import { Route as AuthenticatedTeamAthletesRouteImport } from './routes/_authenticated/_team/athletes'
+import { Route as AuthenticatedCoachLineupsRouteImport } from './routes/_authenticated/_coach/lineups'
 import { Route as AuthenticatedTeamIdentifierSettingsRouteImport } from './routes/_authenticated/team/$identifier/settings'
 import { Route as AuthenticatedTeamIdentifierDashboardRouteImport } from './routes/_authenticated/team/$identifier/dashboard'
 
@@ -75,6 +77,10 @@ const AuthenticatedTeamRoute = AuthenticatedTeamRouteImport.update({
   id: '/_team',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedCoachRoute = AuthenticatedCoachRouteImport.update({
+  id: '/_coach',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedWorkoutsIndexRoute =
   AuthenticatedWorkoutsIndexRouteImport.update({
     id: '/',
@@ -104,6 +110,12 @@ const AuthenticatedTeamAthletesRoute =
     path: '/athletes',
     getParentRoute: () => AuthenticatedTeamRoute,
   } as any)
+const AuthenticatedCoachLineupsRoute =
+  AuthenticatedCoachLineupsRouteImport.update({
+    id: '/lineups',
+    path: '/lineups',
+    getParentRoute: () => AuthenticatedCoachRoute,
+  } as any)
 const AuthenticatedTeamIdentifierSettingsRoute =
   AuthenticatedTeamIdentifierSettingsRouteImport.update({
     id: '/settings',
@@ -126,6 +138,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/workouts': typeof AuthenticatedWorkoutsRouteWithChildren
   '/invite/$code': typeof InviteCodeRoute
+  '/lineups': typeof AuthenticatedCoachLineupsRoute
   '/athletes': typeof AuthenticatedTeamAthletesRoute
   '/team/$identifier': typeof AuthenticatedTeamIdentifierRouteWithChildren
   '/workouts/$workoutId': typeof AuthenticatedWorkoutsWorkoutIdRoute
@@ -142,6 +155,7 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthenticatedProfileRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/invite/$code': typeof InviteCodeRoute
+  '/lineups': typeof AuthenticatedCoachLineupsRoute
   '/athletes': typeof AuthenticatedTeamAthletesRoute
   '/team/$identifier': typeof AuthenticatedTeamIdentifierRouteWithChildren
   '/workouts/$workoutId': typeof AuthenticatedWorkoutsWorkoutIdRoute
@@ -155,6 +169,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/_authenticated/_coach': typeof AuthenticatedCoachRouteWithChildren
   '/_authenticated/_team': typeof AuthenticatedTeamRouteWithChildren
   '/_authenticated/create-team': typeof AuthenticatedCreateTeamRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
@@ -162,6 +177,7 @@ export interface FileRoutesById {
   '/_authenticated/workouts': typeof AuthenticatedWorkoutsRouteWithChildren
   '/invite/$code': typeof InviteCodeRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/_coach/lineups': typeof AuthenticatedCoachLineupsRoute
   '/_authenticated/_team/athletes': typeof AuthenticatedTeamAthletesRoute
   '/_authenticated/team/$identifier': typeof AuthenticatedTeamIdentifierRouteWithChildren
   '/_authenticated/workouts/$workoutId': typeof AuthenticatedWorkoutsWorkoutIdRoute
@@ -181,6 +197,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/workouts'
     | '/invite/$code'
+    | '/lineups'
     | '/athletes'
     | '/team/$identifier'
     | '/workouts/$workoutId'
@@ -197,6 +214,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/settings'
     | '/invite/$code'
+    | '/lineups'
     | '/athletes'
     | '/team/$identifier'
     | '/workouts/$workoutId'
@@ -209,6 +227,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/login'
     | '/register'
+    | '/_authenticated/_coach'
     | '/_authenticated/_team'
     | '/_authenticated/create-team'
     | '/_authenticated/profile'
@@ -216,6 +235,7 @@ export interface FileRouteTypes {
     | '/_authenticated/workouts'
     | '/invite/$code'
     | '/_authenticated/'
+    | '/_authenticated/_coach/lineups'
     | '/_authenticated/_team/athletes'
     | '/_authenticated/team/$identifier'
     | '/_authenticated/workouts/$workoutId'
@@ -304,6 +324,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTeamRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/_coach': {
+      id: '/_authenticated/_coach'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedCoachRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/workouts/': {
       id: '/_authenticated/workouts/'
       path: '/'
@@ -339,6 +366,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTeamAthletesRouteImport
       parentRoute: typeof AuthenticatedTeamRoute
     }
+    '/_authenticated/_coach/lineups': {
+      id: '/_authenticated/_coach/lineups'
+      path: '/lineups'
+      fullPath: '/lineups'
+      preLoaderRoute: typeof AuthenticatedCoachLineupsRouteImport
+      parentRoute: typeof AuthenticatedCoachRoute
+    }
     '/_authenticated/team/$identifier/settings': {
       id: '/_authenticated/team/$identifier/settings'
       path: '/settings'
@@ -355,6 +389,17 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthenticatedCoachRouteChildren {
+  AuthenticatedCoachLineupsRoute: typeof AuthenticatedCoachLineupsRoute
+}
+
+const AuthenticatedCoachRouteChildren: AuthenticatedCoachRouteChildren = {
+  AuthenticatedCoachLineupsRoute: AuthenticatedCoachLineupsRoute,
+}
+
+const AuthenticatedCoachRouteWithChildren =
+  AuthenticatedCoachRoute._addFileChildren(AuthenticatedCoachRouteChildren)
 
 interface AuthenticatedTeamRouteChildren {
   AuthenticatedTeamAthletesRoute: typeof AuthenticatedTeamAthletesRoute
@@ -401,6 +446,7 @@ const AuthenticatedTeamIdentifierRouteWithChildren =
   )
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedCoachRoute: typeof AuthenticatedCoachRouteWithChildren
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRouteWithChildren
   AuthenticatedCreateTeamRoute: typeof AuthenticatedCreateTeamRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
@@ -412,6 +458,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedCoachRoute: AuthenticatedCoachRouteWithChildren,
   AuthenticatedTeamRoute: AuthenticatedTeamRouteWithChildren,
   AuthenticatedCreateTeamRoute: AuthenticatedCreateTeamRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
