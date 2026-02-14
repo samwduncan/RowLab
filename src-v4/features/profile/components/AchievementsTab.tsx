@@ -1,0 +1,143 @@
+/**
+ * Achievements tab content for the profile page.
+ * Shows a trophy case with unlocked achievements prominent and locked dimmed below.
+ * Unlocked sorted by rarity (descending), locked sorted by progress ratio (descending).
+ */
+
+import { useQuery } from '@tanstack/react-query';
+import { motion } from 'motion/react';
+import { Trophy } from 'lucide-react';
+
+import { profileAchievementsQueryOptions } from '../api';
+import { AchievementCard } from './AchievementCard';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { slideUp, listContainerVariants } from '@/lib/animations';
+import type { Achievement } from '../types';
+
+/** Rarity sort order (higher = more prominent) */
+const RARITY_ORDER: Record<Achievement['rarity'], number> = {
+  Legendary: 4,
+  Epic: 3,
+  Rare: 2,
+  Common: 1,
+};
+
+export function AchievementsTab() {
+  const { data, isLoading } = useQuery(profileAchievementsQueryOptions());
+
+  if (isLoading) {
+    return <AchievementsTabSkeleton />;
+  }
+
+  const achievements = data?.achievements ?? [];
+  const summary = data?.summary ?? { total: 0, unlocked: 0 };
+
+  if (achievements.length === 0) {
+    return (
+      <EmptyState
+        icon={Trophy}
+        title="No achievements yet"
+        description="Start training to unlock achievements and build your trophy case."
+        className="py-16"
+      />
+    );
+  }
+
+  const unlocked = achievements
+    .filter((a) => a.unlocked)
+    .sort((a, b) => (RARITY_ORDER[b.rarity] ?? 0) - (RARITY_ORDER[a.rarity] ?? 0));
+
+  const locked = achievements
+    .filter((a) => !a.unlocked)
+    .sort((a, b) => {
+      const ratioA = a.target > 0 ? a.progress / a.target : 0;
+      const ratioB = b.target > 0 ? b.progress / b.target : 0;
+      return ratioB - ratioA;
+    });
+
+  return (
+    <motion.div className="space-y-6" {...slideUp}>
+      {/* Summary header */}
+      <GlassCard padding="sm">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Trophy size={18} className="text-accent-copper" />
+            <span className="text-ink-primary font-semibold">
+              {summary.unlocked} / {summary.total}
+            </span>
+            <span className="text-ink-secondary text-sm">Achievements Unlocked</span>
+          </div>
+          <div className="text-ink-tertiary text-xs">
+            {Math.round((summary.unlocked / Math.max(summary.total, 1)) * 100)}% complete
+          </div>
+        </div>
+      </GlassCard>
+
+      {/* Unlocked section */}
+      {unlocked.length > 0 && (
+        <section>
+          <h3 className="text-sm font-medium text-ink-secondary uppercase tracking-wider mb-3">
+            Unlocked
+          </h3>
+          <motion.div
+            variants={listContainerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+          >
+            {unlocked.map((achievement) => (
+              <AchievementCard key={achievement.id} achievement={achievement} />
+            ))}
+          </motion.div>
+        </section>
+      )}
+
+      {/* Locked section */}
+      {locked.length > 0 && (
+        <section>
+          <h3 className="text-sm font-medium text-ink-muted uppercase tracking-wider mb-3">
+            Locked
+          </h3>
+          <motion.div
+            variants={listContainerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-2"
+          >
+            {locked.map((achievement) => (
+              <AchievementCard key={achievement.id} achievement={achievement} compact />
+            ))}
+          </motion.div>
+        </section>
+      )}
+    </motion.div>
+  );
+}
+
+function AchievementsTabSkeleton() {
+  return (
+    <div className="space-y-6">
+      <div className="glass rounded-xl p-3">
+        <Skeleton height="1.5rem" width="240px" />
+      </div>
+      <SkeletonGroup>
+        <Skeleton height="0.75rem" width="80px" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} height="5rem" className="rounded-xl" />
+          ))}
+        </div>
+      </SkeletonGroup>
+      <SkeletonGroup>
+        <Skeleton height="0.75rem" width="60px" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} height="4rem" className="rounded-xl" />
+          ))}
+        </div>
+      </SkeletonGroup>
+    </div>
+  );
+}

@@ -2,7 +2,7 @@
  * Navigation configuration: defines all nav items grouped by zone and section.
  * Zones filter visibility based on user role and team membership.
  *
- * - personal: always visible (workouts, stats, profile)
+ * - personal: always visible (workouts, profile)
  * - team: visible when user has an active team
  * - coach: visible when activeTeamRole is 'coach' or 'admin'
  */
@@ -10,9 +10,6 @@ import {
   LayoutDashboard,
   Dumbbell,
   Calendar,
-  BarChart3,
-  Trophy,
-  Medal,
   Users,
   ClipboardList,
   UserCheck,
@@ -36,26 +33,10 @@ const trainingSection: NavSection = {
   ],
 };
 
-const statsSection: NavSection = {
-  id: 'stats',
-  label: 'Stats',
-  items: [
-    {
-      id: 'personal-stats',
-      label: 'Personal Stats',
-      icon: BarChart3,
-      path: '/stats',
-      zone: 'personal',
-    },
-    { id: 'prs', label: 'PRs', icon: Trophy, path: '/prs', zone: 'personal' },
-    {
-      id: 'achievements',
-      label: 'Achievements',
-      icon: Medal,
-      path: '/achievements',
-      zone: 'personal',
-    },
-  ],
+const profileSection: NavSection = {
+  id: 'profile',
+  label: 'You',
+  items: [{ id: 'profile', label: 'Profile', icon: User, path: '/profile', zone: 'personal' }],
 };
 
 /* === TEAM ZONE (visible with active team) === */
@@ -102,14 +83,13 @@ const coachSection: NavSection = {
 
 /* === ALL SECTIONS === */
 
-const allSections: NavSection[] = [trainingSection, statsSection, teamSection, coachSection];
+const allSections: NavSection[] = [trainingSection, profileSection, teamSection, coachSection];
 
 /* === BOTTOM TAB ITEMS (mobile, max 5) === */
 
 const personalBottomTabs: NavItem[] = [
   { id: 'dashboard', label: 'Home', icon: LayoutDashboard, path: '/', zone: 'personal' },
   { id: 'workouts', label: 'Workouts', icon: Dumbbell, path: '/workouts', zone: 'personal' },
-  { id: 'personal-stats', label: 'Stats', icon: BarChart3, path: '/stats', zone: 'personal' },
 ];
 
 const teamBottomTab: NavItem = {
@@ -164,7 +144,7 @@ export function getNavConfig(role: string | null, hasTeam: boolean): NavConfig {
 
 /**
  * Returns up to 5 bottom tab items for mobile navigation.
- * Dashboard, Workouts, Stats are always present.
+ * Dashboard and Workouts are always present.
  * Team tab appears if user has a team.
  * Profile is always last.
  */
