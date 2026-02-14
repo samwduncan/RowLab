@@ -27,4 +27,11 @@ export const queryKeys = {
     workouts: (limit?: number) => [...queryKeys.dashboard.all, 'workouts', limit] as const,
     prs: () => [...queryKeys.dashboard.all, 'prs'] as const,
   },
+  workouts: {
+    all: ['workouts'] as const,
+    feed: (filters: Record<string, unknown>) =>
+      [...queryKeys.workouts.all, 'feed', filters] as const,
+    detail: (id: string) => [...queryKeys.workouts.all, 'detail', id] as const,
+    calendar: (month: string) => [...queryKeys.workouts.all, 'calendar', month] as const,
+  },
 } as const;
