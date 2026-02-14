@@ -6,6 +6,7 @@ import workoutsRouter from './workouts.js';
 import prsRouter from './prs.js';
 import dashboardRouter from './dashboard.js';
 import profileRouter from './profile.js';
+import achievementsRouter from './achievements.js';
 
 const router = express.Router();
 
@@ -14,6 +15,7 @@ router.use(authenticateToken);
 
 // Sub-routers
 router.use('/profile', profileRouter);
+router.use('/achievements', achievementsRouter);
 router.use('/stats', statsRouter);
 router.use('/workouts', workoutsRouter);
 router.use('/prs', prsRouter);
