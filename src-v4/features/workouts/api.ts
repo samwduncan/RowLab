@@ -4,7 +4,7 @@
  * workoutFeedOptions  -- infinite cursor-paginated feed
  * workoutDetailOptions -- single workout with splits + adjacency
  */
-import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
+import { infiniteQueryOptions, queryOptions, type InfiniteData } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import { queryKeys } from '@/lib/queryKeys';
 import type { WorkoutFilters, WorkoutsData, WorkoutDetail } from './types';
@@ -17,7 +17,7 @@ export function workoutFeedOptions(filters: WorkoutFilters) {
   return infiniteQueryOptions<
     WorkoutsData,
     Error,
-    WorkoutsData,
+    InfiniteData<WorkoutsData, string | null>,
     ReturnType<typeof queryKeys.workouts.feed>,
     string | null
   >({
