@@ -53,7 +53,7 @@ interface PlansListProps {
 // PlansList
 // ---------------------------------------------------------------------------
 
-export function PlansList({ teamId, readOnly, onSelectPlan }: PlansListProps) {
+export function PlansList({ teamId: _teamId, readOnly, onSelectPlan }: PlansListProps) {
   const queryClient = useQueryClient();
   const { data: plans, isLoading } = useQuery(plansOptions());
   const [showForm, setShowForm] = useState(false);

@@ -29,7 +29,7 @@ import { Route as AuthenticatedCoachWhiteboardRouteImport } from './routes/_auth
 import { Route as AuthenticatedCoachTrainingRouteImport } from './routes/_authenticated/_coach/training'
 import { Route as AuthenticatedCoachSeatRacingRouteImport } from './routes/_authenticated/_coach/seat-racing'
 import { Route as AuthenticatedCoachRecruitingRouteImport } from './routes/_authenticated/_coach/recruiting'
-import { Route as AuthenticatedCoachLineupsRouteImport } from './routes/_authenticated/_coach/lineups'
+import { Route as AuthenticatedCoachLineupBuilderRouteImport } from './routes/_authenticated/_coach/lineup-builder'
 import { Route as AuthenticatedCoachFleetRouteImport } from './routes/_authenticated/_coach/fleet'
 import { Route as AuthenticatedCoachAttendanceRouteImport } from './routes/_authenticated/_coach/attendance'
 import { Route as AuthenticatedTeamIdentifierSettingsRouteImport } from './routes/_authenticated/team/$identifier/settings'
@@ -143,10 +143,10 @@ const AuthenticatedCoachRecruitingRoute =
     path: '/recruiting',
     getParentRoute: () => AuthenticatedCoachRoute,
   } as any)
-const AuthenticatedCoachLineupsRoute =
-  AuthenticatedCoachLineupsRouteImport.update({
-    id: '/lineups',
-    path: '/lineups',
+const AuthenticatedCoachLineupBuilderRoute =
+  AuthenticatedCoachLineupBuilderRouteImport.update({
+    id: '/lineup-builder',
+    path: '/lineup-builder',
     getParentRoute: () => AuthenticatedCoachRoute,
   } as any)
 const AuthenticatedCoachFleetRoute = AuthenticatedCoachFleetRouteImport.update({
@@ -202,7 +202,7 @@ export interface FileRoutesByFullPath {
   '/invite/$code': typeof InviteCodeRoute
   '/attendance': typeof AuthenticatedCoachAttendanceRoute
   '/fleet': typeof AuthenticatedCoachFleetRoute
-  '/lineups': typeof AuthenticatedCoachLineupsRoute
+  '/lineup-builder': typeof AuthenticatedCoachLineupBuilderRoute
   '/recruiting': typeof AuthenticatedCoachRecruitingRoute
   '/seat-racing': typeof AuthenticatedCoachSeatRacingRoute
   '/training': typeof AuthenticatedCoachTrainingRoute
@@ -228,7 +228,7 @@ export interface FileRoutesByTo {
   '/invite/$code': typeof InviteCodeRoute
   '/attendance': typeof AuthenticatedCoachAttendanceRoute
   '/fleet': typeof AuthenticatedCoachFleetRoute
-  '/lineups': typeof AuthenticatedCoachLineupsRoute
+  '/lineup-builder': typeof AuthenticatedCoachLineupBuilderRoute
   '/recruiting': typeof AuthenticatedCoachRecruitingRoute
   '/seat-racing': typeof AuthenticatedCoachSeatRacingRoute
   '/training': typeof AuthenticatedCoachTrainingRoute
@@ -259,7 +259,7 @@ export interface FileRoutesById {
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/_coach/attendance': typeof AuthenticatedCoachAttendanceRoute
   '/_authenticated/_coach/fleet': typeof AuthenticatedCoachFleetRoute
-  '/_authenticated/_coach/lineups': typeof AuthenticatedCoachLineupsRoute
+  '/_authenticated/_coach/lineup-builder': typeof AuthenticatedCoachLineupBuilderRoute
   '/_authenticated/_coach/recruiting': typeof AuthenticatedCoachRecruitingRoute
   '/_authenticated/_coach/seat-racing': typeof AuthenticatedCoachSeatRacingRoute
   '/_authenticated/_coach/training': typeof AuthenticatedCoachTrainingRoute
@@ -288,7 +288,7 @@ export interface FileRouteTypes {
     | '/invite/$code'
     | '/attendance'
     | '/fleet'
-    | '/lineups'
+    | '/lineup-builder'
     | '/recruiting'
     | '/seat-racing'
     | '/training'
@@ -314,7 +314,7 @@ export interface FileRouteTypes {
     | '/invite/$code'
     | '/attendance'
     | '/fleet'
-    | '/lineups'
+    | '/lineup-builder'
     | '/recruiting'
     | '/seat-racing'
     | '/training'
@@ -344,7 +344,7 @@ export interface FileRouteTypes {
     | '/_authenticated/'
     | '/_authenticated/_coach/attendance'
     | '/_authenticated/_coach/fleet'
-    | '/_authenticated/_coach/lineups'
+    | '/_authenticated/_coach/lineup-builder'
     | '/_authenticated/_coach/recruiting'
     | '/_authenticated/_coach/seat-racing'
     | '/_authenticated/_coach/training'
@@ -510,11 +510,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCoachRecruitingRouteImport
       parentRoute: typeof AuthenticatedCoachRoute
     }
-    '/_authenticated/_coach/lineups': {
-      id: '/_authenticated/_coach/lineups'
-      path: '/lineups'
-      fullPath: '/lineups'
-      preLoaderRoute: typeof AuthenticatedCoachLineupsRouteImport
+    '/_authenticated/_coach/lineup-builder': {
+      id: '/_authenticated/_coach/lineup-builder'
+      path: '/lineup-builder'
+      fullPath: '/lineup-builder'
+      preLoaderRoute: typeof AuthenticatedCoachLineupBuilderRouteImport
       parentRoute: typeof AuthenticatedCoachRoute
     }
     '/_authenticated/_coach/fleet': {
@@ -602,7 +602,7 @@ const AuthenticatedCoachTrainingSessionsRouteWithChildren =
 interface AuthenticatedCoachRouteChildren {
   AuthenticatedCoachAttendanceRoute: typeof AuthenticatedCoachAttendanceRoute
   AuthenticatedCoachFleetRoute: typeof AuthenticatedCoachFleetRoute
-  AuthenticatedCoachLineupsRoute: typeof AuthenticatedCoachLineupsRoute
+  AuthenticatedCoachLineupBuilderRoute: typeof AuthenticatedCoachLineupBuilderRoute
   AuthenticatedCoachRecruitingRoute: typeof AuthenticatedCoachRecruitingRoute
   AuthenticatedCoachSeatRacingRoute: typeof AuthenticatedCoachSeatRacingRoute
   AuthenticatedCoachTrainingRoute: typeof AuthenticatedCoachTrainingRoute
@@ -613,7 +613,7 @@ interface AuthenticatedCoachRouteChildren {
 const AuthenticatedCoachRouteChildren: AuthenticatedCoachRouteChildren = {
   AuthenticatedCoachAttendanceRoute: AuthenticatedCoachAttendanceRoute,
   AuthenticatedCoachFleetRoute: AuthenticatedCoachFleetRoute,
-  AuthenticatedCoachLineupsRoute: AuthenticatedCoachLineupsRoute,
+  AuthenticatedCoachLineupBuilderRoute: AuthenticatedCoachLineupBuilderRoute,
   AuthenticatedCoachRecruitingRoute: AuthenticatedCoachRecruitingRoute,
   AuthenticatedCoachSeatRacingRoute: AuthenticatedCoachSeatRacingRoute,
   AuthenticatedCoachTrainingRoute: AuthenticatedCoachTrainingRoute,

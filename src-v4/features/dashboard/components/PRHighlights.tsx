@@ -25,10 +25,10 @@ function parseDistance(testType: string): number {
   if (lower === 'fm') return 42195;
 
   const kMatch = lower.match(/^(\d+(?:\.\d+)?)k$/);
-  if (kMatch) return parseFloat(kMatch[1]) * 1000;
+  if (kMatch?.[1]) return parseFloat(kMatch[1]) * 1000;
 
   const mMatch = lower.match(/^(\d+)m$/);
-  if (mMatch) return parseInt(mMatch[1], 10);
+  if (mMatch?.[1]) return parseInt(mMatch[1], 10);
 
   return Infinity;
 }

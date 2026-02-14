@@ -54,12 +54,7 @@ export function TrainingPage({ teamId, readOnly }: TrainingPageProps) {
     }
   }, [plans, selectedPlanId]);
 
-  // Plan stats for Plans tab sidebar
-  const planStats = useMemo(() => {
-    const activePlans = plans.filter((p) => !p.isTemplate);
-    const templates = plans.filter((p) => p.isTemplate);
-    return { active: activePlans.length, templates: templates.length };
-  }, [plans]);
+  // TODO(50-16): Plan stats for Plans tab sidebar badge counts (plans.filter by isTemplate)
 
   // Handlers
   const openWorkoutModal = useCallback((date?: Date) => {
@@ -202,7 +197,7 @@ interface CalendarTabProps {
 }
 
 function CalendarTab({
-  teamId,
+  teamId: _teamId,
   readOnly,
   plans,
   selectedPlanId,

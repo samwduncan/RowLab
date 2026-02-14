@@ -131,7 +131,7 @@ function ModalOverlay({ onClose, children }: { onClose: () => void; children: Re
 // ---------------------------------------------------------------------------
 
 function WorkoutForm({
-  teamId,
+  teamId: _teamId,
   planId,
   initialDate,
   onClose,

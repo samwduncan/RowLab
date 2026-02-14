@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Shield, AlertTriangle, Users, Clock } from 'lucide-react';
 import { motion } from 'motion/react';
 import { complianceReportOptions, weeklyComplianceOptions } from '../api';
-import type { WeeklyComplianceEntry, ComplianceReport } from '../types';
+
 import { GlassCard } from '@/components/ui/GlassCard';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
@@ -69,7 +69,7 @@ interface ComplianceDashboardProps {
 // ComplianceDashboard
 // ---------------------------------------------------------------------------
 
-export function ComplianceDashboard({ teamId }: ComplianceDashboardProps) {
+export function ComplianceDashboard({ teamId: _teamId }: ComplianceDashboardProps) {
   const weekStart = useMemo(currentWeekStart, []);
 
   const { data: report, isLoading: reportLoading } = useQuery(complianceReportOptions(weekStart));
