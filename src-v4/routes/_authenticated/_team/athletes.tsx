@@ -98,8 +98,8 @@ function AthletesPage() {
         {/* Header */}
         <motion.div variants={listItemVariants} transition={SPRING_SMOOTH} className="mb-6">
           <div className="flex items-center gap-2 mb-1">
-            <Users className="h-5 w-5 text-white/40" />
-            <p className="text-xs font-medium uppercase tracking-wider text-white/40">Team</p>
+            <Users className="h-5 w-5 text-ink-muted" />
+            <p className="text-xs font-medium uppercase tracking-wider text-ink-muted">Team</p>
           </div>
           <h1 className="text-2xl font-bold text-heading-gradient tracking-tight">
             Athletes

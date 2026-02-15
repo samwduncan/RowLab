@@ -203,7 +203,7 @@ function PanelContent({
   if (isLoading) {
     return (
       <>
-        <SlideOverHeader title="Loading..." onClose={onClose} />
+        <SlideOverHeader title="Session Details" onClose={onClose} />
         <div className="flex-1 p-6 space-y-4">
           {[...Array(3)].map((_, i) => (
             <div key={i} className="h-24 bg-ink-raised animate-shimmer rounded-lg" />

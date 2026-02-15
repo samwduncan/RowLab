@@ -40,7 +40,7 @@ export function GoogleAuthButton() {
     <button
       type="button"
       onClick={handleClick}
-      className="inline-flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-ink-border bg-white px-4 text-sm font-medium text-gray-700 transition-all duration-150 hover:bg-gray-50 hover:border-ink-border-strong active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-accent-copper/60 focus-visible:outline-offset-2"
+      className="inline-flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-ink-border bg-white px-4 text-sm font-medium text-ink-deep transition-all duration-150 hover:bg-white/90 hover:border-ink-border-strong active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-accent-copper/60 focus-visible:outline-offset-2"
     >
       <GoogleIcon />
       <span>Sign in with Google</span>

@@ -158,7 +158,7 @@ export function TeamActivityFeed({ teamId, compact }: TeamActivityFeedProps) {
             disabled={isFetchingNextPage}
             className="rounded-lg bg-ink-well/50 px-4 py-2 text-sm text-ink-secondary transition-colors hover:bg-ink-well hover:text-ink-primary disabled:opacity-50"
           >
-            {isFetchingNextPage ? 'Loading...' : 'Load more'}
+            {isFetchingNextPage ? 'Loading more\u2026' : 'Load more'}
           </button>
         </div>
       )}
