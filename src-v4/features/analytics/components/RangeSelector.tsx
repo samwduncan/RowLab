@@ -1,50 +1,44 @@
 /**
  * RangeSelector -- horizontal row of preset time range buttons.
  *
- * Active button shows copper accent. Matches the design system
- * toggle-button pattern used throughout the profile feature.
+ * Uses the shared TabToggle component for animated pill-style selection
+ * with consistent design system treatment across the app.
  */
 
+import { useCallback } from 'react';
+import { TabToggle, type Tab } from '@/components/ui/TabToggle';
 import type { PMCRange } from '../types';
 
-const RANGES: Array<{ value: PMCRange; label: string }> = [
-  { value: '30d', label: '30D' },
-  { value: '90d', label: '90D' },
-  { value: '180d', label: '180D' },
-  { value: '365d', label: '1Y' },
-  { value: 'all', label: 'All' },
+const RANGE_TABS: Tab[] = [
+  { id: '30d', label: '30D' },
+  { id: '90d', label: '90D' },
+  { id: '180d', label: '180D' },
+  { id: '365d', label: '1Y' },
+  { id: 'all', label: 'All' },
 ];
 
 interface RangeSelectorProps {
   value: PMCRange;
   onChange: (range: PMCRange) => void;
+  className?: string;
 }
 
-export function RangeSelector({ value, onChange }: RangeSelectorProps) {
+export function RangeSelector({ value, onChange, className }: RangeSelectorProps) {
+  const handleTabChange = useCallback(
+    (tabId: string) => {
+      onChange(tabId as PMCRange);
+    },
+    [onChange]
+  );
+
   return (
-    <div
-      className="flex gap-1 rounded-lg bg-ink-base/50 p-0.5"
-      role="group"
-      aria-label="Time range"
-    >
-      {RANGES.map((range) => {
-        const isActive = value === range.value;
-        return (
-          <button
-            key={range.value}
-            type="button"
-            onClick={() => onChange(range.value)}
-            aria-pressed={isActive}
-            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
-              isActive
-                ? 'bg-accent-copper/15 text-accent-copper'
-                : 'text-ink-tertiary hover:text-ink-secondary'
-            }`}
-          >
-            {range.label}
-          </button>
-        );
-      })}
-    </div>
+    <TabToggle
+      tabs={RANGE_TABS}
+      activeTab={value}
+      onTabChange={handleTabChange}
+      layoutId="range-selector"
+      size="sm"
+      className={className}
+    />
   );
 }

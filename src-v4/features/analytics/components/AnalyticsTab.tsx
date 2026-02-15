@@ -231,6 +231,7 @@ export function AnalyticsTab() {
               summary={volumeData.summary}
               metric={volumeMetric}
               granularity={volumeGranularity}
+              buckets={volumeData.buckets}
             />
             <VolumeChart
               data={volumeData.buckets}

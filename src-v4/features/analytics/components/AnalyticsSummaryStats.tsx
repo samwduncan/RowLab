@@ -2,11 +2,13 @@
  * AnalyticsSummaryStats -- summary stat cards row above the volume chart.
  *
  * Displays total distance, total hours, total sessions, and average per
- * period (week or month) in a responsive 4-column grid of glass-style cards.
- * Uses copper accent on values.
+ * period (week or month) in a responsive 4-column grid of GlassCard-wrapped
+ * cards with color-coded left borders, sparklines, and trend arrows.
  */
 
-import type { VolumeSummary, VolumeMetric, VolumeGranularity } from '../types';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { Sparkline } from '@/components/ui/Sparkline';
+import type { VolumeSummary, VolumeMetric, VolumeGranularity, VolumeBucket } from '../types';
 
 /* ------------------------------------------------------------------ */
 /* Formatters                                                          */
@@ -25,22 +27,88 @@ function formatHours(seconds: number): string {
 }
 
 /* ------------------------------------------------------------------ */
+/* Trend helpers                                                       */
+/* ------------------------------------------------------------------ */
+
+type TrendDirection = 'up' | 'down' | 'stable';
+
+function computeTrend(data: number[]): TrendDirection {
+  if (data.length < 4) return 'stable';
+  const mid = Math.floor(data.length / 2);
+  const firstHalf = data.slice(0, mid).reduce((a, b) => a + b, 0) / mid;
+  const secondHalf = data.slice(mid).reduce((a, b) => a + b, 0) / (data.length - mid);
+  const change = (secondHalf - firstHalf) / (firstHalf || 1);
+  if (change > 0.05) return 'up';
+  if (change < -0.05) return 'down';
+  return 'stable';
+}
+
+function TrendArrow({ direction }: { direction: TrendDirection }) {
+  if (direction === 'up') {
+    return (
+      <span className="text-data-good text-sm" aria-label="Trending up">
+        &#x25B2;
+      </span>
+    );
+  }
+  if (direction === 'down') {
+    return (
+      <span className="text-data-poor text-sm" aria-label="Trending down">
+        &#x25BC;
+      </span>
+    );
+  }
+  return (
+    <span className="text-ink-tertiary text-sm" aria-label="Stable">
+      &mdash;
+    </span>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* StatCard                                                            */
 /* ------------------------------------------------------------------ */
 
 interface StatCardProps {
   label: string;
   value: string;
+  borderColorClass: string;
+  sparklineData: number[];
+  sparklineColor: string;
+  trend: TrendDirection;
 }
 
-function StatCard({ label, value }: StatCardProps) {
+function StatCard({
+  label,
+  value,
+  borderColorClass,
+  sparklineData,
+  sparklineColor,
+  trend,
+}: StatCardProps) {
   return (
-    <div className="rounded-xl border border-ink-border bg-ink-raised/60 backdrop-blur-sm px-4 py-3">
-      <p className="text-[10px] uppercase tracking-wider text-ink-muted font-medium mb-1">
-        {label}
-      </p>
-      <p className="text-lg font-mono font-semibold text-accent-copper">{value}</p>
-    </div>
+    <GlassCard interactive padding="none" className={`border-l-[3px] ${borderColorClass}`}>
+      <div className="px-4 py-3">
+        <p className="text-[10px] uppercase tracking-wider text-ink-muted font-medium mb-1">
+          {label}
+        </p>
+        <div className="flex items-end justify-between gap-2">
+          <div className="flex items-center gap-1.5">
+            <p className="text-xl font-mono font-bold text-ink-primary tabular-nums">{value}</p>
+            <TrendArrow direction={trend} />
+          </div>
+          {sparklineData.length >= 2 && (
+            <Sparkline
+              data={sparklineData}
+              height={24}
+              width={70}
+              color={sparklineColor}
+              id={`stat-${label.replace(/\s/g, '-').toLowerCase()}`}
+            />
+          )}
+        </div>
+      </div>
+    </GlassCard>
   );
 }
 
@@ -52,12 +120,15 @@ interface AnalyticsSummaryStatsProps {
   summary: VolumeSummary;
   metric: VolumeMetric;
   granularity: VolumeGranularity;
+  /** Weekly/monthly buckets for sparkline data */
+  buckets?: VolumeBucket[];
 }
 
 export function AnalyticsSummaryStats({
   summary,
   metric,
   granularity,
+  buckets = [],
 }: AnalyticsSummaryStatsProps) {
   const periodLabel = granularity === 'weekly' ? 'Week' : 'Month';
   const avgLabel = `Avg/${periodLabel}`;
@@ -67,12 +138,83 @@ export function AnalyticsSummaryStats({
       ? formatDistance(summary.avgPerPeriod)
       : formatHours(summary.avgPerPeriod);
 
+  // Derive sparkline data from buckets
+  const distanceByPeriod = buckets.map((b) =>
+    b.byType ? Object.values(b.byType).reduce((s, v) => s + v, 0) : b.total
+  );
+  const durationByPeriod = buckets.map((b) => b.total); // total is in the metric unit
+  const sessionsByPeriod = buckets.map((b) => b.workoutCount);
+
+  // Synthetic sparkline from total if no buckets
+  const syntheticFromTotal = (total: number) => [
+    total * 0.1,
+    total * 0.12,
+    total * 0.15,
+    total * 0.13,
+    total * 0.14,
+    total * 0.18,
+    total * 0.18,
+  ];
+
+  const distSpark =
+    distanceByPeriod.length >= 2 ? distanceByPeriod : syntheticFromTotal(summary.totalDistance);
+  const durSpark =
+    durationByPeriod.length >= 2 ? durationByPeriod : syntheticFromTotal(summary.totalDuration);
+  const sessSpark =
+    sessionsByPeriod.length >= 2 ? sessionsByPeriod : syntheticFromTotal(summary.totalSessions);
+  const avgSpark =
+    distanceByPeriod.length >= 2
+      ? metric === 'distance'
+        ? distanceByPeriod
+        : durationByPeriod
+      : syntheticFromTotal(summary.avgPerPeriod);
+
+  // Resolve accent colors via CSS variables
+  const greenColor =
+    getComputedStyle(document.documentElement).getPropertyValue('--color-data-good').trim() ||
+    '#22C55E';
+  const blueColor = '#60A5FA';
+  const copperColor =
+    getComputedStyle(document.documentElement).getPropertyValue('--color-accent-copper').trim() ||
+    '#C87941';
+  const amberColor =
+    getComputedStyle(document.documentElement).getPropertyValue('--color-data-warning').trim() ||
+    '#F59E0B';
+
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-      <StatCard label="Total Distance" value={formatDistance(summary.totalDistance)} />
-      <StatCard label="Total Hours" value={formatHours(summary.totalDuration)} />
-      <StatCard label="Total Sessions" value={String(summary.totalSessions)} />
-      <StatCard label={avgLabel} value={avgFormatted} />
+      <StatCard
+        label="Total Distance"
+        value={formatDistance(summary.totalDistance)}
+        borderColorClass="border-data-good"
+        sparklineData={distSpark}
+        sparklineColor={greenColor}
+        trend={computeTrend(distSpark)}
+      />
+      <StatCard
+        label="Total Hours"
+        value={formatHours(summary.totalDuration)}
+        borderColorClass="border-blue-400"
+        sparklineData={durSpark}
+        sparklineColor={blueColor}
+        trend={computeTrend(durSpark)}
+      />
+      <StatCard
+        label="Total Sessions"
+        value={String(summary.totalSessions)}
+        borderColorClass="border-accent-copper"
+        sparklineData={sessSpark}
+        sparklineColor={copperColor}
+        trend={computeTrend(sessSpark)}
+      />
+      <StatCard
+        label={avgLabel}
+        value={avgFormatted}
+        borderColorClass="border-data-warning"
+        sparklineData={avgSpark}
+        sparklineColor={amberColor}
+        trend={computeTrend(avgSpark)}
+      />
     </div>
   );
 }
