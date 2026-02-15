@@ -504,7 +504,7 @@ function mapSourceToDb(apiSource) {
     manual: ['manual', 'csv_import', 'bluetooth'],
     concept2: ['concept2_sync'],
     strava: ['strava_sync'],
-    garmin: ['fit_import'],
+    garmin: ['fit_import', 'garmin_sync'],
   };
   return mapping[apiSource] || [apiSource];
 }

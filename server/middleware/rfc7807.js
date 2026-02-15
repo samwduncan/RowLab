@@ -47,6 +47,7 @@ export function mapSourceForApi(dbSource) {
     csv_import: 'manual',
     bluetooth: 'manual',
     fit_import: 'garmin',
+    garmin_sync: 'garmin',
     strava_sync: 'strava',
   };
   return mapping[dbSource] || 'manual';

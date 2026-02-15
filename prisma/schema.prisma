@@ -417,6 +417,7 @@ model Workout {
   type             String? // on_water, erg, strength, cardio, other
   c2LogbookId      String?  @unique
   stravaActivityId String?  @unique
+  garminActivityId String?  @unique  // Garmin activity ID for dedup
   date             DateTime
   distanceM        Int?
   durationSeconds  Decimal? @db.Decimal(10, 1)
