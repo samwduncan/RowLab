@@ -159,6 +159,42 @@ function Metric({ label, value, className }: { label: string; value: string; cla
 }
 
 /* ------------------------------------------------------------------ */
+/* Intensity classification                                            */
+/* ------------------------------------------------------------------ */
+
+type IntensityLevel = 'none' | 'medium' | 'high' | 'max';
+
+/**
+ * Determine workout intensity for the heat indicator bar.
+ * Uses watts first; falls back to duration for non-watt workouts.
+ */
+function getIntensity(workout: Workout): IntensityLevel {
+  const watts = workout.avgWatts;
+  if (watts != null) {
+    if (watts > 250) return 'max';
+    if (watts > 200) return 'high';
+    if (watts >= 150) return 'medium';
+    return 'none';
+  }
+
+  // Duration fallback for non-watt workouts (strength, yoga, etc.)
+  const dur = workout.durationSeconds;
+  if (dur != null) {
+    if (dur > 5400) return 'max'; // >90 min
+    if (dur > 3600) return 'high'; // >60 min
+  }
+
+  return 'none';
+}
+
+/** CSS color for the intensity heat bar. Uses design token CSS variables. */
+const INTENSITY_COLOR: Record<Exclude<IntensityLevel, 'none'>, string> = {
+  medium: 'var(--color-data-ok, var(--color-data-excellent))',
+  high: 'var(--color-data-warning)',
+  max: 'var(--color-data-poor)',
+};
+
+/* ------------------------------------------------------------------ */
 /* WorkoutRow                                                          */
 /* ------------------------------------------------------------------ */
 
@@ -171,6 +207,7 @@ export function WorkoutRow({ workout, isExpanded, onToggle, onEdit, onDelete }: 
   const sourceKey = (workout.source ?? 'manual') as SourceType;
   const SourceIcon = resolveSourceIcon(sourceKey);
   const sourceColor = SOURCE_CONFIG[sourceKey].color;
+  const intensity = getIntensity(workout);
 
   return (
     <motion.div variants={listItemVariants} transition={SPRING_SMOOTH} className="group">
@@ -184,7 +221,7 @@ export function WorkoutRow({ workout, isExpanded, onToggle, onEdit, onDelete }: 
             onToggle();
           }
         }}
-        className="flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-lg hover:bg-ink-hover transition-colors cursor-pointer"
+        className="relative flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-lg hover:bg-ink-hover hover:-translate-y-px transition-all duration-150 cursor-pointer"
         aria-expanded={isExpanded}
       >
         {/* Sport icon */}
@@ -225,6 +262,16 @@ export function WorkoutRow({ workout, isExpanded, onToggle, onEdit, onDelete }: 
             className={`text-ink-muted transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}
           />
         </div>
+
+        {/* Intensity heat indicator bar (right edge) */}
+        {intensity !== 'none' && (
+          <div
+            className="absolute right-0 top-0 bottom-0 w-0.5 rounded-full pointer-events-none"
+            style={{
+              background: `linear-gradient(to bottom, transparent, ${INTENSITY_COLOR[intensity]}${intensity === 'medium' ? '4d' : intensity === 'high' ? '66' : '80'}, transparent)`,
+            }}
+          />
+        )}
       </div>
     </motion.div>
   );
