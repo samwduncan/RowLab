@@ -6,6 +6,8 @@
  */
 import { ClipboardList, Pencil } from 'lucide-react';
 import MDEditor from '@uiw/react-md-editor';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { Button } from '@/components/ui/Button';
 import type { WhiteboardEntry } from '../types';
 
 interface WhiteboardViewProps {
@@ -27,38 +29,34 @@ export function WhiteboardView({ whiteboard, canEdit, onEdit }: WhiteboardViewPr
   // Empty state
   if (!whiteboard) {
     return (
-      <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-10 text-center">
-        <ClipboardList className="mx-auto mb-4 h-12 w-12 text-white/30" />
-        <p className="text-sm text-white/50 mb-5">No whiteboard posted yet.</p>
+      <GlassCard className="text-center">
+        <ClipboardList className="mx-auto mb-4 h-12 w-12 text-ink-tertiary" />
+        <p className="text-sm text-ink-muted mb-5">No whiteboard posted yet.</p>
         {canEdit && (
-          <button
-            onClick={onEdit}
-            className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white/90 transition-colors hover:bg-white/15"
-          >
+          <Button variant="primary" onClick={onEdit}>
             <Pencil className="h-4 w-4" />
             Create Today's Whiteboard
-          </button>
+          </Button>
         )}
-      </div>
+      </GlassCard>
     );
   }
 
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-white/[0.03] overflow-hidden">
+    <GlassCard padding="none">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-ink-border">
         <div>
-          <h2 className="text-base font-semibold text-white/90">{formatDate(whiteboard.date)}</h2>
-          <p className="text-xs text-white/40 mt-0.5">Posted by {whiteboard.author.name}</p>
+          <h2 className="text-base font-semibold text-ink-primary">
+            {formatDate(whiteboard.date)}
+          </h2>
+          <p className="text-xs text-ink-muted mt-0.5">Posted by {whiteboard.author.name}</p>
         </div>
         {canEdit && (
-          <button
-            onClick={onEdit}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-sm text-white/70 transition-colors hover:bg-white/[0.08] hover:text-white/90"
-          >
+          <Button variant="secondary" size="sm" onClick={onEdit}>
             <Pencil className="h-3.5 w-3.5" />
             Edit
-          </button>
+          </Button>
         )}
       </div>
 
@@ -70,11 +68,11 @@ export function WhiteboardView({ whiteboard, canEdit, onEdit }: WhiteboardViewPr
       </div>
 
       {/* Footer -- last updated */}
-      <div className="border-t border-white/[0.06] px-6 py-3">
-        <p className="text-xs text-white/30">
+      <div className="border-t border-ink-border px-6 py-3">
+        <p className="text-xs text-ink-tertiary">
           Last updated {new Date(whiteboard.updatedAt).toLocaleString()}
         </p>
       </div>
-    </div>
+    </GlassCard>
   );
 }

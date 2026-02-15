@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { ClipboardList, ShieldAlert } from 'lucide-react';
 import { listContainerVariants, listItemVariants, SPRING_SMOOTH } from '@/lib/animations';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 import { useAuth } from '@/features/auth/useAuth';
 import { whiteboardOptions, useSaveWhiteboard } from '../api';
 import { WhiteboardView } from './WhiteboardView';
@@ -36,9 +37,9 @@ export function WhiteboardPage() {
     return (
       <div className="mx-auto max-w-4xl p-4 md:p-6">
         <div className="space-y-4">
-          <div className="h-8 w-48 animate-pulse rounded-lg bg-white/[0.04]" />
-          <div className="h-4 w-32 animate-pulse rounded bg-white/[0.03]" />
-          <div className="mt-6 h-64 animate-pulse rounded-xl bg-white/[0.03]" />
+          <div className="h-8 w-48 animate-pulse rounded-lg bg-ink-border/50" />
+          <div className="h-4 w-32 animate-pulse rounded bg-ink-border/30" />
+          <div className="mt-6 h-64 animate-pulse rounded-xl bg-ink-border/30" />
         </div>
       </div>
     );
@@ -48,29 +49,20 @@ export function WhiteboardPage() {
     <div className="mx-auto max-w-4xl p-4 md:p-6 pb-20 md:pb-6">
       <motion.div variants={listContainerVariants} initial="hidden" animate="visible">
         {/* Header */}
-        <motion.div
-          variants={listItemVariants}
-          transition={SPRING_SMOOTH}
-          className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6"
-        >
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <ClipboardList className="h-5 w-5 text-white/40" />
-              <p className="text-xs font-medium uppercase tracking-wider text-white/40">
-                Team Notes
-              </p>
-            </div>
-            <h1 className="text-2xl font-bold text-white/95 tracking-tight">Whiteboard</h1>
-          </div>
-
-          <div className="flex items-center gap-2">
-            {readOnly && (
-              <span className="inline-flex items-center gap-1.5 rounded-lg bg-white/[0.04] px-3 py-1.5 text-xs text-white/40 border border-white/[0.06]">
-                <ShieldAlert className="h-3.5 w-3.5" />
-                Read Only
-              </span>
-            )}
-          </div>
+        <motion.div variants={listItemVariants} transition={SPRING_SMOOTH} className="mb-6">
+          <SectionHeader
+            title="Whiteboard"
+            description="Team Notes"
+            icon={<ClipboardList className="h-4 w-4" />}
+            action={
+              readOnly ? (
+                <span className="inline-flex items-center gap-1.5 rounded-lg bg-ink-well px-3 py-1.5 text-xs text-ink-muted border border-ink-border">
+                  <ShieldAlert className="h-3.5 w-3.5" />
+                  Read Only
+                </span>
+              ) : undefined
+            }
+          />
         </motion.div>
 
         {/* Content */}
