@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 /**
@@ -9,7 +9,7 @@ import { MemoryRouter, Routes, Route, Navigate } from 'react-router-dom';
  * This prevents 404 errors for users who might try to access /calendar directly.
  */
 describe('Calendar Route Redirect', () => {
-  it('redirects /calendar to /app/coach/training', async () => {
+  it('redirects /calendar to /app/coach/training', () => {
     // Create a test router that mimics the App.jsx routing structure
     const TestComponent = () => (
       <MemoryRouter initialEntries={['/calendar']}>
@@ -23,16 +23,14 @@ describe('Calendar Route Redirect', () => {
 
     render(<TestComponent />);
 
-    // The redirect should happen and we should see the training page content
-    await waitFor(() => {
-      expect(screen.getByText('Training Page')).toBeInTheDocument();
-    });
+    // The redirect should happen synchronously and we should see the training page content
+    expect(screen.getByText('Training Page')).toBeInTheDocument();
 
     // Should NOT see the 404 page
     expect(screen.queryByText('404 Not Found')).not.toBeInTheDocument();
   });
 
-  it('/calendar should not show 404 page', () => {
+  it('redirects before reaching 404 catch-all route', () => {
     // Test that /calendar doesn't fall through to 404 catch-all
     const TestComponent = () => (
       <MemoryRouter initialEntries={['/calendar']}>
