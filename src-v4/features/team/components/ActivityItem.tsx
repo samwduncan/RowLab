@@ -1,8 +1,8 @@
 /**
- * Single activity event in the team feed.
+ * Social-styled activity item with avatar circles, action-typed icons, and relative time.
  *
- * Layout: [Avatar circle] [Event description] [Timestamp]
- * Event type determines icon, color, and text formatting.
+ * Layout: [Left border accent] [Avatar circle OR action icon] [Rich text with bolded name] [Relative timestamp]
+ * Each event type has its own icon, color scheme, and descriptive verb.
  */
 import {
   UserPlus,
@@ -26,92 +26,148 @@ interface ActivityItemProps {
 
 interface EventConfig {
   icon: LucideIcon;
-  color: string;
-  bgColor: string;
-  format: (event: ActivityEvent) => string;
+  /** Tailwind text color for the icon */
+  iconColor: string;
+  /** Tailwind bg color for the icon circle */
+  iconBg: string;
+  /** Tailwind border-l color for the left accent */
+  borderColor: string;
+  /** Returns [action verb part] that follows the bolded actor name */
+  verb: (event: ActivityEvent) => string;
 }
 
 const EVENT_CONFIG: Record<ActivityEventType, EventConfig> = {
   member_joined: {
     icon: UserPlus,
-    color: 'text-green-400',
-    bgColor: 'bg-green-400/10',
-    format: (e) => `${e.actorName ?? 'Someone'} joined the team`,
+    iconColor: 'text-data-good',
+    iconBg: 'bg-data-good/10',
+    borderColor: 'border-l-data-good/60',
+    verb: () => ' joined the team',
   },
   member_left: {
     icon: UserMinus,
-    color: 'text-red-400',
-    bgColor: 'bg-red-400/10',
-    format: (e) => `${e.actorName ?? 'Someone'} left the team`,
+    iconColor: 'text-data-poor',
+    iconBg: 'bg-data-poor/10',
+    borderColor: 'border-l-data-poor/60',
+    verb: () => ' left the team',
   },
   role_changed: {
     icon: Shield,
-    color: 'text-blue-400',
-    bgColor: 'bg-blue-400/10',
-    format: (e) => {
+    iconColor: 'text-data-warning',
+    iconBg: 'bg-data-warning/10',
+    borderColor: 'border-l-data-warning/60',
+    verb: (e) => {
       const data = e.data as { newRole?: string } | null;
       const role = data?.newRole ?? 'a new role';
-      return `${e.actorName ?? 'Someone'} was assigned ${role}`;
+      return ` was promoted to ${role}`;
     },
   },
   announcement: {
     icon: Megaphone,
-    color: 'text-accent-copper',
-    bgColor: 'bg-accent-copper/10',
-    format: (e) => {
-      const truncated = e.title.length > 60 ? e.title.slice(0, 57) + '...' : e.title;
-      return `${e.actorName ?? 'Someone'} posted: ${truncated}`;
+    iconColor: 'text-accent-copper',
+    iconBg: 'bg-accent-copper/10',
+    borderColor: 'border-l-accent-copper/60',
+    verb: (e) => {
+      const truncated = e.title.length > 50 ? e.title.slice(0, 47) + '...' : e.title;
+      return ` posted: "${truncated}"`;
     },
   },
   team_created: {
     icon: Sparkles,
-    color: 'text-accent-copper',
-    bgColor: 'bg-accent-copper/10',
-    format: () => 'Team created',
+    iconColor: 'text-data-good',
+    iconBg: 'bg-data-good/10',
+    borderColor: 'border-l-data-good/60',
+    verb: () => ' created the team',
   },
   team_updated: {
     icon: Settings,
-    color: 'text-ink-secondary',
-    bgColor: 'bg-ink-well',
-    format: () => 'Team settings updated',
+    iconColor: 'text-ink-secondary',
+    iconBg: 'bg-ink-well',
+    borderColor: 'border-l-ink-secondary/40',
+    verb: () => ' updated team settings',
   },
   invite_generated: {
     icon: Link2,
-    color: 'text-purple-400',
-    bgColor: 'bg-purple-400/10',
-    format: (e) => `${e.actorName ?? 'Someone'} generated an invite code`,
+    iconColor: 'text-purple-400',
+    iconBg: 'bg-purple-400/10',
+    borderColor: 'border-l-purple-400/60',
+    verb: () => ' generated an invite link',
   },
   workout: {
     icon: Dumbbell,
-    color: 'text-green-400',
-    bgColor: 'bg-green-400/10',
-    format: (e) => {
+    iconColor: 'text-data-good',
+    iconBg: 'bg-data-good/10',
+    borderColor: 'border-l-data-good/60',
+    verb: (e) => {
       const data = e.data as { distance?: number; type?: string } | null;
-      const distance = data?.distance ? `${data.distance}m` : '';
-      const type = data?.type ?? '';
-      const suffix = [distance, type].filter(Boolean).join(' ');
-      return `${e.actorName ?? 'Someone'} logged${suffix ? ` ${suffix}` : ' a workout'}`;
+      const parts: string[] = [];
+      if (data?.type) parts.push(data.type);
+      if (data?.distance) parts.push(`${data.distance}m`);
+      const suffix = parts.length > 0 ? ` (${parts.join(' ')})` : '';
+      return ` logged a workout${suffix}`;
     },
   },
   pr: {
     icon: Trophy,
-    color: 'text-yellow-400',
-    bgColor: 'bg-yellow-400/10',
-    format: (e) => `${e.actorName ?? 'Someone'} set a new PR`,
+    iconColor: 'text-yellow-400',
+    iconBg: 'bg-yellow-400/10',
+    borderColor: 'border-l-yellow-400/60',
+    verb: () => ' set a new personal record',
   },
   session_completed: {
     icon: CheckCircle,
-    color: 'text-green-400',
-    bgColor: 'bg-green-400/10',
-    format: (e) => `${e.actorName ?? 'Someone'} completed a training session`,
+    iconColor: 'text-data-good',
+    iconBg: 'bg-data-good/10',
+    borderColor: 'border-l-data-good/60',
+    verb: () => ' completed a training session',
   },
   achievement_unlocked: {
     icon: Medal,
-    color: 'text-yellow-400',
-    bgColor: 'bg-yellow-400/10',
-    format: (e) => `${e.actorName ?? 'Someone'} unlocked an achievement`,
+    iconColor: 'text-yellow-400',
+    iconBg: 'bg-yellow-400/10',
+    borderColor: 'border-l-yellow-400/60',
+    verb: () => ' unlocked an achievement',
   },
 };
+
+const FALLBACK_CONFIG: EventConfig = {
+  icon: Settings,
+  iconColor: 'text-ink-muted',
+  iconBg: 'bg-ink-well',
+  borderColor: 'border-l-ink-border',
+  verb: (e) => ` ${e.title}`,
+};
+
+/**
+ * Generate a deterministic color from a name string for avatar backgrounds.
+ * Returns a Tailwind bg class.
+ */
+const AVATAR_COLORS = [
+  'bg-accent-copper/20',
+  'bg-blue-400/20',
+  'bg-purple-400/20',
+  'bg-data-good/20',
+  'bg-yellow-400/20',
+  'bg-pink-400/20',
+  'bg-teal-400/20',
+  'bg-orange-400/20',
+];
+
+function getAvatarColor(name: string): string {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length]!;
+}
+
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2 && parts[0] && parts[parts.length - 1]) {
+    return ((parts[0][0] ?? '') + (parts[parts.length - 1]![0] ?? '')).toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase();
+}
 
 function getTimeAgo(dateStr: string): string {
   const date = new Date(dateStr);
@@ -120,53 +176,65 @@ function getTimeAgo(dateStr: string): string {
   const diffMinutes = Math.floor(diffMs / 60_000);
 
   if (diffMinutes < 1) return 'just now';
-  if (diffMinutes < 60) return `${diffMinutes}m`;
+  if (diffMinutes < 60) return `${diffMinutes}m ago`;
   const diffHours = Math.floor(diffMinutes / 60);
-  if (diffHours < 24) return `${diffHours}h`;
+  if (diffHours < 24) return `${diffHours}h ago`;
   const diffDays = Math.floor(diffHours / 24);
-  if (diffDays < 7) return `${diffDays}d`;
+  if (diffDays === 1) return 'yesterday';
+  if (diffDays < 7) return `${diffDays}d ago`;
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
 export function ActivityItem({ event }: ActivityItemProps) {
-  const config = EVENT_CONFIG[event.type] ?? {
-    icon: Settings,
-    color: 'text-ink-muted',
-    bgColor: 'bg-ink-well',
-    format: (e: ActivityEvent) => e.title,
-  };
-
+  const config = EVENT_CONFIG[event.type] ?? FALLBACK_CONFIG;
   const Icon = config.icon;
-  const description = config.format(event);
+  const verb = config.verb(event);
   const timeAgo = getTimeAgo(event.createdAt);
 
   return (
-    <div className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-ink-well/30">
-      {/* Actor avatar or event icon */}
+    <div
+      className={`flex items-center gap-3 border-l-2 ${config.borderColor} rounded-lg px-3 py-2.5 transition-colors hover:bg-ink-hover/30`}
+    >
+      {/* Avatar circle (photo > initials > action icon fallback) */}
       {event.actorAvatarUrl ? (
         <img
           src={event.actorAvatarUrl}
           alt=""
-          className="h-8 w-8 shrink-0 rounded-full object-cover"
+          className="h-10 w-10 shrink-0 rounded-full object-cover"
         />
+      ) : event.actorName ? (
+        <div
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${getAvatarColor(event.actorName)} text-xs font-semibold text-ink-primary`}
+        >
+          {getInitials(event.actorName)}
+        </div>
       ) : (
         <div
-          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${config.bgColor}`}
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${config.iconBg}`}
         >
-          <Icon size={14} className={config.color} />
+          <Icon size={16} className={config.iconColor} />
         </div>
       )}
 
-      {/* Description */}
-      <p className="min-w-0 flex-1 text-sm text-ink-secondary">
-        {event.actorName && <span className="font-medium text-ink-primary">{event.actorName}</span>}
-        {event.actorName ? description.replace(event.actorName, '') : description}
+      {/* Rich text description */}
+      <p className="min-w-0 flex-1 text-sm leading-relaxed text-ink-secondary">
+        {event.actorName ? (
+          <>
+            <span className="font-semibold text-ink-primary">{event.actorName}</span>
+            {verb}
+          </>
+        ) : (
+          <>
+            <Icon size={14} className={`inline-block align-text-bottom mr-1 ${config.iconColor}`} />
+            {event.title || verb.trim()}
+          </>
+        )}
       </p>
 
-      {/* Timestamp */}
+      {/* Relative timestamp */}
       <time
         dateTime={event.createdAt}
-        className="shrink-0 text-xs tabular-nums text-ink-tertiary"
+        className="shrink-0 text-xs tabular-nums text-ink-muted"
         title={new Date(event.createdAt).toLocaleString()}
       >
         {timeAgo}

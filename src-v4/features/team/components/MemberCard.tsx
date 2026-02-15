@@ -1,10 +1,11 @@
 /**
- * Roster member card with avatar, name, role badge, and activity summary.
+ * Roster member card with avatar, name, prominent role badge, and activity summary.
  *
- * Glass card styling with subtle hover border glow.
- * Avatar: first letter fallback if no avatarUrl.
- * Role badge: colored per role (Admin=copper, Coach=blue, Athlete=default).
+ * GlassCard with interactive hover lift.
+ * Role badges: Owner=copper with crown, Admin=copper, Coach=blue, Athlete=subtle.
+ * Last-active indicator: green dot if active in last 24h.
  */
+import { Crown, Shield } from 'lucide-react';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { formatRelativeDate } from '@/lib/format';
 import { ROLE_DISPLAY } from '../types';
@@ -14,10 +15,35 @@ interface MemberCardProps {
   member: RosterMember;
 }
 
-const ROLE_BADGE_COLORS: Record<string, string> = {
-  OWNER: 'bg-accent-copper/20 text-accent-copper',
-  COACH: 'bg-blue-500/20 text-blue-400',
-  ATHLETE: 'bg-ink-well text-ink-secondary',
+interface RoleBadgeConfig {
+  classes: string;
+  icon?: typeof Crown;
+}
+
+const ROLE_BADGE_CONFIG: Record<string, RoleBadgeConfig> = {
+  OWNER: {
+    classes:
+      'bg-accent-copper/15 text-accent-copper border border-accent-copper/30 font-semibold px-2.5 py-1 rounded-lg text-xs',
+    icon: Crown,
+  },
+  ADMIN: {
+    classes:
+      'bg-accent-copper/10 text-accent-copper border border-accent-copper/20 px-2.5 py-1 rounded-lg text-xs',
+    icon: Shield,
+  },
+  COACH: {
+    classes:
+      'bg-blue-400/10 text-blue-400 border border-blue-400/20 px-2.5 py-1 rounded-lg text-xs',
+  },
+  ATHLETE: {
+    classes:
+      'bg-ink-secondary/10 text-ink-secondary border border-ink-secondary/20 px-2.5 py-1 rounded-lg text-xs',
+  },
+};
+
+const DEFAULT_BADGE: RoleBadgeConfig = {
+  classes:
+    'bg-ink-secondary/10 text-ink-secondary border border-ink-secondary/20 px-2.5 py-1 rounded-lg text-xs',
 };
 
 function getInitials(name: string): string {
@@ -45,9 +71,22 @@ function getJoinedRelative(dateStr: string): string {
   return `Joined ${diffYears} years ago`;
 }
 
+/**
+ * Check if a workout date is within the last 24 hours.
+ */
+function isActiveRecently(lastWorkoutDate: string | null): boolean {
+  if (!lastWorkoutDate) return false;
+  const date = new Date(lastWorkoutDate);
+  const now = new Date();
+  return now.getTime() - date.getTime() < 24 * 60 * 60 * 1000;
+}
+
 export function MemberCard({ member }: MemberCardProps) {
-  const roleBadgeClass = ROLE_BADGE_COLORS[member.role] ?? ROLE_BADGE_COLORS.ATHLETE;
+  const badgeConfig = ROLE_BADGE_CONFIG[member.role] ?? DEFAULT_BADGE;
   const roleLabel = ROLE_DISPLAY[member.role] ?? member.role;
+  const BadgeIcon = badgeConfig.icon;
+  const recentlyActive = isActiveRecently(member.lastWorkoutDate);
+
   const activityText =
     member.workoutsLast30Days > 0
       ? `${member.workoutsLast30Days} workout${member.workoutsLast30Days !== 1 ? 's' : ''} last 30d`
@@ -57,28 +96,36 @@ export function MemberCard({ member }: MemberCardProps) {
     : '\u2014';
 
   return (
-    <GlassCard hover padding="md" as="article">
+    <GlassCard hover interactive padding="md" as="article">
       <div className="flex items-start gap-3">
-        {/* Avatar */}
-        {member.avatarUrl ? (
-          <img
-            src={member.avatarUrl}
-            alt={member.name}
-            className="h-11 w-11 shrink-0 rounded-full object-cover"
-          />
-        ) : (
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ink-well text-sm font-semibold text-ink-secondary">
-            {getInitials(member.name)}
-          </div>
-        )}
+        {/* Avatar with optional active indicator */}
+        <div className="relative shrink-0">
+          {member.avatarUrl ? (
+            <img
+              src={member.avatarUrl}
+              alt={member.name}
+              className="h-11 w-11 rounded-full object-cover"
+            />
+          ) : (
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-ink-well text-sm font-semibold text-ink-secondary">
+              {getInitials(member.name)}
+            </div>
+          )}
+          {/* Green active dot */}
+          {recentlyActive && (
+            <span
+              className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-ink-base bg-data-good"
+              title="Active in last 24h"
+            />
+          )}
+        </div>
 
         {/* Info */}
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <h4 className="truncate text-sm font-semibold text-ink-primary">{member.name}</h4>
-            <span
-              className={`shrink-0 rounded-md px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ${roleBadgeClass}`}
-            >
+            <span className={`inline-flex shrink-0 items-center gap-1 ${badgeConfig.classes}`}>
+              {BadgeIcon && <BadgeIcon size={11} />}
               {roleLabel}
             </span>
           </div>
@@ -92,8 +139,13 @@ export function MemberCard({ member }: MemberCardProps) {
         <span className="text-xs text-ink-tertiary">Last: {lastWorkout}</span>
       </div>
 
-      {/* Joined */}
-      <p className="mt-2 text-[11px] text-ink-tertiary">{getJoinedRelative(member.joinedAt)}</p>
+      {/* Joined + active status */}
+      <div className="mt-2 flex items-center justify-between">
+        <p className="text-[11px] text-ink-tertiary">{getJoinedRelative(member.joinedAt)}</p>
+        {recentlyActive && (
+          <span className="text-[11px] font-medium text-data-good">Active today</span>
+        )}
+      </div>
     </GlassCard>
   );
 }

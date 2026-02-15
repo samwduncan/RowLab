@@ -1,9 +1,9 @@
 /**
- * Team Activity Feed with infinite scroll.
+ * Team Activity Feed with infinite scroll and date grouping.
  *
  * Uses useTeamActivity hook for paginated data.
- * Groups events by date (Today, Yesterday, {date}) with section headers.
- * Supports compact mode (used in Overview sidebar) with limited items.
+ * Groups events by date: Today, Yesterday, This Week, Older (with month label).
+ * Stagger animation on entrance with motion variants.
  */
 import { motion } from 'motion/react';
 import { listContainerVariants, listItemVariants, SPRING_SMOOTH } from '@/lib/animations';
@@ -23,6 +23,10 @@ function groupByDate(events: ActivityEvent[]): Array<{ label: string; events: Ac
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const yesterday = new Date(today.getTime() - 86_400_000);
+  // Start of the current week (Monday-based)
+  const dayOfWeek = today.getDay();
+  const mondayOffset = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+  const weekStart = new Date(today.getTime() - mondayOffset * 86_400_000);
 
   for (const event of events) {
     const date = new Date(event.createdAt);
@@ -33,10 +37,15 @@ function groupByDate(events: ActivityEvent[]): Array<{ label: string; events: Ac
       label = 'Today';
     } else if (eventDay.getTime() === yesterday.getTime()) {
       label = 'Yesterday';
+    } else if (eventDay.getTime() >= weekStart.getTime()) {
+      label = 'This Week';
     } else {
-      label = eventDay.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      // Group older events by month
+      const monthLabel = eventDay.toLocaleDateString('en-US', { month: 'long' });
       if (eventDay.getFullYear() !== now.getFullYear()) {
-        label += `, ${eventDay.getFullYear()}`;
+        label = `${monthLabel} ${eventDay.getFullYear()}`;
+      } else {
+        label = monthLabel;
       }
     }
 
@@ -48,7 +57,10 @@ function groupByDate(events: ActivityEvent[]): Array<{ label: string; events: Ac
     }
   }
 
-  return Array.from(groups.entries()).map(([label, events]) => ({ label, events }));
+  return Array.from(groups.entries()).map(([label, groupEvents]) => ({
+    label,
+    events: groupEvents,
+  }));
 }
 
 export function TeamActivityFeed({ teamId, compact }: TeamActivityFeedProps) {
@@ -63,11 +75,12 @@ export function TeamActivityFeed({ teamId, compact }: TeamActivityFeedProps) {
             key={i}
             className="flex items-center gap-3 animate-shimmer rounded-lg bg-ink-raised p-3"
           >
-            <div className="h-8 w-8 rounded-full bg-ink-well" />
+            <div className="h-10 w-10 rounded-full bg-ink-well" />
             <div className="flex-1 space-y-2">
               <div className="h-3 w-3/4 rounded bg-ink-well" />
               <div className="h-2 w-1/3 rounded bg-ink-well" />
             </div>
+            <div className="h-2 w-8 rounded bg-ink-well" />
           </div>
         ))}
       </div>
@@ -113,14 +126,27 @@ export function TeamActivityFeed({ teamId, compact }: TeamActivityFeedProps) {
     >
       {grouped.map((group) => (
         <motion.div key={group.label} variants={listItemVariants} transition={SPRING_SMOOTH}>
-          <h4 className="mb-2 text-xs font-medium uppercase tracking-wider text-ink-muted">
-            {group.label}
-          </h4>
-          <div className="space-y-1">
-            {group.events.map((event) => (
-              <ActivityItem key={event.id} event={event} />
-            ))}
+          <div className="mb-2 flex items-center gap-3">
+            <h4 className="text-xs font-medium uppercase tracking-wider text-ink-muted">
+              {group.label}
+            </h4>
+            {group.label === 'Today' && (
+              <span className="h-1.5 w-1.5 rounded-full bg-data-good animate-pulse" title="Live" />
+            )}
+            <div className="flex-1 border-t border-ink-well/30" />
           </div>
+          <motion.div
+            variants={listContainerVariants}
+            initial="hidden"
+            animate="visible"
+            className="space-y-1"
+          >
+            {group.events.map((event) => (
+              <motion.div key={event.id} variants={listItemVariants} transition={SPRING_SMOOTH}>
+                <ActivityItem event={event} />
+              </motion.div>
+            ))}
+          </motion.div>
         </motion.div>
       ))}
 

@@ -1,11 +1,18 @@
 /**
- * /settings route -- user settings page with integrations and analytics thresholds.
+ * /settings route -- comprehensive settings page with sidebar navigation.
+ * 6 sections: Profile, Notifications, Integrations, Analytics, Privacy, Account.
+ * Desktop: sidebar + content grid. Mobile: horizontal scrollable tab bar.
  */
 import { useState, useCallback, useEffect } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
+import { motion } from 'motion/react';
+import { User, Bell, Plug, Activity, Shield, Settings, Save, Check } from 'lucide-react';
 import { IntegrationsSection } from '@/features/integrations';
 import { useAnalyticsSettings, useUpdateAnalyticsSettings } from '@/features/analytics/api';
-import { Activity, Save, Check } from 'lucide-react';
+import { ProfileSection } from '@/features/settings/components/ProfileSection';
+import { NotificationsSection } from '@/features/settings/components/NotificationsSection';
+import { PrivacySection } from '@/features/settings/components/PrivacySection';
+import { AccountSection } from '@/features/settings/components/AccountSection';
 import type { AnalyticsSettings } from '@/features/analytics/types';
 
 export const Route = createFileRoute('/_authenticated/settings')({
@@ -14,6 +21,21 @@ export const Route = createFileRoute('/_authenticated/settings')({
     breadcrumb: 'Settings',
   },
 });
+
+/* ------------------------------------------------------------------ */
+/* Settings Sections Config                                             */
+/* ------------------------------------------------------------------ */
+
+const SETTINGS_SECTIONS = [
+  { id: 'profile', label: 'Profile', icon: User },
+  { id: 'notifications', label: 'Notifications', icon: Bell },
+  { id: 'integrations', label: 'Integrations', icon: Plug },
+  { id: 'analytics', label: 'Analytics', icon: Activity },
+  { id: 'privacy', label: 'Privacy', icon: Shield },
+  { id: 'account', label: 'Account', icon: Settings },
+] as const;
+
+type SectionId = (typeof SETTINGS_SECTIONS)[number]['id'];
 
 /* ------------------------------------------------------------------ */
 /* Analytics Settings Section                                          */
@@ -68,17 +90,17 @@ function AnalyticsSettingsSection() {
 
   if (isLoading) {
     return (
-      <section className="mt-10">
+      <div className="space-y-4">
         <div className="animate-pulse space-y-4">
           <div className="h-6 w-48 rounded bg-ink-border/50" />
           <div className="h-64 rounded-xl bg-ink-border/30" />
         </div>
-      </section>
+      </div>
     );
   }
 
   return (
-    <section className="mt-10">
+    <div>
       <div className="flex items-center gap-2 mb-1">
         <Activity className="w-4 h-4 text-accent-copper" />
         <h2 className="text-lg font-semibold text-ink-primary">Analytics Thresholds</h2>
@@ -159,7 +181,7 @@ function AnalyticsSettingsSection() {
               flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium
               bg-accent-copper text-ink-inverse hover:bg-accent-copper/90
               disabled:opacity-50 disabled:cursor-not-allowed
-              transition-colors
+              transition-colors cursor-pointer
             "
           >
             {saved ? (
@@ -176,7 +198,7 @@ function AnalyticsSettingsSection() {
           </button>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -228,15 +250,150 @@ function SettingsField({
 }
 
 /* ------------------------------------------------------------------ */
+/* Sidebar Navigation                                                   */
+/* ------------------------------------------------------------------ */
+
+function SettingsSidebar({
+  activeSection,
+  onSelect,
+}: {
+  activeSection: SectionId;
+  onSelect: (id: SectionId) => void;
+}) {
+  return (
+    <nav className="hidden lg:flex flex-col gap-1" aria-label="Settings sections">
+      {SETTINGS_SECTIONS.map((section) => {
+        const Icon = section.icon;
+        const isActive = activeSection === section.id;
+
+        return (
+          <button
+            key={section.id}
+            type="button"
+            onClick={() => onSelect(section.id)}
+            className={`
+              group relative flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm
+              transition-colors duration-150 cursor-pointer
+              ${
+                isActive
+                  ? 'bg-ink-well text-ink-primary font-medium'
+                  : 'text-ink-secondary hover:text-ink-primary hover:bg-ink-hover'
+              }
+            `.trim()}
+          >
+            {/* Copper left indicator */}
+            {isActive && (
+              <motion.div
+                layoutId="settings-nav-indicator"
+                className="absolute left-0 top-2 bottom-2 w-0.5 rounded-full bg-accent-copper"
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              />
+            )}
+            <Icon className="w-4 h-4 shrink-0" />
+            <span>{section.label}</span>
+          </button>
+        );
+      })}
+    </nav>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Mobile Tab Bar                                                       */
+/* ------------------------------------------------------------------ */
+
+function MobileTabBar({
+  activeSection,
+  onSelect,
+}: {
+  activeSection: SectionId;
+  onSelect: (id: SectionId) => void;
+}) {
+  return (
+    <nav
+      className="flex lg:hidden overflow-x-auto gap-1 px-4 py-2 -mx-4 no-scrollbar"
+      aria-label="Settings sections"
+    >
+      {SETTINGS_SECTIONS.map((section) => {
+        const Icon = section.icon;
+        const isActive = activeSection === section.id;
+
+        return (
+          <button
+            key={section.id}
+            type="button"
+            onClick={() => onSelect(section.id)}
+            className={`
+              relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm whitespace-nowrap
+              transition-colors duration-150 shrink-0 cursor-pointer
+              ${
+                isActive
+                  ? 'bg-accent-copper/10 text-accent-copper font-medium'
+                  : 'text-ink-secondary hover:text-ink-primary hover:bg-ink-hover'
+              }
+            `.trim()}
+          >
+            <Icon className="w-3.5 h-3.5 shrink-0" />
+            <span>{section.label}</span>
+            {isActive && (
+              <motion.div
+                layoutId="settings-tab-indicator"
+                className="absolute inset-0 rounded-full border border-accent-copper/30"
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              />
+            )}
+          </button>
+        );
+      })}
+    </nav>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Section Content Renderer                                             */
+/* ------------------------------------------------------------------ */
+
+function SectionContent({ section }: { section: SectionId }) {
+  switch (section) {
+    case 'profile':
+      return <ProfileSection />;
+    case 'notifications':
+      return <NotificationsSection />;
+    case 'integrations':
+      return <IntegrationsSection />;
+    case 'analytics':
+      return <AnalyticsSettingsSection />;
+    case 'privacy':
+      return <PrivacySection />;
+    case 'account':
+      return <AccountSection />;
+    default:
+      return null;
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* SettingsPage                                                        */
 /* ------------------------------------------------------------------ */
 
 function SettingsPage() {
+  const [activeSection, setActiveSection] = useState<SectionId>('profile');
+
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-heading-gradient mb-8">Settings</h1>
-      <IntegrationsSection />
-      <AnalyticsSettingsSection />
+    <div className="max-w-5xl mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold text-heading-gradient mb-6">Settings</h1>
+
+      {/* Mobile tab bar */}
+      <MobileTabBar activeSection={activeSection} onSelect={setActiveSection} />
+
+      {/* Desktop: sidebar + content grid */}
+      <div className="lg:grid lg:grid-cols-[220px_1fr] lg:gap-8 mt-4 lg:mt-0">
+        <SettingsSidebar activeSection={activeSection} onSelect={setActiveSection} />
+
+        <div className="min-w-0">
+          <SectionContent section={activeSection} />
+        </div>
+      </div>
     </div>
   );
 }
