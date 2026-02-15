@@ -117,6 +117,21 @@
   animation: pulse-subtle 1.5s ease-in-out infinite;
 }
 
+/* === PULSE-SLOW KEYFRAME (PR celebration glow) === */
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
 /* === SHIMMER KEYFRAMES === */
 @keyframes shimmer {
   0% {

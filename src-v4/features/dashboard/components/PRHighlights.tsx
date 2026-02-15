@@ -1,6 +1,7 @@
 /**
  * PR highlights grid showing personal records for standard distances.
  * Filters out records with no data, sorts by distance ascending (500m first).
+ * Recent PRs (last 7 days) are flagged for celebration glow.
  * Ref: DASH-04 (PR highlights).
  */
 
@@ -10,6 +11,15 @@ import { listContainerVariants, listItemVariants, SPRING_SMOOTH } from '@/lib/an
 import { EmptyState } from '@/components/ui/EmptyState';
 import { PRCard } from './PRCard';
 import type { PRRecord } from '../types';
+
+const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+
+/** Check if a PR date is within the last 7 days. */
+function isRecentPR(bestDate: string | null): boolean {
+  if (!bestDate) return false;
+  const prDate = new Date(bestDate).getTime();
+  return Date.now() - prDate < SEVEN_DAYS_MS;
+}
 
 interface PRHighlightsProps {
   records: PRRecord[];
@@ -70,7 +80,7 @@ export function PRHighlights({ records, className = '' }: PRHighlightsProps) {
             variants={listItemVariants}
             transition={SPRING_SMOOTH}
           >
-            <PRCard record={record} />
+            <PRCard record={record} isRecent={isRecentPR(record.bestDate)} />
           </motion.div>
         ))}
       </motion.div>

@@ -1,11 +1,13 @@
 /**
  * Dashboard layout orchestrator.
  * Composes all dashboard sections with staggered entrance animations.
- * Sections: Hero → Stats Grid → Recent Workouts → PR Highlights → Team Context (conditional).
+ * Sections separated by SectionDivider ("The Wake") for visual rhythm.
+ * Sections: Hero → Stats Grid → [Wake] → Recent Workouts → [Wake] → PR Highlights → Team Context (conditional).
  */
 
 import { motion } from 'motion/react';
 import { listContainerVariants, listItemVariants, SPRING_SMOOTH } from '@/lib/animations';
+import { SectionDivider } from '@/components/ui/SectionDivider';
 import { HeroSection } from './HeroSection';
 import { QuickStatsGrid } from './QuickStatsGrid';
 import { RecentWorkouts } from './RecentWorkouts';
@@ -31,16 +33,16 @@ export function DashboardContent({ data, userName, teamContext }: DashboardConte
           <QuickStatsGrid stats={data.stats} className="mt-6" />
         </motion.div>
 
-        <motion.div variants={listItemVariants} transition={SPRING_SMOOTH}>
-          <RecentWorkouts
-            workouts={data.workouts.items}
-            totalCount={data.workouts.totalCount}
-            className="mt-8"
-          />
-        </motion.div>
+        <SectionDivider spacing="my-8" />
 
         <motion.div variants={listItemVariants} transition={SPRING_SMOOTH}>
-          <PRHighlights records={data.prs.records} className="mt-8" />
+          <RecentWorkouts workouts={data.workouts.items} totalCount={data.workouts.totalCount} />
+        </motion.div>
+
+        <SectionDivider spacing="my-8" />
+
+        <motion.div variants={listItemVariants} transition={SPRING_SMOOTH}>
+          <PRHighlights records={data.prs.records} />
         </motion.div>
 
         {teamContext && (
