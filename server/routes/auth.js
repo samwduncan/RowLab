@@ -272,12 +272,17 @@ router.get('/me', authenticateToken, async (req, res) => {
 /**
  * POST /api/v1/auth/dev-login
  * Passwordless admin login — only from localhost or Tailscale (100.x.x.x)
- * SECURITY: Disabled in production environments
+ * SECURITY: Only enabled in development and test environments (whitelist approach)
  */
 router.post('/dev-login', async (req, res) => {
-  // Disable in production
-  if (process.env.NODE_ENV === 'production') {
-    logger.warn('Dev-login attempt rejected in production environment');
+  // Only allow in development or test environments
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isTest = process.env.NODE_ENV === 'test';
+  
+  if (!isDevelopment && !isTest) {
+    logger.warn('Dev-login attempt rejected in non-development environment', {
+      nodeEnv: process.env.NODE_ENV || 'undefined',
+    });
     return res.status(404).json({
       success: false,
       error: { code: 'NOT_FOUND', message: 'Endpoint not found' },
