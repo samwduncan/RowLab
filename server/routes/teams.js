@@ -43,6 +43,21 @@ const validateRequest = (req, res, next) => {
 };
 
 /**
+ * GET /api/v1/teams
+ * List teams for authenticated user
+ * Returns 405 - use GET /api/v1/teams/:id instead
+ */
+router.get('/', authenticateToken, (req, res) => {
+  res.status(405).json({
+    success: false,
+    error: {
+      code: 'METHOD_NOT_ALLOWED',
+      message: 'Use GET /api/v1/teams/:id to fetch a specific team',
+    },
+  });
+});
+
+/**
  * GET /api/v1/teams/invite-codes/validate/:code
  * Validate an invite code without joining (no auth required).
  * Returns team name, role, and code validity for the invite preview page.
