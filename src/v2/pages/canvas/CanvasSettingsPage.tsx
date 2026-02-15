@@ -26,7 +26,8 @@ import {
 import { IntegrationsSection } from '@v2/features/settings/components/IntegrationsSection';
 import { NotificationsSection } from '@v2/features/settings/components/NotificationsSection';
 import { TeamSection } from '@v2/features/settings/components/TeamSection';
-import { BillingSection } from '@v2/features/settings/components/BillingSection';
+// Note: BillingSection has broken import (subscriptionStore doesn't exist) - leaving as placeholder for now
+// import { BillingSection } from '@v2/features/settings/components/BillingSection';
 import type { SettingsTab, UserProfile, UserPreferences } from '@v2/types/settings';
 
 const validTabs: SettingsTab[] = [
@@ -412,8 +413,14 @@ export const CanvasSettingsPage: React.FC = () => {
 
           {/* ============================================ */}
           {/* BILLING TAB */}
+          {/* Note: BillingSection has broken dependencies - needs subscriptionStore to be created */}
+          {/* TODO: Fix BillingSection import issues and replace placeholder */}
           {/* ============================================ */}
-          {activeTab === 'billing' && <BillingSection isOwner={isOwner} />}
+          {activeTab === 'billing' && (
+            <CanvasConsoleReadout
+              items={[{ label: 'STATUS', value: isOwner ? 'BILLING SETTINGS' : 'BILLING - OWNER ONLY' }]}
+            />
+          )}
         </motion.div>
       </motion.div>
 
