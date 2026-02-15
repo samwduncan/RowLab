@@ -142,20 +142,22 @@ export function AnalyticsTab() {
 
   const handleVolumeBarClick = useCallback(
     (startDate: string, endDate: string) => {
-      void navigate({
-        to: '/workouts' as string,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      void (navigate as any)({
+        to: '/workouts',
         search: { dateFrom: startDate, dateTo: endDate },
-      } as Parameters<typeof navigate>[0]);
+      });
     },
     [navigate]
   );
 
   const handleDayClick = useCallback(
     (date: string) => {
-      void navigate({
-        to: '/workouts' as string,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      void (navigate as any)({
+        to: '/workouts',
         search: { dateFrom: date, dateTo: date },
-      } as Parameters<typeof navigate>[0]);
+      });
     },
     [navigate]
   );
