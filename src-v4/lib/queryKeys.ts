@@ -42,6 +42,13 @@ export const queryKeys = {
     achievements: () => [...queryKeys.profile.all, 'achievements'] as const,
     prs: () => [...queryKeys.profile.all, 'prs'] as const,
   },
+  analytics: {
+    all: ['analytics'] as const,
+    pmc: (filters: { range: string; sport: string | null }) =>
+      [...queryKeys.analytics.all, 'pmc', filters] as const,
+    volume: (filters: { range: string; granularity: string; metric: string }) =>
+      [...queryKeys.analytics.all, 'volume', filters] as const,
+  },
   integrations: {
     all: ['integrations'] as const,
     c2: {
