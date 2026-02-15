@@ -1129,6 +1129,15 @@ model UserSettings {
   lastName           String?
   role               String?
   avatar             String?  @db.Text
+
+  // Analytics threshold settings
+  dateOfBirth               DateTime?
+  maxHeartRate              Int?            // Default: 220 - age, or 185 if no age
+  lactateThresholdHR        Int?            // Default: 0.85 * maxHR
+  functionalThresholdPower  Int?            // Default: 200W
+  tsbAlertThreshold         Int?            @default(-30)
+  acwrAlertThreshold        Decimal?        @default(1.5) @db.Decimal(3, 1)
+
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
