@@ -18,6 +18,7 @@ interface TabToggleProps {
   onTabChange: (tabId: string) => void;
   layoutId?: string;
   size?: 'sm' | 'md';
+  fullWidth?: boolean;
   className?: string;
 }
 
@@ -32,11 +33,12 @@ export function TabToggle({
   onTabChange,
   layoutId = 'tab-indicator',
   size = 'md',
+  fullWidth = false,
   className = '',
 }: TabToggleProps) {
   return (
     <div
-      className={`inline-flex items-center gap-1 p-1 rounded-xl bg-ink-well/60 ${className}`}
+      className={`${fullWidth ? 'flex' : 'inline-flex'} items-center gap-1 p-1 rounded-xl bg-ink-well/60 ${className}`}
       role="tablist"
     >
       {tabs.map((tab) => {
@@ -51,6 +53,7 @@ export function TabToggle({
             className={`
               relative flex items-center justify-center gap-1.5
               ${sizeStyles[size]}
+              ${fullWidth ? 'flex-1' : ''}
               rounded-lg font-medium cursor-pointer
               transition-colors duration-150
               ${isActive ? 'text-ink-primary' : 'text-ink-muted hover:text-ink-secondary'}

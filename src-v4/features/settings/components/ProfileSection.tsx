@@ -110,7 +110,7 @@ export function ProfileSection() {
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-accent-copper text-white flex items-center justify-center hover:bg-accent-copper/90 transition-colors cursor-pointer"
+              className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-accent-copper text-ink-deep flex items-center justify-center hover:bg-accent-copper/90 transition-colors cursor-pointer"
               aria-label="Change avatar"
             >
               <Camera className="w-3.5 h-3.5" />

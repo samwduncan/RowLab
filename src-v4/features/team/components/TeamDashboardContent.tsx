@@ -7,8 +7,8 @@
  */
 import { Suspense } from 'react';
 import { getRouteApi, useNavigate } from '@tanstack/react-router';
-import { motion } from 'motion/react';
 import { LayoutDashboard, Users, Activity } from 'lucide-react';
+import { TabToggle } from '@/components/ui/TabToggle';
 import { TeamOverview } from './TeamOverview';
 import { TeamRoster } from './TeamRoster';
 import { TeamActivityFeed } from './TeamActivityFeed';
@@ -43,7 +43,7 @@ export function TeamDashboardContent() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl p-4 md:p-6 pb-20 md:pb-6">
+    <div className="mx-auto max-w-6xl p-4 md:p-6 pb-20 md:pb-6">
       {/* Team header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-ink-primary">{team.name}</h1>
@@ -52,35 +52,17 @@ export function TeamDashboardContent() {
 
       {/* Tab bar */}
       <div className="sticky top-0 z-10 -mx-4 md:-mx-6 px-4 md:px-6 pb-4 pt-1 glass">
-        <nav className="flex gap-1 rounded-xl bg-ink-well/50 p-1" role="tablist">
-          {TABS.map((t) => {
-            const isActive = activeTab === t.id;
-            const Icon = t.icon;
-            return (
-              <button
-                key={t.id}
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => handleTabChange(t.id)}
-                className={`relative flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                  isActive ? 'text-ink-primary' : 'text-ink-muted hover:text-ink-secondary'
-                }`}
-              >
-                {isActive && (
-                  <motion.div
-                    layoutId="team-tab-indicator"
-                    className="absolute inset-0 rounded-lg bg-ink-raised shadow-sm"
-                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                  />
-                )}
-                <span className="relative z-10 flex items-center gap-2">
-                  <Icon size={16} />
-                  <span className="hidden sm:inline">{t.label}</span>
-                </span>
-              </button>
-            );
-          })}
-        </nav>
+        <TabToggle
+          tabs={TABS.map((t) => ({
+            id: t.id,
+            label: t.label,
+            icon: <t.icon size={16} />,
+          }))}
+          activeTab={activeTab}
+          onTabChange={(id) => handleTabChange(id as TabId)}
+          layoutId="team-tab-indicator"
+          fullWidth
+        />
       </div>
 
       {/* Tab content */}

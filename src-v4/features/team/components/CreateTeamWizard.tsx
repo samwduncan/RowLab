@@ -79,7 +79,7 @@ function StepIndicator({ current }: { current: 1 | 2 | 3 }) {
                 flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-colors duration-200
                 ${
                   step.num === current
-                    ? 'bg-accent-copper text-white'
+                    ? 'bg-accent-copper text-ink-deep'
                     : step.num < current
                       ? 'bg-accent-copper/20 text-accent-copper'
                       : 'bg-ink-raised text-ink-muted'

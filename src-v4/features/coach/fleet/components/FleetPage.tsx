@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 import { GlassCard } from '@/components/ui/GlassCard';
 import { SectionHeader } from '@/components/ui/SectionHeader';
+import { TabToggle } from '@/components/ui/TabToggle';
 import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ReadOnlyBadge } from '@/components/ui/ReadOnlyBadge';
@@ -488,40 +489,15 @@ export function FleetPage({ teamId, readOnly }: FleetPageProps) {
       />
 
       {/* Tabs */}
-      <div className="flex gap-1 p-1 bg-ink-well/40 rounded-xl w-fit">
-        <button
-          onClick={() => setActiveTab('shells')}
-          className={`
-            px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-150
-            ${
-              activeTab === 'shells'
-                ? 'bg-ink-raised text-ink-primary shadow-sm'
-                : 'text-ink-muted hover:text-ink-secondary'
-            }
-          `.trim()}
-        >
-          Shells
-          {shells.length > 0 && (
-            <span className="ml-1.5 text-xs text-ink-tertiary">({shells.length})</span>
-          )}
-        </button>
-        <button
-          onClick={() => setActiveTab('oars')}
-          className={`
-            px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-150
-            ${
-              activeTab === 'oars'
-                ? 'bg-ink-raised text-ink-primary shadow-sm'
-                : 'text-ink-muted hover:text-ink-secondary'
-            }
-          `.trim()}
-        >
-          Oars
-          {oarSets.length > 0 && (
-            <span className="ml-1.5 text-xs text-ink-tertiary">({oarSets.length})</span>
-          )}
-        </button>
-      </div>
+      <TabToggle
+        tabs={[
+          { id: 'shells', label: `Shells${shells.length > 0 ? ` (${shells.length})` : ''}` },
+          { id: 'oars', label: `Oars${oarSets.length > 0 ? ` (${oarSets.length})` : ''}` },
+        ]}
+        activeTab={activeTab}
+        onTabChange={(id) => setActiveTab(id as FleetTab)}
+        layoutId="fleet-tab-toggle"
+      />
 
       {/* Content */}
       {isLoading ? (

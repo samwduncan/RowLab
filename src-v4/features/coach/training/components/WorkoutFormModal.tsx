@@ -296,7 +296,7 @@ function WorkoutForm({
                 onClick={() => setIntensity((prev) => (prev === i.value ? '' : i.value))}
                 className={`flex-1 rounded-lg px-3 py-2 text-xs font-medium transition-all ${
                   intensity === i.value
-                    ? 'bg-accent-copper text-white shadow-sm'
+                    ? 'bg-accent-copper text-ink-deep shadow-sm'
                     : 'bg-ink-raised text-ink-secondary hover:text-ink-primary hover:bg-ink-hover border border-white/[0.06]'
                 }`}
               >

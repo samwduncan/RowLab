@@ -224,7 +224,7 @@ function AvatarInitials({ name, size = 80 }: { name: string; size?: number }) {
 
   return (
     <div
-      className="flex items-center justify-center rounded-full font-semibold text-white border-4 border-ink-deep"
+      className="flex items-center justify-center rounded-full font-semibold text-ink-bright border-4 border-ink-deep"
       style={{
         width: size,
         height: size,

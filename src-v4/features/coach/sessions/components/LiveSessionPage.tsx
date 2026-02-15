@@ -125,8 +125,8 @@ export function LiveSessionPage({ sessionId }: LiveSessionPageProps) {
           <ChevronLeft size={16} />
           Back to Session
         </button>
-        <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-6">
-          <p className="text-sm font-medium text-amber-400 mb-2">Session Not Currently Active</p>
+        <div className="bg-data-warning/10 border border-data-warning/20 rounded-lg p-6">
+          <p className="text-sm font-medium text-data-warning mb-2">Session Not Currently Active</p>
           <p className="text-sm text-ink-secondary mb-4">
             This session is not currently active. The live dashboard is only available for active
             sessions.
@@ -168,10 +168,10 @@ export function LiveSessionPage({ sessionId }: LiveSessionPageProps) {
               {/* Pulsing LIVE indicator */}
               <div className="flex items-center gap-2 flex-shrink-0">
                 <div className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-data-good opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-data-good" />
                 </div>
-                <span className="text-xs font-mono font-bold uppercase tracking-widest text-emerald-400">
+                <span className="text-xs font-mono font-bold uppercase tracking-widest text-data-good">
                   LIVE
                 </span>
               </div>
@@ -191,8 +191,8 @@ export function LiveSessionPage({ sessionId }: LiveSessionPageProps) {
               disabled={endMutation.isPending}
               className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex-shrink-0 ${
                 confirmEnd
-                  ? 'bg-rose-500 text-white hover:bg-rose-600'
-                  : 'bg-rose-500/15 text-rose-400 border border-rose-500/30 hover:bg-rose-500/25'
+                  ? 'bg-data-poor text-ink-deep hover:bg-data-poor/90'
+                  : 'bg-data-poor/15 text-data-poor border border-data-poor/30 hover:bg-data-poor/25'
               } disabled:opacity-50`}
             >
               <Square size={14} />

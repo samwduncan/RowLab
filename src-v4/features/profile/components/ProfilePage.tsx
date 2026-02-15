@@ -38,7 +38,7 @@ export function ProfilePage() {
   if (!profile || !stats) return null;
 
   return (
-    <motion.div className="max-w-4xl mx-auto" {...fadeIn}>
+    <motion.div className="max-w-5xl mx-auto" {...fadeIn}>
       <ProfileHero profile={profile} stats={stats} />
       <ProfileTabs activeTab={tab} onTabChange={handleTabChange} />
 

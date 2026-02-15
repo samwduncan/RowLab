@@ -18,7 +18,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    'bg-gradient-to-b from-accent-copper to-accent-copper/90 text-white hover:-translate-y-px active:translate-y-0 shadow-glow-copper/0 hover:shadow-glow-copper active:scale-[0.98]',
+    'bg-gradient-to-b from-accent-copper to-accent-copper/90 text-ink-deep hover:-translate-y-px active:translate-y-0 shadow-glow-copper/0 hover:shadow-glow-copper active:scale-[0.98]',
   secondary:
     'bg-ink-raised text-ink-primary border border-ink-border hover:bg-ink-hover hover:border-ink-border-strong active:scale-[0.98]',
   ghost:
@@ -60,7 +60,7 @@ export function Button({
     >
       {loading ? (
         <span className="inline-flex items-center gap-2">
-          <span className="h-4 w-16 bg-white/20 animate-shimmer rounded-sm" />
+          <span className="h-4 w-16 bg-ink-deep/20 animate-shimmer rounded-sm" />
         </span>
       ) : (
         children

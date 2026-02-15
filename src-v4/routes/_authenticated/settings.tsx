@@ -179,7 +179,7 @@ function AnalyticsSettingsSection() {
             disabled={updateMutation.isPending}
             className="
               flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium
-              bg-accent-copper text-ink-inverse hover:bg-accent-copper/90
+              bg-accent-copper text-ink-deep hover:bg-accent-copper/90
               disabled:opacity-50 disabled:cursor-not-allowed
               transition-colors cursor-pointer
             "

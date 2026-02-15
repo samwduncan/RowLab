@@ -142,7 +142,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
   // Loading
   if (isLoading) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-6">
+      <div className="max-w-5xl mx-auto px-4 py-6">
         <DetailSkeleton />
       </div>
     );
@@ -151,7 +151,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
   // Error / not found
   if (error || !session) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-6">
+      <div className="max-w-5xl mx-auto px-4 py-6">
         <button
           type="button"
           onClick={handleBack}
@@ -178,7 +178,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
   // Edit dialog
   if (editing) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-6">
+      <div className="max-w-5xl mx-auto px-4 py-6">
         <button
           type="button"
           onClick={() => setEditing(false)}
@@ -199,7 +199,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6">
+    <div className="max-w-5xl mx-auto px-4 py-6">
       {/* Back link */}
       <button
         type="button"
@@ -233,7 +233,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
               type="button"
               onClick={handleStart}
               disabled={startMutation.isPending}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-500 text-white text-sm font-medium hover:bg-emerald-600 disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-data-good text-ink-deep text-sm font-medium hover:bg-data-good/90 disabled:opacity-50 transition-colors"
             >
               <Play size={14} />
               Start
@@ -244,7 +244,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
               type="button"
               onClick={handleEnd}
               disabled={endMutation.isPending}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium hover:bg-amber-600 disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-data-warning text-ink-deep text-sm font-medium hover:bg-data-warning/90 disabled:opacity-50 transition-colors"
             >
               <Square size={14} />
               End
@@ -304,7 +304,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
               className="p-1 text-ink-muted hover:text-ink-primary transition-colors"
               title="Copy code"
             >
-              {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+              {copied ? <Check size={14} className="text-data-good" /> : <Copy size={14} />}
             </button>
           </div>
         )}

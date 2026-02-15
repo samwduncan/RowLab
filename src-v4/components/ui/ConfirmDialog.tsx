@@ -22,7 +22,7 @@ interface ConfirmDialogProps {
 }
 
 const variantStyles: Record<ConfirmVariant, string> = {
-  danger: 'bg-data-poor text-white hover:bg-data-poor/90',
+  danger: 'bg-data-poor text-ink-deep hover:bg-data-poor/90',
   warning: 'bg-data-warning text-ink-deep hover:bg-data-warning/90',
 };
 
@@ -58,7 +58,7 @@ export function ConfirmDialog({
           `.trim()}
         >
           {loading ? (
-            <span className="h-4 w-16 bg-white/20 animate-shimmer rounded-sm" />
+            <span className="h-4 w-16 bg-ink-deep/20 animate-shimmer rounded-sm" />
           ) : (
             confirmLabel
           )}

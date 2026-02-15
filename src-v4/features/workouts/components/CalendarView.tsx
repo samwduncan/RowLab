@@ -18,6 +18,7 @@ import {
 } from 'date-fns';
 import { ChevronLeft, ChevronRight, Grid3X3, BarChart3 } from 'lucide-react';
 
+import { TabToggle } from '@/components/ui/TabToggle';
 import { api } from '@/lib/api';
 import { queryKeys } from '@/lib/queryKeys';
 import type { WorkoutFilters, WorkoutsData } from '../types';
@@ -135,32 +136,16 @@ export function CalendarView({ filters, calendarMode }: CalendarViewProps) {
 
         {/* Grid/Heatmap toggle (monthly mode only) */}
         {calendarMode === 'monthly' && (
-          <div className="flex items-center gap-1 bg-ink-well rounded-lg p-0.5">
-            <button
-              type="button"
-              onClick={() => setMonthlyDisplayMode('grid')}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
-                monthlyDisplayMode === 'grid'
-                  ? 'bg-ink-raised text-ink-primary'
-                  : 'text-ink-tertiary hover:text-ink-secondary'
-              }`}
-            >
-              <Grid3X3 size={13} />
-              Grid
-            </button>
-            <button
-              type="button"
-              onClick={() => setMonthlyDisplayMode('heatmap')}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
-                monthlyDisplayMode === 'heatmap'
-                  ? 'bg-ink-raised text-ink-primary'
-                  : 'text-ink-tertiary hover:text-ink-secondary'
-              }`}
-            >
-              <BarChart3 size={13} />
-              Heatmap
-            </button>
-          </div>
+          <TabToggle
+            tabs={[
+              { id: 'grid', label: 'Grid', icon: <Grid3X3 size={13} /> },
+              { id: 'heatmap', label: 'Heatmap', icon: <BarChart3 size={13} /> },
+            ]}
+            activeTab={monthlyDisplayMode}
+            onTabChange={(id) => setMonthlyDisplayMode(id as 'grid' | 'heatmap')}
+            layoutId="calendar-display-toggle"
+            size="sm"
+          />
         )}
       </div>
 

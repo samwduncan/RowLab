@@ -16,6 +16,7 @@ import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 import { Filter, Plus } from 'lucide-react';
 
+import { TabToggle } from '@/components/ui/TabToggle';
 import { useIsMobile } from '@/hooks/useBreakpoint';
 import {
   WorkoutPageContext,
@@ -140,37 +141,22 @@ function WorkoutsLayout() {
 
   return (
     <WorkoutPageContext.Provider value={contextValue}>
-      <div className="max-w-3xl mx-auto px-4 py-6">
+      <div className="max-w-5xl mx-auto px-4 py-6">
         {/* Page header */}
         <h1 className="text-heading-gradient text-2xl font-display font-semibold mb-4">Workouts</h1>
 
         {/* Tab toggle + Filter bar */}
         <div className="flex items-center justify-between mb-5">
           {/* Tab toggle */}
-          <div className="flex bg-ink-well rounded-lg p-0.5">
-            <button
-              type="button"
-              onClick={() => setView('feed')}
-              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                search.view === 'feed'
-                  ? 'bg-ink-raised text-ink-primary'
-                  : 'text-ink-secondary hover:text-ink-body'
-              }`}
-            >
-              Feed
-            </button>
-            <button
-              type="button"
-              onClick={() => setView('calendar')}
-              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                search.view === 'calendar'
-                  ? 'bg-ink-raised text-ink-primary'
-                  : 'text-ink-secondary hover:text-ink-body'
-              }`}
-            >
-              Calendar
-            </button>
-          </div>
+          <TabToggle
+            tabs={[
+              { id: 'feed', label: 'Feed' },
+              { id: 'calendar', label: 'Calendar' },
+            ]}
+            activeTab={search.view}
+            onTabChange={(id) => setView(id as 'feed' | 'calendar')}
+            layoutId="workouts-view-toggle"
+          />
 
           {/* Filter button */}
           <div className="relative">
@@ -287,7 +273,7 @@ function DeleteConfirmDialog({
               type="button"
               onClick={handleConfirm}
               disabled={deleteWorkout.isPending}
-              className="px-4 py-2 rounded-lg text-sm font-medium bg-data-poor text-white hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="px-4 py-2 rounded-lg text-sm font-medium bg-data-poor text-ink-deep hover:opacity-90 transition-opacity disabled:opacity-50"
             >
               {deleteWorkout.isPending ? 'Deleting...' : 'Delete'}
             </button>

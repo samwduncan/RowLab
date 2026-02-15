@@ -93,7 +93,7 @@ function AthletesPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl p-4 md:p-6 pb-20 md:pb-6">
+    <div className="mx-auto max-w-5xl p-4 md:p-6 pb-20 md:pb-6">
       <motion.div variants={listContainerVariants} initial="hidden" animate="visible">
         {/* Header */}
         <motion.div variants={listItemVariants} transition={SPRING_SMOOTH} className="mb-6">

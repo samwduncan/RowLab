@@ -95,7 +95,7 @@ export function UserMenu() {
 
         {/* Role badge */}
         {roleBadge && (
-          <span className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-accent-copper text-[8px] font-bold text-white">
+          <span className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-accent-copper text-[8px] font-bold text-ink-deep">
             {roleBadge}
           </span>
         )}

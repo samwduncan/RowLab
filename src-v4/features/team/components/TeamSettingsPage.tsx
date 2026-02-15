@@ -28,7 +28,7 @@ export function TeamSettingsPage() {
   const isOwner = isAdmin(team.role);
 
   return (
-    <div className="mx-auto max-w-3xl p-4 md:p-6 pb-20 md:pb-6">
+    <div className="mx-auto max-w-5xl p-4 md:p-6 pb-20 md:pb-6">
       {/* Page header */}
       <div className="mb-8 flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-ink-well">

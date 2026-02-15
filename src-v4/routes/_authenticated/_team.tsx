@@ -54,7 +54,7 @@ function TeamlessFallback() {
         <div className="mt-6 flex flex-col gap-3">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-xl bg-accent-copper px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-copper-hover"
+            className="inline-flex items-center justify-center rounded-xl bg-accent-copper px-4 py-2.5 text-sm font-medium text-ink-deep transition-colors hover:bg-accent-copper-hover"
           >
             Go to Personal Dashboard
           </Link>

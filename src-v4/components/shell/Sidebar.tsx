@@ -179,7 +179,7 @@ function FullNavItem({ item, active, isFavorite: pinned, onToggleFavorite }: Ful
 
       {/* Badge */}
       {item.badge != null && item.badge > 0 && (
-        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-accent-copper px-1.5 text-[10px] font-semibold text-white">
+        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-accent-copper px-1.5 text-[10px] font-semibold text-ink-deep">
           {item.badge > 99 ? '99+' : item.badge}
         </span>
       )}
@@ -231,7 +231,7 @@ function RailNavItem({ item, active }: RailNavItemProps) {
 
       {/* Badge for rail */}
       {item.badge != null && item.badge > 0 && (
-        <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent-copper px-1 text-[9px] font-bold text-white">
+        <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent-copper px-1 text-[9px] font-bold text-ink-deep">
           {item.badge > 99 ? '99+' : item.badge}
         </span>
       )}
