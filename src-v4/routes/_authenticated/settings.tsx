@@ -1,7 +1,8 @@
 /**
- * Settings page stub. Full implementation in Phase 50.
+ * /settings route -- user settings page with integrations management.
  */
 import { createFileRoute } from '@tanstack/react-router';
+import { IntegrationsSection } from '@/features/integrations';
 
 export const Route = createFileRoute('/_authenticated/settings')({
   component: SettingsPage,
@@ -12,11 +13,9 @@ export const Route = createFileRoute('/_authenticated/settings')({
 
 function SettingsPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-ink-deep p-8">
-      <div className="max-w-lg text-center">
-        <h1 className="text-2xl font-semibold text-ink-primary">Settings</h1>
-        <p className="mt-2 text-ink-secondary">Account settings will be available in Phase 50.</p>
-      </div>
+    <div className="max-w-3xl mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold text-ink-primary mb-8">Settings</h1>
+      <IntegrationsSection />
     </div>
   );
 }
