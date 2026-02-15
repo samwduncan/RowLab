@@ -31,9 +31,23 @@ import { WorkoutPageContext } from '../WorkoutPageContext';
 import { SPORT_CONFIG, SOURCE_CONFIG, type SportType, type SourceType } from '../constants';
 import { getSportFromWorkout } from '../utils';
 import { formatDistance, formatDuration, formatPace, formatRelativeDate } from '@/lib/format';
+import { GradientBorder } from '@/components/ui/GradientBorder';
 import { SplitsTable } from './SplitsTable';
 import { SplitsChart } from './SplitsChart';
 import type { Workout } from '../types';
+
+/* ------------------------------------------------------------------ */
+/* Sport color → CSS variable resolution for glow                      */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Resolve the SPORT_CONFIG color token to a CSS variable string.
+ * Used for dynamic sport-colored glow shadows on the hero.
+ */
+function sportColorVar(sport: SportType): string {
+  const token = SPORT_CONFIG[sport].color;
+  return `var(--color-${token})`;
+}
 
 /* ------------------------------------------------------------------ */
 /* Icon map                                                            */
@@ -158,44 +172,61 @@ export function WorkoutDetail() {
           </button>
         </div>
 
-        {/* Hero card */}
-        <div className="flex-1 bg-ink-raised rounded-xl p-6">
-          {/* Top row: sport + date + source */}
-          <div className="flex items-start justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <div
-                className={`w-12 h-12 rounded-xl flex items-center justify-center bg-${config.color}/12`}
-              >
-                <SportIcon size={24} className={`text-${config.color}`} />
+        {/* Hero card with gradient border and sport-colored glow */}
+        <GradientBorder
+          className="flex-1"
+          innerBg="bg-ink-raised"
+          radius="rounded-xl"
+          style={{
+            boxShadow: `0 0 40px -10px color-mix(in oklch, ${sportColorVar(sport)}, transparent 70%)`,
+          }}
+        >
+          <div className="p-6">
+            {/* Top row: sport + date + source */}
+            <div className="flex items-start justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-12 h-12 rounded-xl flex items-center justify-center bg-${config.color}/12`}
+                >
+                  <SportIcon size={24} className={`text-${config.color}`} />
+                </div>
+                <div>
+                  <h2 className="text-ink-primary text-lg font-display font-semibold">
+                    {config.label}
+                  </h2>
+                  <p className="text-ink-secondary text-sm">
+                    {format(workoutDate, 'EEEE, MMMM d, yyyy')}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h2 className="text-ink-primary text-lg font-display font-semibold">
-                  {config.label}
-                </h2>
-                <p className="text-ink-secondary text-sm">
-                  {format(workoutDate, 'EEEE, MMMM d, yyyy')}
-                </p>
-              </div>
+
+              {/* Source badge */}
+              <SourceBadge source={sourceKey} createdAt={workout.createdAt} />
             </div>
 
-            {/* Source badge */}
-            <SourceBadge source={sourceKey} createdAt={workout.createdAt} />
+            {/* Metric grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <HeroMetric label="Distance" value={formatDistance(workout.distanceM, false)} />
+              <HeroMetric label="Time" value={formatDuration(workout.durationSeconds)} />
+              <HeroMetric
+                label={`Pace ${config.paceUnit ?? ''}`}
+                value={formatPace(workout.avgPace)}
+              />
+              <HeroMetric
+                label="Watts"
+                value={workout.avgWatts != null ? String(workout.avgWatts) : DASH}
+              />
+            </div>
           </div>
 
-          {/* Metric grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <HeroMetric label="Distance" value={formatDistance(workout.distanceM, false)} />
-            <HeroMetric label="Time" value={formatDuration(workout.durationSeconds)} />
-            <HeroMetric
-              label={`Pace ${config.paceUnit ?? ''}`}
-              value={formatPace(workout.avgPace)}
-            />
-            <HeroMetric
-              label="Watts"
-              value={workout.avgWatts != null ? String(workout.avgWatts) : DASH}
-            />
-          </div>
-        </div>
+          {/* Sport-colored separator line */}
+          <div
+            className="h-px w-full"
+            style={{
+              background: `linear-gradient(to right, transparent, color-mix(in oklch, ${sportColorVar(sport)}, transparent 70%), transparent)`,
+            }}
+          />
+        </GradientBorder>
 
         {/* Next arrow */}
         <div className="flex items-center">
@@ -269,8 +300,10 @@ export function WorkoutDetail() {
 function HeroMetric({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <span className="text-3xl font-mono font-bold text-ink-primary tabular-nums">{value}</span>
-      <p className="text-xs text-ink-tertiary uppercase tracking-wider mt-1">{label}</p>
+      <span className="text-2xl font-mono font-bold text-heading-gradient tabular-nums">
+        {value}
+      </span>
+      <p className="text-[10px] uppercase tracking-widest text-ink-muted mt-1">{label}</p>
     </div>
   );
 }

@@ -13,6 +13,8 @@ interface GradientBorderProps {
   radius?: string;
   /** Gradient class for the outer border */
   gradient?: string;
+  /** Inline styles for the outer container (e.g. dynamic glow shadow) */
+  style?: React.CSSProperties;
 }
 
 export function GradientBorder({
@@ -21,9 +23,10 @@ export function GradientBorder({
   innerBg = 'bg-ink-base',
   radius = 'rounded-2xl',
   gradient = 'bg-gradient-to-b from-ink-bright/15 to-ink-bright/0',
+  style,
 }: GradientBorderProps) {
   return (
-    <div className={`relative p-px ${radius} ${gradient} ${className}`}>
+    <div className={`relative p-px ${radius} ${gradient} ${className}`} style={style}>
       <div className={`${innerBg} ${radius} h-full`}>{children}</div>
     </div>
   );
