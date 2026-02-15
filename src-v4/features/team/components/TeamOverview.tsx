@@ -1,5 +1,5 @@
 /**
- * Team Overview tab: Strava-style 3-column layout.
+ * Team Overview tab: Strava-style 3-column layout with visual energy.
  *
  * Desktop (lg+): [Stats sidebar 280px] [Activity feed flex-1] [Announcements sidebar 280px]
  * Mobile: stacked -- stats, announcements, then feed.
@@ -20,11 +20,13 @@ import {
   Megaphone,
   Pin,
   Send,
+  TrendingUp,
 } from 'lucide-react';
 import { listContainerVariants, listItemVariants, SPRING_SMOOTH } from '@/lib/animations';
 import { formatNumber } from '@/lib/format';
 import { useIsDesktop } from '@/hooks/useBreakpoint';
 import { GlassCard } from '@/components/ui/GlassCard';
+import { SectionDivider } from '@/components/ui/SectionDivider';
 import { useTeamData } from '../hooks/useTeamData';
 import { useCreateAnnouncement } from '../hooks/useTeamMutations';
 import { isCoachOrAbove } from '../types';
@@ -58,6 +60,7 @@ export function TeamOverview({ team }: TeamOverviewProps) {
           className="w-72 shrink-0 space-y-4"
         >
           <StatsPanel overview={overview} memberCount={team.memberCount} />
+          <SectionDivider spacing="my-4" />
           {isCoach && <CoachTools teamIdentifier={team.slug || team.generatedId} />}
         </motion.div>
 
@@ -69,12 +72,11 @@ export function TeamOverview({ team }: TeamOverviewProps) {
         >
           {isCoach && <AnnouncementCompose teamId={team.id} />}
           {!isCoach && <UpcomingEventsPlaceholder />}
-          <div className="mt-4">
-            <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-ink-muted">
-              Recent Activity
-            </h3>
-            <TeamActivityFeed teamId={team.id} compact />
-          </div>
+          <SectionDivider spacing="my-4" />
+          <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-ink-muted">
+            Recent Activity
+          </h3>
+          <TeamActivityFeed teamId={team.id} compact />
         </motion.div>
 
         {/* Right sidebar: announcements */}
@@ -117,6 +119,8 @@ export function TeamOverview({ team }: TeamOverviewProps) {
         </motion.div>
       )}
 
+      <SectionDivider spacing="my-2" />
+
       <motion.div variants={listItemVariants} transition={SPRING_SMOOTH}>
         <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-ink-muted">
           Recent Activity
@@ -128,7 +132,7 @@ export function TeamOverview({ team }: TeamOverviewProps) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Stats Panel                                                         */
+/* Stats Panel -- individual GlassCards per stat with icons             */
 /* ------------------------------------------------------------------ */
 
 function StatsPanel({
@@ -139,34 +143,56 @@ function StatsPanel({
   memberCount: number;
 }) {
   const stats = [
-    { icon: Gauge, label: 'Total Meters', value: formatNumber(overview.totalMeters) },
-    { icon: Users, label: 'Members', value: String(memberCount) },
-    { icon: Users, label: 'Active Members', value: String(overview.activeMembers) },
-    { icon: Dumbbell, label: 'Workouts This Week', value: String(overview.workoutsThisWeek) },
+    {
+      icon: Gauge,
+      label: 'Total Meters',
+      value: formatNumber(overview.totalMeters),
+      iconColor: 'text-accent-copper',
+    },
+    {
+      icon: Users,
+      label: 'Members',
+      value: String(memberCount),
+      iconColor: 'text-blue-400',
+    },
+    {
+      icon: TrendingUp,
+      label: 'Active Members',
+      value: String(overview.activeMembers),
+      iconColor: 'text-data-good',
+    },
+    {
+      icon: Dumbbell,
+      label: 'Workouts This Week',
+      value: String(overview.workoutsThisWeek),
+      iconColor: 'text-purple-400',
+    },
   ];
 
   return (
-    <GlassCard padding="md" as="section">
-      <h3 className="mb-4 text-sm font-medium uppercase tracking-wider text-ink-muted">
+    <section>
+      <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-ink-muted">
         Team Stats
       </h3>
-      <div className="space-y-3">
+      <div className="grid grid-cols-2 gap-3">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <div key={stat.label} className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-ink-well">
-                <Icon size={16} className="text-accent-copper" />
+            <GlassCard key={stat.label} padding="sm" interactive hover>
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-ink-well">
+                  <Icon size={16} className={stat.iconColor} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xl font-bold tabular-nums text-ink-primary">{stat.value}</p>
+                  <p className="truncate text-[11px] text-ink-muted">{stat.label}</p>
+                </div>
               </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-xs text-ink-muted">{stat.label}</p>
-                <p className="text-sm font-semibold tabular-nums text-ink-primary">{stat.value}</p>
-              </div>
-            </div>
+            </GlassCard>
           );
         })}
       </div>
-    </GlassCard>
+    </section>
   );
 }
 

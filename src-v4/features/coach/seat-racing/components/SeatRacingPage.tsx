@@ -3,18 +3,21 @@
  *
  * Rankings tab shows RankingsView (ELO chart + ranked table, from plan 07).
  * Sessions tab shows SessionList with detail slide-over.
- * Header has "New Session" button (hidden when readOnly).
+ * Header uses SectionHeader with Trophy icon and action buttons.
+ * Tabs use shared TabToggle with animated sliding indicator.
  * Keyboard shortcuts: N=new session, R=recalculate, ?=help, Escape=close.
  */
 
 import { useState, useEffect, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'motion/react';
-import { Plus, Keyboard, X } from 'lucide-react';
+import { Plus, Keyboard, X, Trophy } from 'lucide-react';
 
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Button } from '@/components/ui/Button';
 import { ReadOnlyBadge } from '@/components/ui/ReadOnlyBadge';
+import { SectionHeader } from '@/components/ui/SectionHeader';
+import { TabToggle, type Tab } from '@/components/ui/TabToggle';
 import { fadeIn } from '@/lib/animations';
 
 import { sessionsOptions, useRecalculate } from '../api';
@@ -33,6 +36,15 @@ interface SeatRacingPageProps {
   teamId: string;
   readOnly: boolean;
 }
+
+// ---------------------------------------------------------------------------
+// Tab config
+// ---------------------------------------------------------------------------
+
+const SEAT_RACING_TABS: Tab[] = [
+  { id: 'rankings', label: 'Rankings' },
+  { id: 'sessions', label: 'Sessions' },
+];
 
 // ---------------------------------------------------------------------------
 // Shortcuts help overlay
@@ -162,57 +174,31 @@ export function SeatRacingPage({ teamId, readOnly }: SeatRacingPageProps) {
 
   return (
     <motion.div {...fadeIn} className="flex flex-col gap-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold text-ink-primary">Seat Racing</h1>
-          <p className="text-sm text-ink-secondary mt-0.5">
-            Run seat races and track athlete rankings
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          {readOnly && <ReadOnlyBadge />}
-          {!readOnly && (
-            <Button size="sm" onClick={() => setWizardOpen(true)}>
-              <Plus size={16} />
-              New Session
-            </Button>
-          )}
-        </div>
-      </div>
+      {/* Header with SectionHeader */}
+      <SectionHeader
+        title="Seat Racing"
+        description="ELO rankings and race sessions"
+        icon={<Trophy size={18} />}
+        action={
+          <div className="flex items-center gap-3">
+            {readOnly && <ReadOnlyBadge />}
+            {!readOnly && (
+              <Button size="sm" onClick={() => setWizardOpen(true)}>
+                <Plus size={16} />
+                New Session
+              </Button>
+            )}
+          </div>
+        }
+      />
 
-      {/* Tabs */}
-      <div className="flex gap-1 p-1 bg-ink-well/40 rounded-xl w-fit">
-        <button
-          onClick={() => setActiveTab('rankings')}
-          className={`
-            px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-150
-            ${
-              activeTab === 'rankings'
-                ? 'bg-ink-raised text-ink-primary shadow-sm'
-                : 'text-ink-muted hover:text-ink-secondary'
-            }
-          `.trim()}
-        >
-          Rankings
-        </button>
-        <button
-          onClick={() => setActiveTab('sessions')}
-          className={`
-            px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-150
-            ${
-              activeTab === 'sessions'
-                ? 'bg-ink-raised text-ink-primary shadow-sm'
-                : 'text-ink-muted hover:text-ink-secondary'
-            }
-          `.trim()}
-        >
-          Sessions
-          {sessions.length > 0 && (
-            <span className="ml-1.5 text-xs text-ink-tertiary">({sessions.length})</span>
-          )}
-        </button>
-      </div>
+      {/* Tabs -- TabToggle with animated indicator */}
+      <TabToggle
+        tabs={SEAT_RACING_TABS}
+        activeTab={activeTab}
+        onTabChange={(id) => setActiveTab(id as SeatRacingTab)}
+        layoutId="seat-racing-tabs"
+      />
 
       {/* Tab content */}
       <AnimatePresence mode="wait">

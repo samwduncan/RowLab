@@ -5,12 +5,12 @@
  * - Auto-formats: lowercase, replaces spaces with hyphens, strips invalid chars
  * - Validates: 3-50 chars, alphanumeric + hyphens only
  * - Debounced availability check (400ms) via slugCheckOptions
- * - Visual feedback: spinner (loading), green check (available), red X (taken)
+ * - Visual feedback: pulse shimmer (loading), green check (available), red X (taken)
  * - Preview: shows rowlab.com/team/{slug} below input
  */
 import { useState, useEffect, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { CheckCircle, XCircle } from 'lucide-react';
 import { slugCheckOptions } from '../api';
 
 interface SlugInputProps {
@@ -82,7 +82,7 @@ export function SlugInput({ teamId, currentSlug, value, onChange, disabled }: Sl
         {/* Status indicator */}
         <div className="absolute right-3 top-1/2 -translate-y-1/2">
           {isFetching && value.length >= 3 && (
-            <Loader2 size={16} className="text-ink-muted animate-spin" />
+            <div className="h-4 w-4 rounded bg-ink-border/50 animate-pulse" />
           )}
           {!isFetching && showIndicator && isAvailable && (
             <CheckCircle size={16} className="text-data-good" />

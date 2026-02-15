@@ -6,9 +6,9 @@
  * - Text: text-ink-primary, text-ink-secondary, text-ink-tertiary
  * - Primary button: bg-accent-copper, text-ink-deep
  * - Error/disconnect: data-poor tokens
- * - Connected badge: accent-copper (or custom accentColor)
+ * - Loading states: skeleton shimmer (no animate-spin)
  */
-import { CheckCircle2, Loader2 } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 import type { IntegrationCardProps } from './types';
 
 /**
@@ -27,6 +27,16 @@ function formatLastSynced(dateString: string): string {
     hour12: true,
   });
   return `Last synced: ${dateFormatter.format(date)} at ${timeFormatter.format(date)}`;
+}
+
+/** Inline skeleton shimmer for button loading states */
+function ButtonSkeleton({ width = 'w-16' }: { width?: string }) {
+  return (
+    <div className="flex items-center gap-2 animate-pulse">
+      <div className="h-4 w-4 rounded bg-ink-border/50" />
+      <div className={`h-3 ${width} rounded bg-ink-border/30`} />
+    </div>
+  );
 }
 
 export function IntegrationCard({
@@ -90,14 +100,7 @@ export function IntegrationCard({
                 disabled={syncLoading}
                 className="flex items-center gap-2 px-3 py-2 rounded-lg bg-ink-well border border-ink-border text-ink-secondary hover:bg-ink-raised hover:border-ink-border transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {syncLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Syncing...
-                  </>
-                ) : (
-                  'Sync Now'
-                )}
+                {syncLoading ? <ButtonSkeleton width="w-12" /> : 'Sync Now'}
               </button>
             )}
 
@@ -107,14 +110,7 @@ export function IntegrationCard({
               disabled={disconnectLoading}
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-data-poor/10 border border-data-poor/20 text-data-poor hover:bg-data-poor/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {disconnectLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Disconnecting...
-                </>
-              ) : (
-                'Disconnect'
-              )}
+              {disconnectLoading ? <ButtonSkeleton width="w-20" /> : 'Disconnect'}
             </button>
           </>
         ) : (
@@ -124,14 +120,7 @@ export function IntegrationCard({
             disabled={connectLoading}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent-copper text-ink-deep font-medium hover:bg-accent-copper-hover hover:shadow-glow-copper transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {connectLoading ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Connecting...
-              </>
-            ) : (
-              connectLabel
-            )}
+            {connectLoading ? <ButtonSkeleton width="w-16" /> : connectLabel}
           </button>
         )}
       </div>
