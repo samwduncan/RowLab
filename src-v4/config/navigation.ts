@@ -20,6 +20,7 @@ import {
   ClipboardCheck,
   NotebookPen,
   UserPlus,
+  MoreHorizontal,
 } from 'lucide-react';
 import { isCoachOrAbove } from '@/features/team/types';
 import type { NavConfig, NavItem, NavSection } from '@/types/navigation';
@@ -165,17 +166,34 @@ export function getNavConfig(role: string | null, hasTeam: boolean): NavConfig {
  * Returns up to 5 bottom tab items for mobile navigation.
  * Dashboard and Workouts are always present.
  * Team tab appears if user has a team.
+ * Coach users get a "More" tab for coach tools.
  * Profile is always last.
  */
-export function getBottomTabItems(_role: string | null, hasTeam: boolean): NavItem[] {
+export function getBottomTabItems(role: string | null, hasTeam: boolean): NavItem[] {
   const items = [...personalBottomTabs];
 
   if (hasTeam) {
     items.push(teamBottomTab);
   }
 
+  if (hasTeam && isCoachOrAbove(role)) {
+    items.push({
+      id: 'more',
+      label: 'More',
+      icon: MoreHorizontal,
+      path: '/__more__',
+      zone: 'coach',
+    });
+  }
+
   items.push(profileBottomTab);
 
-  // Max 5 items
   return items.slice(0, 5);
+}
+
+/**
+ * Returns coach tool items for the "More" sheet on mobile.
+ */
+export function getCoachToolItems(): NavItem[] {
+  return coachSection.items;
 }

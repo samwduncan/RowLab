@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Primary Meta Tags -->
@@ -24,50 +23,29 @@
     <meta property="twitter:description" content="Build faster lineups, win more races. The modern platform for rowing coaches to visualize rosters, optimize boat assignments, and track athlete performance." />
     <meta property="twitter:image" content="https://rowlab.net/og-image.png" />
 
-    <!-- Fonts: "Rowing Instrument" Typography System -->
-    <!-- Inter (Headings/Body) + Geist Mono (Data/Numbers) -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
 
-    <!-- Inter: Body text (weights: 400, 500, 600, 700) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
-    <!-- Fraunces: Editorial serif headlines (Dark Editorial design system) -->
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap" rel="stylesheet" />
-
-    <!-- Outfit: Geometric sans-serif, crisper than Rubik (Canvas prototype) -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-
-    <!-- Geist Mono: Data numbers - "Stroke Coach" precision display -->
-    <link href="https://cdn.jsdelivr.net/npm/geist@1.2.2/dist/fonts/geist-mono/style.css" rel="stylesheet" />
-
-    <!-- Legacy fonts (backward compatibility) -->
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-
-    <!-- Theme Color - Void Deep -->
+    <!-- Theme Color -->
     <meta name="theme-color" content="#08080A" />
 
-    <!-- Favicon variations -->
+    <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   </head>
-  <body class="antialiased">
-    <div id="root">
-      <!-- Inline splash screen - shows before React loads -->
-      <div id="splash-screen" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0a0a0f;z-index:9999;">
-        <div style="text-align:center;">
-          <div style="font-size:2rem;font-weight:700;color:#ffffff;font-family:Outfit,system-ui,sans-serif;letter-spacing:0.05em;">RowLab</div>
-          <div style="width:40px;height:2px;background:linear-gradient(90deg,transparent,#3b82f6,transparent);margin:12px auto;animation:pulse 1.5s ease-in-out infinite;"></div>
-        </div>
-      </div>
-      <style>
-        @keyframes pulse {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 1; }
-        }
-      </style>
-    </div>
-    <script type="module" src="/src/index.jsx"></script>
+  <body class="bg-ink-deep text-ink-primary">
+    <div id="root"></div>
+    <script type="module" src="/src-v4/main.tsx"></script>
   </body>
 </html>

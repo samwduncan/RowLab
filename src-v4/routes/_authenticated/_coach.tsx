@@ -13,6 +13,9 @@ import { useEffect } from 'react';
 
 export const Route = createFileRoute('/_authenticated/_coach')({
   beforeLoad: ({ context }) => {
+    // Wait for auth initialization before making role decisions
+    if (!context.auth?.isInitialized) return;
+
     const role = context.auth?.activeTeamRole ?? null;
     const level = getRoleLevel(role);
     const coachLevel = getRoleLevel('COACH');

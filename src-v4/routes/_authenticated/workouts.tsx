@@ -142,7 +142,7 @@ function WorkoutsLayout() {
     <WorkoutPageContext.Provider value={contextValue}>
       <div className="max-w-3xl mx-auto px-4 py-6">
         {/* Page header */}
-        <h1 className="text-ink-primary text-2xl font-display font-semibold mb-4">Workouts</h1>
+        <h1 className="text-heading-gradient text-2xl font-display font-semibold mb-4">Workouts</h1>
 
         {/* Tab toggle + Filter bar */}
         <div className="flex items-center justify-between mb-5">

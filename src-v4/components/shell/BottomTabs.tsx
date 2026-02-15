@@ -2,11 +2,15 @@
  * Mobile bottom tab bar for navigation.
  * Only renders when viewport < 768px.
  * Fixed to bottom with iOS safe area padding.
+ * Coach/admin users get a "More" tab that opens a sheet with coach tools.
  */
-import { Link, useRouterState } from '@tanstack/react-router';
+import { useState } from 'react';
+import { Link, useRouterState, useNavigate } from '@tanstack/react-router';
+import { AnimatePresence, motion } from 'motion/react';
+import { X } from 'lucide-react';
 import { useIsMobile } from '@/hooks/useBreakpoint';
 import { useAuth } from '@/features/auth/useAuth';
-import { getBottomTabItems } from '@/config/navigation';
+import { getBottomTabItems, getCoachToolItems } from '@/config/navigation';
 import { useMemo } from 'react';
 
 export function BottomTabs() {
@@ -14,6 +18,8 @@ export function BottomTabs() {
   const { activeTeamRole, activeTeamId } = useAuth();
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
+  const navigate = useNavigate();
+  const [moreOpen, setMoreOpen] = useState(false);
 
   const hasTeam = activeTeamId !== null;
   const tabItems = useMemo(
@@ -21,35 +27,125 @@ export function BottomTabs() {
     [activeTeamRole, hasTeam]
   );
 
+  const coachTools = useMemo(() => getCoachToolItems(), []);
+
   if (!isMobile) return null;
 
   return (
-    <nav
-      className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center justify-around border-t border-ink-border bg-ink-base/95 backdrop-blur-xl"
-      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
-      aria-label="Bottom navigation"
-    >
-      {tabItems.map((item) => {
-        const Icon = item.icon;
-        const active =
-          item.path === '/'
-            ? currentPath === '/'
-            : currentPath === item.path || currentPath.startsWith(item.path + '/');
+    <>
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center justify-around border-t border-ink-border bg-ink-base/95 backdrop-blur-xl"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+        aria-label="Bottom navigation"
+      >
+        {tabItems.map((item) => {
+          const Icon = item.icon;
+          const isMore = item.id === 'more';
+          const active = isMore
+            ? moreOpen
+            : item.path === '/'
+              ? currentPath === '/'
+              : currentPath === item.path || currentPath.startsWith(item.path + '/');
 
-        return (
-          <Link
-            key={item.id}
-            to={item.path}
-            className={`flex flex-col items-center justify-center gap-0.5 px-3 py-1 transition-colors ${
-              active ? 'text-accent-copper' : 'text-ink-muted'
-            }`}
-            aria-current={active ? 'page' : undefined}
-          >
-            <Icon size={20} />
-            <span className="text-[10px] font-medium">{item.label}</span>
-          </Link>
-        );
-      })}
-    </nav>
+          if (isMore) {
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setMoreOpen((prev) => !prev)}
+                className={`flex flex-col items-center justify-center gap-0.5 px-3 py-1 transition-colors ${
+                  active ? 'text-accent-copper' : 'text-ink-muted'
+                }`}
+              >
+                <Icon size={20} />
+                <span className="text-[10px] font-medium">{item.label}</span>
+              </button>
+            );
+          }
+
+          return (
+            <Link
+              key={item.id}
+              to={item.path}
+              onClick={() => setMoreOpen(false)}
+              className={`flex flex-col items-center justify-center gap-0.5 px-3 py-1 transition-colors ${
+                active ? 'text-accent-copper' : 'text-ink-muted'
+              }`}
+              aria-current={active ? 'page' : undefined}
+            >
+              <Icon size={20} />
+              <span className="text-[10px] font-medium">{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Coach tools sheet */}
+      <AnimatePresence>
+        {moreOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm"
+              onClick={() => setMoreOpen(false)}
+            />
+            {/* Sheet */}
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="fixed bottom-16 left-0 right-0 z-35 rounded-t-2xl border-t border-ink-border bg-ink-base/98 backdrop-blur-xl"
+              style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+            >
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-semibold text-ink-primary">Coach Tools</h3>
+                  <button
+                    type="button"
+                    onClick={() => setMoreOpen(false)}
+                    className="p-1 rounded-md hover:bg-ink-hover transition-colors"
+                    aria-label="Close"
+                  >
+                    <X size={16} className="text-ink-muted" />
+                  </button>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {coachTools.map((tool) => {
+                    const ToolIcon = tool.icon;
+                    const isActive =
+                      currentPath === tool.path || currentPath.startsWith(tool.path + '/');
+
+                    return (
+                      <button
+                        key={tool.id}
+                        type="button"
+                        onClick={() => {
+                          setMoreOpen(false);
+                          navigate({ to: tool.path });
+                        }}
+                        className={`flex flex-col items-center gap-1.5 rounded-xl p-3 transition-colors ${
+                          isActive
+                            ? 'bg-accent-copper/10 text-accent-copper'
+                            : 'text-ink-secondary hover:bg-ink-hover'
+                        }`}
+                      >
+                        <ToolIcon size={20} />
+                        <span className="text-[11px] font-medium leading-tight text-center">
+                          {tool.label}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

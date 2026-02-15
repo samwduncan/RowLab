@@ -88,7 +88,7 @@ function AnalyticsSettingsSection() {
         defaults.
       </p>
 
-      <div className="rounded-xl border border-ink-border bg-ink-raised p-5 space-y-5">
+      <div className="glass rounded-xl p-5 space-y-5">
         {/* Date of Birth */}
         <SettingsField
           label="Date of Birth"
@@ -234,7 +234,7 @@ function SettingsField({
 function SettingsPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-ink-primary mb-8">Settings</h1>
+      <h1 className="text-2xl font-bold text-heading-gradient mb-8">Settings</h1>
       <IntegrationsSection />
       <AnalyticsSettingsSection />
     </div>

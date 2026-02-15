@@ -27,7 +27,7 @@ function TeamLayout() {
  */
 function TeamlessFallback() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-ink-deep p-8">
+    <div className="flex flex-1 items-center justify-center p-8">
       <div className="glass max-w-md rounded-2xl p-8 text-center">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-ink-raised">
           <svg

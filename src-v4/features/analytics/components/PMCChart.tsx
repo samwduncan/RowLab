@@ -246,7 +246,7 @@ export function PMCChart({ data, currentCTL, currentATL, currentTSB, onDayClick 
 
   if (chartData.length === 0) {
     return (
-      <div className="h-[350px] md:h-[350px] h-[250px] flex items-center justify-center">
+      <div className="h-[250px] md:h-[350px] flex items-center justify-center">
         <p className="text-sm text-ink-tertiary">No PMC data available</p>
       </div>
     );

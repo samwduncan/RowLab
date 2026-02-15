@@ -1,39 +1,51 @@
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
+import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
-import { visualizer } from 'rollup-plugin-visualizer';
+import fs from 'fs';
+
+/**
+ * Serve index-v4.html instead of index.html for the dev server.
+ * This allows v4 to coexist with the existing frontend during development.
+ * Rewrites ALL HTML navigation requests so SPA routing works correctly.
+ */
+function v4HtmlPlugin(): Plugin {
+  return {
+    name: 'v4-html',
+    configureServer(server) {
+      server.middlewares.use((req, _res, next) => {
+        const url = req.url || '';
+        const isHtmlRequest = req.headers.accept?.includes('text/html');
+        const isInternalOrAsset =
+          url.startsWith('/api') ||
+          url.startsWith('/socket.io') ||
+          url.startsWith('/uploads') ||
+          url.startsWith('/@') ||
+          url.startsWith('/node_modules') ||
+          url.includes('.');
+        if (isHtmlRequest && !isInternalOrAsset) {
+          req.url = '/index-v4.html';
+        }
+        next();
+      });
+    },
+  };
+}
 
 export default defineConfig({
   plugins: [
-    react(),
-    visualizer({
-      filename: './dist/stats.html',
-      gzipSize: true,
-      brotliSize: true,
+    v4HtmlPlugin(),
+    // MUST be before react() — generates route tree before React transform
+    tanstackRouter({
+      target: 'react',
+      autoCodeSplitting: true,
+      routesDirectory: './src-v4/routes',
+      generatedRouteTree: './src-v4/routeTree.gen.ts',
     }),
+    react(),
+    tailwindcss(),
   ],
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'html', 'lcov'],
-      include: ['src/v2/**/*.{ts,tsx}'],
-      exclude: [
-        'src/v2/**/*.test.{ts,tsx}',
-        'src/v2/**/*.stories.{ts,tsx}',
-        'src/v2/**/index.ts',
-        'src/v2/types/**',
-      ],
-      thresholds: {
-        lines: 60,
-        functions: 60,
-        branches: 50,
-        statements: 60,
-      },
-    },
-  },
   server: {
     port: 3001,
     host: '0.0.0.0',
@@ -56,25 +68,14 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@components': path.resolve(__dirname, './src/components'),
-      '@pages': path.resolve(__dirname, './src/pages'),
-      '@store': path.resolve(__dirname, './src/store'),
-      '@theme': path.resolve(__dirname, './src/theme'),
-      '@utils': path.resolve(__dirname, './src/utils'),
-      '@services': path.resolve(__dirname, './src/services'),
-      '@hooks': path.resolve(__dirname, './src/hooks'),
-      '@types': path.resolve(__dirname, './src/types'),
-      '@v2': path.resolve(__dirname, './src/v2'),
+      '@': path.resolve(__dirname, './src-v4'),
     },
   },
   build: {
-    outDir: 'dist',
+    outDir: 'dist-v4',
     sourcemap: true,
-    // Let Vite's automatic code splitting optimize bundle size
-    chunkSizeWarningLimit: 500,
-  },
-  optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom', 'zustand', 'framer-motion'],
+    rollupOptions: {
+      input: path.resolve(__dirname, 'index-v4.html'),
+    },
   },
 });

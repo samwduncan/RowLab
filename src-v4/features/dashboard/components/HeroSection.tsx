@@ -33,7 +33,7 @@ export function HeroSection({ userName, streak, className = '' }: HeroSectionPro
 
   return (
     <motion.div className={`flex flex-col gap-2 ${className}`} {...slideUp}>
-      <h1 className="text-2xl lg:text-3xl font-semibold text-ink-primary">
+      <h1 className="text-2xl lg:text-3xl font-semibold text-heading-gradient">
         {greeting}, {firstName}
       </h1>
       <p className="text-ink-secondary">Here&apos;s your training overview</p>

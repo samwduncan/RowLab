@@ -5,12 +5,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --port 3001",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "server": "node --env-file=.env server/index.js",
     "start": "NODE_ENV=production node --env-file=.env server/index.js",
     "dev:full": "concurrently \"npm run server\" \"npm run dev\" --names \"backend,frontend\" --prefix-colors \"blue,green\"",
+    "dev:legacy": "vite --config vite.config.legacy.ts --port 3001",
     "dev:tmux": "./scripts/dev.sh",
     "stop": "./scripts/stop-dev.sh",
     "db:migrate": "npx prisma migrate dev",
@@ -29,10 +30,7 @@
     "validate": "npm run typecheck && npm run lint && npm run test:run",
     "lhci": "lhci autorun",
     "lhci:collect": "lhci collect",
-    "lhci:assert": "lhci assert",
-    "dev:v4": "vite --config vite.config.v4.ts",
-    "build:v4": "vite build --config vite.config.v4.ts",
-    "preview:v4": "vite preview --config vite.config.v4.ts"
+    "lhci:assert": "lhci assert"
   },
   "prisma": {
     "seed": "node --env-file=.env prisma/seed.js"

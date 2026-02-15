@@ -48,28 +48,28 @@ export function IntegrationCard({
   accentColor = 'text-accent-copper',
 }: IntegrationCardProps) {
   return (
-    <div className="flex items-center justify-between p-4 rounded-xl bg-ink-base border border-ink-border">
-      <div className="flex items-center gap-4">
+    <div className="glass flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-xl">
+      <div className="flex items-center gap-3 sm:gap-4">
         {/* Icon Container */}
         <div
-          className={`w-12 h-12 rounded-xl ${iconBg} flex items-center justify-center flex-shrink-0`}
+          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${iconBg} flex items-center justify-center flex-shrink-0`}
         >
           {icon}
         </div>
 
         {/* Title and Status */}
-        <div>
+        <div className="min-w-0">
           <h4 className="font-medium text-ink-primary">{title}</h4>
           {connected ? (
             <div className="mt-1 space-y-1">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className={`w-4 h-4 ${accentColor}`} />
-                <span className={`text-sm ${accentColor}`}>
+                <CheckCircle2 className={`w-4 h-4 ${accentColor} shrink-0`} />
+                <span className={`text-sm ${accentColor} truncate`}>
                   Connected{username ? ` as ${username}` : ''}
                 </span>
               </div>
               {lastSynced && (
-                <p className="text-xs text-ink-tertiary">{formatLastSynced(lastSynced)}</p>
+                <p className="text-xs text-ink-tertiary truncate">{formatLastSynced(lastSynced)}</p>
               )}
               {statsLine && <p className="text-xs text-ink-secondary">{statsLine}</p>}
             </div>
@@ -80,7 +80,7 @@ export function IntegrationCard({
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center gap-2 flex-shrink-0">
+      <div className="flex items-center gap-2 flex-shrink-0 self-end sm:self-auto">
         {connected ? (
           <>
             {/* Sync Now Button */}

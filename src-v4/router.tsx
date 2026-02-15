@@ -1,5 +1,6 @@
 import { createRouter } from '@tanstack/react-router';
 import { routeTree } from './routeTree.gen';
+import { NotFoundPage } from './components/NotFoundPage';
 import type { User, Team } from './types/auth';
 
 export interface RouterContext {
@@ -19,6 +20,7 @@ export const router = createRouter({
     auth: undefined!,
   },
   defaultPreloadStaleTime: 0,
+  defaultNotFoundComponent: NotFoundPage,
 });
 
 declare module '@tanstack/react-router' {

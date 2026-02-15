@@ -57,7 +57,7 @@ export function ProfileHero({ profile, stats }: ProfileHeroProps) {
   return (
     <motion.div {...slideUp}>
       {/* Banner */}
-      <div className="relative h-48 w-full rounded-t-xl overflow-hidden group">
+      <div className="relative h-48 w-full sm:rounded-t-xl overflow-hidden group">
         {profile.bannerUrl ? (
           <img
             src={profile.bannerUrl}

@@ -113,6 +113,17 @@
   border-color: oklch(0.965 0.005 285 / 0.12);
 }
 
+.text-heading-gradient {
+  background: linear-gradient(
+    135deg,
+    oklch(0.965 0.005 285) 0%,
+    oklch(0.965 0.005 285 / 0.65) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 /* === BASE STYLES === */
 
 html {

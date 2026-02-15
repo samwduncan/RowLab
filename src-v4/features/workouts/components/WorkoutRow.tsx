@@ -147,9 +147,9 @@ function RowMenu({
 /* Metric cell helper                                                  */
 /* ------------------------------------------------------------------ */
 
-function Metric({ label, value }: { label: string; value: string }) {
+function Metric({ label, value, className }: { label: string; value: string; className?: string }) {
   return (
-    <div className="flex flex-col items-end min-w-0">
+    <div className={`flex flex-col items-end min-w-0 ${className ?? ''}`}>
       <span className="text-[10px] uppercase tracking-wider text-ink-muted leading-none mb-0.5 hidden sm:block">
         {label}
       </span>
@@ -174,9 +174,16 @@ export function WorkoutRow({ workout, isExpanded, onToggle, onEdit, onDelete }: 
 
   return (
     <motion.div variants={listItemVariants} transition={SPRING_SMOOTH} className="group">
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         onClick={onToggle}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onToggle();
+          }
+        }}
         className="flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-lg hover:bg-ink-hover transition-colors cursor-pointer"
         aria-expanded={isExpanded}
       >
@@ -201,6 +208,7 @@ export function WorkoutRow({ workout, isExpanded, onToggle, onEdit, onDelete }: 
           <Metric
             label="Watts"
             value={workout.avgWatts != null ? String(workout.avgWatts) : DASH}
+            className="hidden sm:flex"
           />
         </div>
 
@@ -217,7 +225,7 @@ export function WorkoutRow({ workout, isExpanded, onToggle, onEdit, onDelete }: 
             className={`text-ink-muted transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}
           />
         </div>
-      </button>
+      </div>
     </motion.div>
   );
 }
