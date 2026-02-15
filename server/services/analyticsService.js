@@ -74,6 +74,45 @@ function toDateKey(date) {
   return date.toISOString().split('T')[0];
 }
 
+/**
+ * Get the start date (YYYY-MM-DD) for a bucket key.
+ * Weekly: ISO week Monday. Monthly: first of month.
+ */
+function getBucketStartDate(bucketKey, granularity) {
+  if (granularity === 'weekly') {
+    // Parse YYYY-Www
+    const [yearStr, weekStr] = bucketKey.split('-W');
+    const year = parseInt(yearStr, 10);
+    const week = parseInt(weekStr, 10);
+    // ISO week 1 contains Jan 4. Find Monday of that week.
+    const jan4 = new Date(Date.UTC(year, 0, 4));
+    const dayOfWeek = jan4.getUTCDay() || 7; // Mon=1..Sun=7
+    const monday = new Date(jan4);
+    monday.setUTCDate(jan4.getUTCDate() - dayOfWeek + 1 + (week - 1) * 7);
+    return monday.toISOString().split('T')[0];
+  }
+  // Monthly: YYYY-MM
+  return `${bucketKey}-01`;
+}
+
+/**
+ * Get the end date (YYYY-MM-DD) for a bucket key.
+ * Weekly: Sunday of that week. Monthly: last day of month.
+ */
+function getBucketEndDate(bucketKey, granularity) {
+  if (granularity === 'weekly') {
+    const start = new Date(getBucketStartDate(bucketKey, 'weekly') + 'T00:00:00Z');
+    start.setUTCDate(start.getUTCDate() + 6);
+    return start.toISOString().split('T')[0];
+  }
+  // Monthly: last day of month
+  const [yearStr, monthStr] = bucketKey.split('-');
+  const year = parseInt(yearStr, 10);
+  const month = parseInt(monthStr, 10);
+  const lastDay = new Date(Date.UTC(year, month, 0));
+  return lastDay.toISOString().split('T')[0];
+}
+
 // ============================================
 // getUserAnalyticsSettings
 // ============================================
@@ -361,7 +400,14 @@ export async function getAnalyticsVolume(
         : `${w.date.getUTCFullYear()}-${String(w.date.getUTCMonth() + 1).padStart(2, '0')}`;
 
     if (!bucketMap.has(bucketKey)) {
-      bucketMap.set(bucketKey, { period: bucketKey, total: 0, sessions: 0, byType: {} });
+      bucketMap.set(bucketKey, {
+        period: bucketKey,
+        startDate: getBucketStartDate(bucketKey, granularity),
+        endDate: getBucketEndDate(bucketKey, granularity),
+        total: 0,
+        workoutCount: 0,
+        byType: {},
+      });
     }
 
     const bucket = bucketMap.get(bucketKey);
@@ -375,7 +421,7 @@ export async function getAnalyticsVolume(
     }
 
     bucket.total += value;
-    bucket.sessions += 1;
+    bucket.workoutCount += 1;
     bucket.byType[wType] = (bucket.byType[wType] || 0) + value;
   }
 
