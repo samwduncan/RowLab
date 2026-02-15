@@ -1,0 +1,168 @@
+/**
+ * AnalyticsTab -- orchestrator for the PMC chart on the profile page.
+ *
+ * Wires range selector, sport filter, data sufficiency banner, and
+ * PMC chart together. Manages local filter state and data fetching.
+ * Volume trends and training insights will be added in Plans 03 and 04.
+ */
+
+import { useState, useCallback } from 'react';
+import { useNavigate } from '@tanstack/react-router';
+
+import { useAnalyticsPMC } from '../api';
+import { PMCChart } from './PMCChart';
+import { RangeSelector } from './RangeSelector';
+import { SportFilter } from './SportFilter';
+import { DataSufficiencyBanner } from './DataSufficiencyBanner';
+import type { PMCRange } from '../types';
+
+/* ------------------------------------------------------------------ */
+/* Skeleton loader                                                     */
+/* ------------------------------------------------------------------ */
+
+function PMCChartSkeleton() {
+  return (
+    <div className="space-y-4 animate-pulse">
+      {/* Header row skeleton */}
+      <div className="flex items-center justify-between">
+        <div className="h-5 w-56 rounded bg-ink-border/50" />
+        <div className="flex gap-2">
+          <div className="h-8 w-48 rounded-lg bg-ink-border/50" />
+          <div className="h-8 w-28 rounded-lg bg-ink-border/50" />
+        </div>
+      </div>
+      {/* Chart area skeleton */}
+      <div className="h-[250px] md:h-[350px] rounded-xl bg-ink-border/30" />
+      {/* Values row skeleton */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="h-16 rounded-xl bg-ink-border/30" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Error state                                                         */
+/* ------------------------------------------------------------------ */
+
+function PMCChartError({ message, onRetry }: { message: string; onRetry: () => void }) {
+  return (
+    <div className="rounded-xl border border-ink-border bg-ink-raised p-8 text-center">
+      <p className="text-sm text-ink-secondary mb-3">{message}</p>
+      <button
+        type="button"
+        onClick={onRetry}
+        className="text-sm font-medium text-accent-copper hover:text-accent-copper/80 transition-colors"
+      >
+        Try again
+      </button>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Current values display                                              */
+/* ------------------------------------------------------------------ */
+
+interface ValueCardProps {
+  label: string;
+  value: number | null;
+  colorClass: string;
+  format?: (v: number) => string;
+}
+
+function ValueCard({ label, value, colorClass, format }: ValueCardProps) {
+  const display = value != null ? (format ? format(value) : value.toFixed(1)) : '--';
+
+  return (
+    <div className="rounded-xl border border-ink-border bg-ink-raised px-4 py-3">
+      <p className="text-[10px] uppercase tracking-wider text-ink-muted font-medium mb-1">
+        {label}
+      </p>
+      <p className={`text-lg font-mono font-semibold ${colorClass}`}>{display}</p>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* AnalyticsTab                                                        */
+/* ------------------------------------------------------------------ */
+
+export function AnalyticsTab() {
+  const [range, setRange] = useState<PMCRange>('90d');
+  const [sport, setSport] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const { data, isLoading, isError, error, refetch } = useAnalyticsPMC(range, sport);
+
+  const handleDayClick = useCallback(
+    (date: string) => {
+      void navigate({
+        to: '/workouts' as string,
+        search: { dateFrom: date, dateTo: date },
+      } as Parameters<typeof navigate>[0]);
+    },
+    [navigate]
+  );
+
+  if (isLoading) return <PMCChartSkeleton />;
+
+  if (isError) {
+    return (
+      <PMCChartError
+        message={error?.message ?? 'Failed to load analytics data'}
+        onRetry={() => void refetch()}
+      />
+    );
+  }
+
+  if (!data) return null;
+
+  return (
+    <div className="space-y-4">
+      {/* Header row */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <h3 className="text-sm font-semibold text-ink-primary">Performance Management Chart</h3>
+        <div className="flex items-center gap-2">
+          <RangeSelector value={range} onChange={setRange} />
+          <SportFilter value={sport} onChange={setSport} />
+        </div>
+      </div>
+
+      {/* Data sufficiency banner */}
+      <DataSufficiencyBanner daysWithData={data.daysWithData} daysNeeded={42} />
+
+      {/* PMC Chart */}
+      <div className="rounded-xl border border-ink-border bg-ink-raised p-4">
+        <PMCChart
+          data={data.points}
+          currentCTL={data.currentCTL}
+          currentATL={data.currentATL}
+          currentTSB={data.currentTSB}
+          onDayClick={handleDayClick}
+        />
+      </div>
+
+      {/* Current values row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <ValueCard label="Fitness (CTL)" value={data.currentCTL} colorClass="text-data-good" />
+        <ValueCard label="Fatigue (ATL)" value={data.currentATL} colorClass="text-data-poor" />
+        <ValueCard label="Form (TSB)" value={data.currentTSB} colorClass="text-data-excellent" />
+        <ValueCard
+          label="ACWR"
+          value={data.acwr}
+          colorClass={
+            data.acwr != null && data.acwr > 1.5
+              ? 'text-data-poor'
+              : data.acwr != null && data.acwr > 1.2
+                ? 'text-data-warning'
+                : 'text-data-good'
+          }
+          format={(v) => v.toFixed(2)}
+        />
+      </div>
+    </div>
+  );
+}

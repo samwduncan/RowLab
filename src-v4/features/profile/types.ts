@@ -74,4 +74,4 @@ export interface AchievementData {
 }
 
 /** Valid profile tab identifiers */
-export type ProfileTab = 'overview' | 'training-log' | 'prs' | 'achievements';
+export type ProfileTab = 'overview' | 'training-log' | 'prs' | 'achievements' | 'analytics';

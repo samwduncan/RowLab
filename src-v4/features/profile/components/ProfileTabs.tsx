@@ -10,6 +10,7 @@ const TABS = [
   { id: 'training-log', label: 'Training Log' },
   { id: 'prs', label: 'PRs' },
   { id: 'achievements', label: 'Achievements' },
+  { id: 'analytics', label: 'Analytics' },
 ] as const;
 
 interface ProfileTabsProps {

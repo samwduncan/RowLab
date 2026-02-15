@@ -22,7 +22,7 @@ import { ProfileSkeleton } from '@/features/profile/components/ProfileSkeleton';
 /* ------------------------------------------------------------------ */
 
 const profileSearchSchema = z.object({
-  tab: z.enum(['overview', 'training-log', 'prs', 'achievements']).catch('overview'),
+  tab: z.enum(['overview', 'training-log', 'prs', 'achievements', 'analytics']).catch('overview'),
 });
 
 export type ProfileSearch = z.infer<typeof profileSearchSchema>;

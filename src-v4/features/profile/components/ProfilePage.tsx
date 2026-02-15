@@ -16,6 +16,7 @@ import { OverviewTab } from './OverviewTab';
 import { TrainingLogTab } from './TrainingLogTab';
 import { PRsTab } from './PRsTab';
 import { AchievementsTab } from './AchievementsTab';
+import { AnalyticsTab } from '@/features/analytics/components/AnalyticsTab';
 import { fadeIn } from '@/lib/animations';
 import { Route } from '@/routes/_authenticated/profile';
 import type { ProfileTab } from '../types';
@@ -47,6 +48,7 @@ export function ProfilePage() {
         {tab === 'training-log' && <TrainingLogTab />}
         {tab === 'prs' && <PRsTab />}
         {tab === 'achievements' && <AchievementsTab />}
+        {tab === 'analytics' && <AnalyticsTab />}
       </div>
     </motion.div>
   );
