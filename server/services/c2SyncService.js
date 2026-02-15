@@ -16,13 +16,12 @@ import { convertWorkoutToErgTest } from './workoutToErgTest.js';
  * @returns {string} - Mapped machine type
  */
 export function mapC2MachineType(c2Type) {
-  // C2 API type field mapping:
-  // 0 or "rower" → rower
-  // 1 or "skierg" → skierg
-  // 2 or "bikerg" → bikerg
-  if (c2Type === 0 || c2Type === 'rower') return 'rower';
+  // C2 API returns both numeric and string type values:
+  // Numeric: 0=rower, 1=skierg, 2=bikerg
+  // String: "rower", "slides" (dynamic rower), "skierg", "bike", "bikerg"
+  if (c2Type === 0 || c2Type === 'rower' || c2Type === 'slides') return 'rower';
   if (c2Type === 1 || c2Type === 'skierg') return 'skierg';
-  if (c2Type === 2 || c2Type === 'bikerg') return 'bikerg';
+  if (c2Type === 2 || c2Type === 'bikerg' || c2Type === 'bike') return 'bikerg';
 
   // Default to rower (most common)
   return 'rower';
@@ -206,6 +205,7 @@ export async function syncUserWorkouts(userId, teamId) {
           teamId,
           userId,
           source: 'concept2_sync',
+          type: 'erg',
           c2LogbookId: String(result.id),
           date: new Date(result.date),
           distanceM: result.distance,
@@ -352,6 +352,7 @@ export async function fetchAndStoreResult(
         teamId,
         userId,
         source: 'concept2_sync',
+        type: 'erg',
         c2LogbookId: String(resultId),
         date: new Date(result.date),
         distanceM: result.distance,
@@ -366,6 +367,7 @@ export async function fetchAndStoreResult(
         rawData: result,
       },
       update: {
+        type: 'erg',
         distanceM: result.distance,
         durationSeconds: result.time ? result.time / 10 : null,
         strokeRate: result.stroke_rate,
@@ -661,6 +663,7 @@ export async function historicalImport(userId, teamId, options = {}) {
             teamId,
             userId,
             source: 'concept2_sync',
+            type: 'erg',
             c2LogbookId: String(result.id),
             date: new Date(result.date),
             distanceM: result.distance,
@@ -810,6 +813,7 @@ export async function syncCoachWorkouts(userId, teamId) {
           teamId,
           userId: athleteUserId, // null if unmatched
           source: 'concept2_sync',
+          type: 'erg',
           c2LogbookId: String(result.id),
           date: new Date(result.date),
           distanceM: result.distance,
