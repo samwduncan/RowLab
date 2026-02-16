@@ -650,6 +650,190 @@ export async function getUserWorkouts(userId, options = {}) {
 }
 
 // ============================================
+// Best-Split PR Scanner
+// ============================================
+
+/**
+ * Distances to scan for best-split PRs (subset of standard distances).
+ * Only distances where finding a hidden PR within a longer workout is meaningful.
+ */
+const BEST_SPLIT_DISTANCES = {
+  rower: { '500m': 500, '1k': 1000, '2k': 2000, '6k': 6000 },
+  skierg: { '500m': 500, '1k': 1000, '2k': 2000, '6k': 6000 },
+  bikerg: { '500m': 1000, '1k': 2000, '2k': 4000, '6k': 12000 },
+};
+
+/**
+ * Scan workout splits to find the fastest contiguous segment covering a target distance.
+ * Uses a sliding window that accumulates split distances.
+ *
+ * Rules:
+ * - Only scans within contiguous work segments (skips rest splits)
+ * - Rest detection: split watts < 40% of workout avgWatts
+ * - Split granularity must be ≤ target distance (can't find 500m PR from 2000m splits)
+ * - Returns null if no valid window found
+ *
+ * @param {Array<{distanceM: number, timeSeconds: number, watts: number|null}>} splits
+ * @param {number} targetDistanceM - Target distance in meters
+ * @param {number} workoutAvgWatts - Workout average watts for rest detection
+ * @returns {{ timeSeconds: number, startSplit: number, endSplit: number } | null}
+ */
+function findBestSplitWindow(splits, targetDistanceM, workoutAvgWatts) {
+  if (!splits || splits.length === 0) return null;
+
+  // Rest threshold: 40% of workout average watts (or 50W minimum)
+  const restThreshold = Math.max(workoutAvgWatts ? workoutAvgWatts * 0.4 : 50, 30);
+
+  // Segment splits into contiguous work blocks (break on rest splits)
+  const workSegments = [];
+  let currentSegment = [];
+
+  for (const split of splits) {
+    const isRest = split.watts != null && split.watts < restThreshold;
+    if (isRest) {
+      if (currentSegment.length > 0) {
+        workSegments.push(currentSegment);
+        currentSegment = [];
+      }
+    } else {
+      if (split.distanceM && split.timeSeconds) {
+        // Sanity check: pace must be physically possible
+        // Fastest erg pace ever is ~1:09.8/500m. Anything under 1:10/500m is bad data.
+        const pacePerM = Number(split.timeSeconds) / split.distanceM;
+        if (pacePerM >= 0.14) {
+          // 0.14 s/m = 1:10/500m minimum
+          currentSegment.push(split);
+        }
+      }
+    }
+  }
+  if (currentSegment.length > 0) {
+    workSegments.push(currentSegment);
+  }
+
+  let bestTime = Infinity;
+  let bestWindow = null;
+
+  for (const segment of workSegments) {
+    // Check if any split in this segment is already >= target (can't window into it)
+    // Also check if total segment distance >= target
+    const totalSegmentDist = segment.reduce((sum, s) => sum + s.distanceM, 0);
+    if (totalSegmentDist < targetDistanceM) continue;
+
+    // Check split granularity — splits must be strictly smaller than the target.
+    // If any split >= target, we can't meaningfully window (single splits matching
+    // the target distance are standalone PRs, not "best split" discoveries).
+    const maxSplitDist = Math.max(...segment.map((s) => s.distanceM));
+    if (maxSplitDist >= targetDistanceM) continue;
+
+    // Sliding window over this segment
+    let windowStart = 0;
+    let windowDist = 0;
+    let windowTime = 0;
+
+    for (let windowEnd = 0; windowEnd < segment.length; windowEnd++) {
+      windowDist += segment[windowEnd].distanceM;
+      windowTime += Number(segment[windowEnd].timeSeconds);
+
+      // Shrink window from left while distance exceeds target
+      while (windowDist - segment[windowStart].distanceM >= targetDistanceM) {
+        windowDist -= segment[windowStart].distanceM;
+        windowTime -= Number(segment[windowStart].timeSeconds);
+        windowStart++;
+      }
+
+      // Check if window covers the target distance
+      if (windowDist >= targetDistanceM) {
+        // Interpolate: if window overshoots, prorate time proportionally
+        // from the last split added
+        let effectiveTime = windowTime;
+        if (windowDist > targetDistanceM) {
+          const overshoot = windowDist - targetDistanceM;
+          const lastSplit = segment[windowEnd];
+          const lastSplitProportion = overshoot / lastSplit.distanceM;
+          effectiveTime -= Number(lastSplit.timeSeconds) * lastSplitProportion;
+        }
+
+        if (effectiveTime < bestTime) {
+          bestTime = effectiveTime;
+          bestWindow = { timeSeconds: effectiveTime, startSplit: windowStart, endSplit: windowEnd };
+        }
+      }
+    }
+  }
+
+  return bestWindow;
+}
+
+/**
+ * Scan all user workouts with splits to find best-split PRs.
+ * Only scans workouts longer than the target distance.
+ *
+ * @param {object} baseWhere - Prisma WHERE clause for user's workouts
+ * @returns {Promise<object>} - { rower: { '500m': {...}, ... }, bikerg: { ... } }
+ */
+async function scanBestSplitPRs(baseWhere) {
+  const results = {};
+
+  for (const [machineType, distances] of Object.entries(BEST_SPLIT_DISTANCES)) {
+    results[machineType] = {};
+
+    for (const [label, targetM] of Object.entries(distances)) {
+      // Find workouts longer than the target distance with splits
+      const workouts = await prisma.workout.findMany({
+        where: {
+          AND: [baseWhere, { type: 'erg' }, { machineType }, { distanceM: { gt: targetM } }],
+        },
+        select: {
+          id: true,
+          date: true,
+          distanceM: true,
+          avgWatts: true,
+          splits: {
+            select: { distanceM: true, timeSeconds: true, watts: true, splitNumber: true },
+            orderBy: { splitNumber: 'asc' },
+          },
+        },
+      });
+
+      let bestTime = Infinity;
+      let bestRecord = null;
+
+      for (const workout of workouts) {
+        if (workout.splits.length < 2) continue;
+
+        const result = findBestSplitWindow(workout.splits, targetM, workout.avgWatts);
+        if (result && result.timeSeconds < bestTime) {
+          bestTime = result.timeSeconds;
+          bestRecord = {
+            time: Math.round(result.timeSeconds * 10), // tenths for consistency
+            date: workout.date.toISOString(),
+            workoutId: workout.id,
+            workoutDistanceM: workout.distanceM,
+            watts: null, // computed below
+          };
+        }
+      }
+
+      if (bestRecord) {
+        // Compute watts from the best split time
+        const paceTenths = Math.round(bestRecord.time / (targetM / 500));
+        bestRecord.watts = wattsFromPace(paceTenths, machineType);
+
+        // Sanity: discard results with impossible wattage (>700W = beyond world records)
+        if (bestRecord.watts > 700) {
+          bestRecord = null;
+        }
+      }
+
+      results[machineType][label] = bestRecord;
+    }
+  }
+
+  return results;
+}
+
+// ============================================
 // getUserPRs
 // ============================================
 
@@ -884,7 +1068,10 @@ export async function getUserPRs(userId) {
     }
   }
 
-  // 3. Build final byMachine structure with PR records
+  // 3. Scan for best-split PRs (fastest contiguous segment within longer workouts)
+  const bestSplitPRs = await scanBestSplitPRs(baseWhere);
+
+  // 4. Build final byMachine structure with PR records
   const result = {};
   for (const mt of Object.keys(byMachine)) {
     result[mt] = [];
@@ -902,7 +1089,23 @@ export async function getUserPRs(userId) {
       }
       // Sort by date desc for recentAttempts
       deduped.sort((a, b) => (a.date > b.date ? -1 : 1));
-      result[mt].push(buildPRRecord(testType, mt, deduped));
+      const pr = buildPRRecord(testType, mt, deduped);
+
+      // Attach best-split data if available AND faster than the standalone PR
+      const bestSplit = bestSplitPRs[mt]?.[testType] || null;
+      if (bestSplit && (!pr.bestTime || bestSplit.time < pr.bestTime)) {
+        pr.bestSplit = {
+          time: bestSplit.time,
+          date: bestSplit.date,
+          watts: bestSplit.watts,
+          workoutId: bestSplit.workoutId,
+          workoutDistanceM: bestSplit.workoutDistanceM,
+        };
+      } else {
+        pr.bestSplit = null;
+      }
+
+      result[mt].push(pr);
     }
 
     // Add any non-standard distances that exist for this machine
@@ -919,12 +1122,14 @@ export async function getUserPRs(userId) {
           }
         }
         deduped.sort((a, b) => (a.date > b.date ? -1 : 1));
-        result[mt].push(buildPRRecord(testType, mt, deduped));
+        const pr = buildPRRecord(testType, mt, deduped);
+        pr.bestSplit = null; // Non-standard distances don't get best-split scanning
+        result[mt].push(pr);
       }
     }
   }
 
-  // 4. Backward-compatible flat records array (rower PRs only, same shape as before)
+  // 5. Backward-compatible flat records array (rower PRs only, same shape as before)
   const records = (result.rower || []).map((pr) => ({
     testType: pr.testType,
     machineType: 'rower',
@@ -933,6 +1138,7 @@ export async function getUserPRs(userId) {
     previousBest: pr.previousBest,
     improvement: pr.improvement,
     recentAttempts: pr.recentAttempts,
+    bestSplit: pr.bestSplit,
   }));
 
   return { records, byMachine: result };
