@@ -8,25 +8,27 @@
    ================================================================ */
 
 @theme {
-  /* === INK SCALE (monochrome UI, oklch) === */
-  --color-ink-deep: oklch(0.145 0.005 285);
-  --color-ink-base: oklch(0.195 0.005 285);
-  --color-ink-well: oklch(0.17 0.005 285);
-  --color-ink-raised: oklch(0.235 0.005 285);
-  --color-ink-hover: oklch(0.275 0.005 285);
-  --color-ink-float: oklch(0.265 0.005 285);
-  --color-ink-border: oklch(0.315 0.005 285);
-  --color-ink-border-strong: oklch(0.375 0.005 285);
-  --color-ink-muted: oklch(0.435 0.005 285);
-  --color-ink-tertiary: oklch(0.505 0.005 285);
-  --color-ink-secondary: oklch(0.595 0.005 285);
-  --color-ink-body: oklch(0.72 0.005 285);
-  --color-ink-primary: oklch(0.88 0.005 285);
-  --color-ink-bright: oklch(0.965 0.005 285);
+  /* === INK SCALE (monochrome UI, oklch) ===
+     Bumped chroma on key separation levels for higher visual contrast. */
+  --color-ink-deep: oklch(0.13 0.006 285);
+  --color-ink-base: oklch(0.175 0.006 285);
+  --color-ink-well: oklch(0.155 0.006 285);
+  --color-ink-raised: oklch(0.22 0.007 285);
+  --color-ink-hover: oklch(0.26 0.007 285);
+  --color-ink-float: oklch(0.25 0.007 285);
+  --color-ink-border: oklch(0.3 0.008 285);
+  --color-ink-border-strong: oklch(0.37 0.008 285);
+  --color-ink-muted: oklch(0.44 0.008 285);
+  --color-ink-tertiary: oklch(0.52 0.008 285);
+  --color-ink-secondary: oklch(0.62 0.006 285);
+  --color-ink-body: oklch(0.74 0.005 285);
+  --color-ink-primary: oklch(0.9 0.005 285);
+  --color-ink-bright: oklch(0.97 0.005 285);
 
   /* === ACCENT COLORS === */
   --color-accent-copper: oklch(0.62 0.12 55);
   --color-accent-copper-hover: oklch(0.55 0.12 55);
+  --color-accent-copper-subtle: oklch(0.62 0.12 55 / 0.12);
   --color-accent-primary: oklch(0.55 0.18 255);
   --color-accent-primary-hover: oklch(0.48 0.18 255);
 
@@ -58,16 +60,21 @@
 
   /* === SHADOWS === */
   --shadow-card:
-    0 0 0 1px oklch(0.965 0.005 285 / 0.06), 0 1px 2px oklch(0 0 0 / 0.3),
+    0 0 0 1px oklch(0.97 0.005 285 / 0.06), 0 1px 2px oklch(0 0 0 / 0.3),
     0 4px 16px oklch(0 0 0 / 0.2);
   --shadow-card-hover:
-    0 0 0 1px oklch(0.965 0.005 285 / 0.1), 0 2px 4px oklch(0 0 0 / 0.3),
+    0 0 0 1px oklch(0.97 0.005 285 / 0.1), 0 2px 4px oklch(0 0 0 / 0.3),
     0 8px 24px oklch(0 0 0 / 0.25);
+  --shadow-card-elevated:
+    0 0 0 1px oklch(0.97 0.005 285 / 0.08), 0 4px 8px oklch(0 0 0 / 0.35),
+    0 12px 40px oklch(0 0 0 / 0.3);
+  --shadow-inset: inset 0 1px 3px oklch(0 0 0 / 0.25), inset 0 0 0 1px oklch(0 0 0 / 0.1);
   --shadow-glow-copper:
     0 0 0 1px oklch(0.62 0.12 55 / 0.3), 0 0 20px -5px oklch(0.62 0.12 55 / 0.4);
   --shadow-card-glow:
     0 0 0 1px oklch(0.62 0.12 55 / 0.15), 0 0 20px -5px oklch(0.62 0.12 55 / 0.15),
     0 1px 2px oklch(0 0 0 / 0.3), 0 4px 16px oklch(0 0 0 / 0.2);
+  --shadow-metric: 0 1px 0 oklch(0 0 0 / 0.5);
 
   /* === RADIUS === */
   --radius-sm: 0.25rem;
@@ -77,7 +84,11 @@
   --radius-2xl: 1.25rem;
 }
 
-/* === SLIDE-UP KEYFRAME (bottom sheets) === */
+/* ================================================================
+   KEYFRAMES
+   ================================================================ */
+
+/* === SLIDE-UP (bottom sheets) === */
 @keyframes slideUp {
   from {
     transform: translateY(100%);
@@ -87,7 +98,7 @@
   }
 }
 
-/* === LEGENDARY GLOW KEYFRAME === */
+/* === LEGENDARY GLOW === */
 @keyframes legendary-glow {
   0%,
   100% {
@@ -117,7 +128,7 @@
   animation: pulse-subtle 1.5s ease-in-out infinite;
 }
 
-/* === PULSE-SLOW KEYFRAME (PR celebration glow) === */
+/* === PULSE-SLOW (PR celebration glow) === */
 @keyframes pulse-slow {
   0%,
   100% {
@@ -132,7 +143,7 @@
   animation: pulse-slow 3s ease-in-out infinite;
 }
 
-/* === SHIMMER KEYFRAMES === */
+/* === SHIMMER === */
 @keyframes shimmer {
   0% {
     background-position: -200% 0;
@@ -142,7 +153,36 @@
   }
 }
 
-/* === UTILITY CLASSES === */
+/* === AMBIENT CANVAS GRADIENT (slow-cycling background atmosphere) === */
+@keyframes canvas-drift {
+  0%,
+  100% {
+    background-position: 0% 0%;
+  }
+  25% {
+    background-position: 50% 100%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  75% {
+    background-position: 25% 75%;
+  }
+}
+
+/* === GRADIENT BORDER SPIN (hero cards) === */
+@keyframes border-spin {
+  from {
+    --border-angle: 0deg;
+  }
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+/* ================================================================
+   UTILITY CLASSES
+   ================================================================ */
 
 .animate-shimmer {
   animation: shimmer 1.5s ease-in-out infinite;
@@ -150,23 +190,75 @@
   background-image: linear-gradient(
     90deg,
     transparent 0%,
-    oklch(0.88 0.005 285 / 0.06) 50%,
+    oklch(0.9 0.005 285 / 0.06) 50%,
     transparent 100%
   );
 }
 
+/* --- Glass morphism --- */
 .glass {
-  background: oklch(0.195 0.005 285 / 0.6);
+  background: oklch(0.175 0.006 285 / 0.6);
   backdrop-filter: blur(16px) saturate(1.2);
   -webkit-backdrop-filter: blur(16px) saturate(1.2);
-  border: 1px solid oklch(0.965 0.005 285 / 0.08);
+  border: 1px solid oklch(0.97 0.005 285 / 0.08);
 }
 
 .glass-hover:hover {
-  background: oklch(0.235 0.005 285 / 0.7);
-  border-color: oklch(0.965 0.005 285 / 0.12);
+  background: oklch(0.22 0.007 285 / 0.7);
+  border-color: oklch(0.97 0.005 285 / 0.12);
 }
 
+/* --- Glass variant: elevated (stronger blur, deeper shadow) --- */
+.glass-elevated {
+  background: oklch(0.175 0.006 285 / 0.7);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid oklch(0.97 0.005 285 / 0.1);
+  box-shadow: var(--shadow-card-elevated);
+}
+
+/* --- Glass variant: sunken (inset for wells/inputs) --- */
+.glass-sunken {
+  background: oklch(0.13 0.006 285 / 0.8);
+  border: 1px solid oklch(0 0 0 / 0.15);
+  box-shadow: var(--shadow-inset);
+}
+
+/* --- Glass variant: hero (gradient border on all sides) --- */
+.glass-hero {
+  background: oklch(0.175 0.006 285 / 0.65);
+  backdrop-filter: blur(20px) saturate(1.3);
+  -webkit-backdrop-filter: blur(20px) saturate(1.3);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+
+.glass-hero::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    oklch(0.62 0.12 55 / 0.4),
+    oklch(0.62 0.12 55 / 0.08) 40%,
+    oklch(0.55 0.18 255 / 0.08) 60%,
+    oklch(0.62 0.12 55 / 0.3)
+  );
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+/* --- Hover lift --- */
 .hover-lift {
   transition:
     transform 0.15s ease-out,
@@ -177,6 +269,7 @@
   transform: translateY(-2px);
 }
 
+/* --- Card interactive --- */
 .card-interactive {
   transition:
     transform 0.15s ease-out,
@@ -193,18 +286,72 @@
   transform: translateY(0);
 }
 
+/* --- Text gradients --- */
 .text-heading-gradient {
+  background: linear-gradient(135deg, oklch(0.97 0.005 285) 0%, oklch(0.97 0.005 285 / 0.65) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Copper-tinted heading gradient (for hero sections) */
+.text-heading-copper {
   background: linear-gradient(
     135deg,
-    oklch(0.965 0.005 285) 0%,
-    oklch(0.965 0.005 285 / 0.65) 100%
+    oklch(0.97 0.005 285) 0%,
+    oklch(0.72 0.08 55) 50%,
+    oklch(0.62 0.12 55) 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* === BASE STYLES === */
+/* Metric text: monospace, slightly textured */
+.text-metric {
+  font-family: var(--font-mono);
+  text-shadow: 0 1px 0 oklch(0 0 0 / 0.5);
+  letter-spacing: -0.02em;
+}
+
+/* --- Canvas background (ambient atmosphere for shell) --- */
+.canvas-bg {
+  position: relative;
+  background-color: oklch(0.13 0.006 285);
+}
+
+/* Ambient gradient orbs */
+.canvas-bg::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 15% 20%, oklch(0.62 0.12 55 / 0.04), transparent 70%),
+    radial-gradient(ellipse 500px 350px at 85% 75%, oklch(0.55 0.18 255 / 0.03), transparent 70%),
+    radial-gradient(ellipse 400px 300px at 50% 50%, oklch(0.62 0.12 55 / 0.02), transparent 60%);
+  background-size: 200% 200%;
+  animation: canvas-drift 45s ease-in-out infinite;
+}
+
+/* Grain noise texture */
+.canvas-bg::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.025;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ================================================================
+   BASE STYLES
+   ================================================================ */
 
 html {
   font-family: var(--font-body);
@@ -215,7 +362,7 @@ html {
 
 ::selection {
   background: oklch(0.62 0.12 55 / 0.3);
-  color: oklch(0.965 0.005 285);
+  color: oklch(0.97 0.005 285);
 }
 
 /* Scrollbar styling */
@@ -229,12 +376,12 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: oklch(0.315 0.005 285 / 0.5);
+  background: oklch(0.3 0.008 285 / 0.5);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.375 0.005 285 / 0.7);
+  background: oklch(0.37 0.008 285 / 0.7);
 }
 
 /* Focus ring */
@@ -243,7 +390,9 @@ html {
   outline-offset: 2px;
 }
 
-/* === CMDK COMMAND PALETTE STYLES === */
+/* ================================================================
+   CMDK COMMAND PALETTE STYLES
+   ================================================================ */
 
 .command-palette [cmdk-group-heading] {
   padding: 0.375rem 0.75rem;
@@ -251,13 +400,13 @@ html {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: oklch(0.505 0.005 285);
+  color: oklch(0.52 0.008 285);
 }
 
 .search-group + .search-group {
   margin-top: 0.25rem;
   padding-top: 0.25rem;
-  border-top: 1px solid oklch(0.315 0.005 285 / 0.3);
+  border-top: 1px solid oklch(0.3 0.008 285 / 0.3);
 }
 
 .search-item {
@@ -272,9 +421,9 @@ html {
 }
 
 .search-item[data-selected='true'] {
-  background: oklch(0.275 0.005 285);
+  background: oklch(0.26 0.007 285);
 }
 
 .search-item:active {
-  background: oklch(0.315 0.005 285);
+  background: oklch(0.3 0.008 285);
 }

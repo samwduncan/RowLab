@@ -34,6 +34,14 @@ export const SPRING_GENTLE: Transition = {
   mass: 1,
 };
 
+/** Dramatic entrance for hero elements */
+export const SPRING_DRAMATIC: Transition = {
+  type: 'spring',
+  stiffness: 180,
+  damping: 20,
+  mass: 1.2,
+};
+
 /* === TRANSITION PRESETS === */
 
 export const fadeIn = {
@@ -48,6 +56,14 @@ export const slideUp = {
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: 8 },
   transition: SPRING_SMOOTH,
+} as const;
+
+/** Dramatic entrance with deeper offset — for hero/feature elements */
+export const slideUpDramatic = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: 12 },
+  transition: SPRING_DRAMATIC,
 } as const;
 
 export const slideInFromLeft = {
@@ -103,3 +119,33 @@ export const listContainerVariants: Record<string, Variant> = {
     },
   },
 };
+
+/** Dramatic stagger for feature sections — deeper Y offset */
+export const dramaticContainerVariants: Record<string, Variant> = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+export const dramaticItemVariants: Record<string, Variant> = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: SPRING_DRAMATIC,
+  },
+};
+
+/* === PAGE TRANSITION === */
+
+export const pageTransition = {
+  initial: { opacity: 0, y: 6 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -4 },
+  transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
+} as const;

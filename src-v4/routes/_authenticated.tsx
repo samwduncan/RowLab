@@ -34,12 +34,12 @@ function AuthenticatedLayout() {
   const isMobile = useIsMobile();
 
   return (
-    <div className="flex h-screen bg-ink-deep">
+    <div className="flex h-screen canvas-bg">
       {/* Sidebar: desktop (full) / tablet (rail) / mobile (hidden) */}
       {!isMobile && <Sidebar />}
 
-      {/* Main content column */}
-      <div className="flex flex-1 flex-col min-w-0">
+      {/* Main content column — z-10 ensures it sits above canvas pseudo-elements */}
+      <div className="relative z-10 flex flex-1 flex-col min-w-0">
         <TopBar />
         <main
           className={`flex flex-1 flex-col overflow-auto [&>*]:w-full ${isMobile ? 'pb-16' : ''}`}
