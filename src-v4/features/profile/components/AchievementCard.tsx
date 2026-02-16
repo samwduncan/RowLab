@@ -35,9 +35,9 @@ const RARITY_COLORS: Record<Achievement['rarity'], { text: string; bg: string; b
     border: 'border-ink-secondary/20',
   },
   Rare: {
-    text: 'text-blue-400',
-    bg: 'bg-blue-400/10',
-    border: 'border-blue-400/20',
+    text: 'text-accent-primary',
+    bg: 'bg-accent-primary/10',
+    border: 'border-accent-primary/20',
   },
   Epic: {
     text: 'text-accent-copper',
@@ -45,16 +45,16 @@ const RARITY_COLORS: Record<Achievement['rarity'], { text: string; bg: string; b
     border: 'border-accent-copper/20',
   },
   Legendary: {
-    text: 'text-amber-400',
-    bg: 'bg-amber-400/10',
-    border: 'border-amber-400/20',
+    text: 'text-data-warning',
+    bg: 'bg-data-warning/10',
+    border: 'border-data-warning/20',
   },
 };
 
 /** Rarity glow wrapper classes for unlocked cards */
 const RARITY_GLOW: Record<Achievement['rarity'], string> = {
   Common: '',
-  Rare: 'ring-1 ring-blue-400/20',
+  Rare: 'ring-1 ring-accent-primary/20',
   Epic: 'ring-1 ring-accent-copper/30 shadow-[0_0_20px_-5px_oklch(0.62_0.12_55/0.2)]',
   Legendary: '', // Legendary uses a separate animated overlay
 };
@@ -128,7 +128,7 @@ export function AchievementCard({ achievement, compact = false }: AchievementCar
         <motion.div variants={listItemVariants}>
           <div className="relative rounded-2xl">
             <div
-              className="absolute -inset-px rounded-2xl bg-gradient-to-b from-amber-400/30 via-amber-400/10 to-amber-400/0 animate-legendary-glow pointer-events-none"
+              className="absolute -inset-px rounded-2xl bg-gradient-to-b from-data-warning/30 via-data-warning/10 to-data-warning/0 animate-legendary-glow pointer-events-none"
               aria-hidden="true"
             />
             {card}

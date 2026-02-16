@@ -68,7 +68,10 @@ function TrainingLogSkeleton() {
   return (
     <div className="space-y-2">
       {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="glass rounded-lg px-3 py-2.5 flex items-center gap-3 animate-pulse">
+        <div
+          key={i}
+          className="glass rounded-lg px-3 py-2.5 flex items-center gap-3 animate-shimmer"
+        >
           <div className="w-8 h-8 rounded-lg bg-ink-well shrink-0" />
           <div className="flex-1 space-y-1.5">
             <div className="h-3 w-20 rounded bg-ink-well" />

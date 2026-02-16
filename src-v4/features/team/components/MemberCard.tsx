@@ -33,7 +33,7 @@ const ROLE_BADGE_CONFIG: Record<string, RoleBadgeConfig> = {
   },
   COACH: {
     classes:
-      'bg-blue-400/10 text-blue-400 border border-blue-400/20 px-2.5 py-1 rounded-lg text-xs',
+      'bg-accent-primary/10 text-accent-primary border border-accent-primary/20 px-2.5 py-1 rounded-lg text-xs',
   },
   ATHLETE: {
     classes:

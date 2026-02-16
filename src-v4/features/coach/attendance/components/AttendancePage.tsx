@@ -259,10 +259,10 @@ function DailyTab({ teamId, date, setDate, readOnly }: DailyTabProps) {
         <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
           {(
             [
-              { key: 'present', label: 'Present', color: 'text-emerald-400' },
-              { key: 'late', label: 'Late', color: 'text-amber-400' },
-              { key: 'excused', label: 'Excused', color: 'text-sky-400' },
-              { key: 'unexcused', label: 'Unexcused', color: 'text-rose-400' },
+              { key: 'present', label: 'Present', color: 'text-data-excellent' },
+              { key: 'late', label: 'Late', color: 'text-data-warning' },
+              { key: 'excused', label: 'Excused', color: 'text-accent-primary' },
+              { key: 'unexcused', label: 'Unexcused', color: 'text-data-poor' },
               ...(stats.unmarked > 0
                 ? [{ key: 'unmarked', label: 'Unmarked', color: 'text-ink-muted' }]
                 : []),
@@ -279,7 +279,7 @@ function DailyTab({ teamId, date, setDate, readOnly }: DailyTabProps) {
           <button
             onClick={handleMarkAllPresent}
             disabled={bulkMutation.isPending}
-            className="inline-flex items-center gap-2 rounded-lg bg-emerald-500/20 px-4 py-2 text-sm font-medium text-emerald-400 transition-colors hover:bg-emerald-500/30 disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg bg-data-excellent/20 px-4 py-2 text-sm font-medium text-data-excellent transition-colors hover:bg-data-excellent/30 disabled:opacity-50"
           >
             <CheckCircle className="h-4 w-4" />
             Mark All Present
@@ -487,16 +487,16 @@ function SummaryTab({ teamId }: SummaryTabProps) {
                   <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ink-muted">
                     Athlete
                   </th>
-                  <th className="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-emerald-400/70">
+                  <th className="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-data-excellent/70">
                     P
                   </th>
-                  <th className="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-amber-400/70">
+                  <th className="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-data-warning/70">
                     L
                   </th>
-                  <th className="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-sky-400/70">
+                  <th className="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-accent-primary/70">
                     E
                   </th>
-                  <th className="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-rose-400/70">
+                  <th className="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-data-poor/70">
                     U
                   </th>
                   <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ink-muted">
@@ -535,23 +535,27 @@ function SummaryRow({ row }: { row: AttendanceSummaryRow }) {
           <span className="font-medium text-ink-primary">{name}</span>
         </div>
       </td>
-      <td className="px-3 py-3 text-center font-mono text-emerald-400">{row.present}</td>
-      <td className="px-3 py-3 text-center font-mono text-amber-400">{row.late}</td>
-      <td className="px-3 py-3 text-center font-mono text-sky-400">{row.excused}</td>
-      <td className="px-3 py-3 text-center font-mono text-rose-400">{row.unexcused}</td>
+      <td className="px-3 py-3 text-center font-mono text-data-excellent">{row.present}</td>
+      <td className="px-3 py-3 text-center font-mono text-data-warning">{row.late}</td>
+      <td className="px-3 py-3 text-center font-mono text-accent-primary">{row.excused}</td>
+      <td className="px-3 py-3 text-center font-mono text-data-poor">{row.unexcused}</td>
       <td className="px-4 py-3">
         <div className="flex items-center justify-end gap-2">
           <div className="hidden sm:block h-1.5 w-16 rounded-full bg-ink-well overflow-hidden">
             <div
               className={`h-full rounded-full transition-all ${
-                rate >= 90 ? 'bg-emerald-400' : rate >= 75 ? 'bg-amber-400' : 'bg-rose-400'
+                rate >= 90 ? 'bg-data-excellent' : rate >= 75 ? 'bg-data-warning' : 'bg-data-poor'
               }`}
               style={{ width: `${rate}%` }}
             />
           </div>
           <span
             className={`font-mono font-semibold ${
-              rate >= 90 ? 'text-emerald-400' : rate >= 75 ? 'text-amber-400' : 'text-rose-400'
+              rate >= 90
+                ? 'text-data-excellent'
+                : rate >= 75
+                  ? 'text-data-warning'
+                  : 'text-data-poor'
             }`}
           >
             {rate}%

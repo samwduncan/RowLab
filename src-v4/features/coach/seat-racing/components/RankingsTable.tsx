@@ -43,9 +43,9 @@ const MEDAL_CONFIG: Record<
   { bgClass: string; borderClass: string; textClass: string; icon: typeof Trophy }
 > = {
   1: {
-    bgClass: 'bg-amber-400/5',
-    borderClass: 'border-l-2 border-amber-400',
-    textClass: 'text-amber-400',
+    bgClass: 'bg-data-warning/5',
+    borderClass: 'border-l-2 border-data-warning',
+    textClass: 'text-data-warning',
     icon: Trophy,
   },
   2: {

@@ -29,13 +29,13 @@ interface TeamSwitcherProps {
 /** Deterministic color from team name for the initial circle */
 const TEAM_COLORS = [
   'bg-accent-copper/20 text-accent-copper',
-  'bg-blue-500/20 text-blue-400',
-  'bg-emerald-500/20 text-emerald-400',
-  'bg-violet-500/20 text-violet-400',
-  'bg-amber-500/20 text-amber-400',
-  'bg-rose-500/20 text-rose-400',
-  'bg-cyan-500/20 text-cyan-400',
-  'bg-pink-500/20 text-pink-400',
+  'bg-accent-primary/20 text-accent-primary',
+  'bg-data-excellent/20 text-data-excellent',
+  'bg-accent-primary/20 text-accent-primary',
+  'bg-data-warning/20 text-data-warning',
+  'bg-data-poor/20 text-data-poor',
+  'bg-accent-primary/20 text-accent-primary',
+  'bg-accent-primary/20 text-accent-primary',
 ];
 
 function getTeamColor(name: string): string {

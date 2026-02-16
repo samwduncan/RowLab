@@ -61,7 +61,7 @@ function SessionCard({ session, onNavigate }: SessionCardProps) {
       onClick={() => onNavigate(session.id)}
       className={`w-full text-left rounded-lg border p-4 transition-all hover:border-ink-muted group ${
         isActive
-          ? 'border-emerald-500/30 bg-emerald-500/5'
+          ? 'border-data-excellent/30 bg-data-excellent/5'
           : 'border-ink-border bg-ink-raised hover:bg-ink-hover'
       }`}
     >
@@ -98,7 +98,7 @@ function SessionCard({ session, onNavigate }: SessionCardProps) {
         </div>
 
         {isActive && (
-          <div className="flex items-center gap-1 rounded-md bg-emerald-500/20 px-2.5 py-1 text-xs font-medium text-emerald-400">
+          <div className="flex items-center gap-1 rounded-md bg-data-excellent/20 px-2.5 py-1 text-xs font-medium text-data-excellent">
             <Play size={12} />
             Live
           </div>
@@ -158,8 +158,8 @@ export function SessionsPage() {
         <div>
           <h1 className="text-ink-primary text-2xl font-display font-semibold">Sessions</h1>
           {activeSession && (
-            <p className="text-xs text-emerald-400 mt-1 flex items-center gap-1">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <p className="text-xs text-data-excellent mt-1 flex items-center gap-1">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-data-excellent animate-pulse" />
               Active session in progress
             </p>
           )}

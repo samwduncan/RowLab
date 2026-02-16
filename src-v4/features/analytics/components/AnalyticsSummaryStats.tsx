@@ -169,17 +169,14 @@ export function AnalyticsSummaryStats({
         : durationByPeriod
       : syntheticFromTotal(summary.avgPerPeriod);
 
-  // Resolve accent colors via CSS variables
-  const greenColor =
-    getComputedStyle(document.documentElement).getPropertyValue('--color-data-good').trim() ||
-    '#22C55E';
-  const blueColor = '#60A5FA';
+  // Resolve accent colors via CSS variables for Recharts SVG props
+  const style = getComputedStyle(document.documentElement);
+  const greenColor = style.getPropertyValue('--color-data-good').trim() || 'oklch(0.62 0.17 255)';
+  const blueColor =
+    style.getPropertyValue('--color-accent-primary').trim() || 'oklch(0.55 0.18 255)';
   const copperColor =
-    getComputedStyle(document.documentElement).getPropertyValue('--color-accent-copper').trim() ||
-    '#C87941';
-  const amberColor =
-    getComputedStyle(document.documentElement).getPropertyValue('--color-data-warning').trim() ||
-    '#F59E0B';
+    style.getPropertyValue('--color-accent-copper').trim() || 'oklch(0.62 0.12 55)';
+  const amberColor = style.getPropertyValue('--color-data-warning').trim() || 'oklch(0.75 0.14 75)';
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
@@ -194,7 +191,7 @@ export function AnalyticsSummaryStats({
       <StatCard
         label="Total Hours"
         value={formatHours(summary.totalDuration)}
-        borderColorClass="border-blue-400"
+        borderColorClass="border-accent-primary"
         sparklineData={durSpark}
         sparklineColor={blueColor}
         trend={computeTrend(durSpark)}

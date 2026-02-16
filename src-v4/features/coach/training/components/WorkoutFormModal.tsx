@@ -320,7 +320,7 @@ function WorkoutForm({
 
         {/* Error */}
         {mutation.isError && (
-          <p className="text-xs text-rose-400">
+          <p className="text-xs text-data-poor">
             {mutation.error instanceof Error ? mutation.error.message : 'Failed to create workout.'}
           </p>
         )}

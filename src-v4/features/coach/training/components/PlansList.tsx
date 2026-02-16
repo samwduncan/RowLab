@@ -21,11 +21,11 @@ import { slideUp, listContainerVariants, listItemVariants } from '@/lib/animatio
 // ---------------------------------------------------------------------------
 
 const PHASE_COLORS: Record<TrainingPhase, { bg: string; text: string }> = {
-  Base: { bg: 'bg-sky-500/15', text: 'text-sky-400' },
-  Build: { bg: 'bg-amber-500/15', text: 'text-amber-400' },
-  Peak: { bg: 'bg-rose-500/15', text: 'text-rose-400' },
-  Taper: { bg: 'bg-violet-500/15', text: 'text-violet-400' },
-  Recovery: { bg: 'bg-emerald-500/15', text: 'text-emerald-400' },
+  Base: { bg: 'bg-accent-primary/15', text: 'text-accent-primary' },
+  Build: { bg: 'bg-data-warning/15', text: 'text-data-warning' },
+  Peak: { bg: 'bg-data-poor/15', text: 'text-data-poor' },
+  Taper: { bg: 'bg-accent-primary/15', text: 'text-accent-primary' },
+  Recovery: { bg: 'bg-data-excellent/15', text: 'text-data-excellent' },
 };
 
 function PhaseBadge({ phase }: { phase: TrainingPhase }) {
@@ -326,7 +326,7 @@ function CreatePlanForm({ onCreated, onCancel }: { onCreated: () => void; onCanc
         </div>
 
         {mutation.isError && (
-          <p className="text-xs text-rose-400">Failed to create plan. Please try again.</p>
+          <p className="text-xs text-data-poor">Failed to create plan. Please try again.</p>
         )}
       </form>
     </GlassCard>

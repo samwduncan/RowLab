@@ -153,7 +153,7 @@ function StatsPanel({
       icon: Users,
       label: 'Members',
       value: String(memberCount),
-      iconColor: 'text-blue-400',
+      iconColor: 'text-accent-primary',
     },
     {
       icon: TrendingUp,
@@ -165,7 +165,7 @@ function StatsPanel({
       icon: Dumbbell,
       label: 'Workouts This Week',
       value: String(overview.workoutsThisWeek),
-      iconColor: 'text-purple-400',
+      iconColor: 'text-accent-primary',
     },
   ];
 

@@ -83,7 +83,7 @@ function AuthSkeleton() {
     <div className="flex h-screen w-screen items-center justify-center bg-ink-deep">
       <div className="flex flex-col items-center gap-4">
         {/* Pulsing app icon */}
-        <div className="h-12 w-12 rounded-xl bg-ink-raised animate-pulse" />
+        <div className="h-12 w-12 rounded-xl bg-ink-raised animate-shimmer" />
         {/* Loading bar */}
         <div className="h-1 w-32 overflow-hidden rounded-full bg-ink-raised">
           <div className="h-full w-1/2 animate-shimmer rounded-full bg-accent-copper/40" />

@@ -32,10 +32,10 @@ function paceColor(pace: number, target?: number | null): string {
   const diff = pace - target;
   const threshold = target * 0.02; // 2% tolerance
 
-  if (diff < -threshold) return 'text-sky-400'; // faster than target
-  if (diff <= threshold) return 'text-emerald-400'; // on target
-  if (diff <= threshold * 3) return 'text-amber-400'; // slightly slow
-  return 'text-rose-400'; // very slow
+  if (diff < -threshold) return 'text-accent-primary'; // faster than target
+  if (diff <= threshold) return 'text-data-excellent'; // on target
+  if (diff <= threshold * 3) return 'text-data-warning'; // slightly slow
+  return 'text-data-poor'; // very slow
 }
 
 // ---------------------------------------------------------------------------
@@ -88,7 +88,7 @@ function ErgCard({ data, targetPace }: ErgCardProps) {
         </div>
         {data.heartRate != null && (
           <div className="flex items-center gap-1.5 text-ink-secondary">
-            <Heart size={12} className="text-rose-400 flex-shrink-0" />
+            <Heart size={12} className="text-data-poor flex-shrink-0" />
             <span className="font-mono">{data.heartRate}bpm</span>
           </div>
         )}
@@ -140,7 +140,7 @@ export function LiveErgDashboard({
           <div className="flex items-center gap-1.5">
             <div
               className={`w-2 h-2 rounded-full ${
-                isConnected ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
+                isConnected ? 'bg-data-excellent animate-pulse' : 'bg-data-poor'
               }`}
             />
             <span className="text-xs text-ink-muted">
@@ -173,10 +173,10 @@ export function LiveErgDashboard({
             </span>
           </span>
           <span className="text-ink-border">|</span>
-          <span className="text-sky-400">Fast</span>
-          <span className="text-emerald-400">On target</span>
-          <span className="text-amber-400">Slow</span>
-          <span className="text-rose-400">Very slow</span>
+          <span className="text-accent-primary">Fast</span>
+          <span className="text-data-excellent">On target</span>
+          <span className="text-data-warning">Slow</span>
+          <span className="text-data-poor">Very slow</span>
         </div>
       )}
 

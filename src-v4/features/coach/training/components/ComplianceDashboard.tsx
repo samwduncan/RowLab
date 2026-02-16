@@ -41,19 +41,19 @@ function getStatus(hours: number, limit: number): ComplianceStatus {
 
 const STATUS_STYLES: Record<ComplianceStatus, { bar: string; badge: string; text: string }> = {
   compliant: {
-    bar: 'bg-emerald-500',
-    badge: 'bg-emerald-500/15 text-emerald-400',
-    text: 'text-emerald-400',
+    bar: 'bg-data-excellent',
+    badge: 'bg-data-excellent/15 text-data-excellent',
+    text: 'text-data-excellent',
   },
   approaching: {
-    bar: 'bg-amber-500',
-    badge: 'bg-amber-500/15 text-amber-400',
-    text: 'text-amber-400',
+    bar: 'bg-data-warning',
+    badge: 'bg-data-warning/15 text-data-warning',
+    text: 'text-data-warning',
   },
   over: {
-    bar: 'bg-rose-500',
-    badge: 'bg-rose-500/15 text-rose-400',
-    text: 'text-rose-400',
+    bar: 'bg-data-poor',
+    badge: 'bg-data-poor/15 text-data-poor',
+    text: 'text-data-poor',
   },
 };
 
@@ -253,7 +253,7 @@ function StatCard({
       <div className="flex items-center gap-2">
         <Icon
           className={`h-4 w-4 ${
-            alert ? 'text-rose-400' : highlight ? 'text-emerald-400' : 'text-ink-muted'
+            alert ? 'text-data-poor' : highlight ? 'text-data-excellent' : 'text-ink-muted'
           }`}
         />
         <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
@@ -262,7 +262,7 @@ function StatCard({
       </div>
       <p
         className={`mt-1 text-lg font-bold font-mono ${
-          alert ? 'text-rose-400' : highlight ? 'text-emerald-400' : 'text-ink-primary'
+          alert ? 'text-data-poor' : highlight ? 'text-data-excellent' : 'text-ink-primary'
         }`}
       >
         {value}

@@ -32,7 +32,7 @@ function formatLastSynced(dateString: string): string {
 /** Inline skeleton shimmer for button loading states */
 function ButtonSkeleton({ width = 'w-16' }: { width?: string }) {
   return (
-    <div className="flex items-center gap-2 animate-pulse">
+    <div className="flex items-center gap-2 animate-shimmer">
       <div className="h-4 w-4 rounded bg-ink-border/50" />
       <div className={`h-3 ${width} rounded bg-ink-border/30`} />
     </div>

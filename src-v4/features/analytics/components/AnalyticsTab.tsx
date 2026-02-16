@@ -27,7 +27,7 @@ import type { PMCRange, VolumeRange, VolumeGranularity, VolumeMetric } from '../
 
 function PMCChartSkeleton() {
   return (
-    <div className="space-y-4 animate-pulse">
+    <div className="space-y-4 animate-shimmer">
       {/* Header row skeleton */}
       <div className="flex items-center justify-between">
         <div className="h-5 w-56 rounded bg-ink-border/50" />
@@ -97,7 +97,7 @@ function ValueCard({ label, value, colorClass, format }: ValueCardProps) {
 
 function VolumeChartSkeleton() {
   return (
-    <div className="space-y-4 animate-pulse">
+    <div className="space-y-4 animate-shimmer">
       {/* Summary stats row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {Array.from({ length: 4 }).map((_, i) => (

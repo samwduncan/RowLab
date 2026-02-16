@@ -37,9 +37,9 @@ export function WhiteboardPage() {
     return (
       <div className="mx-auto max-w-5xl p-4 md:p-6">
         <div className="space-y-4">
-          <div className="h-8 w-48 animate-pulse rounded-lg bg-ink-border/50" />
-          <div className="h-4 w-32 animate-pulse rounded bg-ink-border/30" />
-          <div className="mt-6 h-64 animate-pulse rounded-xl bg-ink-border/30" />
+          <div className="h-8 w-48 animate-shimmer rounded-lg bg-ink-border/50" />
+          <div className="h-4 w-32 animate-shimmer rounded bg-ink-border/30" />
+          <div className="mt-6 h-64 animate-shimmer rounded-xl bg-ink-border/30" />
         </div>
       </div>
     );

@@ -38,11 +38,11 @@ const TICK_COLOR = 'var(--color-ink-tertiary)';
 function resolveChartColors() {
   const style = getComputedStyle(document.documentElement);
   return {
-    ctl: style.getPropertyValue('--color-data-good').trim() || '#3B82F6',
-    atl: style.getPropertyValue('--color-data-poor').trim() || '#EF4444',
-    tsb: style.getPropertyValue('--color-data-excellent').trim() || '#22C55E',
-    tssBar: 'rgba(255, 255, 255, 0.08)',
-    grid: style.getPropertyValue('--color-ink-border').trim() || '#333',
+    ctl: style.getPropertyValue('--color-data-good').trim() || 'oklch(0.62 0.17 255)',
+    atl: style.getPropertyValue('--color-data-poor').trim() || 'oklch(0.58 0.2 25)',
+    tsb: style.getPropertyValue('--color-data-excellent').trim() || 'oklch(0.72 0.17 142)',
+    tssBar: 'oklch(1 0 0 / 0.08)',
+    grid: style.getPropertyValue('--color-ink-border').trim() || 'oklch(0.3 0 0)',
   };
 }
 
@@ -50,40 +50,59 @@ function resolveChartColors() {
 /* TSB Zone bands config                                               */
 /* ------------------------------------------------------------------ */
 
-const TSB_ZONES = [
-  {
-    y1: -50,
-    y2: -10,
-    fill: '#EF4444',
-    opacity: 0.06,
-    label: 'Stale',
-    textFill: 'rgba(239,68,68,0.4)',
-  },
-  {
-    y1: -10,
-    y2: 5,
-    fill: '#F59E0B',
-    opacity: 0.04,
-    label: 'Grey Zone',
-    textFill: 'rgba(245,158,11,0.4)',
-  },
-  {
-    y1: 5,
-    y2: 25,
-    fill: '#22C55E',
-    opacity: 0.06,
-    label: 'Optimal',
-    textFill: 'rgba(34,197,94,0.4)',
-  },
-  {
-    y1: 25,
-    y2: 50,
-    fill: '#3B82F6',
-    opacity: 0.04,
-    label: 'Transition',
-    textFill: 'rgba(59,130,246,0.4)',
-  },
-];
+/** Zone layout (resolved colors are injected at runtime via resolveTsbZones) */
+interface TsbZone {
+  y1: number;
+  y2: number;
+  fill: string;
+  opacity: number;
+  label: string;
+  textFill: string;
+}
+
+function resolveTsbZones(): TsbZone[] {
+  const style = getComputedStyle(document.documentElement);
+  const poor = style.getPropertyValue('--color-data-poor').trim() || 'oklch(0.58 0.2 25)';
+  const warning = style.getPropertyValue('--color-data-warning').trim() || 'oklch(0.75 0.14 75)';
+  const excellent =
+    style.getPropertyValue('--color-data-excellent').trim() || 'oklch(0.72 0.17 142)';
+  const good = style.getPropertyValue('--color-data-good').trim() || 'oklch(0.62 0.17 255)';
+
+  return [
+    {
+      y1: -50,
+      y2: -10,
+      fill: poor,
+      opacity: 0.06,
+      label: 'Stale',
+      textFill: poor,
+    },
+    {
+      y1: -10,
+      y2: 5,
+      fill: warning,
+      opacity: 0.04,
+      label: 'Grey Zone',
+      textFill: warning,
+    },
+    {
+      y1: 5,
+      y2: 25,
+      fill: excellent,
+      opacity: 0.06,
+      label: 'Optimal',
+      textFill: excellent,
+    },
+    {
+      y1: 25,
+      y2: 50,
+      fill: good,
+      opacity: 0.04,
+      label: 'Transition',
+      textFill: good,
+    },
+  ];
+}
 
 /* ------------------------------------------------------------------ */
 /* Downsampling for large datasets                                     */
@@ -258,6 +277,7 @@ export function PMCChart({ data, currentCTL, currentATL, currentTSB, onDayClick 
   const [hiddenLines, setHiddenLines] = useState<Set<string>>(new Set());
 
   const chartColors = useMemo(resolveChartColors, []);
+  const tsbZones = useMemo(resolveTsbZones, []);
   const chartData = useMemo(() => downsampleToWeekly(data), [data]);
 
   const toggleLine = useCallback((key: string) => {
@@ -322,7 +342,7 @@ export function PMCChart({ data, currentCTL, currentATL, currentTSB, onDayClick 
             </defs>
 
             {/* TSB zone bands with labels */}
-            {TSB_ZONES.map((zone) => (
+            {tsbZones.map((zone) => (
               <ReferenceArea
                 key={zone.label}
                 yAxisId="tsb"

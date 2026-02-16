@@ -72,12 +72,12 @@ export function ProfileSection() {
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <div className="animate-pulse">
+        <div className="animate-shimmer">
           <div className="h-6 w-48 rounded bg-ink-border/50 mb-2" />
           <div className="h-4 w-72 rounded bg-ink-border/30" />
         </div>
-        <div className="h-40 rounded-xl bg-ink-border/30 animate-pulse" />
-        <div className="h-28 rounded-xl bg-ink-border/30 animate-pulse" />
+        <div className="h-40 rounded-xl bg-ink-border/30 animate-shimmer" />
+        <div className="h-28 rounded-xl bg-ink-border/30 animate-shimmer" />
       </div>
     );
   }

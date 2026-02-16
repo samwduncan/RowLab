@@ -91,7 +91,7 @@ function AnalyticsSettingsSection() {
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <div className="animate-pulse space-y-4">
+        <div className="animate-shimmer space-y-4">
           <div className="h-6 w-48 rounded bg-ink-border/50" />
           <div className="h-64 rounded-xl bg-ink-border/30" />
         </div>

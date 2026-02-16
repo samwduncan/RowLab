@@ -88,9 +88,9 @@ const EVENT_CONFIG: Record<ActivityEventType, EventConfig> = {
   },
   invite_generated: {
     icon: Link2,
-    iconColor: 'text-purple-400',
-    iconBg: 'bg-purple-400/10',
-    borderColor: 'border-l-purple-400/60',
+    iconColor: 'text-accent-primary',
+    iconBg: 'bg-accent-primary/10',
+    borderColor: 'border-l-accent-primary/60',
     verb: () => ' generated an invite link',
   },
   workout: {
@@ -109,9 +109,9 @@ const EVENT_CONFIG: Record<ActivityEventType, EventConfig> = {
   },
   pr: {
     icon: Trophy,
-    iconColor: 'text-yellow-400',
-    iconBg: 'bg-yellow-400/10',
-    borderColor: 'border-l-yellow-400/60',
+    iconColor: 'text-data-warning',
+    iconBg: 'bg-data-warning/10',
+    borderColor: 'border-l-data-warning/60',
     verb: () => ' set a new personal record',
   },
   session_completed: {
@@ -123,9 +123,9 @@ const EVENT_CONFIG: Record<ActivityEventType, EventConfig> = {
   },
   achievement_unlocked: {
     icon: Medal,
-    iconColor: 'text-yellow-400',
-    iconBg: 'bg-yellow-400/10',
-    borderColor: 'border-l-yellow-400/60',
+    iconColor: 'text-data-warning',
+    iconBg: 'bg-data-warning/10',
+    borderColor: 'border-l-data-warning/60',
     verb: () => ' unlocked an achievement',
   },
 };
@@ -144,13 +144,13 @@ const FALLBACK_CONFIG: EventConfig = {
  */
 const AVATAR_COLORS = [
   'bg-accent-copper/20',
-  'bg-blue-400/20',
-  'bg-purple-400/20',
+  'bg-accent-primary/20',
+  'bg-accent-primary/20',
   'bg-data-good/20',
-  'bg-yellow-400/20',
-  'bg-pink-400/20',
-  'bg-teal-400/20',
-  'bg-orange-400/20',
+  'bg-data-warning/20',
+  'bg-accent-primary/20',
+  'bg-data-excellent/20',
+  'bg-data-warning/20',
 ];
 
 function getAvatarColor(name: string): string {
