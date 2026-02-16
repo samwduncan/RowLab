@@ -153,20 +153,39 @@ export interface IntervalPattern {
 
 /**
  * Analyze a splits array to detect repeating interval patterns.
- * Distinguishes work vs rest splits by comparing watts/distance
- * to the median values — rest periods have significantly lower output.
+ * Uses two strategies:
+ *
+ * 1. **C2 workout_type hint**: If workoutType contains "Interval", each split
+ *    is a work interval (C2 stores rest as metadata, not separate splits).
+ *
+ * 2. **Split analysis fallback**: Classifies work vs rest by comparing watts/distance
+ *    to median values — rest periods have significantly lower output.
  *
  * Handles common C2 patterns:
  * - Fixed distance intervals: 5x2000m, 8x500m
  * - Fixed time intervals: 5x11:00
  * - Intervals with rest: 4x1000m/3:00r
  */
-export function parseIntervalPattern(splits: WorkoutSplit[] | undefined): IntervalPattern {
+export function parseIntervalPattern(
+  splits: WorkoutSplit[] | undefined,
+  workoutType?: string | null
+): IntervalPattern {
   const none: IntervalPattern = { isInterval: false, pattern: '', intervals: [], workCount: 0 };
 
-  if (!splits || splits.length < 3) return none;
+  if (!splits || splits.length < 2) return none;
 
-  // Classify each split as work or rest based on watts relative to median
+  // Strategy 1: C2 workout_type hint — each split is one work interval
+  const isC2Interval = workoutType
+    ? /interval/i.test(workoutType) || /VariableInterval/i.test(workoutType)
+    : false;
+
+  if (isC2Interval && splits.length >= 2) {
+    return buildPatternFromSplitsDirectly(splits);
+  }
+
+  // Strategy 2: split-based work/rest classification (needs ≥3 splits)
+  if (splits.length < 3) return none;
+
   const wattsValues = splits.filter((s) => s.watts != null).map((s) => s.watts!);
   const distValues = splits.filter((s) => s.distanceM != null).map((s) => s.distanceM!);
 
@@ -236,6 +255,43 @@ export function parseIntervalPattern(splits: WorkoutSplit[] | undefined): Interv
       pattern += ` / ${formatIntervalTime(restTimes[0])}r`;
     }
   }
+
+  return { isInterval: true, pattern, intervals: blocks, workCount: count };
+}
+
+/**
+ * Build interval pattern when each split is known to be one work interval.
+ * Used for C2 interval workouts where rest is stored as metadata, not separate splits.
+ */
+function buildPatternFromSplitsDirectly(splits: WorkoutSplit[]): IntervalPattern {
+  const none: IntervalPattern = { isInterval: false, pattern: '', intervals: [], workCount: 0 };
+  const count = splits.length;
+
+  const distances = splits.filter((s) => s.distanceM != null).map((s) => s.distanceM!);
+  const times = splits.filter((s) => s.timeSeconds != null).map((s) => s.timeSeconds!);
+
+  const distConsistent = distances.length === count && isConsistent(distances);
+  const timeConsistent = times.length === count && isConsistent(times);
+
+  let pattern: string;
+  if (distConsistent && distances[0] > 0) {
+    pattern = `${count} x ${formatIntervalDist(distances[0])}`;
+  } else if (timeConsistent && times[0] > 0) {
+    pattern = `${count} x ${formatIntervalTime(times[0])}`;
+  } else if (count >= 2) {
+    // Variable intervals — just show count
+    pattern = `${count} intervals`;
+  } else {
+    return none;
+  }
+
+  // Each split becomes its own work block
+  const blocks: IntervalBlock[] = splits.map((s) => ({
+    type: 'work' as const,
+    splits: [s],
+    distanceM: s.distanceM ?? 0,
+    timeSeconds: s.timeSeconds ?? 0,
+  }));
 
   return { isInterval: true, pattern, intervals: blocks, workCount: count };
 }

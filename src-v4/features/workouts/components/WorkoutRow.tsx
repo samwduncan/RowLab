@@ -208,7 +208,7 @@ export function WorkoutRow({ workout, isExpanded, onToggle, onEdit, onDelete }: 
   const SourceIcon = resolveSourceIcon(sourceKey);
   const sourceColor = SOURCE_CONFIG[sourceKey].color;
   const intensity = getIntensity(workout);
-  const intervalInfo = parseIntervalPattern(workout.splits);
+  const intervalInfo = parseIntervalPattern(workout.splits, workout.workoutType);
 
   return (
     <motion.div variants={listItemVariants} transition={SPRING_SMOOTH} className="group">

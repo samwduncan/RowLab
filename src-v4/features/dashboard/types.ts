@@ -49,6 +49,8 @@ export interface Workout {
   avgHeartRate?: number | null;
   teamId: string | null;
   notes: string | null;
+  /** C2 workout_type from rawData (e.g. "FixedDistanceInterval", "FixedTimeSplits") */
+  workoutType?: string | null;
   splits?: WorkoutSplit[];
   createdAt?: string;
 }

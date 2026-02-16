@@ -200,6 +200,7 @@ export async function getUserWorkoutById(userId, workoutId) {
     teamId: workout.teamId,
     notes: workout.notes || null,
     c2LogbookId: workout.c2LogbookId || null,
+    workoutType: workout.rawData?.workout_type || null,
     splits: (workout.splits || []).map((s) => ({
       splitNumber: s.splitNumber,
       distanceM: s.distanceM,
@@ -611,6 +612,7 @@ export async function getUserWorkouts(userId, options = {}) {
     avgHeartRate: w.avgHeartRate,
     teamId: w.teamId,
     notes: w.notes || null,
+    workoutType: w.rawData?.workout_type || null,
     splits: (w.splits || []).map((s) => ({
       splitNumber: s.splitNumber,
       distanceM: s.distanceM,

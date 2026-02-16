@@ -39,12 +39,14 @@ const DASH = '\u2014';
 function SplitsTable({
   splits,
   machineType,
+  workoutType,
 }: {
   splits: WorkoutSplit[];
   machineType?: string | null;
+  workoutType?: string | null;
 }) {
   const rateLabel = machineType === 'bikerg' ? 'RPM' : 'SPM';
-  const intervalInfo = parseIntervalPattern(splits);
+  const intervalInfo = parseIntervalPattern(splits, workoutType);
 
   // Build a set of rest split numbers for dimming
   const restSplitNumbers = new Set<number>();
@@ -216,7 +218,11 @@ export function WorkoutRowExpanded({ workout, onNavigateToDetail }: WorkoutRowEx
       <div className="px-3 pb-4 pt-1 ml-12 space-y-4 border-l-2 border-ink-border">
         {hasSplits && (
           <>
-            <SplitsTable splits={workout.splits!} machineType={workout.machineType} />
+            <SplitsTable
+              splits={workout.splits!}
+              machineType={workout.machineType}
+              workoutType={workout.workoutType}
+            />
             <WattsChart splits={workout.splits!} />
           </>
         )}

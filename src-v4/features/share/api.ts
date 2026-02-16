@@ -3,13 +3,20 @@
  */
 import { useMutation } from '@tanstack/react-query';
 import { api } from '@/lib/api';
-import type { GenerateRequest, ShareCard } from './types';
+import type { GenerateRequest, GenerateResponse, ShareCard } from './types';
 
 export function useGenerateShareCard() {
   return useMutation({
     mutationFn: async (request: GenerateRequest): Promise<ShareCard> => {
       const res = await api.post('/api/v1/share-cards/generate', request);
-      return res.data as ShareCard;
+      const data = res.data as GenerateResponse;
+      // Map backend response shape to UI-friendly ShareCard
+      return {
+        id: data.shareId,
+        url: data.url,
+        publicUrl: data.publicUrl,
+        cardType: request.cardType,
+      };
     },
   });
 }

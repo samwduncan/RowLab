@@ -184,7 +184,7 @@ export function DayPopover({ day, workouts, onClose, anchorRect }: DayPopoverPro
               const sport = getSportFromWorkout(w);
               const config = SPORT_CONFIG[sport];
               const Icon = ICON_MAP[config.icon] ?? Activity;
-              const interval = parseIntervalPattern(w.splits);
+              const interval = parseIntervalPattern(w.splits, w.workoutType);
 
               return (
                 <div

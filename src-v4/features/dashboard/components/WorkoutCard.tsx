@@ -84,7 +84,7 @@ export function WorkoutCard({ workout, className = '' }: WorkoutCardProps) {
   const label = getWorkoutLabel(workout);
   const sportColor = getSportColor(workout);
   const intensityClass = getIntensityClass(workout.avgWatts);
-  const intervalInfo = parseIntervalPattern(workout.splits);
+  const intervalInfo = parseIntervalPattern(workout.splits, workout.workoutType);
 
   const formattedDistance =
     workout.distanceM != null ? formatDistance(workout.distanceM, false) : null;

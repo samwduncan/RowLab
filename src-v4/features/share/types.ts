@@ -27,18 +27,19 @@ export interface GenerateRequest {
   teamId?: string | null;
 }
 
+/** Response from POST /api/v1/share-cards/generate */
+export interface GenerateResponse {
+  shareId: string;
+  url: string;
+  publicUrl: string;
+}
+
+/** Enriched share card data used by the UI after generation */
 export interface ShareCard {
   id: string;
   url: string;
   cardType: CardType;
-  format: CardFormat;
-  metadata?: {
-    athleteName?: string;
-    workoutTitle?: string;
-    description?: string;
-  };
-  createdAt: string;
-  expiresAt: string;
+  publicUrl: string;
 }
 
 export interface CardTemplate {
@@ -59,18 +60,6 @@ export const CARD_TEMPLATES: CardTemplate[] = [
     type: 'erg_summary_alt',
     label: 'Erg Summary Alt',
     description: 'Alternative layout with splits visualization',
-    requiresWorkout: true,
-  },
-  {
-    type: 'erg_charts',
-    label: 'Erg Charts',
-    description: 'Split-by-split charts and performance data',
-    requiresWorkout: true,
-  },
-  {
-    type: 'pr_celebration',
-    label: 'PR Celebration',
-    description: 'Celebrate a new personal record',
     requiresWorkout: true,
   },
 ];

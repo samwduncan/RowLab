@@ -127,7 +127,7 @@ export function WorkoutDetail() {
   const SportIcon = resolveSportIcon(sport);
   const sourceKey = (workout.source ?? 'manual') as SourceType;
   const hasSplits = workout.splits && workout.splits.length > 0;
-  const intervalInfo = parseIntervalPattern(workout.splits);
+  const intervalInfo = parseIntervalPattern(workout.splits, workout.workoutType);
   const workoutDate = new Date(workout.date);
 
   return (
