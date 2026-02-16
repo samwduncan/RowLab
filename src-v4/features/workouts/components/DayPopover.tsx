@@ -201,12 +201,18 @@ export function DayPopover({ day, workouts, onClose, anchorRect }: DayPopoverPro
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-xs font-medium text-ink-primary truncate">
-                        {config.label}
-                      </span>
-                      {interval.isInterval && (
-                        <span className="inline-flex items-center px-1 py-px rounded text-[9px] font-mono font-medium bg-accent-copper-subtle text-accent-copper whitespace-nowrap shrink-0">
-                          {interval.pattern}
+                      {interval.isInterval ? (
+                        <>
+                          <span className="text-xs font-medium text-accent-copper font-mono whitespace-nowrap">
+                            {interval.pattern}
+                          </span>
+                          <span className="text-[10px] text-ink-muted truncate">
+                            {config.label}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="text-xs font-medium text-ink-primary truncate">
+                          {config.label}
                         </span>
                       )}
                     </div>

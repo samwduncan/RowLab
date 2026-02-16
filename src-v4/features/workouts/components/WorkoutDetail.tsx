@@ -203,19 +203,25 @@ export function WorkoutDetail() {
                   <SportIcon size={24} className={`text-${config.color}`} />
                 </div>
                 <div>
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-ink-primary text-lg font-display font-semibold">
-                      {config.label}
-                    </h2>
-                    {intervalInfo.isInterval && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-mono font-medium bg-accent-copper-subtle text-accent-copper">
+                  {intervalInfo.isInterval ? (
+                    <>
+                      <h2 className="text-accent-copper text-lg font-display font-semibold font-mono">
                         {intervalInfo.pattern}
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-ink-secondary text-sm">
-                    {format(workoutDate, 'EEEE, MMMM d, yyyy')}
-                  </p>
+                      </h2>
+                      <p className="text-ink-secondary text-sm">
+                        {config.label} &middot; {format(workoutDate, 'EEEE, MMMM d, yyyy')}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <h2 className="text-ink-primary text-lg font-display font-semibold">
+                        {config.label}
+                      </h2>
+                      <p className="text-ink-secondary text-sm">
+                        {format(workoutDate, 'EEEE, MMMM d, yyyy')}
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
 

@@ -180,7 +180,8 @@ export function parseIntervalPattern(
     : false;
 
   if (isC2Interval && splits.length >= 2) {
-    return buildPatternFromSplitsDirectly(splits);
+    const preferTime = /FixedTime/i.test(workoutType ?? '');
+    return buildPatternFromSplitsDirectly(splits, preferTime);
   }
 
   // Strategy 2: split-based work/rest classification (needs ≥3 splits)
@@ -262,8 +263,12 @@ export function parseIntervalPattern(
 /**
  * Build interval pattern when each split is known to be one work interval.
  * Used for C2 interval workouts where rest is stored as metadata, not separate splits.
+ * When preferTime is true (FixedTimeInterval), show time-based pattern even if distances are consistent.
  */
-function buildPatternFromSplitsDirectly(splits: WorkoutSplit[]): IntervalPattern {
+function buildPatternFromSplitsDirectly(
+  splits: WorkoutSplit[],
+  preferTime = false
+): IntervalPattern {
   const none: IntervalPattern = { isInterval: false, pattern: '', intervals: [], workCount: 0 };
   const count = splits.length;
 
@@ -274,10 +279,16 @@ function buildPatternFromSplitsDirectly(splits: WorkoutSplit[]): IntervalPattern
   const timeConsistent = times.length === count && isConsistent(times);
 
   let pattern: string;
-  if (distConsistent && distances[0] > 0) {
+  if (preferTime && timeConsistent && times[0] > 0) {
+    // FixedTimeInterval: always show time-based pattern
+    pattern = `${count} x ${formatIntervalTime(times[0])}`;
+  } else if (!preferTime && distConsistent && distances[0] > 0) {
+    // FixedDistanceInterval or default: show distance-based pattern
     pattern = `${count} x ${formatIntervalDist(distances[0])}`;
   } else if (timeConsistent && times[0] > 0) {
     pattern = `${count} x ${formatIntervalTime(times[0])}`;
+  } else if (distConsistent && distances[0] > 0) {
+    pattern = `${count} x ${formatIntervalDist(distances[0])}`;
   } else if (count >= 2) {
     // Variable intervals — just show count
     pattern = `${count} intervals`;

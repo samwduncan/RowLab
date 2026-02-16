@@ -127,11 +127,15 @@ export function WorkoutCard({ workout, className = '' }: WorkoutCardProps) {
           {/* Top line: workout type + interval badge + date */}
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-1.5 min-w-0">
-              <span className="text-sm font-medium text-ink-primary truncate">{label}</span>
-              {intervalInfo.isInterval && (
-                <span className="inline-flex items-center px-1.5 py-px rounded text-[10px] font-mono font-medium bg-accent-copper-subtle text-accent-copper whitespace-nowrap shrink-0">
-                  {intervalInfo.pattern}
-                </span>
+              {intervalInfo.isInterval ? (
+                <>
+                  <span className="text-sm font-medium text-accent-copper font-mono whitespace-nowrap">
+                    {intervalInfo.pattern}
+                  </span>
+                  <span className="text-xs text-ink-muted truncate">{label}</span>
+                </>
+              ) : (
+                <span className="text-sm font-medium text-ink-primary truncate">{label}</span>
               )}
             </div>
             <span className="text-xs text-ink-tertiary shrink-0">

@@ -4,7 +4,7 @@
  * When intervalInfo is provided, rest splits are dimmed and labeled.
  */
 
-import { formatPace } from '@/lib/format';
+import { formatPace, formatDistance, formatDuration } from '@/lib/format';
 import type { WorkoutSplit } from '../types';
 import type { IntervalPattern } from '../utils';
 
@@ -57,6 +57,12 @@ export function SplitsTable({ splits, machineType, intervalInfo }: SplitsTablePr
                 Split
               </th>
               <th className="text-right py-2.5 px-4 text-ink-tertiary text-xs uppercase tracking-wider font-medium">
+                Dist
+              </th>
+              <th className="text-right py-2.5 px-4 text-ink-tertiary text-xs uppercase tracking-wider font-medium">
+                Time
+              </th>
+              <th className="text-right py-2.5 px-4 text-ink-tertiary text-xs uppercase tracking-wider font-medium">
                 Pace
               </th>
               <th className="text-right py-2.5 px-4 text-ink-tertiary text-xs uppercase tracking-wider font-medium">
@@ -83,6 +89,12 @@ export function SplitsTable({ splits, machineType, intervalInfo }: SplitsTablePr
                   } ${isRest ? 'opacity-40' : ''}`}
                 >
                   <td className="py-2 px-4 text-ink-muted">{isRest ? 'R' : split.splitNumber}</td>
+                  <td className="py-2 px-4 text-right text-ink-secondary tabular-nums">
+                    {split.distanceM != null ? formatDistance(split.distanceM) : DASH}
+                  </td>
+                  <td className="py-2 px-4 text-right text-ink-secondary tabular-nums">
+                    {split.timeSeconds != null ? formatDuration(split.timeSeconds) : DASH}
+                  </td>
                   <td className="py-2 px-4 text-right text-ink-body tabular-nums">
                     {formatPace(split.pace, machineType)}
                   </td>

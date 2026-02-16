@@ -16,7 +16,7 @@ import {
   type TooltipProps,
 } from 'recharts';
 
-import { formatPace } from '@/lib/format';
+import { formatPace, formatDistance, formatDuration } from '@/lib/format';
 import { SPRING_GENTLE } from '@/lib/animations';
 import { parseIntervalPattern } from '../utils';
 import type { Workout, WorkoutSplit } from '../types';
@@ -71,6 +71,8 @@ function SplitsTable({
         <thead>
           <tr className="text-ink-tertiary uppercase text-xs tracking-wider">
             <th className="text-left py-1.5 pr-3 font-medium">Split</th>
+            <th className="text-right py-1.5 px-3 font-medium">Dist</th>
+            <th className="text-right py-1.5 px-3 font-medium">Time</th>
             <th className="text-right py-1.5 px-3 font-medium">Pace</th>
             <th className="text-right py-1.5 px-3 font-medium">Watts</th>
             <th className="text-right py-1.5 pl-3 font-medium">{rateLabel}</th>
@@ -86,6 +88,12 @@ function SplitsTable({
               >
                 <td className="py-1.5 pr-3 text-ink-secondary">
                   {isRest ? 'R' : split.splitNumber}
+                </td>
+                <td className="py-1.5 px-3 text-right text-ink-secondary tabular-nums">
+                  {split.distanceM != null ? formatDistance(split.distanceM) : DASH}
+                </td>
+                <td className="py-1.5 px-3 text-right text-ink-secondary tabular-nums">
+                  {split.timeSeconds != null ? formatDuration(split.timeSeconds) : DASH}
                 </td>
                 <td className="py-1.5 px-3 text-right text-ink-primary tabular-nums">
                   {formatPace(split.pace, machineType)}

@@ -233,13 +233,17 @@ export function WorkoutRow({ workout, isExpanded, onToggle, onEdit, onDelete }: 
           <SportIcon size={18} className={`text-${config.color}`} />
         </div>
 
-        {/* Sport label + interval badge */}
+        {/* Sport label — interval-first when applicable */}
         <div className="flex items-center gap-1.5 shrink-0 min-w-0">
-          <span className="text-sm font-medium text-ink-primary truncate">{config.label}</span>
-          {intervalInfo.isInterval && (
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-accent-copper-subtle text-accent-copper whitespace-nowrap">
-              {intervalInfo.pattern}
-            </span>
+          {intervalInfo.isInterval ? (
+            <>
+              <span className="text-sm font-medium text-accent-copper font-mono whitespace-nowrap">
+                {intervalInfo.pattern}
+              </span>
+              <span className="text-xs text-ink-muted truncate">{config.label}</span>
+            </>
+          ) : (
+            <span className="text-sm font-medium text-ink-primary truncate">{config.label}</span>
           )}
         </div>
 
