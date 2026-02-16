@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { RefreshCw } from 'lucide-react';
 
 import { useWorkoutFeed } from '../hooks/useWorkoutFeed';
-import { groupWorkoutsByDay } from '../utils';
+import { groupWorkoutsByDay, detectWorkoutSessions } from '../utils';
 import { listContainerVariants, listItemVariants, SPRING_SMOOTH } from '@/lib/animations';
 import type { WorkoutFilters, Workout } from '../types';
 import { WorkoutRow } from './WorkoutRow';
@@ -53,7 +53,9 @@ export function WorkoutFeed({ filters, onEdit, onDelete, onCreateNew }: WorkoutF
   };
 
   const handleNavigateToDetail = (id: string) => {
-    navigate({ to: `/workouts/${id}` as '/' });
+    // Session workouts use synthetic IDs — navigate to the first piece instead
+    const realId = id.startsWith('session:') ? id.slice('session:'.length) : id;
+    navigate({ to: `/workouts/${realId}` as '/' });
   };
 
   // Loading state
@@ -86,8 +88,9 @@ export function WorkoutFeed({ filters, onEdit, onDelete, onCreateNew }: WorkoutF
     return <WorkoutEmptyState onCreateNew={onCreateNew} />;
   }
 
-  // Group workouts by day
-  const groups = groupWorkoutsByDay(workouts);
+  // Detect session groups (e.g., 5 x 1500m logged as separate pieces) then group by day
+  const sessionGrouped = detectWorkoutSessions(workouts);
+  const groups = groupWorkoutsByDay(sessionGrouped);
 
   return (
     <motion.div

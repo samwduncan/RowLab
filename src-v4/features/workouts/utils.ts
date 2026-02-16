@@ -338,3 +338,194 @@ function formatIntervalTime(seconds: number): string {
   if (secs === 0) return `${mins}:00`;
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
+
+/* ------------------------------------------------------------------ */
+/* Session grouping: merge consecutive same-distance pieces            */
+/* ------------------------------------------------------------------ */
+
+/** Maximum gap between pieces to consider them part of one session (seconds) */
+const MAX_SESSION_GAP = 1800; // 30 minutes
+
+/**
+ * Detect consecutive same-distance erg workouts within each day that were
+ * likely done as one interval session (e.g., 5 x 1500m logged as 5 separate
+ * pieces on C2). Returns a new array where detected sessions are replaced
+ * with a synthetic session workout.
+ *
+ * The synthetic workout:
+ * - Has `id` prefixed with `session:` (not a real DB record)
+ * - Uses `workoutType: 'FixedDistanceInterval'` to trigger interval display
+ * - Has splits derived from the individual pieces
+ * - Shows inferred rest between pieces in the notes field
+ */
+export function detectWorkoutSessions(workouts: Workout[]): Workout[] {
+  if (workouts.length < 2) return workouts;
+
+  // Group by calendar day
+  const byDate = new Map<string, Workout[]>();
+  for (const w of workouts) {
+    const dateKey = w.date.split('T')[0] ?? w.date;
+    if (!byDate.has(dateKey)) byDate.set(dateKey, []);
+    byDate.get(dateKey)!.push(w);
+  }
+
+  // Track which workout IDs get merged into sessions
+  const mergedIds = new Set<string>();
+  // Map from date key to synthetic sessions for that day
+  const sessionsByDate = new Map<string, { position: number; workout: Workout }[]>();
+
+  for (const [dateKey, dayWorkouts] of byDate) {
+    // Sort ascending by time within the day for session detection
+    const sorted = [...dayWorkouts].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+
+    const sessions: { position: number; workout: Workout }[] = [];
+    let i = 0;
+
+    while (i < sorted.length) {
+      const current = sorted[i];
+
+      // Skip non-erg, no-distance, or already-interval workouts
+      if (
+        current.type !== 'erg' ||
+        !current.distanceM ||
+        (current.workoutType && /interval/i.test(current.workoutType))
+      ) {
+        i++;
+        continue;
+      }
+
+      // Look ahead for consecutive same-distance, same-machine pieces
+      const group = [current];
+      let j = i + 1;
+
+      while (j < sorted.length) {
+        const next = sorted[j];
+
+        if (next.machineType !== current.machineType) break;
+        if (next.distanceM !== current.distanceM) break;
+        if (next.type !== 'erg') break;
+        if (next.workoutType && /interval/i.test(next.workoutType)) break;
+
+        // Check time gap between end of previous piece and start of next
+        const prev = group[group.length - 1];
+        const prevEnd = new Date(prev.date).getTime() + (prev.durationSeconds || 0) * 1000;
+        const nextStart = new Date(next.date).getTime();
+        const gapSeconds = (nextStart - prevEnd) / 1000;
+
+        if (gapSeconds > MAX_SESSION_GAP || gapSeconds < -60) break;
+
+        group.push(next);
+        j++;
+      }
+
+      if (group.length >= 2) {
+        const synthetic = createSessionWorkout(group);
+        for (const g of group) mergedIds.add(g.id);
+        // Position = index of first piece in the original day list
+        const pos = dayWorkouts.indexOf(group[0]);
+        sessions.push({ position: pos, workout: synthetic });
+        i = j;
+      } else {
+        i++;
+      }
+    }
+
+    if (sessions.length > 0) {
+      sessionsByDate.set(dateKey, sessions);
+    }
+  }
+
+  // If no sessions detected, return unchanged
+  if (mergedIds.size === 0) return workouts;
+
+  // Rebuild the workouts array: remove merged pieces, insert sessions
+  const result: Workout[] = [];
+  for (const w of workouts) {
+    if (mergedIds.has(w.id)) {
+      // Check if this is the first piece of a session (insert session here)
+      const dateKey = w.date.split('T')[0] ?? w.date;
+      const sessions = sessionsByDate.get(dateKey);
+      if (sessions) {
+        const session = sessions.find((s) => s.workout.date === w.date);
+        if (session) {
+          result.push(session.workout);
+          // Remove from map so we don't insert again
+          const idx = sessions.indexOf(session);
+          sessions.splice(idx, 1);
+        }
+      }
+      // Otherwise skip (this piece was merged into a session)
+    } else {
+      result.push(w);
+    }
+  }
+
+  return result;
+}
+
+function createSessionWorkout(pieces: Workout[]): Workout {
+  const first = pieces[0];
+  const totalDistance = pieces.reduce((s, w) => s + (w.distanceM || 0), 0);
+  const totalDuration = pieces.reduce((s, w) => s + (w.durationSeconds || 0), 0);
+
+  // Average pace and watts across pieces
+  const paces = pieces.filter((w) => w.avgPace != null).map((w) => w.avgPace!);
+  const avgPace =
+    paces.length > 0 ? Math.round(paces.reduce((s, p) => s + p, 0) / paces.length) : null;
+
+  const wattsList = pieces.filter((w) => w.avgWatts != null).map((w) => w.avgWatts!);
+  const avgWatts =
+    wattsList.length > 0
+      ? Math.round(wattsList.reduce((s, w) => s + w, 0) / wattsList.length)
+      : null;
+
+  const srs = pieces.filter((w) => w.strokeRate != null).map((w) => w.strokeRate!);
+  const avgSR = srs.length > 0 ? Math.round(srs.reduce((s, r) => s + r, 0) / srs.length) : null;
+
+  // Create splits from individual pieces
+  const splits: WorkoutSplit[] = pieces.map((w, idx) => ({
+    splitNumber: idx + 1,
+    distanceM: w.distanceM,
+    timeSeconds: w.durationSeconds,
+    pace: w.avgPace,
+    watts: w.avgWatts,
+    strokeRate: w.strokeRate,
+    heartRate: w.avgHeartRate ?? null,
+  }));
+
+  // Infer rest between pieces from timestamps
+  const rests: number[] = [];
+  for (let k = 0; k < pieces.length - 1; k++) {
+    const endTime = new Date(pieces[k].date).getTime() + (pieces[k].durationSeconds || 0) * 1000;
+    const nextStart = new Date(pieces[k + 1].date).getTime();
+    rests.push(Math.max(0, Math.round((nextStart - endTime) / 1000)));
+  }
+
+  // Format rest as human-readable notes
+  const avgRest =
+    rests.length > 0 ? Math.round(rests.reduce((s, r) => s + r, 0) / rests.length) : 0;
+  const restNote =
+    rests.length > 0
+      ? `Rest: ${rests.map((r) => formatIntervalTime(r)).join(' / ')} (avg ${formatIntervalTime(avgRest)})`
+      : null;
+
+  return {
+    id: `session:${first.id}`,
+    date: first.date,
+    source: first.source,
+    type: first.type,
+    machineType: first.machineType,
+    distanceM: totalDistance,
+    durationSeconds: totalDuration,
+    avgPace: avgPace,
+    avgWatts: avgWatts,
+    strokeRate: avgSR,
+    avgHeartRate: null,
+    teamId: first.teamId,
+    notes: restNote,
+    workoutType: 'FixedDistanceInterval',
+    splits,
+  };
+}
