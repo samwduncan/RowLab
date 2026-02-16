@@ -60,7 +60,12 @@ function DashboardInner() {
   const teamContext = deriveTeamContext(activeTeamId, teams);
 
   return (
-    <DashboardContent data={data} userName={user?.name ?? 'Athlete'} teamContext={teamContext} />
+    <DashboardContent
+      data={data}
+      userName={user?.name ?? 'Athlete'}
+      avatar={user?.avatarUrl}
+      teamContext={teamContext}
+    />
   );
 }
 

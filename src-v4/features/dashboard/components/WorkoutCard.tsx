@@ -11,7 +11,7 @@ import type { LucideIcon } from 'lucide-react';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { formatDistance, formatDuration, formatPace, formatRelativeDate } from '@/lib/format';
 import { SPORT_CONFIG } from '@/features/workouts/constants';
-import { getSportFromWorkout } from '@/features/workouts/utils';
+import { getSportFromWorkout, parseIntervalPattern } from '@/features/workouts/utils';
 import type { Workout } from '../types';
 
 // TODO(phase-47): Create workout detail route /workouts/$workoutId
@@ -84,6 +84,7 @@ export function WorkoutCard({ workout, className = '' }: WorkoutCardProps) {
   const label = getWorkoutLabel(workout);
   const sportColor = getSportColor(workout);
   const intensityClass = getIntensityClass(workout.avgWatts);
+  const intervalInfo = parseIntervalPattern(workout.splits);
 
   const formattedDistance =
     workout.distanceM != null ? formatDistance(workout.distanceM, false) : null;
@@ -123,9 +124,16 @@ export function WorkoutCard({ workout, className = '' }: WorkoutCardProps) {
 
         {/* Center info */}
         <div className="flex-1 min-w-0">
-          {/* Top line: workout type + date */}
+          {/* Top line: workout type + interval badge + date */}
           <div className="flex items-center justify-between gap-2">
-            <span className="text-sm font-medium text-ink-primary truncate">{label}</span>
+            <div className="flex items-center gap-1.5 min-w-0">
+              <span className="text-sm font-medium text-ink-primary truncate">{label}</span>
+              {intervalInfo.isInterval && (
+                <span className="inline-flex items-center px-1.5 py-px rounded text-[10px] font-mono font-medium bg-accent-copper-subtle text-accent-copper whitespace-nowrap shrink-0">
+                  {intervalInfo.pattern}
+                </span>
+              )}
+            </div>
             <span className="text-xs text-ink-tertiary shrink-0">
               {formatRelativeDate(workout.date)}
             </span>

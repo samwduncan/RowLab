@@ -58,7 +58,7 @@ export function QuickStatsGrid({ stats, className = '' }: QuickStatsGridProps) {
 
   return (
     <motion.div
-      className={`grid grid-cols-2 lg:grid-cols-4 gap-4 ${className}`}
+      className={`grid grid-cols-2 gap-3 ${className}`}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
