@@ -1,4 +1,4 @@
-# RowLab
+# oarbit
 
 Rowing lineup management SaaS - React 18 frontend + Express backend + PostgreSQL/Prisma.
 
