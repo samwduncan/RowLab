@@ -142,24 +142,24 @@ export function BoatView({
   }
 
   return (
-    <div className="relative overflow-hidden rounded-[28px] border-2 border-ink-border/30 bg-ink-base/40 p-1 shadow-card">
+    <div className="relative overflow-hidden rounded-[28px] border-2 border-edge-default/30 bg-void-surface/40 p-1 shadow-md">
       {/* Boat header */}
       <div className="flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-3 min-w-0">
-          <span className="text-sm font-bold text-accent-copper">{boat.boatClass}</span>
-          <span className="text-sm font-medium text-ink-primary truncate">
+          <span className="text-sm font-bold text-accent-teal">{boat.boatClass}</span>
+          <span className="text-sm font-medium text-text-bright truncate">
             {boatClassLabel(boat.boatClass)}
           </span>
           {boat.shellName && (
-            <span className="text-xs text-ink-muted truncate">{boat.shellName}</span>
+            <span className="text-xs text-text-faint truncate">{boat.shellName}</span>
           )}
         </div>
         {!readOnly && onRemoveBoat && (
           <button
             onClick={onRemoveBoat}
             className="
-              p-1.5 rounded-lg text-ink-muted hover:text-ink-primary
-              hover:bg-ink-hover transition-colors
+              p-1.5 rounded-lg text-text-faint hover:text-text-bright
+              hover:bg-void-overlay transition-colors
             "
             aria-label="Remove boat"
           >
@@ -177,7 +177,7 @@ export function BoatView({
 
       {/* Bow indicator (pointed shape) */}
       <div className="flex justify-center pb-1">
-        <svg width="40" height="16" viewBox="0 0 40 16" className="text-ink-border/40" aria-hidden>
+        <svg width="40" height="16" viewBox="0 0 40 16" className="text-edge-default/40" aria-hidden>
           <path d="M20 0 L38 16 L2 16 Z" fill="none" stroke="currentColor" strokeWidth="1.5" />
         </svg>
       </div>
@@ -225,7 +225,7 @@ export function BoatView({
         {/* Bow label (sculling / single column) */}
         {sculling && seats.length > 1 && (
           <div className="px-1 pb-1.5">
-            <span className="text-[10px] font-semibold text-ink-muted uppercase tracking-wider">
+            <span className="text-[10px] font-semibold text-text-faint uppercase tracking-wider">
               Bow
             </span>
           </div>
@@ -239,7 +239,7 @@ export function BoatView({
                 idx % 2 === 0 && !sculling
                   ? ''
                   : sculling && idx % 2 === 1
-                    ? 'bg-ink-well/10 rounded-lg'
+                    ? 'bg-void-deep/10 rounded-lg'
                     : ''
               }
             >
@@ -265,7 +265,7 @@ export function BoatView({
         {/* Stroke label */}
         {seats.length > 1 && (
           <div className="px-1 pt-1.5 flex justify-center">
-            <span className="text-[10px] font-semibold text-ink-muted uppercase tracking-wider">
+            <span className="text-[10px] font-semibold text-text-faint uppercase tracking-wider">
               Stroke
             </span>
           </div>
@@ -274,7 +274,7 @@ export function BoatView({
 
       {/* Stern indicator */}
       <div className="flex justify-center pt-0.5 pb-2">
-        <div className="w-12 h-1 rounded-full bg-ink-border/30" />
+        <div className="w-12 h-1 rounded-full bg-edge-default/30" />
       </div>
     </div>
   );

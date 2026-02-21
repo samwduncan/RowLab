@@ -33,10 +33,10 @@ function TeamIdentifierLayout() {
 function TeamNotFound() {
   return (
     <div className="flex min-h-[60vh] items-center justify-center p-8">
-      <div className="glass max-w-md rounded-2xl p-8 text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-ink-well">
+      <div className="panel max-w-md rounded-2xl p-8 text-center">
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-void-deep">
           <svg
-            className="h-7 w-7 text-ink-muted"
+            className="h-7 w-7 text-text-faint"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
@@ -49,13 +49,13 @@ function TeamNotFound() {
             />
           </svg>
         </div>
-        <h2 className="text-xl font-semibold text-ink-primary">Team not found</h2>
-        <p className="mt-2 text-sm text-ink-secondary">
+        <h2 className="text-xl font-semibold text-text-bright">Team not found</h2>
+        <p className="mt-2 text-sm text-text-dim">
           This team doesn't exist or you don't have access to it.
         </p>
         <Link
           to="/"
-          className="mt-6 inline-block rounded-lg bg-accent-copper px-4 py-2 text-sm font-medium text-ink-deep transition-colors hover:bg-accent-copper/90"
+          className="mt-6 inline-block rounded-lg bg-accent-teal px-4 py-2 text-sm font-medium text-void-deep transition-colors hover:bg-accent-teal/90"
         >
           Back to Dashboard
         </Link>

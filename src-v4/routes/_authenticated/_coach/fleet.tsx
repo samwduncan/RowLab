@@ -19,7 +19,7 @@ function FleetRoute() {
 
   if (!activeTeamId) {
     return (
-      <div className="p-8 text-ink-secondary text-sm">Select a team to manage fleet equipment.</div>
+      <div className="p-8 text-text-dim text-sm">Select a team to manage fleet equipment.</div>
     );
   }
 

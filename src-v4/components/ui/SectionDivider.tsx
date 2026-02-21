@@ -1,25 +1,45 @@
 /**
- * Section divider component ("The Wake").
- * A gradient horizontal line with a centered copper dot and glow.
- * Used between major content sections for visual rhythm.
+ * Section divider — oarbit design system.
+ *
+ * Variants:
+ *   rule    — simple 1px border-subtle, full width
+ *   section — 1px border-default with space-8 (32px) vertical margin
+ *   accent  — 1px with a short accent-colored segment (24px centered)
+ *
+ * No copper dot, no "Wake" concept. Simple and clean.
  */
 
 interface SectionDividerProps {
-  /** Vertical spacing class (default 'my-12') */
-  spacing?: string;
+  variant?: 'rule' | 'section' | 'accent';
   className?: string;
 }
 
-export function SectionDivider({ spacing = 'my-12', className = '' }: SectionDividerProps) {
-  return (
-    <div role="separator" aria-hidden="true" className={`relative h-px ${spacing} ${className}`}>
-      {/* Gradient line */}
-      <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-ink-border to-transparent" />
-
-      {/* Centered copper dot with glow */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div className="w-1.5 h-1.5 rounded-full bg-accent-copper/50 shadow-[0_0_8px_oklch(0.62_0.12_55/0.4)]" />
+export function SectionDivider({ variant = 'rule', className = '' }: SectionDividerProps) {
+  if (variant === 'accent') {
+    return (
+      <div role="separator" aria-hidden="true" className={`relative h-px my-8 ${className}`}>
+        <div className="absolute inset-x-0 top-0 h-px bg-edge-default" />
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 w-6 h-px bg-accent-teal" />
       </div>
-    </div>
+    );
+  }
+
+  if (variant === 'section') {
+    return (
+      <hr
+        role="separator"
+        aria-hidden="true"
+        className={`border-0 h-px bg-edge-default my-8 ${className}`}
+      />
+    );
+  }
+
+  // rule (default)
+  return (
+    <hr
+      role="separator"
+      aria-hidden="true"
+      className={`border-0 h-px bg-edge-default ${className}`}
+    />
   );
 }

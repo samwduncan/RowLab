@@ -59,7 +59,7 @@ function PasswordChangeForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-ink-primary mb-1.5">
+        <label className="block text-sm font-medium text-text-bright mb-1.5">
           Current Password
         </label>
         <input
@@ -69,16 +69,16 @@ function PasswordChangeForm() {
           autoComplete="current-password"
           className="
             w-full px-3 py-2 rounded-lg text-sm
-            bg-ink-base border border-ink-border text-ink-primary
-            placeholder:text-ink-muted
-            focus:outline-none focus:ring-1 focus:ring-accent-copper/50 focus:border-accent-copper
+            bg-void-surface border border-edge-default text-text-bright
+            placeholder:text-text-faint
+            focus:outline-none focus:ring-1 focus:ring-accent/50 focus:border-accent-teal
             transition-colors
           "
           placeholder="Enter current password"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-ink-primary mb-1.5">New Password</label>
+        <label className="block text-sm font-medium text-text-bright mb-1.5">New Password</label>
         <input
           type="password"
           value={newPassword}
@@ -87,9 +87,9 @@ function PasswordChangeForm() {
           minLength={8}
           className="
             w-full px-3 py-2 rounded-lg text-sm
-            bg-ink-base border border-ink-border text-ink-primary
-            placeholder:text-ink-muted
-            focus:outline-none focus:ring-1 focus:ring-accent-copper/50 focus:border-accent-copper
+            bg-void-surface border border-edge-default text-text-bright
+            placeholder:text-text-faint
+            focus:outline-none focus:ring-1 focus:ring-accent/50 focus:border-accent-teal
             transition-colors
           "
           placeholder="At least 8 characters"
@@ -147,8 +147,8 @@ export function AccountSection() {
       {/* Email Display */}
       <GlassCard>
         <div className="flex items-center gap-2 mb-3">
-          <Mail className="w-4 h-4 text-accent-copper" />
-          <h3 className="text-sm font-semibold text-ink-primary">Email Address</h3>
+          <Mail className="w-4 h-4 text-accent-teal" />
+          <h3 className="text-sm font-semibold text-text-bright">Email Address</h3>
         </div>
         <div className="flex items-center gap-3">
           <input
@@ -157,7 +157,7 @@ export function AccountSection() {
             readOnly
             className="
               flex-1 px-3 py-2 rounded-lg text-sm
-              bg-ink-well border border-ink-border text-ink-secondary
+              bg-void-deep border border-edge-default text-text-dim
               cursor-not-allowed
             "
           />
@@ -171,8 +171,8 @@ export function AccountSection() {
       {/* Password Change */}
       <GlassCard>
         <div className="flex items-center gap-2 mb-4">
-          <Lock className="w-4 h-4 text-accent-copper" />
-          <h3 className="text-sm font-semibold text-ink-primary">Change Password</h3>
+          <Lock className="w-4 h-4 text-accent-teal" />
+          <h3 className="text-sm font-semibold text-text-bright">Change Password</h3>
         </div>
         <PasswordChangeForm />
       </GlassCard>
@@ -183,7 +183,7 @@ export function AccountSection() {
           <AlertTriangle className="w-4 h-4 text-data-poor" />
           <h3 className="text-sm font-semibold text-data-poor">Danger Zone</h3>
         </div>
-        <p className="text-sm text-ink-secondary mb-4">
+        <p className="text-sm text-text-dim mb-4">
           Permanently delete your account and all associated data. This action cannot be undone.
         </p>
         <button

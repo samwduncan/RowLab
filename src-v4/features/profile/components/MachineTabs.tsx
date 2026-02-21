@@ -1,6 +1,6 @@
 /**
  * Segmented control for switching between erg machines.
- * Active tab uses accent-copper styling; inactive tabs are muted.
+ * Active tab uses accent styling; inactive tabs are muted.
  */
 
 import { Waves, Mountain, Bike } from 'lucide-react';
@@ -41,8 +41,8 @@ export function MachineTabs({ activeMachine, onMachineChange }: MachineTabsProps
               border transition-colors duration-150
               ${
                 isActive
-                  ? 'bg-accent-copper/20 text-accent-copper border-accent-copper/30'
-                  : 'text-ink-secondary hover:text-ink-primary bg-ink-deep/30 border-transparent hover:border-ink-border/30'
+                  ? 'bg-accent-teal/20 text-accent-teal border-accent-teal/30'
+                  : 'text-text-dim hover:text-text-bright bg-void-deep/30 border-transparent hover:border-edge-default/30'
               }
             `}
           >

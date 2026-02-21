@@ -47,22 +47,22 @@ function RegisterPage() {
   // No invite token: show "invitation required" message
   if (!invite) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-ink-deep p-4">
+      <div className="flex min-h-screen items-center justify-center bg-void-deep p-4">
         <div className="w-full max-w-md">
           <GlassCard padding="lg" className="rounded-2xl text-center">
             <div className="mb-6">
-              <h1 className="text-3xl font-bold tracking-tight text-ink-primary font-display">
-                Row<span className="text-accent-copper">Lab</span>
+              <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
+                Row<span className="text-accent-teal">Lab</span>
               </h1>
             </div>
             <div className="flex flex-col gap-3">
-              <h2 className="text-lg font-semibold text-ink-primary">Invitation required</h2>
-              <p className="text-sm text-ink-secondary">
+              <h2 className="text-lg font-semibold text-text-bright">Invitation required</h2>
+              <p className="text-sm text-text-dim">
                 Registration requires an invitation. Ask your team admin for an invite link.
               </p>
               <Link
                 to="/login"
-                className="mt-2 inline-flex items-center justify-center text-sm font-medium text-accent-copper hover:text-accent-copper-hover transition-colors duration-150"
+                className="mt-2 inline-flex items-center justify-center text-sm font-medium text-accent-teal hover:text-accent-teal-hover transition-colors duration-150"
               >
                 Back to login
               </Link>
@@ -89,14 +89,14 @@ function InviteGatedRegister({ inviteToken }: { inviteToken: string }) {
   });
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-ink-deep p-4">
+    <div className="flex min-h-screen items-center justify-center bg-void-deep p-4">
       <div className="w-full max-w-md">
         <GlassCard padding="lg" className="rounded-2xl">
           <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold tracking-tight text-ink-primary font-display">
-              Row<span className="text-accent-copper">Lab</span>
+            <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
+              Row<span className="text-accent-teal">Lab</span>
             </h1>
-            <p className="mt-1.5 text-sm text-ink-secondary">Create your account</p>
+            <p className="mt-1.5 text-sm text-text-dim">Create your account</p>
           </div>
 
           {isLoading && <RegisterSkeleton />}
@@ -109,7 +109,7 @@ function InviteGatedRegister({ inviteToken }: { inviteToken: string }) {
               </div>
               <Link
                 to="/login"
-                className="mt-2 inline-flex items-center justify-center text-sm font-medium text-accent-copper hover:text-accent-copper-hover transition-colors duration-150"
+                className="mt-2 inline-flex items-center justify-center text-sm font-medium text-accent-teal hover:text-accent-teal-hover transition-colors duration-150"
               >
                 Back to login
               </Link>
@@ -119,9 +119,9 @@ function InviteGatedRegister({ inviteToken }: { inviteToken: string }) {
           {data && (
             <>
               {data.invitation.team && (
-                <div className="mb-4 rounded-lg bg-ink-raised/50 border border-ink-border px-3 py-2.5 text-sm text-ink-body text-center">
+                <div className="mb-4 rounded-lg bg-void-raised/50 border border-edge-default px-3 py-2.5 text-sm text-text-default text-center">
                   You've been invited to join{' '}
-                  <span className="font-semibold text-ink-primary">
+                  <span className="font-semibold text-text-bright">
                     {data.invitation.team.name}
                   </span>
                 </div>
@@ -135,12 +135,12 @@ function InviteGatedRegister({ inviteToken }: { inviteToken: string }) {
             </>
           )}
 
-          <div className="mt-6 border-t border-ink-border pt-5 text-center">
-            <p className="text-sm text-ink-secondary">
+          <div className="mt-6 border-t border-edge-default pt-5 text-center">
+            <p className="text-sm text-text-dim">
               Already have an account?{' '}
               <Link
                 to="/login"
-                className="text-accent-copper hover:text-accent-copper-hover font-medium transition-colors duration-150"
+                className="text-accent-teal hover:text-accent-teal-hover font-medium transition-colors duration-150"
               >
                 Sign in
               </Link>
@@ -157,26 +157,26 @@ function RegisterSkeleton() {
     <div className="flex flex-col gap-4">
       {/* Name field skeleton */}
       <div className="flex flex-col gap-1.5">
-        <div className="h-4 w-20 rounded-sm bg-ink-raised animate-shimmer" />
-        <div className="h-10 w-full rounded-xl bg-ink-raised animate-shimmer" />
+        <div className="h-4 w-20 rounded-sm bg-void-raised animate-shimmer" />
+        <div className="h-10 w-full rounded-xl bg-void-raised animate-shimmer" />
       </div>
       {/* Email field skeleton */}
       <div className="flex flex-col gap-1.5">
-        <div className="h-4 w-12 rounded-sm bg-ink-raised animate-shimmer" />
-        <div className="h-10 w-full rounded-xl bg-ink-raised animate-shimmer" />
+        <div className="h-4 w-12 rounded-sm bg-void-raised animate-shimmer" />
+        <div className="h-10 w-full rounded-xl bg-void-raised animate-shimmer" />
       </div>
       {/* Password field skeleton */}
       <div className="flex flex-col gap-1.5">
-        <div className="h-4 w-16 rounded-sm bg-ink-raised animate-shimmer" />
-        <div className="h-10 w-full rounded-xl bg-ink-raised animate-shimmer" />
+        <div className="h-4 w-16 rounded-sm bg-void-raised animate-shimmer" />
+        <div className="h-10 w-full rounded-xl bg-void-raised animate-shimmer" />
       </div>
       {/* Confirm password field skeleton */}
       <div className="flex flex-col gap-1.5">
-        <div className="h-4 w-28 rounded-sm bg-ink-raised animate-shimmer" />
-        <div className="h-10 w-full rounded-xl bg-ink-raised animate-shimmer" />
+        <div className="h-4 w-28 rounded-sm bg-void-raised animate-shimmer" />
+        <div className="h-10 w-full rounded-xl bg-void-raised animate-shimmer" />
       </div>
       {/* Button skeleton */}
-      <div className="mt-1 h-12 w-full rounded-xl bg-ink-raised animate-shimmer" />
+      <div className="mt-1 h-12 w-full rounded-xl bg-void-raised animate-shimmer" />
     </div>
   );
 }

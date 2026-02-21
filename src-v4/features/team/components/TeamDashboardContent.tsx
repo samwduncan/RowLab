@@ -2,7 +2,7 @@
  * Team dashboard tab container.
  *
  * 3 tabs: Overview, Roster, Activity -- state persisted via URL search params.
- * Tab bar is sticky with glass styling and active indicator.
+ * Tab bar is sticky with panel styling and active indicator.
  * Reads team data from parent layout route loader.
  */
 import { Suspense } from 'react';
@@ -46,12 +46,12 @@ export function TeamDashboardContent() {
     <div className="mx-auto max-w-6xl p-4 md:p-6 pb-20 md:pb-6">
       {/* Team header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-ink-primary">{team.name}</h1>
-        {team.description && <p className="mt-1 text-sm text-ink-secondary">{team.description}</p>}
+        <h1 className="text-2xl font-bold text-text-bright">{team.name}</h1>
+        {team.description && <p className="mt-1 text-sm text-text-dim">{team.description}</p>}
       </div>
 
       {/* Tab bar */}
-      <div className="sticky top-0 z-10 -mx-4 md:-mx-6 px-4 md:px-6 pb-4 pt-1 glass">
+      <div className="sticky top-0 z-10 -mx-4 md:-mx-6 px-4 md:px-6 pb-4 pt-1 panel">
         <TabToggle
           tabs={TABS.map((t) => ({
             id: t.id,

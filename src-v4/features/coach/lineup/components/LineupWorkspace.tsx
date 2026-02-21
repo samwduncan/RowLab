@@ -372,9 +372,9 @@ export function LineupWorkspace({ teamId, lineupId, readOnly = false }: LineupWo
               }
               className="
                 sticky bottom-0 w-full py-3 px-4 text-center
-                text-sm font-medium text-accent-copper
-                bg-ink-base/80 backdrop-blur-sm
-                border-t border-ink-border/30
+                text-sm font-medium text-accent-teal
+                bg-void-surface/80 backdrop-blur-sm
+                border-t border-edge-default/30
               "
             >
               {state.unassigned.length} unassigned athlete{state.unassigned.length !== 1 ? 's' : ''}
@@ -523,13 +523,13 @@ function LoadLineupModal({
         aria-label="Load lineup"
         className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
       >
-        <div className="glass rounded-2xl shadow-xl w-full max-w-lg max-h-[70vh] flex flex-col pointer-events-auto">
+        <div className="panel rounded-2xl shadow-xl w-full max-w-lg max-h-[70vh] flex flex-col pointer-events-auto">
           {/* Header */}
-          <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-ink-border/30">
-            <h2 className="text-lg font-semibold text-ink-primary">Load Lineup</h2>
+          <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-edge-default/30">
+            <h2 className="text-lg font-semibold text-text-bright">Load Lineup</h2>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-ink-muted hover:text-ink-primary hover:bg-ink-hover transition-colors"
+              className="p-1.5 rounded-lg text-text-faint hover:text-text-bright hover:bg-void-overlay transition-colors"
               aria-label="Close"
             >
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
@@ -547,7 +547,7 @@ function LoadLineupModal({
           <div className="flex-1 overflow-y-auto p-3">
             {lineups.length === 0 ? (
               <div className="flex items-center justify-center py-12">
-                <p className="text-sm text-ink-muted">No saved lineups yet.</p>
+                <p className="text-sm text-text-faint">No saved lineups yet.</p>
               </div>
             ) : (
               <div className="space-y-1.5">
@@ -557,20 +557,20 @@ function LoadLineupModal({
                     onClick={() => onSelect(lineup)}
                     className="
                       w-full text-left px-4 py-3 rounded-xl
-                      bg-ink-raised/60 border border-ink-border
-                      hover:bg-ink-hover hover:border-ink-border-strong
+                      bg-void-raised/60 border border-edge-default
+                      hover:bg-void-overlay hover:border-edge-hover
                       active:scale-[0.99]
                       transition-all duration-100
                     "
                   >
-                    <p className="text-sm font-medium text-ink-primary">{lineup.name}</p>
-                    <div className="flex items-center gap-3 mt-1 text-xs text-ink-muted">
+                    <p className="text-sm font-medium text-text-bright">{lineup.name}</p>
+                    <div className="flex items-center gap-3 mt-1 text-xs text-text-faint">
                       <span>{lineup.assignments.length} assignments</span>
                       <span>{lineup.status}</span>
                       <span>{new Date(lineup.updatedAt).toLocaleDateString()}</span>
                     </div>
                     {lineup.notes && (
-                      <p className="text-xs text-ink-secondary mt-1 truncate">{lineup.notes}</p>
+                      <p className="text-xs text-text-dim mt-1 truncate">{lineup.notes}</p>
                     )}
                   </button>
                 ))}

@@ -20,7 +20,7 @@ interface ProfileTabsProps {
 
 export function ProfileTabs({ activeTab, onTabChange }: ProfileTabsProps) {
   return (
-    <div className="border-b border-ink-border mt-6">
+    <div className="border-b border-edge-default mt-6">
       <nav className="flex gap-6 px-4 overflow-x-auto" role="tablist" aria-label="Profile sections">
         {TABS.map((tab) => {
           const isActive = activeTab === tab.id;
@@ -33,8 +33,8 @@ export function ProfileTabs({ activeTab, onTabChange }: ProfileTabsProps) {
               onClick={() => onTabChange(tab.id)}
               className={`whitespace-nowrap py-3 text-sm font-medium border-b-2 transition-colors ${
                 isActive
-                  ? 'border-accent-copper text-ink-primary'
-                  : 'border-transparent text-ink-secondary hover:text-ink-primary'
+                  ? 'border-accent-teal text-text-bright'
+                  : 'border-transparent text-text-dim hover:text-text-bright'
               }`}
             >
               {tab.label}

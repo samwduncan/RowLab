@@ -110,11 +110,11 @@ export function WorkoutDetail() {
   if (isError || !workout) {
     return (
       <div className="flex flex-col items-center justify-center py-20 px-4">
-        <p className="text-ink-secondary text-base mb-4">Workout not found</p>
+        <p className="text-text-dim text-base mb-4">Workout not found</p>
         <button
           type="button"
           onClick={nav.toList}
-          className="text-accent-copper hover:underline text-sm"
+          className="text-accent-teal hover:underline text-sm"
         >
           Back to workouts
         </button>
@@ -137,7 +137,7 @@ export function WorkoutDetail() {
         <button
           type="button"
           onClick={nav.toList}
-          className="inline-flex items-center gap-1.5 text-sm text-ink-secondary hover:text-ink-primary transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-text-dim hover:text-text-bright transition-colors"
         >
           <ArrowLeft size={16} />
           <span>Back to workouts</span>
@@ -147,7 +147,7 @@ export function WorkoutDetail() {
           <button
             type="button"
             onClick={() => setShareOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-ink-secondary hover:text-ink-primary hover:bg-ink-hover rounded-lg transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-text-dim hover:text-text-bright hover:bg-void-overlay rounded-lg transition-colors"
           >
             <Share2 size={14} />
             <span>Share</span>
@@ -156,7 +156,7 @@ export function WorkoutDetail() {
             <button
               type="button"
               onClick={() => onEdit!(workout as Workout)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-ink-secondary hover:text-ink-primary hover:bg-ink-hover rounded-lg transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-text-dim hover:text-text-bright hover:bg-void-overlay rounded-lg transition-colors"
             >
               <Pencil size={14} />
               <span>Edit</span>
@@ -175,8 +175,8 @@ export function WorkoutDetail() {
             onClick={() => workout.prevWorkoutId && nav.toDetail(workout.prevWorkoutId)}
             className={`p-2 rounded-lg transition-colors ${
               workout.prevWorkoutId
-                ? 'text-ink-secondary hover:text-ink-primary hover:bg-ink-hover cursor-pointer'
-                : 'text-ink-muted cursor-not-allowed opacity-30'
+                ? 'text-text-dim hover:text-text-bright hover:bg-void-overlay cursor-pointer'
+                : 'text-text-faint cursor-not-allowed opacity-30'
             }`}
             aria-label="Previous workout"
           >
@@ -187,7 +187,7 @@ export function WorkoutDetail() {
         {/* Hero card with gradient border and sport-colored glow */}
         <GradientBorder
           className="flex-1"
-          innerBg="bg-ink-raised"
+          innerBg="bg-void-raised"
           radius="rounded-xl"
           style={{
             boxShadow: `0 0 40px -10px color-mix(in oklch, ${sportColorVar(sport)}, transparent 70%)`,
@@ -205,19 +205,19 @@ export function WorkoutDetail() {
                 <div>
                   {intervalInfo.isInterval ? (
                     <>
-                      <h2 className="text-accent-copper text-lg font-display font-semibold font-mono">
+                      <h2 className="text-accent-teal text-lg font-display font-semibold font-mono">
                         {intervalInfo.pattern}
                       </h2>
-                      <p className="text-ink-secondary text-sm">
+                      <p className="text-text-dim text-sm">
                         {config.label} &middot; {format(workoutDate, 'EEEE, MMMM d, yyyy')}
                       </p>
                     </>
                   ) : (
                     <>
-                      <h2 className="text-ink-primary text-lg font-display font-semibold">
+                      <h2 className="text-text-bright text-lg font-display font-semibold">
                         {config.label}
                       </h2>
-                      <p className="text-ink-secondary text-sm">
+                      <p className="text-text-dim text-sm">
                         {format(workoutDate, 'EEEE, MMMM d, yyyy')}
                       </p>
                     </>
@@ -261,8 +261,8 @@ export function WorkoutDetail() {
             onClick={() => workout.nextWorkoutId && nav.toDetail(workout.nextWorkoutId)}
             className={`p-2 rounded-lg transition-colors ${
               workout.nextWorkoutId
-                ? 'text-ink-secondary hover:text-ink-primary hover:bg-ink-hover cursor-pointer'
-                : 'text-ink-muted cursor-not-allowed opacity-30'
+                ? 'text-text-dim hover:text-text-bright hover:bg-void-overlay cursor-pointer'
+                : 'text-text-faint cursor-not-allowed opacity-30'
             }`}
             aria-label="Next workout"
           >
@@ -275,9 +275,9 @@ export function WorkoutDetail() {
       {hasSplits && (
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <h3 className="text-ink-primary text-lg font-medium">Splits</h3>
+            <h3 className="text-text-bright text-lg font-medium">Splits</h3>
             {intervalInfo.isInterval && (
-              <span className="text-xs text-ink-muted font-mono">
+              <span className="text-xs text-text-faint font-mono">
                 {intervalInfo.workCount} work intervals
               </span>
             )}
@@ -292,14 +292,14 @@ export function WorkoutDetail() {
       )}
 
       {/* Notes section */}
-      <div className="bg-ink-raised rounded-xl border border-ink-border p-4">
+      <div className="bg-void-raised rounded-xl border border-edge-default p-4">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-ink-primary text-sm font-medium">Notes</h3>
+          <h3 className="text-text-bright text-sm font-medium">Notes</h3>
           {onEdit && (
             <button
               type="button"
               onClick={() => onEdit!(workout as Workout)}
-              className="p-1 rounded-md text-ink-muted hover:text-ink-secondary hover:bg-ink-hover transition-colors"
+              className="p-1 rounded-md text-text-faint hover:text-text-dim hover:bg-void-overlay transition-colors"
               aria-label="Edit notes"
             >
               <Pencil size={14} />
@@ -307,9 +307,9 @@ export function WorkoutDetail() {
           )}
         </div>
         {workout.notes && workout.notes.trim() ? (
-          <p className="text-ink-body text-sm leading-relaxed">{workout.notes}</p>
+          <p className="text-text-default text-sm leading-relaxed">{workout.notes}</p>
         ) : (
-          <p className="text-ink-muted italic text-sm">No notes</p>
+          <p className="text-text-faint italic text-sm">No notes</p>
         )}
       </div>
 
@@ -319,7 +319,7 @@ export function WorkoutDetail() {
           href="https://log.concept2.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-accent-copper hover:underline text-sm transition-colors"
+          className="inline-flex items-center gap-1.5 text-accent-teal hover:underline text-sm transition-colors"
         >
           <ExternalLink size={14} />
           View on Concept2 Logbook
@@ -347,7 +347,7 @@ function HeroMetric({ label, value }: { label: string; value: string }) {
       <span className="text-2xl font-mono font-bold text-heading-gradient tabular-nums">
         {value}
       </span>
-      <p className="text-[10px] uppercase tracking-widest text-ink-muted mt-1">{label}</p>
+      <p className="text-[10px] uppercase tracking-widest text-text-faint mt-1">{label}</p>
     </div>
   );
 }
@@ -368,7 +368,7 @@ function SourceBadge({ source, createdAt }: { source: SourceType; createdAt?: st
         <SourceIcon size={12} />
         {cfg.label}
       </div>
-      {createdAt && <span className="text-ink-muted text-xs">{formatRelativeDate(createdAt)}</span>}
+      {createdAt && <span className="text-text-faint text-xs">{formatRelativeDate(createdAt)}</span>}
     </div>
   );
 }

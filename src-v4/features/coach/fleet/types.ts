@@ -53,17 +53,17 @@ export const STATUS_DISPLAY: Record<EquipmentStatus, string> = {
 
 export const STATUS_COLOR: Record<EquipmentStatus, string> = {
   AVAILABLE: 'text-data-great',
-  IN_USE: 'text-accent-copper',
+  IN_USE: 'text-accent-teal',
   MAINTENANCE: 'text-data-fair',
-  RETIRED: 'text-ink-muted',
+  RETIRED: 'text-text-faint',
 };
 
 /** Condition dot background color for visual status indicator */
 export const STATUS_DOT: Record<EquipmentStatus, string> = {
   AVAILABLE: 'bg-data-great',
-  IN_USE: 'bg-accent-copper',
+  IN_USE: 'bg-accent-teal',
   MAINTENANCE: 'bg-data-fair',
-  RETIRED: 'bg-ink-muted',
+  RETIRED: 'bg-text-faint',
 };
 
 // ---------------------------------------------------------------------------

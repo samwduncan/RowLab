@@ -34,7 +34,7 @@ function AuthenticatedLayout() {
   const isMobile = useIsMobile();
 
   return (
-    <div className="flex h-screen canvas-bg">
+    <div className="flex h-screen bg-void-deep">
       {/* Sidebar: desktop (full) / tablet (rail) / mobile (hidden) */}
       {!isMobile && <Sidebar />}
 

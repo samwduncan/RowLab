@@ -95,7 +95,7 @@ export function MobileAthleteSelector({
   function sideBadge(side?: string): { text: string; classes: string } | null {
     switch (side) {
       case 'Cox':
-        return { text: 'Cox', classes: 'bg-accent-primary/10 text-accent-primary' };
+        return { text: 'Cox', classes: 'bg-accent-teal-primary/10 text-accent-teal-primary' };
       case 'Both':
         return { text: 'Both', classes: 'bg-data-good/10 text-data-good' };
       case 'Port':
@@ -126,7 +126,7 @@ export function MobileAthleteSelector({
         aria-label={seatLabel ? `Select athlete for ${seatLabel}` : 'Select athlete'}
         className="
           fixed bottom-0 left-0 right-0 z-50
-          bg-ink-base rounded-t-2xl
+          bg-void-surface rounded-t-2xl
           shadow-[0_-4px_24px_rgba(0,0,0,0.4)]
           flex flex-col
           max-h-[80vh]
@@ -135,18 +135,18 @@ export function MobileAthleteSelector({
       >
         {/* Swipe handle */}
         <div className="flex items-center justify-center pt-3 pb-2">
-          <div className="w-10 h-1 bg-ink-border rounded-full" />
+          <div className="w-10 h-1 bg-edge-default rounded-full" />
         </div>
 
         {/* Header */}
-        <div className="flex items-center justify-between px-4 pb-3 border-b border-ink-border/30">
+        <div className="flex items-center justify-between px-4 pb-3 border-b border-edge-default/30">
           <div>
-            <h2 className="text-base font-semibold text-ink-primary">Select Athlete</h2>
-            {seatLabel && <p className="text-xs text-ink-muted mt-0.5">{seatLabel}</p>}
+            <h2 className="text-base font-semibold text-text-bright">Select Athlete</h2>
+            {seatLabel && <p className="text-xs text-text-faint mt-0.5">{seatLabel}</p>}
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-ink-hover text-ink-secondary transition-colors"
+            className="p-2 rounded-lg hover:bg-void-overlay text-text-dim transition-colors"
             aria-label="Close"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
@@ -164,7 +164,7 @@ export function MobileAthleteSelector({
         <div className="px-4 py-3">
           <div className="relative">
             <svg
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-text-faint"
               width="14"
               height="14"
               viewBox="0 0 14 14"
@@ -187,9 +187,9 @@ export function MobileAthleteSelector({
               onChange={(e) => setSearchQuery(e.target.value)}
               className="
                 w-full pl-9 pr-4 py-2.5 rounded-xl text-sm
-                bg-ink-well border border-ink-border
-                text-ink-primary placeholder:text-ink-muted
-                focus:outline-none focus:border-accent-copper focus:ring-1 focus:ring-accent-copper/30
+                bg-void-deep border border-edge-default
+                text-text-bright placeholder:text-text-faint
+                focus:outline-none focus:border-accent-teal focus:ring-1 focus:ring-accent/30
                 transition-colors
               "
             />
@@ -200,7 +200,7 @@ export function MobileAthleteSelector({
         <div className="flex-1 overflow-y-auto px-4 pb-6">
           {filteredAthletes.length === 0 ? (
             <div className="flex items-center justify-center py-10">
-              <p className="text-sm text-ink-muted">
+              <p className="text-sm text-text-faint">
                 {searchQuery ? 'No athletes match' : 'No athletes available'}
               </p>
             </div>
@@ -217,24 +217,24 @@ export function MobileAthleteSelector({
                     onClick={() => handleSelect(athlete.id)}
                     className="
                       w-full flex items-center gap-3 p-3 rounded-xl
-                      bg-ink-raised/60 border border-ink-border
-                      hover:bg-ink-hover hover:border-ink-border-strong
+                      bg-void-raised/60 border border-edge-default
+                      hover:bg-void-overlay hover:border-edge-hover
                       active:scale-[0.98]
                       transition-all duration-100
                     "
                   >
                     {/* Avatar */}
-                    <div className="w-9 h-9 rounded-lg bg-ink-hover text-ink-secondary font-semibold text-sm flex items-center justify-center flex-shrink-0">
+                    <div className="w-9 h-9 rounded-lg bg-void-overlay text-text-dim font-semibold text-sm flex items-center justify-center flex-shrink-0">
                       {initials}
                     </div>
 
                     {/* Name */}
                     <div className="flex-1 text-left min-w-0">
-                      <p className="text-sm font-medium text-ink-primary truncate">
+                      <p className="text-sm font-medium text-text-bright truncate">
                         {athlete.firstName} {athlete.lastName}
                       </p>
                       {(athlete.erg2k || athlete.weight) && (
-                        <p className="text-[11px] text-ink-muted mt-0.5">
+                        <p className="text-[11px] text-text-faint mt-0.5">
                           {[athlete.erg2k, athlete.weight ? `${athlete.weight}kg` : null]
                             .filter(Boolean)
                             .join(' / ')}

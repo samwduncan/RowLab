@@ -2,9 +2,9 @@
  * IntegrationCard -- reusable card for integration status display.
  *
  * Ported from v2 IntegrationCard with v4 Canvas design tokens:
- * - Surface: bg-ink-base, border-ink-border
- * - Text: text-ink-primary, text-ink-secondary, text-ink-tertiary
- * - Primary button: bg-accent-copper, text-ink-deep
+ * - Surface: bg-void-surface, border-edge-default
+ * - Text: text-text-bright, text-text-dim, text-text-faint
+ * - Primary button: bg-accent-teal, text-void-deep
  * - Error/disconnect: data-poor tokens
  * - Loading states: skeleton shimmer (no animate-spin)
  */
@@ -33,8 +33,8 @@ function formatLastSynced(dateString: string): string {
 function ButtonSkeleton({ width = 'w-16' }: { width?: string }) {
   return (
     <div className="flex items-center gap-2 animate-shimmer">
-      <div className="h-4 w-4 rounded bg-ink-border/50" />
-      <div className={`h-3 ${width} rounded bg-ink-border/30`} />
+      <div className="h-4 w-4 rounded bg-edge-default/50" />
+      <div className={`h-3 ${width} rounded bg-edge-default/30`} />
     </div>
   );
 }
@@ -55,10 +55,10 @@ export function IntegrationCard({
   connectLoading = false,
   disconnectLoading = false,
   connectLabel = 'Connect',
-  accentColor = 'text-accent-copper',
+  accentColor = 'text-accent-teal',
 }: IntegrationCardProps) {
   return (
-    <div className="glass flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-xl">
+    <div className="panel flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-xl">
       <div className="flex items-center gap-3 sm:gap-4">
         {/* Icon Container */}
         <div
@@ -69,7 +69,7 @@ export function IntegrationCard({
 
         {/* Title and Status */}
         <div className="min-w-0">
-          <h4 className="font-medium text-ink-primary">{title}</h4>
+          <h4 className="font-medium text-text-bright">{title}</h4>
           {connected ? (
             <div className="mt-1 space-y-1">
               <div className="flex items-center gap-2">
@@ -79,12 +79,12 @@ export function IntegrationCard({
                 </span>
               </div>
               {lastSynced && (
-                <p className="text-xs text-ink-tertiary truncate">{formatLastSynced(lastSynced)}</p>
+                <p className="text-xs text-text-faint truncate">{formatLastSynced(lastSynced)}</p>
               )}
-              {statsLine && <p className="text-xs text-ink-secondary">{statsLine}</p>}
+              {statsLine && <p className="text-xs text-text-dim">{statsLine}</p>}
             </div>
           ) : (
-            <p className="text-sm text-ink-secondary mt-1">{description}</p>
+            <p className="text-sm text-text-dim mt-1">{description}</p>
           )}
         </div>
       </div>
@@ -98,7 +98,7 @@ export function IntegrationCard({
               <button
                 onClick={onSync}
                 disabled={syncLoading}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-ink-well border border-ink-border text-ink-secondary hover:bg-ink-raised hover:border-ink-border transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-void-deep border border-edge-default text-text-dim hover:bg-void-raised hover:border-edge-default transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {syncLoading ? <ButtonSkeleton width="w-12" /> : 'Sync Now'}
               </button>
@@ -118,7 +118,7 @@ export function IntegrationCard({
           <button
             onClick={onConnect}
             disabled={connectLoading}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent-copper text-ink-deep font-medium hover:bg-accent-copper-hover hover:shadow-glow-copper transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent-teal text-void-deep font-medium hover:bg-accent-teal-hover hover:shadow-glow-accent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {connectLoading ? <ButtonSkeleton width="w-16" /> : connectLabel}
           </button>

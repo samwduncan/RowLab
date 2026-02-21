@@ -19,7 +19,7 @@ interface VisitCardProps {
 
 const statusStyles: Record<VisitStatus, { bg: string; text: string; label: string }> = {
   scheduled: { bg: 'bg-data-good/15', text: 'text-data-good', label: 'Scheduled' },
-  completed: { bg: 'bg-accent-copper/15', text: 'text-accent-copper', label: 'Completed' },
+  completed: { bg: 'bg-accent-teal/15', text: 'text-accent-teal', label: 'Completed' },
   cancelled: { bg: 'bg-data-poor/15', text: 'text-data-poor', label: 'Cancelled' },
 };
 
@@ -45,7 +45,7 @@ export function VisitCard({ visit, onClick }: VisitCardProps) {
         >
           {/* Header: name + status */}
           <div className="flex items-start justify-between gap-3">
-            <h3 className="text-ink-primary font-medium text-sm truncate">{visit.recruitName}</h3>
+            <h3 className="text-text-bright font-medium text-sm truncate">{visit.recruitName}</h3>
             <span
               className={`inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-medium ${status.bg} ${status.text}`}
             >
@@ -54,7 +54,7 @@ export function VisitCard({ visit, onClick }: VisitCardProps) {
           </div>
 
           {/* Meta row */}
-          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink-secondary">
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-text-dim">
             <span className="inline-flex items-center gap-1">
               <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
               {formattedDate}
@@ -70,7 +70,7 @@ export function VisitCard({ visit, onClick }: VisitCardProps) {
 
           {/* Notes preview */}
           {visit.notes && (
-            <div className="mt-2 flex items-start gap-1.5 text-xs text-ink-muted">
+            <div className="mt-2 flex items-start gap-1.5 text-xs text-text-faint">
               <FileText className="h-3.5 w-3.5 mt-0.5 shrink-0" aria-hidden="true" />
               <p className="line-clamp-2">{visit.notes}</p>
             </div>

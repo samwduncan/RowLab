@@ -47,15 +47,11 @@ function TemplateOption({
       onClick={() => onSelect(type)}
       className={`
         w-full text-left p-3 rounded-lg transition-all duration-150 cursor-pointer
-        ${
-          selected
-            ? 'ring-1 ring-accent-copper bg-accent-copper/8'
-            : 'bg-ink-well hover:bg-ink-hover'
-        }
+        ${selected ? 'ring-1 ring-accent bg-accent-teal/8' : 'bg-void-deep hover:bg-void-overlay'}
       `.trim()}
     >
-      <span className="text-sm font-medium text-ink-primary block">{label}</span>
-      <span className="text-xs text-ink-muted mt-0.5 block">{description}</span>
+      <span className="text-sm font-medium text-text-bright block">{label}</span>
+      <span className="text-xs text-text-faint mt-0.5 block">{description}</span>
     </button>
   );
 }
@@ -78,8 +74,8 @@ function FormatToggle({
         onClick={() => onChange('1:1')}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
           format === '1:1'
-            ? 'bg-accent-copper text-ink-deep'
-            : 'bg-ink-well text-ink-secondary hover:bg-ink-hover'
+            ? 'bg-accent-teal text-void-deep'
+            : 'bg-void-deep text-text-dim hover:bg-void-overlay'
         }`}
       >
         <Square size={12} />
@@ -90,8 +86,8 @@ function FormatToggle({
         onClick={() => onChange('9:16')}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
           format === '9:16'
-            ? 'bg-accent-copper text-ink-deep'
-            : 'bg-ink-well text-ink-secondary hover:bg-ink-hover'
+            ? 'bg-accent-teal text-void-deep'
+            : 'bg-void-deep text-text-dim hover:bg-void-overlay'
         }`}
       >
         <Smartphone size={12} />
@@ -111,7 +107,7 @@ function ResultActions({ card, onClose }: { card: ShareCard; onClose: () => void
   const handleDownload = useCallback(() => {
     const link = document.createElement('a');
     link.href = card.url;
-    link.download = `rowlab-share-${card.cardType}.png`;
+    link.download = `oarbit-share-${card.cardType}.png`;
     link.click();
   }, [card]);
 
@@ -126,8 +122,8 @@ function ResultActions({ card, onClose }: { card: ShareCard; onClose: () => void
     if (!navigator.share) return;
     try {
       await navigator.share({
-        title: 'RowLab Workout',
-        text: 'Check out my workout on RowLab',
+        title: 'oarbit workout',
+        text: 'Check out my workout on oarbit',
         url: `${window.location.origin}/share/${card.id}`,
       });
     } catch {
@@ -138,7 +134,7 @@ function ResultActions({ card, onClose }: { card: ShareCard; onClose: () => void
   return (
     <div className="space-y-3">
       {/* Preview */}
-      <div className="rounded-lg overflow-hidden border border-ink-border">
+      <div className="rounded-lg overflow-hidden border border-edge-default">
         <img src={card.url} alt="Generated share card" className="w-full h-auto" />
       </div>
 
@@ -198,16 +194,16 @@ export function ShareCardModal({ workoutId, workoutLabel, open, onClose }: Share
           {/* Header */}
           <div className="flex items-center justify-between mb-5">
             <div>
-              <h2 className="text-lg font-display font-semibold text-ink-primary">Share Card</h2>
-              <p className="text-xs text-ink-muted mt-0.5">{workoutLabel}</p>
+              <h2 className="text-lg font-display font-semibold text-text-bright">Share Card</h2>
+              <p className="text-xs text-text-faint mt-0.5">{workoutLabel}</p>
             </div>
             <button
               type="button"
               onClick={handleClose}
-              className="p-1.5 rounded-md hover:bg-ink-hover transition-colors"
+              className="p-1.5 rounded-md hover:bg-void-overlay transition-colors"
               aria-label="Close"
             >
-              <X size={16} className="text-ink-tertiary" />
+              <X size={16} className="text-text-faint" />
             </button>
           </div>
 
@@ -233,7 +229,7 @@ export function ShareCardModal({ workoutId, workoutLabel, open, onClose }: Share
               >
                 {/* Template selector */}
                 <div>
-                  <label className="text-xs uppercase tracking-wider text-ink-muted font-medium block mb-2">
+                  <label className="text-xs uppercase tracking-wider text-text-faint font-medium block mb-2">
                     Template
                   </label>
                   <div className="space-y-1.5">
@@ -253,7 +249,7 @@ export function ShareCardModal({ workoutId, workoutLabel, open, onClose }: Share
                 {/* Format + options row */}
                 <div className="flex items-center justify-between">
                   <div>
-                    <label className="text-xs uppercase tracking-wider text-ink-muted font-medium block mb-1.5">
+                    <label className="text-xs uppercase tracking-wider text-text-faint font-medium block mb-1.5">
                       Format
                     </label>
                     <FormatToggle format={format} onChange={setFormat} />
@@ -269,7 +265,7 @@ export function ShareCardModal({ workoutId, workoutLabel, open, onClose }: Share
                     <div
                       className={`
                         relative w-9 h-5 rounded-full transition-colors
-                        ${showAttribution ? 'bg-accent-copper' : 'bg-ink-well'}
+                        ${showAttribution ? 'bg-accent-teal' : 'bg-void-deep'}
                       `}
                     >
                       <div
@@ -279,7 +275,7 @@ export function ShareCardModal({ workoutId, workoutLabel, open, onClose }: Share
                         `}
                       />
                     </div>
-                    <span className="text-xs text-ink-secondary">RowLab branding</span>
+                    <span className="text-xs text-text-dim">oarbit branding</span>
                   </label>
                 </div>
 

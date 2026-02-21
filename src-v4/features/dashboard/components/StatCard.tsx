@@ -147,17 +147,17 @@ function StatCardShell({
       <div className="flex flex-col gap-3" aria-label={`${label}: ${displayValue}`} role="group">
         {/* Icon */}
         <div
-          className="w-10 h-10 rounded-lg bg-ink-well flex items-center justify-center"
+          className="w-10 h-10 rounded-lg bg-void-deep flex items-center justify-center"
           aria-hidden="true"
         >
-          <Icon size={20} className="text-accent-copper" />
+          <Icon size={20} className="text-accent-teal" />
         </div>
 
         {/* Label */}
-        <span className="text-xs uppercase tracking-wider text-ink-muted font-medium">{label}</span>
+        <span className="text-xs uppercase tracking-wider text-text-faint font-medium">{label}</span>
 
         {/* Value */}
-        <span className="text-2xl lg:text-3xl font-bold text-ink-primary tabular-nums">
+        <span className="text-2xl lg:text-3xl font-bold text-text-bright tabular-nums">
           {displayValue}
         </span>
 
@@ -175,7 +175,7 @@ function StatCardShell({
         )}
 
         {/* Footnote */}
-        {footnote && <span className="text-xs text-ink-tertiary">{footnote}</span>}
+        {footnote && <span className="text-xs text-text-faint">{footnote}</span>}
       </div>
     </GlassCard>
   );

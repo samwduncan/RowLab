@@ -47,8 +47,8 @@ function ToggleSwitch({
   return (
     <div className="flex items-center justify-between gap-4 py-2">
       <div className="min-w-0">
-        <p className="text-sm font-medium text-ink-primary">{label}</p>
-        {description && <p className="text-xs text-ink-muted mt-0.5">{description}</p>}
+        <p className="text-sm font-medium text-text-bright">{label}</p>
+        {description && <p className="text-xs text-text-faint mt-0.5">{description}</p>}
       </div>
       <button
         type="button"
@@ -59,7 +59,7 @@ function ToggleSwitch({
         onClick={() => onChange(!checked)}
         className={`
           relative shrink-0 w-11 h-6 rounded-full transition-colors duration-150 cursor-pointer
-          ${checked ? 'bg-accent-copper' : 'bg-ink-well'}
+          ${checked ? 'bg-accent-teal' : 'bg-void-deep'}
           ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
         `.trim()}
       >
@@ -111,17 +111,17 @@ export function NotificationsSection() {
     <div className="space-y-6">
       <SectionHeader
         title="Notifications"
-        description="Control how and when RowLab contacts you"
+        description="Control how and when oarbit contacts you"
         icon={<Bell className="w-4 h-4" />}
       />
 
       {/* Email Notifications */}
       <GlassCard>
         <div className="flex items-center gap-2 mb-4">
-          <Mail className="w-4 h-4 text-accent-copper" />
-          <h3 className="text-sm font-semibold text-ink-primary">Email Notifications</h3>
+          <Mail className="w-4 h-4 text-accent-teal" />
+          <h3 className="text-sm font-semibold text-text-bright">Email Notifications</h3>
         </div>
-        <div className="divide-y divide-ink-border/50">
+        <div className="divide-y divide-edge-default/50">
           <ToggleSwitch
             label="Weekly Training Summary"
             description="Receive a weekly recap of your training activity"
@@ -145,7 +145,7 @@ export function NotificationsSection() {
           />
           <ToggleSwitch
             label="Product Updates"
-            description="New features and improvements to RowLab"
+            description="New features and improvements to oarbit"
             checked={prefs.email.productUpdates}
             onChange={(v) => updateEmail('productUpdates', v)}
             disabled={isPending}
@@ -156,10 +156,10 @@ export function NotificationsSection() {
       {/* Push Notifications */}
       <GlassCard>
         <div className="flex items-center gap-2 mb-4">
-          <Smartphone className="w-4 h-4 text-accent-copper" />
-          <h3 className="text-sm font-semibold text-ink-primary">Push Notifications</h3>
+          <Smartphone className="w-4 h-4 text-accent-teal" />
+          <h3 className="text-sm font-semibold text-text-bright">Push Notifications</h3>
         </div>
-        <div className="divide-y divide-ink-border/50">
+        <div className="divide-y divide-edge-default/50">
           <ToggleSwitch
             label="Workout Reminders"
             description="Remind you before scheduled training sessions"

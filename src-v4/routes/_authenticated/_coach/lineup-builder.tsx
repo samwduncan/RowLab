@@ -27,7 +27,7 @@ function LineupBuilderRoute() {
 
   if (!activeTeamId) {
     return (
-      <div className="p-8 text-ink-secondary text-sm">
+      <div className="p-8 text-text-dim text-sm">
         Select a team to access the lineup builder.
       </div>
     );

@@ -63,13 +63,13 @@ function SplitsTable({
   return (
     <div className="overflow-x-auto">
       {intervalInfo.isInterval && (
-        <div className="mb-2 text-xs text-accent-copper font-mono font-medium">
+        <div className="mb-2 text-xs text-accent-teal font-mono font-medium">
           {intervalInfo.pattern}
         </div>
       )}
       <table className="w-full text-sm font-mono">
         <thead>
-          <tr className="text-ink-tertiary uppercase text-xs tracking-wider">
+          <tr className="text-text-faint uppercase text-xs tracking-wider">
             <th className="text-left py-1.5 pr-3 font-medium">Split</th>
             <th className="text-right py-1.5 px-3 font-medium">Dist</th>
             <th className="text-right py-1.5 px-3 font-medium">Time</th>
@@ -84,24 +84,24 @@ function SplitsTable({
             return (
               <tr
                 key={split.splitNumber}
-                className={`border-b border-ink-border last:border-0 ${isRest ? 'opacity-40' : ''}`}
+                className={`border-b border-edge-default last:border-0 ${isRest ? 'opacity-40' : ''}`}
               >
-                <td className="py-1.5 pr-3 text-ink-secondary">
+                <td className="py-1.5 pr-3 text-text-dim">
                   {isRest ? 'R' : split.splitNumber}
                 </td>
-                <td className="py-1.5 px-3 text-right text-ink-secondary tabular-nums">
+                <td className="py-1.5 px-3 text-right text-text-dim tabular-nums">
                   {split.distanceM != null ? formatDistance(split.distanceM) : DASH}
                 </td>
-                <td className="py-1.5 px-3 text-right text-ink-secondary tabular-nums">
+                <td className="py-1.5 px-3 text-right text-text-dim tabular-nums">
                   {split.timeSeconds != null ? formatDuration(split.timeSeconds) : DASH}
                 </td>
-                <td className="py-1.5 px-3 text-right text-ink-primary tabular-nums">
+                <td className="py-1.5 px-3 text-right text-text-bright tabular-nums">
                   {formatPace(split.pace, machineType)}
                 </td>
-                <td className="py-1.5 px-3 text-right text-ink-primary tabular-nums">
+                <td className="py-1.5 px-3 text-right text-text-bright tabular-nums">
                   {split.watts != null ? split.watts : DASH}
                 </td>
-                <td className="py-1.5 pl-3 text-right text-ink-secondary tabular-nums">
+                <td className="py-1.5 pl-3 text-right text-text-dim tabular-nums">
                   {split.strokeRate != null ? split.strokeRate : DASH}
                 </td>
               </tr>
@@ -126,9 +126,9 @@ function ChartTooltip({ active, payload }: TooltipProps<number, string>) {
   if (!active || !payload || payload.length === 0 || !payload[0]) return null;
   const data = payload[0].payload as SplitChartPoint;
   return (
-    <div className="bg-ink-raised border border-ink-border rounded-md px-2.5 py-1.5 shadow-card">
-      <span className="font-mono text-sm font-semibold text-ink-primary block">{data.watts}w</span>
-      <span className="text-[10px] text-ink-tertiary">Split {data.split}</span>
+    <div className="bg-void-raised border border-edge-default rounded-md px-2.5 py-1.5 shadow-md">
+      <span className="font-mono text-sm font-semibold text-text-bright block">{data.watts}w</span>
+      <span className="text-[10px] text-text-faint">Split {data.split}</span>
     </div>
   );
 }
@@ -148,26 +148,26 @@ function WattsChart({ splits }: { splits: WorkoutSplit[] }) {
     <div className="h-[160px] w-full">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 4, right: 4, bottom: 4, left: 4 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="var(--color-ink-border)" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--color-edge-default)" vertical={false} />
           <XAxis
             dataKey="split"
-            tick={{ fontSize: 11, fill: 'var(--color-ink-tertiary)' }}
+            tick={{ fontSize: 11, fill: 'var(--color-text-faint)' }}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
-            tick={{ fontSize: 11, fill: 'var(--color-ink-tertiary)' }}
+            tick={{ fontSize: 11, fill: 'var(--color-text-faint)' }}
             axisLine={false}
             tickLine={false}
             width={36}
           />
           <Tooltip
             content={<ChartTooltip />}
-            cursor={{ fill: 'var(--color-ink-hover)', opacity: 0.5 }}
+            cursor={{ fill: 'var(--color-void-overlay)', opacity: 0.5 }}
           />
           <Bar
             dataKey="watts"
-            fill="var(--color-accent-copper)"
+            fill="var(--color-accent)"
             radius={[3, 3, 0, 0]}
             maxBarSize={32}
           />
@@ -198,8 +198,8 @@ function SecondaryMetrics({ workout }: { workout: Workout }) {
     <div className="flex items-center gap-4">
       {items.map((item) => (
         <div key={item.label} className="flex items-center gap-1.5">
-          <span className="text-xs text-ink-muted">{item.label}:</span>
-          <span className="text-xs font-mono text-ink-secondary tabular-nums">{item.value}</span>
+          <span className="text-xs text-text-faint">{item.label}:</span>
+          <span className="text-xs font-mono text-text-dim tabular-nums">{item.value}</span>
         </div>
       ))}
     </div>
@@ -223,7 +223,7 @@ export function WorkoutRowExpanded({ workout, onNavigateToDetail }: WorkoutRowEx
       transition={SPRING_GENTLE}
       className="overflow-hidden"
     >
-      <div className="px-3 pb-4 pt-1 ml-12 space-y-4 border-l-2 border-ink-border">
+      <div className="px-3 pb-4 pt-1 ml-12 space-y-4 border-l-2 border-edge-default">
         {hasSplits && (
           <>
             <SplitsTable
@@ -235,11 +235,11 @@ export function WorkoutRowExpanded({ workout, onNavigateToDetail }: WorkoutRowEx
           </>
         )}
 
-        {hasNotes && <p className="text-ink-secondary text-sm italic">{workout.notes}</p>}
+        {hasNotes && <p className="text-text-dim text-sm italic">{workout.notes}</p>}
 
         <SecondaryMetrics workout={workout} />
 
-        {!hasContent && <p className="text-ink-muted text-sm">No additional details</p>}
+        {!hasContent && <p className="text-text-faint text-sm">No additional details</p>}
 
         <div className="flex justify-end">
           <button
@@ -248,7 +248,7 @@ export function WorkoutRowExpanded({ workout, onNavigateToDetail }: WorkoutRowEx
               e.stopPropagation();
               onNavigateToDetail(workout.id);
             }}
-            className="text-accent-copper hover:underline text-sm transition-colors"
+            className="text-accent-teal hover:underline text-sm transition-colors"
           >
             View full detail
           </button>

@@ -196,19 +196,19 @@ function WorkoutForm({
   );
 
   const inputClass =
-    'w-full rounded-lg border border-white/[0.06] bg-ink-well/50 px-3 py-2 text-sm text-ink-primary placeholder:text-ink-muted transition-colors focus:border-accent-copper/50 focus:outline-none';
+    'w-full rounded-lg border border-white/[0.06] bg-void-deep/50 px-3 py-2 text-sm text-text-bright placeholder:text-text-faint transition-colors focus:border-accent-teal/50 focus:outline-none';
 
-  const labelClass = 'block text-xs font-semibold uppercase tracking-wider text-ink-muted mb-1';
+  const labelClass = 'block text-xs font-semibold uppercase tracking-wider text-text-faint mb-1';
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-ink-base shadow-2xl">
+    <div className="rounded-xl border border-white/[0.08] bg-void-surface shadow-2xl">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-4">
-        <h2 className="text-base font-semibold text-ink-primary">New Workout</h2>
+        <h2 className="text-base font-semibold text-text-bright">New Workout</h2>
         <button
           type="button"
           onClick={onClose}
-          className="rounded-lg p-1.5 text-ink-muted hover:text-ink-primary hover:bg-ink-hover transition-colors"
+          className="rounded-lg p-1.5 text-text-faint hover:text-text-bright hover:bg-void-overlay transition-colors"
           aria-label="Close"
         >
           <X className="h-4 w-4" />
@@ -296,8 +296,8 @@ function WorkoutForm({
                 onClick={() => setIntensity((prev) => (prev === i.value ? '' : i.value))}
                 className={`flex-1 rounded-lg px-3 py-2 text-xs font-medium transition-all ${
                   intensity === i.value
-                    ? 'bg-accent-copper text-ink-deep shadow-sm'
-                    : 'bg-ink-raised text-ink-secondary hover:text-ink-primary hover:bg-ink-hover border border-white/[0.06]'
+                    ? 'bg-accent-teal text-void-deep shadow-sm'
+                    : 'bg-void-raised text-text-dim hover:text-text-bright hover:bg-void-overlay border border-white/[0.06]'
                 }`}
               >
                 {i.label}

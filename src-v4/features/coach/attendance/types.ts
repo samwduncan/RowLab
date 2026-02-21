@@ -33,8 +33,8 @@ export const STATUS_CONFIG: Record<
   excused: {
     label: 'Excused',
     shortLabel: 'E',
-    color: 'text-accent-primary',
-    bgColor: 'bg-accent-primary/20 hover:bg-accent-primary/30',
+    color: 'text-accent-teal-primary',
+    bgColor: 'bg-accent-teal-primary/20 hover:bg-accent-teal-primary/30',
     sortOrder: 2,
   },
   unexcused: {

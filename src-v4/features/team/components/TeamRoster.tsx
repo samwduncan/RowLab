@@ -48,28 +48,28 @@ export function TeamRoster({ teamId }: TeamRosterProps) {
       <div className="relative">
         <Search
           size={16}
-          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted"
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-faint"
         />
         <input
           type="text"
           placeholder="Search members..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-xl bg-ink-well/50 py-2.5 pl-10 pr-4 text-sm text-ink-primary placeholder:text-ink-muted outline-none transition-colors focus:ring-1 focus:ring-accent-copper/50"
+          className="w-full rounded-xl bg-void-deep/50 py-2.5 pl-10 pr-4 text-sm text-text-bright placeholder:text-text-faint outline-none transition-colors focus:ring-1 focus:ring-accent/50"
         />
       </div>
 
       {/* Member count */}
-      <p className="text-xs text-ink-muted">
+      <p className="text-xs text-text-faint">
         {filteredAndSorted.length} member{filteredAndSorted.length !== 1 ? 's' : ''}
         {search && ` matching "${search}"`}
       </p>
 
       {/* Grid */}
       {filteredAndSorted.length === 0 ? (
-        <div className="flex flex-col items-center gap-2 rounded-xl bg-ink-well/30 py-12 text-center">
-          <Search size={24} className="text-ink-muted" />
-          <p className="text-sm text-ink-secondary">No members found.</p>
+        <div className="flex flex-col items-center gap-2 rounded-xl bg-void-deep/30 py-12 text-center">
+          <Search size={24} className="text-text-faint" />
+          <p className="text-sm text-text-dim">No members found.</p>
         </div>
       ) : (
         <motion.div

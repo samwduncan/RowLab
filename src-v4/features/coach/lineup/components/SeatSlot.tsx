@@ -105,25 +105,25 @@ export function SeatSlot({
         group relative flex items-center gap-2 rounded-xl transition-all duration-200 ease-out
         ${
           isEmpty
-            ? 'border-2 border-dashed border-ink-border/50 bg-ink-well/20 py-3 px-3'
-            : 'border border-ink-border bg-ink-raised/40 p-1'
+            ? 'border-2 border-dashed border-edge-default/50 bg-void-deep/20 py-3 px-3'
+            : 'border border-edge-default bg-void-raised/40 p-1'
         }
         ${
           isOver
-            ? 'border-2 border-accent-copper/60 bg-accent-copper/5 shadow-[0_0_20px_-5px_oklch(0.62_0.12_55/0.3)] scale-[1.02]'
+            ? 'border-2 border-accent-teal/60 bg-accent-teal/5 shadow-[0_0_20px_-5px_oklch(0.62_0.12_55/0.3)] scale-[1.02]'
             : ''
         }
         ${isOver && isEmpty ? 'animate-pulse-subtle' : ''}
-        ${isEmpty && onTapEmpty ? 'cursor-pointer hover:border-ink-border-strong hover:bg-ink-well' : ''}
+        ${isEmpty && onTapEmpty ? 'cursor-pointer hover:border-edge-hover hover:bg-void-deep' : ''}
       `.trim()}
     >
       {/* Seat label */}
       <div className="flex-shrink-0 w-7 text-center">
         {isCoxswain ? (
-          <span className="text-[10px] font-bold text-accent-primary uppercase">Cox</span>
+          <span className="text-[10px] font-bold text-accent-teal-primary uppercase">Cox</span>
         ) : (
           <span
-            className={`text-xs font-semibold ${isOver ? 'text-accent-copper' : 'text-ink-muted'}`}
+            className={`text-xs font-semibold ${isOver ? 'text-accent-teal' : 'text-text-faint'}`}
           >
             {seatNumber}
           </span>
@@ -134,7 +134,7 @@ export function SeatSlot({
       <div className="flex-1 min-w-0">
         {isEmpty ? (
           <span
-            className={`text-xs select-none ${isOver ? 'text-accent-copper/80' : 'text-ink-muted'}`}
+            className={`text-xs select-none ${isOver ? 'text-accent-teal/80' : 'text-text-faint'}`}
           >
             {isCoxswain ? 'Assign coxswain' : `Seat ${seatNumber}`}
           </span>
@@ -153,7 +153,7 @@ export function SeatSlot({
 
       {/* Swap icon overlay (occupied + drag hovering) */}
       {isOver && !isEmpty && (
-        <div className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-md bg-accent-copper/15 text-accent-copper">
+        <div className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-md bg-accent-teal/15 text-accent-teal">
           <ArrowLeftRight size={12} />
         </div>
       )}
@@ -183,7 +183,7 @@ export function SeatSlot({
           }}
           className="
             flex-shrink-0 p-1 rounded opacity-0 group-hover:opacity-100
-            hover:bg-ink-hover text-ink-muted hover:text-ink-primary
+            hover:bg-void-overlay text-text-faint hover:text-text-bright
             transition-opacity duration-100
           "
           aria-label={`Remove ${athlete.firstName} ${athlete.lastName}`}

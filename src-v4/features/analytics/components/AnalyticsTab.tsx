@@ -30,18 +30,18 @@ function PMCChartSkeleton() {
     <div className="space-y-4 animate-shimmer">
       {/* Header row skeleton */}
       <div className="flex items-center justify-between">
-        <div className="h-5 w-56 rounded bg-ink-border/50" />
+        <div className="h-5 w-56 rounded bg-edge-default/50" />
         <div className="flex gap-2">
-          <div className="h-8 w-48 rounded-lg bg-ink-border/50" />
-          <div className="h-8 w-28 rounded-lg bg-ink-border/50" />
+          <div className="h-8 w-48 rounded-lg bg-edge-default/50" />
+          <div className="h-8 w-28 rounded-lg bg-edge-default/50" />
         </div>
       </div>
       {/* Chart area skeleton */}
-      <div className="h-[250px] md:h-[350px] rounded-xl bg-ink-border/30" />
+      <div className="h-[250px] md:h-[350px] rounded-xl bg-edge-default/30" />
       {/* Values row skeleton */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-16 rounded-xl bg-ink-border/30" />
+          <div key={i} className="h-16 rounded-xl bg-edge-default/30" />
         ))}
       </div>
     </div>
@@ -54,12 +54,12 @@ function PMCChartSkeleton() {
 
 function PMCChartError({ message, onRetry }: { message: string; onRetry: () => void }) {
   return (
-    <div className="rounded-xl border border-ink-border bg-ink-raised p-8 text-center">
-      <p className="text-sm text-ink-secondary mb-3">{message}</p>
+    <div className="rounded-xl border border-edge-default bg-void-raised p-8 text-center">
+      <p className="text-sm text-text-dim mb-3">{message}</p>
       <button
         type="button"
         onClick={onRetry}
-        className="text-sm font-medium text-accent-copper hover:text-accent-copper/80 transition-colors"
+        className="text-sm font-medium text-accent-teal hover:text-accent-teal/80 transition-colors"
       >
         Try again
       </button>
@@ -82,8 +82,8 @@ function ValueCard({ label, value, colorClass, format }: ValueCardProps) {
   const display = value != null ? (format ? format(value) : value.toFixed(1)) : '--';
 
   return (
-    <div className="rounded-xl border border-ink-border bg-ink-raised px-4 py-3">
-      <p className="text-[10px] uppercase tracking-wider text-ink-muted font-medium mb-1">
+    <div className="rounded-xl border border-edge-default bg-void-raised px-4 py-3">
+      <p className="text-[10px] uppercase tracking-wider text-text-faint font-medium mb-1">
         {label}
       </p>
       <p className={`text-lg font-mono font-semibold ${colorClass}`}>{display}</p>
@@ -101,19 +101,19 @@ function VolumeChartSkeleton() {
       {/* Summary stats row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-16 rounded-xl bg-ink-border/30" />
+          <div key={i} className="h-16 rounded-xl bg-edge-default/30" />
         ))}
       </div>
       {/* Chart skeleton */}
-      <div className="rounded-xl bg-ink-border/30 p-4">
+      <div className="rounded-xl bg-edge-default/30 p-4">
         <div className="flex items-center justify-between mb-4">
-          <div className="h-5 w-32 rounded bg-ink-border/50" />
+          <div className="h-5 w-32 rounded bg-edge-default/50" />
           <div className="flex gap-2">
-            <div className="h-7 w-36 rounded-lg bg-ink-border/50" />
-            <div className="h-7 w-32 rounded-lg bg-ink-border/50" />
+            <div className="h-7 w-36 rounded-lg bg-edge-default/50" />
+            <div className="h-7 w-32 rounded-lg bg-edge-default/50" />
           </div>
         </div>
-        <div className="h-[220px] md:h-[300px] rounded-lg bg-ink-border/20" />
+        <div className="h-[220px] md:h-[300px] rounded-lg bg-edge-default/20" />
       </div>
     </div>
   );
@@ -182,7 +182,7 @@ export function AnalyticsTab() {
 
       {/* Header row */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <h3 className="text-sm font-semibold text-ink-primary">Performance Management Chart</h3>
+        <h3 className="text-sm font-semibold text-text-bright">Performance Management Chart</h3>
         <div className="flex items-center gap-2">
           <RangeSelector value={range} onChange={setRange} />
           <SportFilter value={sport} onChange={setSport} />
@@ -193,7 +193,7 @@ export function AnalyticsTab() {
       <DataSufficiencyBanner daysWithData={data.daysWithData} daysNeeded={42} />
 
       {/* PMC Chart */}
-      <div className="rounded-xl border border-ink-border bg-ink-raised p-4">
+      <div className="rounded-xl border border-edge-default bg-void-raised p-4">
         <PMCChart
           data={data.points}
           currentCTL={data.currentCTL}

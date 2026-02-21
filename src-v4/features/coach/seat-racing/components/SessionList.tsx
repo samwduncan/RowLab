@@ -57,15 +57,15 @@ const CONDITIONS_COLOR: Record<Conditions, string> = {
 
 function SessionCardSkeleton() {
   return (
-    <div className="p-4 rounded-xl glass animate-shimmer">
+    <div className="p-4 rounded-xl panel animate-shimmer">
       <div className="flex items-start justify-between mb-2">
         <div className="space-y-2">
-          <div className="h-4 w-28 bg-ink-raised rounded" />
-          <div className="h-3.5 w-20 bg-ink-raised rounded" />
+          <div className="h-4 w-28 bg-void-raised rounded" />
+          <div className="h-3.5 w-20 bg-void-raised rounded" />
         </div>
-        <div className="h-5 w-10 bg-ink-raised rounded-full" />
+        <div className="h-5 w-10 bg-void-raised rounded-full" />
       </div>
-      <div className="h-3.5 w-44 bg-ink-raised rounded mt-2" />
+      <div className="h-3.5 w-44 bg-void-raised rounded mt-2" />
     </div>
   );
 }
@@ -122,19 +122,19 @@ export function SessionList({ sessions, isLoading, selectedId, onSelect }: Sessi
               transition={SPRING_SMOOTH}
               onClick={() => onSelect(session.id)}
               className={`
-                w-full text-left p-4 rounded-xl glass transition-all
+                w-full text-left p-4 rounded-xl panel transition-all
                 ${
                   isSelected
-                    ? 'ring-1 ring-accent-copper shadow-glow-copper/30'
-                    : 'hover:bg-ink-hover/30 hover:shadow-card-hover'
+                    ? 'ring-1 ring-accent shadow-glow-accent/30'
+                    : 'hover:bg-void-overlay/30 hover:shadow-lg'
                 }
               `.trim()}
             >
               {/* Top row: date + boat class */}
               <div className="flex items-start justify-between mb-1.5">
                 <div className="flex items-center gap-2">
-                  <Calendar size={14} className="text-ink-tertiary shrink-0" />
-                  <span className="text-sm font-medium text-ink-primary">
+                  <Calendar size={14} className="text-text-faint shrink-0" />
+                  <span className="text-sm font-medium text-text-bright">
                     {formatDate(session.date)}
                   </span>
                 </div>
@@ -145,7 +145,7 @@ export function SessionList({ sessions, isLoading, selectedId, onSelect }: Sessi
 
               {/* Location */}
               {session.location && (
-                <div className="flex items-center gap-2 text-xs text-ink-secondary mb-1.5 ml-5">
+                <div className="flex items-center gap-2 text-xs text-text-dim mb-1.5 ml-5">
                   <MapPin size={12} className="shrink-0" />
                   {session.location}
                 </div>
@@ -161,7 +161,7 @@ export function SessionList({ sessions, isLoading, selectedId, onSelect }: Sessi
                   </span>
                 )}
                 {session.description && (
-                  <span className="text-xs text-ink-tertiary truncate max-w-[260px]">
+                  <span className="text-xs text-text-faint truncate max-w-[260px]">
                     {session.description}
                   </span>
                 )}

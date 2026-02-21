@@ -44,7 +44,7 @@ function SideFilterBar({
 }) {
   return (
     <div
-      className="flex items-center rounded-lg bg-ink-well p-0.5"
+      className="flex items-center rounded-lg bg-void-deep p-0.5"
       role="radiogroup"
       aria-label="Side filter"
     >
@@ -59,8 +59,8 @@ function SideFilterBar({
             onClick={() => onChange(opt.value)}
             className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
               active
-                ? 'bg-ink-raised text-ink-primary shadow-sm'
-                : 'text-ink-muted hover:text-ink-secondary'
+                ? 'bg-void-raised text-text-bright shadow-sm'
+                : 'text-text-faint hover:text-text-dim'
             }`}
           >
             {opt.label}
@@ -89,7 +89,7 @@ export function RankingsView({ teamId }: RankingsViewProps) {
     <div className="space-y-6">
       {/* Header row: title + side filter + recalculate */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <h2 className="text-lg font-semibold text-ink-primary">Rankings</h2>
+        <h2 className="text-lg font-semibold text-text-bright">Rankings</h2>
         <div className="flex items-center gap-3">
           <SideFilterBar value={sideFilter} onChange={setSideFilter} />
           <Button
@@ -106,11 +106,11 @@ export function RankingsView({ teamId }: RankingsViewProps) {
 
       {/* ELO Distribution chart */}
       <GlassCard padding="md">
-        <h3 className="text-sm font-medium text-ink-secondary uppercase tracking-wider mb-4">
+        <h3 className="text-sm font-medium text-text-dim uppercase tracking-wider mb-4">
           ELO Distribution
         </h3>
         {isLoading ? (
-          <div className="h-[280px] bg-ink-raised animate-shimmer rounded-lg" aria-hidden="true" />
+          <div className="h-[280px] bg-void-raised animate-shimmer rounded-lg" aria-hidden="true" />
         ) : (
           <EloChart ratings={ratings} />
         )}

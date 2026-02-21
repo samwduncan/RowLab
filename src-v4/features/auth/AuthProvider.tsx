@@ -3,7 +3,7 @@
  *
  * On mount: attempts silent refresh to restore session.
  * While !isInitialized: full-screen skeleton prevents flash-of-login-page.
- * Listens for rowlab:auth:expired custom event from the axios interceptor.
+ * Listens for oarbit:auth:expired custom event from the axios interceptor.
  * Wraps children in QueryClientProvider.
  */
 import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -105,8 +105,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       clearAuth();
     }
 
-    window.addEventListener('rowlab:auth:expired', handleExpired);
-    return () => window.removeEventListener('rowlab:auth:expired', handleExpired);
+    window.addEventListener('oarbit:auth:expired', handleExpired);
+    return () => window.removeEventListener('oarbit:auth:expired', handleExpired);
   }, [clearAuth]);
 
   // Login with email/password

@@ -36,7 +36,7 @@ export function HeroSection({ userName, streak, className = '' }: HeroSectionPro
       <h1 className="text-2xl lg:text-3xl font-semibold text-heading-gradient">
         {greeting}, {firstName}
       </h1>
-      <p className="text-ink-secondary">Here&apos;s your training overview</p>
+      <p className="text-text-dim">Here&apos;s your training overview</p>
       <StreakIndicator current={streak.current} longest={streak.longest} className="mt-1" />
     </motion.div>
   );

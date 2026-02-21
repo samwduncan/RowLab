@@ -41,7 +41,7 @@ export function PRCard({ record, isRecent = false, className = '' }: PRCardProps
     <GlassCard padding="sm" className={`relative ${className}`} as="article" glow={showGlow}>
       {/* Copper pulse overlay for recent significant PRs */}
       {showGlow && (
-        <div className="absolute inset-0 rounded-xl animate-pulse-slow bg-accent-copper/5 pointer-events-none z-0" />
+        <div className="absolute inset-0 rounded-xl animate-pulse-slow bg-accent-teal/5 pointer-events-none z-0" />
       )}
 
       <div
@@ -51,8 +51,8 @@ export function PRCard({ record, isRecent = false, className = '' }: PRCardProps
       >
         {/* Header: test type + machine badge */}
         <div className="flex items-center justify-between gap-2">
-          <span className="text-sm font-medium text-ink-primary">{record.testType}</span>
-          <span className="text-xs bg-ink-well px-2 py-0.5 rounded-md text-ink-muted">
+          <span className="text-sm font-medium text-text-bright">{record.testType}</span>
+          <span className="text-xs bg-void-deep px-2 py-0.5 rounded-md text-text-faint">
             {machineLabel}
           </span>
         </div>
@@ -60,19 +60,19 @@ export function PRCard({ record, isRecent = false, className = '' }: PRCardProps
         {/* Best time or no data */}
         {hasBest ? (
           <>
-            <span className="text-xl font-bold text-ink-primary tabular-nums">
+            <span className="text-xl font-bold text-text-bright tabular-nums">
               {formatErgTime(record.bestTime)}
             </span>
 
             {/* Date + improvement + New badge */}
             <div className="flex items-center justify-between gap-2">
-              <span className="text-xs text-ink-tertiary">
+              <span className="text-xs text-text-faint">
                 {formatRelativeDate(record.bestDate)}
               </span>
               <div className="flex items-center gap-1.5">
                 <ImprovementIndicator improvement={record.improvement} />
                 {isRecent && (
-                  <span className="text-[9px] font-bold uppercase tracking-widest text-accent-copper bg-accent-copper/10 px-1.5 py-0.5 rounded-md">
+                  <span className="text-[9px] font-bold uppercase tracking-widest text-accent-teal bg-accent-teal/10 px-1.5 py-0.5 rounded-md">
                     New
                   </span>
                 )}
@@ -81,10 +81,10 @@ export function PRCard({ record, isRecent = false, className = '' }: PRCardProps
           </>
         ) : (
           <div className="flex flex-col items-center py-2">
-            <span className="text-xl font-bold text-ink-muted tabular-nums" aria-label="No data">
+            <span className="text-xl font-bold text-text-faint tabular-nums" aria-label="No data">
               {'\u2014'}
             </span>
-            <span className="text-xs text-ink-tertiary mt-1">No data</span>
+            <span className="text-xs text-text-faint mt-1">No data</span>
           </div>
         )}
       </div>

@@ -121,8 +121,8 @@ export function RecruitingPage() {
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-semibold text-ink-primary">Recruiting</h1>
-          <p className="text-sm text-ink-secondary mt-0.5">
+          <h1 className="text-xl font-semibold text-text-bright">Recruiting</h1>
+          <p className="text-sm text-text-dim mt-0.5">
             Track recruit visits and schedule campus tours
           </p>
         </div>
@@ -138,7 +138,7 @@ export function RecruitingPage() {
       </div>
 
       {/* Filter tabs */}
-      <div className="flex items-center gap-1 p-1 bg-ink-well rounded-xl w-fit">
+      <div className="flex items-center gap-1 p-1 bg-void-deep rounded-xl w-fit">
         {TABS.map((tab) => (
           <button
             key={tab.value}
@@ -148,14 +148,14 @@ export function RecruitingPage() {
               px-3 py-1.5 text-sm font-medium rounded-lg transition-colors duration-150
               ${
                 activeTab === tab.value
-                  ? 'bg-ink-raised text-ink-primary shadow-sm'
-                  : 'text-ink-secondary hover:text-ink-primary'
+                  ? 'bg-void-raised text-text-bright shadow-sm'
+                  : 'text-text-dim hover:text-text-bright'
               }
             `.trim()}
           >
             {tab.label}
             {!isLoading && tab.value !== 'all' && (
-              <span className="ml-1.5 text-xs text-ink-muted">
+              <span className="ml-1.5 text-xs text-text-faint">
                 {visits.filter((v) => v.status === tab.value).length}
               </span>
             )}
@@ -212,15 +212,15 @@ export function RecruitingPage() {
             {...scaleIn}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
           >
-            <div className="glass rounded-2xl shadow-card-hover w-full max-w-lg max-h-[80vh] overflow-y-auto">
+            <div className="panel rounded-2xl shadow-lg w-full max-w-lg max-h-[80vh] overflow-y-auto">
               <div className="p-5 space-y-4">
                 {/* Header */}
                 <div className="flex items-start justify-between">
                   <div>
-                    <h2 className="text-lg font-semibold text-ink-primary">
+                    <h2 className="text-lg font-semibold text-text-bright">
                       {selectedVisit.recruitName}
                     </h2>
-                    <p className="text-sm text-ink-secondary">
+                    <p className="text-sm text-text-dim">
                       {selectedVisit.date?.split('T')[0]} {selectedVisit.startTime}
                       {' - '}
                       {selectedVisit.endTime}
@@ -229,7 +229,7 @@ export function RecruitingPage() {
                   <button
                     type="button"
                     onClick={() => setSelectedVisit(null)}
-                    className="text-ink-muted hover:text-ink-primary transition-colors p-1"
+                    className="text-text-faint hover:text-text-bright transition-colors p-1"
                     aria-label="Close detail panel"
                   >
                     <X className="h-5 w-5" />
@@ -240,39 +240,39 @@ export function RecruitingPage() {
                 <dl className="grid grid-cols-2 gap-3 text-sm">
                   {selectedVisit.recruitEmail && (
                     <div>
-                      <dt className="text-ink-muted text-xs">Email</dt>
-                      <dd className="text-ink-primary">{selectedVisit.recruitEmail}</dd>
+                      <dt className="text-text-faint text-xs">Email</dt>
+                      <dd className="text-text-bright">{selectedVisit.recruitEmail}</dd>
                     </div>
                   )}
                   {selectedVisit.recruitPhone && (
                     <div>
-                      <dt className="text-ink-muted text-xs">Phone</dt>
-                      <dd className="text-ink-primary">{selectedVisit.recruitPhone}</dd>
+                      <dt className="text-text-faint text-xs">Phone</dt>
+                      <dd className="text-text-bright">{selectedVisit.recruitPhone}</dd>
                     </div>
                   )}
                   {selectedVisit.recruitSchool && (
                     <div>
-                      <dt className="text-ink-muted text-xs">School</dt>
-                      <dd className="text-ink-primary">{selectedVisit.recruitSchool}</dd>
+                      <dt className="text-text-faint text-xs">School</dt>
+                      <dd className="text-text-bright">{selectedVisit.recruitSchool}</dd>
                     </div>
                   )}
                   {selectedVisit.recruitGradYear && (
                     <div>
-                      <dt className="text-ink-muted text-xs">Grad Year</dt>
-                      <dd className="text-ink-primary">{selectedVisit.recruitGradYear}</dd>
+                      <dt className="text-text-faint text-xs">Grad Year</dt>
+                      <dd className="text-text-bright">{selectedVisit.recruitGradYear}</dd>
                     </div>
                   )}
                   <div>
-                    <dt className="text-ink-muted text-xs">Status</dt>
-                    <dd className="text-ink-primary capitalize">{selectedVisit.status}</dd>
+                    <dt className="text-text-faint text-xs">Status</dt>
+                    <dd className="text-text-bright capitalize">{selectedVisit.status}</dd>
                   </div>
                 </dl>
 
                 {/* Notes */}
                 {selectedVisit.notes && (
                   <div>
-                    <h4 className="text-xs text-ink-muted mb-1">Notes</h4>
-                    <p className="text-sm text-ink-body whitespace-pre-wrap">
+                    <h4 className="text-xs text-text-faint mb-1">Notes</h4>
+                    <p className="text-sm text-text-default whitespace-pre-wrap">
                       {selectedVisit.notes}
                     </p>
                   </div>
@@ -280,7 +280,7 @@ export function RecruitingPage() {
 
                 {/* Actions (coach only) */}
                 {!readOnly && (
-                  <div className="flex items-center gap-2 pt-3 border-t border-ink-border">
+                  <div className="flex items-center gap-2 pt-3 border-t border-edge-default">
                     <Button
                       size="sm"
                       onClick={() => {
@@ -313,16 +313,16 @@ export function RecruitingPage() {
             {...scaleIn}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
           >
-            <div className="glass rounded-2xl shadow-card-hover w-full max-w-lg max-h-[85vh] overflow-y-auto">
+            <div className="panel rounded-2xl shadow-lg w-full max-w-lg max-h-[85vh] overflow-y-auto">
               <div className="p-5 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-ink-primary">
+                  <h2 className="text-lg font-semibold text-text-bright">
                     {modal.type === 'create' ? 'New Recruit Visit' : 'Edit Visit'}
                   </h2>
                   <button
                     type="button"
                     onClick={() => setModal(null)}
-                    className="text-ink-muted hover:text-ink-primary transition-colors p-1"
+                    className="text-text-faint hover:text-text-bright transition-colors p-1"
                     aria-label="Close form"
                   >
                     <X className="h-5 w-5" />

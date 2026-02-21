@@ -1,13 +1,15 @@
 /**
- * Reusable section-level empty state component.
- * Uses icon composition (not geometric SVG — that's for full-page only).
- * Provides centered layout with optional primary and secondary actions.
+ * Empty state — oarbit design system.
+ *
+ * Compact, domain-specific. Icon 32px in text-tertiary.
+ * Title: text-h3 (15px semibold), text-primary.
+ * Description: text-body (14px), text-secondary, max-width 280px.
+ * Action: secondary button (not primary).
+ * No oversized illustrations, no patronizing copy, no animated elements.
  */
 
 import type { LucideIcon } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
-import { motion } from 'motion/react';
-import { fadeIn } from '@/lib/animations';
 import { Button } from '@/components/ui/Button';
 
 interface EmptyStateAction {
@@ -26,30 +28,14 @@ interface EmptyStateProps {
   size?: 'sm' | 'md';
 }
 
-const iconSizeMap = {
-  sm: 32,
-  md: 40,
-} as const;
-
-const containerSizeMap = {
-  sm: 'h-14 w-14',
-  md: 'h-18 w-18',
-} as const;
-
-const gapMap = {
-  sm: 'gap-3',
-  md: 'gap-4',
-} as const;
-
 function ActionButton({
   action,
   variant,
 }: {
   action: EmptyStateAction;
-  variant: 'primary' | 'ghost';
+  variant: 'secondary' | 'ghost';
 }) {
   const navigate = useNavigate();
-
   const handleClick = action.to ? () => navigate({ to: action.to as '/' }) : action.onClick;
 
   return (
@@ -68,29 +54,23 @@ export function EmptyState({
   className = '',
   size = 'md',
 }: EmptyStateProps) {
+  const iconSize = size === 'sm' ? 24 : 32;
+
   return (
-    <motion.div
-      {...fadeIn}
-      role="status"
-      className={`flex flex-col items-center text-center ${gapMap[size]} ${className}`}
-    >
-      <div
-        className={`flex items-center justify-center rounded-full bg-ink-well ${containerSizeMap[size]}`}
-      >
-        <Icon size={iconSizeMap[size]} className="text-ink-muted" aria-hidden="true" />
-      </div>
+    <div role="status" className={`flex flex-col items-center text-center gap-3 ${className}`}>
+      <Icon size={iconSize} className="text-text-faint" aria-hidden="true" />
 
       <div className="space-y-1">
-        <h3 className="text-ink-primary font-medium">{title}</h3>
-        <p className="text-ink-secondary text-sm max-w-xs">{description}</p>
+        <h3 className="text-[0.9375rem] font-semibold text-text-bright">{title}</h3>
+        <p className="text-sm text-text-dim max-w-[280px]">{description}</p>
       </div>
 
       {(action || secondaryAction) && (
         <div className="flex items-center gap-2">
-          {action && <ActionButton action={action} variant="primary" />}
+          {action && <ActionButton action={action} variant="secondary" />}
           {secondaryAction && <ActionButton action={secondaryAction} variant="ghost" />}
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }

@@ -2,7 +2,7 @@
  * CalendarView -- Monthly/weekly/daily calendar for training events.
  *
  * Wraps react-big-calendar with dateFnsLocalizer and a dark-theme
- * override that matches the RowLab v4 ink/copper design system.
+ * override that matches the oarbit design system.
  */
 import { useCallback, useMemo, useState } from 'react';
 import { Calendar, dateFnsLocalizer, type Event, type View } from 'react-big-calendar';
@@ -35,10 +35,10 @@ const localizer = dateFnsLocalizer({
 
 const WORKOUT_TYPE_COLORS: Record<WorkoutType, string> = {
   erg: 'oklch(0.55 0.18 255)', // accent-primary blue
-  row: 'oklch(0.62 0.12 55)', // accent-copper
+  row: 'oklch(0.62 0.12 55)', // accent
   cross_train: 'oklch(0.72 0.17 142)', // data-excellent green
   strength: 'oklch(0.75 0.14 75)', // data-warning amber
-  rest: 'oklch(0.435 0.005 285)', // ink-muted
+  rest: 'oklch(0.435 0.005 285)', // text-tertiary
 };
 
 const INTENSITY_OPACITY: Record<Intensity, number> = {
@@ -115,7 +115,7 @@ function Toolbar({ label, view, onNavigate, onView }: ToolbarProps) {
           type="button"
           onClick={() => onNavigate('TODAY')}
           className="px-3 py-1.5 text-xs font-medium rounded-md
-                     bg-ink-raised text-ink-body hover:bg-ink-hover
+                     bg-void-raised text-text-default hover:bg-void-overlay
                      transition-colors"
         >
           Today
@@ -123,8 +123,8 @@ function Toolbar({ label, view, onNavigate, onView }: ToolbarProps) {
         <button
           type="button"
           onClick={() => onNavigate('PREV')}
-          className="p-1.5 rounded-md text-ink-secondary hover:text-ink-body
-                     hover:bg-ink-hover transition-colors"
+          className="p-1.5 rounded-md text-text-dim hover:text-text-default
+                     hover:bg-void-overlay transition-colors"
           aria-label="Previous"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -140,8 +140,8 @@ function Toolbar({ label, view, onNavigate, onView }: ToolbarProps) {
         <button
           type="button"
           onClick={() => onNavigate('NEXT')}
-          className="p-1.5 rounded-md text-ink-secondary hover:text-ink-body
-                     hover:bg-ink-hover transition-colors"
+          className="p-1.5 rounded-md text-text-dim hover:text-text-default
+                     hover:bg-void-overlay transition-colors"
           aria-label="Next"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -154,10 +154,10 @@ function Toolbar({ label, view, onNavigate, onView }: ToolbarProps) {
             />
           </svg>
         </button>
-        <h2 className="text-sm font-semibold text-ink-primary ml-1">{label}</h2>
+        <h2 className="text-sm font-semibold text-text-bright ml-1">{label}</h2>
       </div>
 
-      <div className="flex rounded-lg border border-ink-border overflow-hidden">
+      <div className="flex rounded-lg border border-edge-default overflow-hidden">
         {views.map(({ key, label: vLabel }) => (
           <button
             key={key}
@@ -166,8 +166,8 @@ function Toolbar({ label, view, onNavigate, onView }: ToolbarProps) {
             className={`px-3 py-1 text-xs font-medium transition-colors
               ${
                 view === key
-                  ? 'bg-accent-copper text-ink-bright'
-                  : 'bg-ink-base text-ink-secondary hover:text-ink-body hover:bg-ink-raised'
+                  ? 'bg-accent-teal text-text-bright'
+                  : 'bg-void-surface text-text-dim hover:text-text-default hover:bg-void-raised'
               }`}
           >
             {vLabel}

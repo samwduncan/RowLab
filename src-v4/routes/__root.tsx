@@ -9,6 +9,7 @@ import { createRootRouteWithContext, Outlet, useRouter } from '@tanstack/react-r
 import { Toaster } from 'sonner';
 import { AuthProvider } from '@/features/auth/AuthProvider';
 import { useAuth } from '@/features/auth/useAuth';
+import { CosmicAtmosphere } from '@/components/ui/CosmicAtmosphere';
 import { useEffect } from 'react';
 import type { RouterContext } from '../router';
 
@@ -63,11 +64,12 @@ function InnerRoot() {
 
   return (
     <>
+      <CosmicAtmosphere />
       <Outlet />
       <Toaster
         position="bottom-right"
         toastOptions={{
-          className: 'bg-ink-float text-ink-primary border-ink-border',
+          className: 'bg-void-overlay text-text-bright border-edge-default',
         }}
       />
     </>
@@ -80,13 +82,13 @@ function InnerRoot() {
  */
 function AuthSkeleton() {
   return (
-    <div className="flex h-screen w-screen items-center justify-center bg-ink-deep">
+    <div className="flex h-screen w-screen items-center justify-center bg-void-deep">
       <div className="flex flex-col items-center gap-4">
         {/* Pulsing app icon */}
-        <div className="h-12 w-12 rounded-xl bg-ink-raised animate-shimmer" />
+        <div className="h-12 w-12 rounded-xl bg-void-raised animate-shimmer" />
         {/* Loading bar */}
-        <div className="h-1 w-32 overflow-hidden rounded-full bg-ink-raised">
-          <div className="h-full w-1/2 animate-shimmer rounded-full bg-accent-copper/40" />
+        <div className="h-1 w-32 overflow-hidden rounded-full bg-void-raised">
+          <div className="h-full w-1/2 animate-shimmer rounded-full bg-accent-teal/40" />
         </div>
       </div>
     </div>

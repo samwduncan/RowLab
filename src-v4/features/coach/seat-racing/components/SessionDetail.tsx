@@ -125,7 +125,7 @@ export function SessionDetail({ sessionId, onClose, teamId, readOnly }: SessionD
           {isMobile ? (
             <motion.div
               key="panel"
-              className="fixed bottom-0 left-0 right-0 z-50 h-[90vh] bg-ink-base border-t border-ink-border rounded-t-2xl flex flex-col"
+              className="fixed bottom-0 left-0 right-0 z-50 h-[90vh] bg-void-surface border-t border-edge-default rounded-t-2xl flex flex-col"
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
@@ -146,7 +146,7 @@ export function SessionDetail({ sessionId, onClose, teamId, readOnly }: SessionD
           ) : (
             <motion.div
               key="panel"
-              className="fixed top-0 right-0 h-full z-50 w-[600px] max-w-[90vw] bg-ink-base border-l border-ink-border flex flex-col"
+              className="fixed top-0 right-0 h-full z-50 w-[600px] max-w-[90vw] bg-void-surface border-l border-edge-default flex flex-col"
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
@@ -206,7 +206,7 @@ function PanelContent({
         <SlideOverHeader title="Session Details" onClose={onClose} />
         <div className="flex-1 p-6 space-y-4">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-24 bg-ink-raised animate-shimmer rounded-lg" />
+            <div key={i} className="h-24 bg-void-raised animate-shimmer rounded-lg" />
           ))}
         </div>
       </>
@@ -217,7 +217,7 @@ function PanelContent({
     return (
       <>
         <SlideOverHeader title="Session" onClose={onClose} />
-        <div className="flex-1 flex items-center justify-center text-ink-secondary text-sm">
+        <div className="flex-1 flex items-center justify-center text-text-dim text-sm">
           Session not found
         </div>
       </>
@@ -227,16 +227,16 @@ function PanelContent({
   return (
     <>
       {/* Header */}
-      <div className="shrink-0 px-5 py-4 border-b border-ink-border">
+      <div className="shrink-0 px-5 py-4 border-b border-edge-default">
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <h2 className="text-lg font-display font-semibold text-ink-primary">
+            <h2 className="text-lg font-display font-semibold text-text-bright">
               {formatLongDate(session.date)}
             </h2>
 
             {/* Badges */}
             <div className="flex flex-wrap items-center gap-2 mt-2">
-              <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-accent-copper/10 text-accent-copper">
+              <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-accent-teal/10 text-accent-teal">
                 {session.boatClass}
               </span>
               {session.conditions && (
@@ -250,7 +250,7 @@ function PanelContent({
 
             {/* Location */}
             {session.location && (
-              <div className="flex items-center gap-2 mt-2 text-sm text-ink-secondary">
+              <div className="flex items-center gap-2 mt-2 text-sm text-text-dim">
                 <MapPin size={14} className="shrink-0" />
                 {session.location}
               </div>
@@ -258,17 +258,17 @@ function PanelContent({
 
             {/* Description */}
             {session.description && (
-              <p className="mt-2 text-sm text-ink-secondary">{session.description}</p>
+              <p className="mt-2 text-sm text-text-dim">{session.description}</p>
             )}
           </div>
 
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-md hover:bg-ink-hover transition-colors ml-3"
+            className="p-1.5 rounded-md hover:bg-void-overlay transition-colors ml-3"
             aria-label="Close"
           >
-            <X size={18} className="text-ink-tertiary" />
+            <X size={18} className="text-text-faint" />
           </button>
         </div>
 
@@ -277,7 +277,7 @@ function PanelContent({
           <div className="mt-3">
             {confirmDelete ? (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-ink-secondary">Delete this session?</span>
+                <span className="text-xs text-text-dim">Delete this session?</span>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -300,7 +300,7 @@ function PanelContent({
               <button
                 type="button"
                 onClick={onConfirmDelete}
-                className="flex items-center gap-1.5 text-xs text-ink-muted hover:text-data-poor transition-colors"
+                className="flex items-center gap-1.5 text-xs text-text-faint hover:text-data-poor transition-colors"
               >
                 <Trash2 size={13} />
                 Delete Session
@@ -326,20 +326,20 @@ function PanelContent({
                 return (
                   <div
                     key={piece.id}
-                    className="rounded-lg border border-ink-border/50 overflow-hidden"
+                    className="rounded-lg border border-edge-default/50 overflow-hidden"
                   >
                     {/* Piece header */}
-                    <div className="px-4 py-2.5 bg-ink-well/40 border-b border-ink-border/30">
-                      <h3 className="text-sm font-semibold text-ink-primary">
+                    <div className="px-4 py-2.5 bg-void-deep/40 border-b border-edge-default/30">
+                      <h3 className="text-sm font-semibold text-text-bright">
                         Piece {piece.sequenceOrder}
                       </h3>
                       {piece.distanceMeters && (
-                        <span className="text-xs text-ink-tertiary">{piece.distanceMeters}m</span>
+                        <span className="text-xs text-text-faint">{piece.distanceMeters}m</span>
                       )}
                     </div>
 
                     {/* Boats */}
-                    <div className="divide-y divide-ink-border/20">
+                    <div className="divide-y divide-edge-default/20">
                       {sortedBoats.length > 0 ? (
                         sortedBoats.map((boat, idx) => (
                           <div key={boat.id} className="px-4 py-3">
@@ -351,18 +351,18 @@ function PanelContent({
                                     flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold
                                     ${
                                       idx === 0
-                                        ? 'bg-accent-copper/20 text-accent-copper'
-                                        : 'bg-ink-well text-ink-tertiary'
+                                        ? 'bg-accent-teal/20 text-accent-teal'
+                                        : 'bg-void-deep text-text-faint'
                                     }
                                   `.trim()}
                                 >
                                   {idx + 1}
                                 </span>
-                                <span className="text-sm font-medium text-ink-primary">
+                                <span className="text-sm font-medium text-text-bright">
                                   {boat.name || `Boat ${idx + 1}`}
                                 </span>
                               </div>
-                              <span className="text-sm font-mono text-ink-secondary">
+                              <span className="text-sm font-mono text-text-dim">
                                 {formatTime(boat.finishTimeSeconds)}
                               </span>
                             </div>
@@ -375,12 +375,12 @@ function PanelContent({
                                   .map((asgn) => (
                                     <span
                                       key={asgn.id}
-                                      className="flex items-center gap-1 px-2 py-0.5 text-xs bg-ink-well/40 rounded"
+                                      className="flex items-center gap-1 px-2 py-0.5 text-xs bg-void-deep/40 rounded"
                                     >
-                                      <span className="font-medium text-ink-tertiary">
+                                      <span className="font-medium text-text-faint">
                                         {asgn.seatNumber === 9 ? 'Cox' : asgn.seatNumber}:
                                       </span>
-                                      <span className="text-ink-secondary">
+                                      <span className="text-text-dim">
                                         {asgn.athlete.firstName} {asgn.athlete.lastName}
                                       </span>
                                       {asgn.side && (
@@ -401,7 +401,7 @@ function PanelContent({
                           </div>
                         ))
                       ) : (
-                        <div className="px-4 py-6 text-center text-xs text-ink-tertiary">
+                        <div className="px-4 py-6 text-center text-xs text-text-faint">
                           No boats recorded
                         </div>
                       )}
@@ -411,7 +411,7 @@ function PanelContent({
               })}
           </div>
         ) : (
-          <div className="flex items-center justify-center h-32 text-sm text-ink-secondary">
+          <div className="flex items-center justify-center h-32 text-sm text-text-dim">
             No pieces recorded for this session
           </div>
         )}
@@ -426,15 +426,15 @@ function PanelContent({
 
 function SlideOverHeader({ title, onClose }: { title: string; onClose: () => void }) {
   return (
-    <div className="flex items-center justify-between px-5 py-4 border-b border-ink-border shrink-0">
-      <h2 className="text-lg font-display font-semibold text-ink-primary">{title}</h2>
+    <div className="flex items-center justify-between px-5 py-4 border-b border-edge-default shrink-0">
+      <h2 className="text-lg font-display font-semibold text-text-bright">{title}</h2>
       <button
         type="button"
         onClick={onClose}
-        className="p-1.5 rounded-md hover:bg-ink-hover transition-colors"
+        className="p-1.5 rounded-md hover:bg-void-overlay transition-colors"
         aria-label="Close"
       >
-        <X size={18} className="text-ink-tertiary" />
+        <X size={18} className="text-text-faint" />
       </button>
     </div>
   );

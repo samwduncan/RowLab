@@ -23,27 +23,27 @@ interface RoleBadgeConfig {
 const ROLE_BADGE_CONFIG: Record<string, RoleBadgeConfig> = {
   OWNER: {
     classes:
-      'bg-accent-copper/15 text-accent-copper border border-accent-copper/30 font-semibold px-2.5 py-1 rounded-lg text-xs',
+      'bg-accent-teal/15 text-accent-teal border border-accent-teal/30 font-semibold px-2.5 py-1 rounded-lg text-xs',
     icon: Crown,
   },
   ADMIN: {
     classes:
-      'bg-accent-copper/10 text-accent-copper border border-accent-copper/20 px-2.5 py-1 rounded-lg text-xs',
+      'bg-accent-teal/10 text-accent-teal border border-accent-teal/20 px-2.5 py-1 rounded-lg text-xs',
     icon: Shield,
   },
   COACH: {
     classes:
-      'bg-accent-primary/10 text-accent-primary border border-accent-primary/20 px-2.5 py-1 rounded-lg text-xs',
+      'bg-accent-teal-primary/10 text-accent-teal-primary border border-accent-teal-primary/20 px-2.5 py-1 rounded-lg text-xs',
   },
   ATHLETE: {
     classes:
-      'bg-ink-secondary/10 text-ink-secondary border border-ink-secondary/20 px-2.5 py-1 rounded-lg text-xs',
+      'bg-text-dim/10 text-text-dim border border-text-dim/20 px-2.5 py-1 rounded-lg text-xs',
   },
 };
 
 const DEFAULT_BADGE: RoleBadgeConfig = {
   classes:
-    'bg-ink-secondary/10 text-ink-secondary border border-ink-secondary/20 px-2.5 py-1 rounded-lg text-xs',
+    'bg-text-dim/10 text-text-dim border border-text-dim/20 px-2.5 py-1 rounded-lg text-xs',
 };
 
 function getInitials(name: string): string {
@@ -107,14 +107,14 @@ export function MemberCard({ member }: MemberCardProps) {
               className="h-11 w-11 rounded-full object-cover"
             />
           ) : (
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-ink-well text-sm font-semibold text-ink-secondary">
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-void-deep text-sm font-semibold text-text-dim">
               {getInitials(member.name)}
             </div>
           )}
           {/* Green active dot */}
           {recentlyActive && (
             <span
-              className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-ink-base bg-data-good"
+              className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-void-surface bg-data-good"
               title="Active in last 24h"
             />
           )}
@@ -123,25 +123,25 @@ export function MemberCard({ member }: MemberCardProps) {
         {/* Info */}
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <h4 className="truncate text-sm font-semibold text-ink-primary">{member.name}</h4>
+            <h4 className="truncate text-sm font-semibold text-text-bright">{member.name}</h4>
             <span className={`inline-flex shrink-0 items-center gap-1 ${badgeConfig.classes}`}>
               {BadgeIcon && <BadgeIcon size={11} />}
               {roleLabel}
             </span>
           </div>
-          <p className="mt-0.5 truncate text-xs text-ink-muted">{member.email}</p>
+          <p className="mt-0.5 truncate text-xs text-text-faint">{member.email}</p>
         </div>
       </div>
 
       {/* Activity summary */}
-      <div className="mt-3 flex items-center justify-between border-t border-ink-well/40 pt-3">
-        <span className="text-xs text-ink-secondary">{activityText}</span>
-        <span className="text-xs text-ink-tertiary">Last: {lastWorkout}</span>
+      <div className="mt-3 flex items-center justify-between border-t border-surface-inset/40 pt-3">
+        <span className="text-xs text-text-dim">{activityText}</span>
+        <span className="text-xs text-text-faint">Last: {lastWorkout}</span>
       </div>
 
       {/* Joined + active status */}
       <div className="mt-2 flex items-center justify-between">
-        <p className="text-[11px] text-ink-tertiary">{getJoinedRelative(member.joinedAt)}</p>
+        <p className="text-[11px] text-text-faint">{getJoinedRelative(member.joinedAt)}</p>
         {recentlyActive && (
           <span className="text-[11px] font-medium text-data-good">Active today</span>
         )}

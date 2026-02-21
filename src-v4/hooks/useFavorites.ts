@@ -4,7 +4,7 @@
  */
 import { useCallback, useSyncExternalStore } from 'react';
 
-const STORAGE_KEY = 'rowlab:nav-favorites';
+const STORAGE_KEY = 'oarbit:nav-favorites';
 const MAX_FAVORITES = 5;
 
 // Listeners for external store subscription

@@ -46,12 +46,12 @@ export function NotificationBell() {
       <button
         type="button"
         onClick={toggle}
-        className="relative rounded-lg p-2 text-ink-muted transition-colors hover:bg-ink-hover hover:text-ink-primary"
+        className="relative rounded-lg p-2 text-text-faint transition-colors hover:bg-void-overlay hover:text-text-bright"
         aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} unread)` : ''}`}
       >
         <Bell size={18} />
         {unreadCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 flex min-w-[18px] items-center justify-center rounded-full bg-accent-copper px-1 text-[11px] font-semibold leading-[18px] text-ink-deep">
+          <span className="absolute -top-0.5 -right-0.5 flex min-w-[18px] items-center justify-center rounded-full bg-accent-teal px-1 text-[11px] font-semibold leading-[18px] text-void-deep">
             {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}

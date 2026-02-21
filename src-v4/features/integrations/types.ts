@@ -56,6 +56,6 @@ export interface IntegrationCardProps {
   disconnectLoading?: boolean;
   /** Custom label for connect button (default: "Connect") */
   connectLabel?: string;
-  /** Accent color class for connected state (default: "text-accent-copper") */
+  /** Accent color class for connected state (default: "text-accent-teal") */
   accentColor?: string;
 }

@@ -130,45 +130,45 @@ export function DayPopover({ day, workouts, onClose, anchorRect }: DayPopoverPro
         ref={popoverRef}
         {...scaleIn}
         style={popoverStyle}
-        className="z-50 w-[18rem] bg-ink-raised border border-ink-border rounded-xl shadow-card p-4"
+        className="z-50 w-[18rem] bg-void-raised border border-edge-default rounded-xl shadow-md p-4"
         role="dialog"
         aria-label={`Workouts for ${format(day, 'EEEE, MMM d')}`}
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-ink-primary font-medium text-sm">{format(day, 'EEEE, MMM d')}</h3>
+          <h3 className="text-text-bright font-medium text-sm">{format(day, 'EEEE, MMM d')}</h3>
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-md hover:bg-ink-hover transition-colors"
+            className="p-1 rounded-md hover:bg-void-overlay transition-colors"
             aria-label="Close"
           >
-            <X size={14} className="text-ink-tertiary" />
+            <X size={14} className="text-text-faint" />
           </button>
         </div>
 
         {/* Quick stats */}
         {dayWorkouts.length > 0 && (
-          <div className="flex items-center gap-4 mb-3 pb-3 border-b border-ink-border/50">
+          <div className="flex items-center gap-4 mb-3 pb-3 border-b border-edge-default/50">
             <div>
-              <span className="text-[10px] uppercase tracking-wider text-ink-muted block">
+              <span className="text-[10px] uppercase tracking-wider text-text-faint block">
                 Workouts
               </span>
-              <span className="text-sm font-mono text-ink-primary tabular-nums">{stats.count}</span>
+              <span className="text-sm font-mono text-text-bright tabular-nums">{stats.count}</span>
             </div>
             <div>
-              <span className="text-[10px] uppercase tracking-wider text-ink-muted block">
+              <span className="text-[10px] uppercase tracking-wider text-text-faint block">
                 Distance
               </span>
-              <span className="text-sm font-mono text-ink-primary tabular-nums">
+              <span className="text-sm font-mono text-text-bright tabular-nums">
                 {formatDistance(stats.totalMeters)}
               </span>
             </div>
             <div>
-              <span className="text-[10px] uppercase tracking-wider text-ink-muted block">
+              <span className="text-[10px] uppercase tracking-wider text-text-faint block">
                 Duration
               </span>
-              <span className="text-sm font-mono text-ink-primary tabular-nums">
+              <span className="text-sm font-mono text-text-bright tabular-nums">
                 {formatDuration(stats.totalSeconds)}
               </span>
             </div>
@@ -177,7 +177,7 @@ export function DayPopover({ day, workouts, onClose, anchorRect }: DayPopoverPro
 
         {/* Workout list */}
         {dayWorkouts.length === 0 ? (
-          <p className="text-ink-muted text-sm text-center py-3">No workouts this day</p>
+          <p className="text-text-faint text-sm text-center py-3">No workouts this day</p>
         ) : (
           <div className="space-y-1.5 max-h-[200px] overflow-y-auto">
             {dayWorkouts.map((w) => {
@@ -189,7 +189,7 @@ export function DayPopover({ day, workouts, onClose, anchorRect }: DayPopoverPro
               return (
                 <div
                   key={w.id}
-                  className="flex items-center gap-2.5 py-1.5 px-2 rounded-md hover:bg-ink-hover transition-colors"
+                  className="flex items-center gap-2.5 py-1.5 px-2 rounded-md hover:bg-void-overlay transition-colors"
                 >
                   <div
                     className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
@@ -203,25 +203,25 @@ export function DayPopover({ day, workouts, onClose, anchorRect }: DayPopoverPro
                     <div className="flex items-center gap-1.5">
                       {interval.isInterval ? (
                         <>
-                          <span className="text-xs font-medium text-accent-copper font-mono whitespace-nowrap">
+                          <span className="text-xs font-medium text-accent-teal font-mono whitespace-nowrap">
                             {interval.pattern}
                           </span>
-                          <span className="text-[10px] text-ink-muted truncate">
+                          <span className="text-[10px] text-text-faint truncate">
                             {config.label}
                           </span>
                         </>
                       ) : (
-                        <span className="text-xs font-medium text-ink-primary truncate">
+                        <span className="text-xs font-medium text-text-bright truncate">
                           {config.label}
                         </span>
                       )}
                     </div>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
-                    <span className="text-xs font-mono text-ink-secondary tabular-nums">
+                    <span className="text-xs font-mono text-text-dim tabular-nums">
                       {formatDistance(w.distanceM)}
                     </span>
-                    <span className="text-xs font-mono text-ink-tertiary tabular-nums">
+                    <span className="text-xs font-mono text-text-faint tabular-nums">
                       {formatDuration(w.durationSeconds)}
                     </span>
                   </div>

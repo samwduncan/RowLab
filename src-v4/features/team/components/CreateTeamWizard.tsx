@@ -79,10 +79,10 @@ function StepIndicator({ current }: { current: 1 | 2 | 3 }) {
                 flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-colors duration-200
                 ${
                   step.num === current
-                    ? 'bg-accent-copper text-ink-deep'
+                    ? 'bg-accent-teal text-void-deep'
                     : step.num < current
-                      ? 'bg-accent-copper/20 text-accent-copper'
-                      : 'bg-ink-raised text-ink-muted'
+                      ? 'bg-accent-teal/20 text-accent-teal'
+                      : 'bg-void-raised text-text-faint'
                 }
               `}
             >
@@ -102,7 +102,7 @@ function StepIndicator({ current }: { current: 1 | 2 | 3 }) {
             </div>
             <span
               className={`text-sm font-medium hidden sm:inline ${
-                step.num === current ? 'text-ink-primary' : 'text-ink-muted'
+                step.num === current ? 'text-text-bright' : 'text-text-faint'
               }`}
             >
               {step.label}
@@ -111,7 +111,7 @@ function StepIndicator({ current }: { current: 1 | 2 | 3 }) {
           {i < steps.length - 1 && (
             <div
               className={`h-px w-8 transition-colors duration-200 ${
-                step.num < current ? 'bg-accent-copper/40' : 'bg-ink-border'
+                step.num < current ? 'bg-accent-teal/40' : 'bg-edge-default'
               }`}
             />
           )}
@@ -201,13 +201,13 @@ export function CreateTeamWizard() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-ink-deep p-4 sm:p-8">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-void-deep p-4 sm:p-8">
       {/* Header */}
       <div className="mb-6 text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-ink-primary font-display">
-          Row<span className="text-accent-copper">Lab</span>
+        <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
+          Row<span className="text-accent-teal">Lab</span>
         </h1>
-        <p className="mt-1 text-sm text-ink-secondary">Create your team</p>
+        <p className="mt-1 text-sm text-text-dim">Create your team</p>
       </div>
 
       <div className="w-full max-w-xl">
@@ -303,8 +303,8 @@ function Step1TeamInfo({
   return (
     <form onSubmit={handleSubmit(onNext)} className="flex flex-col gap-5" noValidate>
       <div>
-        <h2 className="text-lg font-semibold text-ink-primary">Team Information</h2>
-        <p className="mt-1 text-sm text-ink-secondary">
+        <h2 className="text-lg font-semibold text-text-bright">Team Information</h2>
+        <p className="mt-1 text-sm text-text-dim">
           Give your team a name and pick a sport to get started.
         </p>
       </div>
@@ -320,12 +320,12 @@ function Step1TeamInfo({
 
       {/* Sport dropdown */}
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="sport" className="text-sm font-medium text-ink-body">
+        <label htmlFor="sport" className="text-sm font-medium text-text-default">
           Sport
         </label>
         <select
           id="sport"
-          className="h-10 w-full rounded-xl px-3.5 text-sm bg-ink-raised text-ink-primary border border-ink-border focus:border-accent-copper focus:ring-1 focus:ring-accent-copper/30 focus:outline-none transition-colors duration-150 appearance-none cursor-pointer"
+          className="h-10 w-full rounded-xl px-3.5 text-sm bg-void-raised text-text-bright border border-edge-default focus:border-accent-teal focus:ring-1 focus:ring-accent/30 focus:outline-none transition-colors duration-150 appearance-none cursor-pointer"
           {...register('sport')}
         >
           {SPORT_OPTIONS.map((opt) => (
@@ -338,13 +338,13 @@ function Step1TeamInfo({
 
       {/* Description textarea */}
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="description" className="text-sm font-medium text-ink-body">
-          Description <span className="text-ink-muted font-normal">(optional)</span>
+        <label htmlFor="description" className="text-sm font-medium text-text-default">
+          Description <span className="text-text-faint font-normal">(optional)</span>
         </label>
         <textarea
           id="description"
           rows={3}
-          className="w-full rounded-xl px-3.5 py-2.5 text-sm bg-ink-raised text-ink-primary placeholder:text-ink-muted border border-ink-border focus:border-accent-copper focus:ring-1 focus:ring-accent-copper/30 focus:outline-none transition-colors duration-150 resize-none"
+          className="w-full rounded-xl px-3.5 py-2.5 text-sm bg-void-raised text-text-bright placeholder:text-text-faint border border-edge-default focus:border-accent-teal focus:ring-1 focus:ring-accent/30 focus:outline-none transition-colors duration-150 resize-none"
           placeholder="Describe your team..."
           maxLength={500}
           {...register('description')}
@@ -358,7 +358,7 @@ function Step1TeamInfo({
         <button
           type="button"
           onClick={onCancel}
-          className="text-sm font-medium text-ink-secondary hover:text-ink-primary transition-colors"
+          className="text-sm font-medium text-text-dim hover:text-text-bright transition-colors"
         >
           Cancel
         </button>
@@ -393,28 +393,28 @@ function Step2Configure({
   return (
     <div className="flex flex-col gap-5">
       <div>
-        <h2 className="text-lg font-semibold text-ink-primary">Review & Configure</h2>
-        <p className="mt-1 text-sm text-ink-secondary">
+        <h2 className="text-lg font-semibold text-text-bright">Review & Configure</h2>
+        <p className="mt-1 text-sm text-text-dim">
           Confirm your team details before creating.
         </p>
       </div>
 
       {/* Summary card */}
-      <div className="rounded-xl bg-ink-raised/50 border border-ink-border p-4 flex flex-col gap-2">
+      <div className="rounded-xl bg-void-raised/50 border border-edge-default p-4 flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-ink-muted">Name</span>
-          <span className="text-sm font-medium text-ink-primary">{teamData.name}</span>
+          <span className="text-sm text-text-faint">Name</span>
+          <span className="text-sm font-medium text-text-bright">{teamData.name}</span>
         </div>
         {teamData.sport && (
           <div className="flex items-center justify-between">
-            <span className="text-sm text-ink-muted">Sport</span>
-            <span className="text-sm font-medium text-ink-primary">{teamData.sport}</span>
+            <span className="text-sm text-text-faint">Sport</span>
+            <span className="text-sm font-medium text-text-bright">{teamData.sport}</span>
           </div>
         )}
         {teamData.description && (
           <div className="flex flex-col gap-1">
-            <span className="text-sm text-ink-muted">Description</span>
-            <span className="text-sm text-ink-body">{teamData.description}</span>
+            <span className="text-sm text-text-faint">Description</span>
+            <span className="text-sm text-text-default">{teamData.description}</span>
           </div>
         )}
       </div>
@@ -427,8 +427,8 @@ function Step2Configure({
           aria-checked={isPublic}
           onClick={() => onTogglePublic(!isPublic)}
           className={`
-            relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-copper/60
-            ${isPublic ? 'bg-accent-copper' : 'bg-ink-border'}
+            relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent/60
+            ${isPublic ? 'bg-accent-teal' : 'bg-edge-default'}
           `}
         >
           <span
@@ -439,8 +439,8 @@ function Step2Configure({
           />
         </button>
         <div className="flex flex-col">
-          <span className="text-sm font-medium text-ink-primary">Public team</span>
-          <span className="text-xs text-ink-muted mt-0.5">
+          <span className="text-sm font-medium text-text-bright">Public team</span>
+          <span className="text-xs text-text-faint mt-0.5">
             {isPublic
               ? 'Anyone can discover and request to join this team.'
               : 'Only people with an invite link can join.'}
@@ -469,9 +469,9 @@ function Step3Invite({ team, onFinish }: { team: TeamDetail; onFinish: () => voi
   return (
     <div className="flex flex-col gap-5">
       <div className="text-center">
-        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-accent-copper/10">
+        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-accent-teal/10">
           <svg
-            className="h-6 w-6 text-accent-copper"
+            className="h-6 w-6 text-accent-teal"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
@@ -480,9 +480,9 @@ function Step3Invite({ team, onFinish }: { team: TeamDetail; onFinish: () => voi
             <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
           </svg>
         </div>
-        <h2 className="text-lg font-semibold text-ink-primary">Team created!</h2>
-        <p className="mt-1 text-sm text-ink-secondary">
-          <span className="font-medium text-ink-primary">{team.name}</span> is ready. Invite your
+        <h2 className="text-lg font-semibold text-text-bright">Team created!</h2>
+        <p className="mt-1 text-sm text-text-dim">
+          <span className="font-medium text-text-bright">{team.name}</span> is ready. Invite your
           teammates to get started.
         </p>
       </div>
@@ -496,7 +496,7 @@ function Step3Invite({ team, onFinish }: { team: TeamDetail; onFinish: () => voi
         <button
           type="button"
           onClick={onFinish}
-          className="text-sm font-medium text-ink-secondary hover:text-ink-primary transition-colors text-center py-1"
+          className="text-sm font-medium text-text-dim hover:text-text-bright transition-colors text-center py-1"
         >
           Skip -- I'll invite later
         </button>

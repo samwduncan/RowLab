@@ -41,10 +41,10 @@ export function SplitsTable({ splits, machineType, intervalInfo }: SplitsTablePr
   }
 
   return (
-    <div className="bg-ink-raised rounded-xl border border-ink-border overflow-hidden">
+    <div className="bg-void-raised rounded-xl border border-edge-default overflow-hidden">
       {intervalInfo?.isInterval && (
-        <div className="px-4 py-2 border-b border-ink-border/50">
-          <span className="text-xs text-accent-copper font-mono font-medium">
+        <div className="px-4 py-2 border-b border-edge-default/50">
+          <span className="text-xs text-accent-teal font-mono font-medium">
             {intervalInfo.pattern}
           </span>
         </div>
@@ -52,27 +52,27 @@ export function SplitsTable({ splits, machineType, intervalInfo }: SplitsTablePr
       <div className="overflow-x-auto">
         <table className="w-full text-sm font-mono">
           <thead>
-            <tr className="border-b border-ink-border">
-              <th className="text-left py-2.5 px-4 text-ink-tertiary text-xs uppercase tracking-wider font-medium">
+            <tr className="border-b border-edge-default">
+              <th className="text-left py-2.5 px-4 text-text-faint text-xs uppercase tracking-wider font-medium">
                 Split
               </th>
-              <th className="text-right py-2.5 px-4 text-ink-tertiary text-xs uppercase tracking-wider font-medium">
+              <th className="text-right py-2.5 px-4 text-text-faint text-xs uppercase tracking-wider font-medium">
                 Dist
               </th>
-              <th className="text-right py-2.5 px-4 text-ink-tertiary text-xs uppercase tracking-wider font-medium">
+              <th className="text-right py-2.5 px-4 text-text-faint text-xs uppercase tracking-wider font-medium">
                 Time
               </th>
-              <th className="text-right py-2.5 px-4 text-ink-tertiary text-xs uppercase tracking-wider font-medium">
+              <th className="text-right py-2.5 px-4 text-text-faint text-xs uppercase tracking-wider font-medium">
                 Pace
               </th>
-              <th className="text-right py-2.5 px-4 text-ink-tertiary text-xs uppercase tracking-wider font-medium">
+              <th className="text-right py-2.5 px-4 text-text-faint text-xs uppercase tracking-wider font-medium">
                 Watts
               </th>
-              <th className="text-right py-2.5 px-4 text-ink-tertiary text-xs uppercase tracking-wider font-medium">
+              <th className="text-right py-2.5 px-4 text-text-faint text-xs uppercase tracking-wider font-medium">
                 {rateLabel}
               </th>
               {hasHeartRate && (
-                <th className="text-right py-2.5 px-4 text-ink-tertiary text-xs uppercase tracking-wider font-medium">
+                <th className="text-right py-2.5 px-4 text-text-faint text-xs uppercase tracking-wider font-medium">
                   HR
                 </th>
               )}
@@ -84,28 +84,28 @@ export function SplitsTable({ splits, machineType, intervalInfo }: SplitsTablePr
               return (
                 <tr
                   key={split.splitNumber}
-                  className={`hover:bg-ink-hover transition-colors ${
-                    idx % 2 === 1 ? 'bg-ink-well/50' : 'bg-ink-base'
+                  className={`hover:bg-void-overlay transition-colors ${
+                    idx % 2 === 1 ? 'bg-void-deep/50' : 'bg-void-surface'
                   } ${isRest ? 'opacity-40' : ''}`}
                 >
-                  <td className="py-2 px-4 text-ink-muted">{isRest ? 'R' : split.splitNumber}</td>
-                  <td className="py-2 px-4 text-right text-ink-secondary tabular-nums">
+                  <td className="py-2 px-4 text-text-faint">{isRest ? 'R' : split.splitNumber}</td>
+                  <td className="py-2 px-4 text-right text-text-dim tabular-nums">
                     {split.distanceM != null ? formatDistance(split.distanceM) : DASH}
                   </td>
-                  <td className="py-2 px-4 text-right text-ink-secondary tabular-nums">
+                  <td className="py-2 px-4 text-right text-text-dim tabular-nums">
                     {split.timeSeconds != null ? formatDuration(split.timeSeconds) : DASH}
                   </td>
-                  <td className="py-2 px-4 text-right text-ink-body tabular-nums">
+                  <td className="py-2 px-4 text-right text-text-default tabular-nums">
                     {formatPace(split.pace, machineType)}
                   </td>
-                  <td className="py-2 px-4 text-right text-ink-body tabular-nums">
+                  <td className="py-2 px-4 text-right text-text-default tabular-nums">
                     {split.watts != null ? split.watts : DASH}
                   </td>
-                  <td className="py-2 px-4 text-right text-ink-secondary tabular-nums">
+                  <td className="py-2 px-4 text-right text-text-dim tabular-nums">
                     {split.strokeRate != null ? split.strokeRate : DASH}
                   </td>
                   {hasHeartRate && (
-                    <td className="py-2 px-4 text-right text-ink-secondary tabular-nums">
+                    <td className="py-2 px-4 text-right text-text-dim tabular-nums">
                       {split.heartRate != null ? split.heartRate : DASH}
                     </td>
                   )}

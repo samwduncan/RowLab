@@ -41,15 +41,15 @@ export function LineupToolbar({
   lineupName,
 }: LineupToolbarProps) {
   return (
-    <div className="flex items-center justify-between gap-3 px-4 py-2.5 glass rounded-xl">
+    <div className="flex items-center justify-between gap-3 px-4 py-2.5 panel rounded-xl">
       {/* Left: lineup name + dirty indicator */}
       <div className="flex items-center gap-2 min-w-0">
-        <h2 className="text-sm font-semibold text-ink-primary truncate">
+        <h2 className="text-sm font-semibold text-text-bright truncate">
           {lineupName || 'New Lineup'}
         </h2>
         {isDirty && (
           <span
-            className="flex-shrink-0 w-2 h-2 rounded-full bg-accent-copper animate-pulse"
+            className="flex-shrink-0 w-2 h-2 rounded-full bg-accent-teal animate-pulse"
             title="Unsaved changes"
             aria-label="Unsaved changes"
           />
@@ -76,7 +76,7 @@ export function LineupToolbar({
               shortcut="Ctrl+Shift+Z"
             />
 
-            <div className="w-px h-5 bg-ink-border/40 mx-1" aria-hidden />
+            <div className="w-px h-5 bg-edge-default/40 mx-1" aria-hidden />
           </>
         )}
 
@@ -129,8 +129,8 @@ function ToolbarButton({
         disabled:opacity-35 disabled:pointer-events-none
         ${
           accent
-            ? 'text-accent-copper hover:bg-accent-copper/10'
-            : 'text-ink-secondary hover:text-ink-primary hover:bg-ink-hover'
+            ? 'text-accent-teal hover:bg-accent-teal/10'
+            : 'text-text-dim hover:text-text-bright hover:bg-void-overlay'
         }
       `.trim()}
     >

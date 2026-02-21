@@ -27,7 +27,7 @@ function SessionsSkeleton() {
   return (
     <SkeletonGroup className="space-y-3">
       {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="bg-ink-raised border border-ink-border rounded-lg p-4" aria-hidden>
+        <div key={i} className="bg-void-raised border border-edge-default rounded-lg p-4" aria-hidden>
           <div className="flex items-center justify-between">
             <div className="space-y-2">
               <Skeleton height="1rem" width="10rem" rounded="sm" />
@@ -59,10 +59,10 @@ function SessionCard({ session, onNavigate }: SessionCardProps) {
     <button
       type="button"
       onClick={() => onNavigate(session.id)}
-      className={`w-full text-left rounded-lg border p-4 transition-all hover:border-ink-muted group ${
+      className={`w-full text-left rounded-lg border p-4 transition-all hover:border-text-faint group ${
         isActive
           ? 'border-data-excellent/30 bg-data-excellent/5'
-          : 'border-ink-border bg-ink-raised hover:bg-ink-hover'
+          : 'border-edge-default bg-void-raised hover:bg-void-overlay'
       }`}
     >
       <div className="flex items-center justify-between gap-3">
@@ -75,10 +75,10 @@ function SessionCard({ session, onNavigate }: SessionCardProps) {
               {statusConfig.label}
             </span>
           </div>
-          <h3 className="mt-1 text-sm font-medium text-ink-primary group-hover:text-ink-bright truncate">
+          <h3 className="mt-1 text-sm font-medium text-text-bright group-hover:text-text-bright truncate">
             {session.name}
           </h3>
-          <div className="mt-1 flex items-center gap-3 text-xs text-ink-secondary">
+          <div className="mt-1 flex items-center gap-3 text-xs text-text-dim">
             <span className="flex items-center gap-1">
               <Calendar size={12} />
               {new Date(session.date).toLocaleDateString()}
@@ -156,7 +156,7 @@ export function SessionsPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h1 className="text-ink-primary text-2xl font-display font-semibold">Sessions</h1>
+          <h1 className="text-text-bright text-2xl font-display font-semibold">Sessions</h1>
           {activeSession && (
             <p className="text-xs text-data-excellent mt-1 flex items-center gap-1">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-data-excellent animate-pulse" />
@@ -167,7 +167,7 @@ export function SessionsPage() {
         <button
           type="button"
           onClick={() => setShowForm(true)}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-accent-copper text-ink-deep text-sm font-medium hover:bg-accent-copper-hover transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-accent-teal text-void-deep text-sm font-medium hover:bg-accent-teal-hover transition-colors"
         >
           <Plus size={16} />
           New Session
@@ -179,11 +179,11 @@ export function SessionsPage() {
         <SessionsSkeleton />
       ) : sortedSessions.length === 0 ? (
         <div className="text-center py-16">
-          <p className="text-ink-secondary text-sm mb-4">No training sessions yet.</p>
+          <p className="text-text-dim text-sm mb-4">No training sessions yet.</p>
           <button
             type="button"
             onClick={() => setShowForm(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-accent-copper text-ink-deep text-sm font-medium hover:bg-accent-copper-hover transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-accent-teal text-void-deep text-sm font-medium hover:bg-accent-teal-hover transition-colors"
           >
             <Plus size={16} />
             Create your first session
@@ -203,10 +203,10 @@ export function SessionsPage() {
           <div className="fixed inset-0 bg-black/50 z-50" onClick={() => setShowForm(false)} />
           <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh] px-4">
             <div
-              className="bg-ink-base border border-ink-border rounded-xl shadow-card p-5 max-w-lg w-full max-h-[80vh] overflow-y-auto"
+              className="bg-void-surface border border-edge-default rounded-xl shadow-md p-5 max-w-lg w-full max-h-[80vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2 className="text-lg font-semibold text-ink-primary mb-4">New Session</h2>
+              <h2 className="text-lg font-semibold text-text-bright mb-4">New Session</h2>
               <SessionForm
                 onSubmit={handleCreate}
                 onCancel={() => setShowForm(false)}

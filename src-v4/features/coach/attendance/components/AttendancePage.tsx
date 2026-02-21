@@ -88,15 +88,15 @@ export function AttendancePage({ teamId, readOnly }: AttendancePageProps) {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 rounded-xl bg-ink-well/50 p-1 mb-6">
+      <div className="flex gap-1 rounded-xl bg-void-deep/50 p-1 mb-6">
         {(['daily', 'summary'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
               activeTab === tab
-                ? 'bg-ink-raised text-ink-primary shadow-sm'
-                : 'text-ink-secondary hover:text-ink-primary'
+                ? 'bg-void-raised text-text-bright shadow-sm'
+                : 'text-text-dim hover:text-text-bright'
             }`}
           >
             <span className="flex items-center justify-center gap-2">
@@ -229,7 +229,7 @@ function DailyTab({ teamId, date, setDate, readOnly }: DailyTabProps) {
         <div className="flex items-center gap-2">
           <button
             onClick={() => navigateDate('prev')}
-            className="rounded-lg bg-ink-raised p-2 text-ink-secondary transition-colors hover:bg-ink-well hover:text-ink-primary"
+            className="rounded-lg bg-void-raised p-2 text-text-dim transition-colors hover:bg-void-deep hover:text-text-bright"
             aria-label="Previous day"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -239,19 +239,19 @@ function DailyTab({ teamId, date, setDate, readOnly }: DailyTabProps) {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="rounded-lg border border-ink-border bg-ink-raised px-3 py-2 font-mono text-sm text-ink-primary transition-colors focus:border-accent-copper/50 focus:outline-none"
+            className="rounded-lg border border-edge-default bg-void-raised px-3 py-2 font-mono text-sm text-text-bright transition-colors focus:border-accent-teal/50 focus:outline-none"
           />
 
           <button
             onClick={() => navigateDate('next')}
-            className="rounded-lg bg-ink-raised p-2 text-ink-secondary transition-colors hover:bg-ink-well hover:text-ink-primary"
+            className="rounded-lg bg-void-raised p-2 text-text-dim transition-colors hover:bg-void-deep hover:text-text-bright"
             aria-label="Next day"
           >
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
 
-        <span className="text-sm text-ink-secondary">{formatDateDisplay(date)}</span>
+        <span className="text-sm text-text-dim">{formatDateDisplay(date)}</span>
       </div>
 
       {/* Stats console + bulk action */}
@@ -261,15 +261,15 @@ function DailyTab({ teamId, date, setDate, readOnly }: DailyTabProps) {
             [
               { key: 'present', label: 'Present', color: 'text-data-excellent' },
               { key: 'late', label: 'Late', color: 'text-data-warning' },
-              { key: 'excused', label: 'Excused', color: 'text-accent-primary' },
+              { key: 'excused', label: 'Excused', color: 'text-accent-teal-primary' },
               { key: 'unexcused', label: 'Unexcused', color: 'text-data-poor' },
               ...(stats.unmarked > 0
-                ? [{ key: 'unmarked', label: 'Unmarked', color: 'text-ink-muted' }]
+                ? [{ key: 'unmarked', label: 'Unmarked', color: 'text-text-faint' }]
                 : []),
             ] as const
           ).map(({ key, label, color }) => (
             <span key={key} className="flex items-center gap-1.5 font-mono text-xs">
-              <span className="uppercase tracking-wider text-ink-muted">{label}</span>
+              <span className="uppercase tracking-wider text-text-faint">{label}</span>
               <span className={`font-semibold ${color}`}>{stats[key as keyof typeof stats]}</span>
             </span>
           ))}
@@ -290,9 +290,9 @@ function DailyTab({ teamId, date, setDate, readOnly }: DailyTabProps) {
       {/* Roster */}
       {athletes.length === 0 ? (
         <div className="py-12 text-center">
-          <Users className="mx-auto mb-3 h-10 w-10 text-ink-muted/50" />
-          <p className="text-sm font-medium text-ink-muted">No athletes in roster</p>
-          <p className="mt-1 text-xs text-ink-muted/70">
+          <Users className="mx-auto mb-3 h-10 w-10 text-text-faint/50" />
+          <p className="text-sm font-medium text-text-faint">No athletes in roster</p>
+          <p className="mt-1 text-xs text-text-faint/70">
             Invite athletes to your team to track attendance
           </p>
         </div>
@@ -307,11 +307,11 @@ function DailyTab({ teamId, date, setDate, readOnly }: DailyTabProps) {
               <div key={athlete.userId}>
                 {isFirstMarked && (
                   <div className="flex items-center gap-3 py-3">
-                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-accent-copper/20 to-accent-copper/20" />
-                    <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-accent-copper">
+                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-accent/20 to-accent/20" />
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-accent-teal">
                       MARKED
                     </span>
-                    <div className="h-px flex-1 bg-gradient-to-l from-transparent via-accent-copper/20 to-accent-copper/20" />
+                    <div className="h-px flex-1 bg-gradient-to-l from-transparent via-accent/20 to-accent/20" />
                   </div>
                 )}
 
@@ -346,18 +346,18 @@ function AthleteRow({ athlete, status, readOnly, onMark }: AthleteRowProps) {
     <div
       className={`flex items-center gap-4 rounded-lg p-3 transition-colors ${
         status
-          ? 'bg-ink-raised/60 border border-ink-border/50'
-          : 'bg-ink-raised border border-accent-copper/20'
+          ? 'bg-void-raised/60 border border-edge-default/50'
+          : 'bg-void-raised border border-accent-teal/20'
       }`}
     >
       {/* Avatar */}
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink-well text-xs font-semibold text-ink-secondary">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-void-deep text-xs font-semibold text-text-dim">
         {getInitials(athlete.name)}
       </div>
 
       {/* Name */}
       <div className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-medium text-ink-primary">{athlete.name}</span>
+        <span className="block truncate text-sm font-medium text-text-bright">{athlete.name}</span>
         {status && (
           <span className={`text-xs ${STATUS_CONFIG[status].color}`}>
             {STATUS_CONFIG[status].label}
@@ -379,7 +379,7 @@ function AthleteRow({ athlete, status, readOnly, onMark }: AthleteRowProps) {
                 className={`flex h-8 w-8 items-center justify-center rounded-md text-xs font-bold transition-all ${
                   isActive
                     ? `${cfg.bgColor} ${cfg.color} ring-1 ring-current/30`
-                    : 'bg-ink-well/50 text-ink-muted hover:bg-ink-well hover:text-ink-primary'
+                    : 'bg-void-deep/50 text-text-faint hover:bg-void-deep hover:text-text-bright'
                 }`}
               >
                 {cfg.shortLabel}
@@ -430,26 +430,26 @@ function SummaryTab({ teamId }: SummaryTabProps) {
       {/* Date range picker */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="flex items-center gap-2">
-          <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+          <label className="text-xs font-semibold uppercase tracking-wider text-text-faint">
             From
           </label>
           <input
             type="date"
             value={range.start}
             onChange={(e) => setRange((r) => ({ ...r, start: e.target.value }))}
-            className="rounded-lg border border-ink-border bg-ink-raised px-3 py-2 font-mono text-sm text-ink-primary transition-colors focus:border-accent-copper/50 focus:outline-none"
+            className="rounded-lg border border-edge-default bg-void-raised px-3 py-2 font-mono text-sm text-text-bright transition-colors focus:border-accent-teal/50 focus:outline-none"
           />
         </div>
 
         <div className="flex items-center gap-2">
-          <label className="text-xs font-semibold uppercase tracking-wider text-ink-muted">
+          <label className="text-xs font-semibold uppercase tracking-wider text-text-faint">
             To
           </label>
           <input
             type="date"
             value={range.end}
             onChange={(e) => setRange((r) => ({ ...r, end: e.target.value }))}
-            className="rounded-lg border border-ink-border bg-ink-raised px-3 py-2 font-mono text-sm text-ink-primary transition-colors focus:border-accent-copper/50 focus:outline-none"
+            className="rounded-lg border border-edge-default bg-void-raised px-3 py-2 font-mono text-sm text-text-bright transition-colors focus:border-accent-teal/50 focus:outline-none"
           />
         </div>
 
@@ -462,7 +462,7 @@ function SummaryTab({ teamId }: SummaryTabProps) {
             <button
               key={label}
               onClick={() => applyPreset(days)}
-              className="rounded-lg bg-ink-raised px-3 py-2 text-xs font-medium text-ink-secondary transition-colors hover:bg-ink-well hover:text-ink-primary"
+              className="rounded-lg bg-void-raised px-3 py-2 text-xs font-medium text-text-dim transition-colors hover:bg-void-deep hover:text-text-bright"
             >
               {label}
             </button>
@@ -475,16 +475,16 @@ function SummaryTab({ teamId }: SummaryTabProps) {
         <AttendanceSkeleton rows={4} />
       ) : summary.length === 0 ? (
         <div className="py-12 text-center">
-          <ClipboardList className="mx-auto mb-3 h-10 w-10 text-ink-muted/50" />
-          <p className="text-sm font-medium text-ink-muted">No attendance data for this period</p>
+          <ClipboardList className="mx-auto mb-3 h-10 w-10 text-text-faint/50" />
+          <p className="text-sm font-medium text-text-faint">No attendance data for this period</p>
         </div>
       ) : (
         <GlassCard padding="none">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-ink-border">
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ink-muted">
+                <tr className="border-b border-edge-default">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-faint">
                     Athlete
                   </th>
                   <th className="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-data-excellent/70">
@@ -493,18 +493,18 @@ function SummaryTab({ teamId }: SummaryTabProps) {
                   <th className="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-data-warning/70">
                     L
                   </th>
-                  <th className="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-accent-primary/70">
+                  <th className="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-accent-teal-primary/70">
                     E
                   </th>
                   <th className="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-data-poor/70">
                     U
                   </th>
-                  <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-ink-muted">
+                  <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-faint">
                     Rate
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-ink-border/50">
+              <tbody className="divide-y divide-edge-default/50">
                 {summary.map((row) => (
                   <SummaryRow key={row.athlete.id} row={row} />
                 ))}
@@ -526,22 +526,22 @@ function SummaryRow({ row }: { row: AttendanceSummaryRow }) {
   const rate = Math.round(row.attendanceRate * 100);
 
   return (
-    <tr className="transition-colors hover:bg-ink-well/30">
+    <tr className="transition-colors hover:bg-void-deep/30">
       <td className="px-4 py-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ink-well text-xs font-semibold text-ink-secondary">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-void-deep text-xs font-semibold text-text-dim">
             {getInitials(name)}
           </div>
-          <span className="font-medium text-ink-primary">{name}</span>
+          <span className="font-medium text-text-bright">{name}</span>
         </div>
       </td>
       <td className="px-3 py-3 text-center font-mono text-data-excellent">{row.present}</td>
       <td className="px-3 py-3 text-center font-mono text-data-warning">{row.late}</td>
-      <td className="px-3 py-3 text-center font-mono text-accent-primary">{row.excused}</td>
+      <td className="px-3 py-3 text-center font-mono text-accent-teal-primary">{row.excused}</td>
       <td className="px-3 py-3 text-center font-mono text-data-poor">{row.unexcused}</td>
       <td className="px-4 py-3">
         <div className="flex items-center justify-end gap-2">
-          <div className="hidden sm:block h-1.5 w-16 rounded-full bg-ink-well overflow-hidden">
+          <div className="hidden sm:block h-1.5 w-16 rounded-full bg-void-deep overflow-hidden">
             <div
               className={`h-full rounded-full transition-all ${
                 rate >= 90 ? 'bg-data-excellent' : rate >= 75 ? 'bg-data-warning' : 'bg-data-poor'

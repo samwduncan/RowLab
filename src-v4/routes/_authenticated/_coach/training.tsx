@@ -21,7 +21,7 @@ function TrainingRoute() {
   if (!activeTeamId) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
-        <p className="text-sm text-ink-muted">Select a team to manage training plans</p>
+        <p className="text-sm text-text-faint">Select a team to manage training plans</p>
       </div>
     );
   }

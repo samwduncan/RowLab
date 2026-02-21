@@ -115,25 +115,25 @@ function RowMenu({
       <button
         type="button"
         onClick={handleToggle}
-        className="p-1.5 rounded-md hover:bg-ink-hover transition-colors"
+        className="p-1.5 rounded-md hover:bg-void-overlay transition-colors"
         aria-label="Workout actions"
       >
-        <MoreHorizontal size={16} className="text-ink-tertiary" />
+        <MoreHorizontal size={16} className="text-text-faint" />
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-1 z-50 min-w-[140px] bg-ink-raised border border-ink-border rounded-lg shadow-card py-1">
+        <div className="absolute right-0 top-full mt-1 z-50 min-w-[140px] bg-void-raised border border-edge-default rounded-lg shadow-md py-1">
           <button
             type="button"
             onClick={handleEdit}
-            className="w-full text-left px-3 py-2 text-sm text-ink-primary hover:bg-ink-hover transition-colors"
+            className="w-full text-left px-3 py-2 text-sm text-text-bright hover:bg-void-overlay transition-colors"
           >
             Edit
           </button>
           <button
             type="button"
             onClick={handleDelete}
-            className="w-full text-left px-3 py-2 text-sm text-data-poor hover:bg-ink-hover transition-colors"
+            className="w-full text-left px-3 py-2 text-sm text-data-poor hover:bg-void-overlay transition-colors"
           >
             Delete
           </button>
@@ -150,10 +150,10 @@ function RowMenu({
 function Metric({ label, value, className }: { label: string; value: string; className?: string }) {
   return (
     <div className={`flex flex-col items-end min-w-0 ${className ?? ''}`}>
-      <span className="text-[10px] uppercase tracking-wider text-ink-muted leading-none mb-0.5 hidden sm:block">
+      <span className="text-[10px] uppercase tracking-wider text-text-faint leading-none mb-0.5 hidden sm:block">
         {label}
       </span>
-      <span className="font-mono text-sm text-ink-primary tabular-nums">{value}</span>
+      <span className="font-mono text-sm text-text-bright tabular-nums">{value}</span>
     </div>
   );
 }
@@ -222,7 +222,7 @@ export function WorkoutRow({ workout, isExpanded, onToggle, onEdit, onDelete }: 
             onToggle();
           }
         }}
-        className="relative flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-lg hover:bg-ink-hover hover:-translate-y-px transition-all duration-150 cursor-pointer"
+        className="relative flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-lg hover:bg-void-overlay hover:-translate-y-px transition-all duration-150 cursor-pointer"
         aria-expanded={isExpanded}
       >
         {/* Sport icon */}
@@ -237,13 +237,13 @@ export function WorkoutRow({ workout, isExpanded, onToggle, onEdit, onDelete }: 
         <div className="flex items-center gap-1.5 shrink-0 min-w-0">
           {intervalInfo.isInterval ? (
             <>
-              <span className="text-sm font-medium text-accent-copper font-mono whitespace-nowrap">
+              <span className="text-sm font-medium text-accent-teal font-mono whitespace-nowrap">
                 {intervalInfo.pattern}
               </span>
-              <span className="text-xs text-ink-muted truncate">{config.label}</span>
+              <span className="text-xs text-text-faint truncate">{config.label}</span>
             </>
           ) : (
-            <span className="text-sm font-medium text-ink-primary truncate">{config.label}</span>
+            <span className="text-sm font-medium text-text-bright truncate">{config.label}</span>
           )}
         </div>
 
@@ -269,7 +269,7 @@ export function WorkoutRow({ workout, isExpanded, onToggle, onEdit, onDelete }: 
 
           <ChevronRight
             size={14}
-            className={`text-ink-muted transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}
+            className={`text-text-faint transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}
           />
         </div>
 

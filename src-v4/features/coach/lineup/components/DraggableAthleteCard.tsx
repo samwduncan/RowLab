@@ -61,7 +61,7 @@ interface DraggableAthleteCardProps {
 function getSideBadge(side?: string): { text: string; classes: string } | null {
   switch (side) {
     case 'Cox':
-      return { text: 'Cox', classes: 'bg-accent-primary/10 text-accent-primary' };
+      return { text: 'Cox', classes: 'bg-accent-teal-primary/10 text-accent-teal-primary' };
     case 'Both':
       return { text: 'Both', classes: 'bg-data-good/10 text-data-good' };
     case 'Port':
@@ -135,10 +135,10 @@ export function DraggableAthleteCard({
         ${isDragging ? 'opacity-50 scale-95' : 'opacity-100 scale-100'}
         ${
           isSelected
-            ? 'bg-accent-copper/10 border border-accent-copper ring-1 ring-accent-copper/30 shadow-glow-copper'
+            ? 'bg-accent-teal/10 border border-accent-teal ring-1 ring-accent/30 shadow-glow-accent'
             : compact
               ? 'bg-transparent border-0'
-              : 'glass border border-ink-border/50 shadow-card hover:-translate-y-0.5 hover:shadow-card-hover hover:border-ink-border-strong'
+              : 'panel border border-edge-default/50 shadow-md hover:-translate-y-0.5 hover:shadow-lg hover:border-edge-hover'
         }
         ${className}
       `.trim()}
@@ -147,7 +147,7 @@ export function DraggableAthleteCard({
       <div
         className={`
           flex-shrink-0 flex items-center justify-center rounded-lg
-          bg-ink-well text-ink-secondary font-semibold
+          bg-void-deep text-text-dim font-semibold
           ${compact ? 'w-7 h-7 text-xs' : 'w-8 h-8 text-xs'}
         `}
       >
@@ -156,18 +156,18 @@ export function DraggableAthleteCard({
 
       {/* Name + meta */}
       <div className="flex-1 min-w-0">
-        <div className={`font-medium text-ink-primary truncate ${compact ? 'text-xs' : 'text-sm'}`}>
+        <div className={`font-medium text-text-bright truncate ${compact ? 'text-xs' : 'text-sm'}`}>
           {athlete.firstName} {athlete.lastName}
         </div>
         {!compact && (
           <div className="flex items-center gap-2 mt-0.5">
             {athlete.weight && (
-              <span className="text-[11px] text-ink-muted px-1.5 py-0.5 rounded bg-ink-well/60">
+              <span className="text-[11px] text-text-faint px-1.5 py-0.5 rounded bg-void-deep/60">
                 {athlete.weight}kg
               </span>
             )}
             {athlete.erg2k && (
-              <span className="text-[11px] text-ink-muted px-1.5 py-0.5 rounded bg-ink-well/60">
+              <span className="text-[11px] text-text-faint px-1.5 py-0.5 rounded bg-void-deep/60">
                 {athlete.erg2k}
               </span>
             )}

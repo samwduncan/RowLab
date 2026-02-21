@@ -119,21 +119,21 @@ export function CalendarView({ filters, calendarMode }: CalendarViewProps) {
           <button
             type="button"
             onClick={goToPrevMonth}
-            className="p-1.5 rounded-md hover:bg-ink-hover transition-colors"
+            className="p-1.5 rounded-md hover:bg-void-overlay transition-colors"
             aria-label="Previous month"
           >
-            <ChevronLeft size={18} className="text-ink-secondary" />
+            <ChevronLeft size={18} className="text-text-dim" />
           </button>
-          <h2 className="text-ink-primary font-medium text-sm min-w-[140px] text-center">
+          <h2 className="text-text-bright font-medium text-sm min-w-[140px] text-center">
             {format(currentMonth, 'MMMM yyyy')}
           </h2>
           <button
             type="button"
             onClick={goToNextMonth}
-            className="p-1.5 rounded-md hover:bg-ink-hover transition-colors"
+            className="p-1.5 rounded-md hover:bg-void-overlay transition-colors"
             aria-label="Next month"
           >
-            <ChevronRight size={18} className="text-ink-secondary" />
+            <ChevronRight size={18} className="text-text-dim" />
           </button>
         </div>
 
@@ -154,10 +154,10 @@ export function CalendarView({ filters, calendarMode }: CalendarViewProps) {
 
       {/* Loading skeleton */}
       {isLoading && (
-        <div className="bg-ink-base rounded-xl border border-ink-border p-4">
+        <div className="bg-void-surface rounded-xl border border-edge-default p-4">
           <div className="grid grid-cols-7 gap-1">
             {Array.from({ length: 35 }).map((_, i) => (
-              <div key={i} className="aspect-square rounded-md bg-ink-raised animate-shimmer" />
+              <div key={i} className="aspect-square rounded-md bg-void-raised animate-shimmer" />
             ))}
           </div>
         </div>

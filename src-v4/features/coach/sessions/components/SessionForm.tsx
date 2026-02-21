@@ -143,29 +143,29 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
           type="button"
           onClick={() => setStep('metadata')}
           className={`flex items-center gap-2 text-sm font-medium transition-colors ${
-            step === 'metadata' ? 'text-ink-primary' : 'text-ink-muted hover:text-ink-secondary'
+            step === 'metadata' ? 'text-text-bright' : 'text-text-faint hover:text-text-dim'
           }`}
         >
           <span
             className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-              step === 'metadata' ? 'bg-accent-copper text-ink-deep' : 'bg-ink-well text-ink-muted'
+              step === 'metadata' ? 'bg-accent-teal text-void-deep' : 'bg-void-deep text-text-faint'
             }`}
           >
             1
           </span>
           Details
         </button>
-        <div className="flex-1 h-px bg-ink-border" />
+        <div className="flex-1 h-px bg-edge-default" />
         <button
           type="button"
           onClick={goToStep2}
           className={`flex items-center gap-2 text-sm font-medium transition-colors ${
-            step === 'pieces' ? 'text-ink-primary' : 'text-ink-muted hover:text-ink-secondary'
+            step === 'pieces' ? 'text-text-bright' : 'text-text-faint hover:text-text-dim'
           }`}
         >
           <span
             className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-              step === 'pieces' ? 'bg-accent-copper text-ink-deep' : 'bg-ink-well text-ink-muted'
+              step === 'pieces' ? 'bg-accent-teal text-void-deep' : 'bg-void-deep text-text-faint'
             }`}
           >
             2
@@ -179,15 +179,15 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
         <div className="space-y-4">
           {/* Session Type */}
           <div>
-            <label className="block text-sm text-ink-secondary mb-2">Session Type</label>
+            <label className="block text-sm text-text-dim mb-2">Session Type</label>
             <div className="grid grid-cols-3 gap-2">
               {SESSION_TYPES.map((type) => (
                 <label
                   key={type.value}
                   className={`flex items-center justify-center gap-1.5 p-2.5 rounded-lg border cursor-pointer transition-all text-sm font-medium ${
                     selectedType === type.value
-                      ? 'border-accent-copper bg-accent-copper/10 text-ink-primary'
-                      : 'border-ink-border bg-ink-base text-ink-secondary hover:border-ink-muted'
+                      ? 'border-accent-teal bg-accent-teal/10 text-text-bright'
+                      : 'border-edge-default bg-void-surface text-text-dim hover:border-text-faint'
                   }`}
                 >
                   <input
@@ -204,11 +204,11 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
 
           {/* Name */}
           <div>
-            <label className="block text-sm text-ink-secondary mb-1">Session Name</label>
+            <label className="block text-sm text-text-dim mb-1">Session Name</label>
             <input
               {...register('name')}
               placeholder="e.g. Morning Erg"
-              className="w-full px-3 py-2 rounded-lg bg-ink-base border border-ink-border text-ink-primary placeholder:text-ink-muted focus:outline-none focus:border-accent-copper transition-colors"
+              className="w-full px-3 py-2 rounded-lg bg-void-surface border border-edge-default text-text-bright placeholder:text-text-faint focus:outline-none focus:border-accent-teal transition-colors"
             />
             {errors.name && <p className="text-data-poor text-sm mt-1">{errors.name.message}</p>}
           </div>
@@ -216,39 +216,39 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
           {/* Date + Times */}
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="block text-sm text-ink-secondary mb-1">Date</label>
+              <label className="block text-sm text-text-dim mb-1">Date</label>
               <input
                 type="date"
                 {...register('date')}
-                className="w-full px-3 py-2 rounded-lg bg-ink-base border border-ink-border text-ink-primary focus:outline-none focus:border-accent-copper transition-colors"
+                className="w-full px-3 py-2 rounded-lg bg-void-surface border border-edge-default text-text-bright focus:outline-none focus:border-accent-teal transition-colors"
               />
             </div>
             <div>
-              <label className="block text-sm text-ink-secondary mb-1">Start</label>
+              <label className="block text-sm text-text-dim mb-1">Start</label>
               <input
                 type="time"
                 {...register('startTime')}
-                className="w-full px-3 py-2 rounded-lg bg-ink-base border border-ink-border text-ink-primary focus:outline-none focus:border-accent-copper transition-colors"
+                className="w-full px-3 py-2 rounded-lg bg-void-surface border border-edge-default text-text-bright focus:outline-none focus:border-accent-teal transition-colors"
               />
             </div>
             <div>
-              <label className="block text-sm text-ink-secondary mb-1">End</label>
+              <label className="block text-sm text-text-dim mb-1">End</label>
               <input
                 type="time"
                 {...register('endTime')}
-                className="w-full px-3 py-2 rounded-lg bg-ink-base border border-ink-border text-ink-primary focus:outline-none focus:border-accent-copper transition-colors"
+                className="w-full px-3 py-2 rounded-lg bg-void-surface border border-edge-default text-text-bright focus:outline-none focus:border-accent-teal transition-colors"
               />
             </div>
           </div>
 
           {/* Notes */}
           <div>
-            <label className="block text-sm text-ink-secondary mb-1">Notes</label>
+            <label className="block text-sm text-text-dim mb-1">Notes</label>
             <textarea
               {...register('notes')}
               rows={2}
               placeholder="Optional notes..."
-              className="w-full px-3 py-2 rounded-lg bg-ink-base border border-ink-border text-ink-primary placeholder:text-ink-muted focus:outline-none focus:border-accent-copper resize-none transition-colors"
+              className="w-full px-3 py-2 rounded-lg bg-void-surface border border-edge-default text-text-bright placeholder:text-text-faint focus:outline-none focus:border-accent-teal resize-none transition-colors"
             />
           </div>
 
@@ -257,18 +257,18 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
             <input
               type="checkbox"
               {...register('athleteVisibility')}
-              className="w-4 h-4 rounded border-ink-border text-accent-copper focus:ring-accent-copper"
+              className="w-4 h-4 rounded border-edge-default text-accent-teal focus:ring-accent"
             />
-            <span className="text-sm text-ink-primary">Athletes can see this session</span>
+            <span className="text-sm text-text-bright">Athletes can see this session</span>
           </label>
 
           {/* Actions */}
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-ink-border">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-edge-default">
             {onCancel && (
               <button
                 type="button"
                 onClick={onCancel}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-ink-secondary hover:text-ink-body hover:bg-ink-hover transition-colors"
+                className="px-4 py-2 rounded-lg text-sm font-medium text-text-dim hover:text-text-default hover:bg-void-overlay transition-colors"
               >
                 Cancel
               </button>
@@ -276,7 +276,7 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
             <button
               type="button"
               onClick={goToStep2}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-accent-copper text-ink-deep text-sm font-medium hover:bg-accent-copper-hover transition-colors"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-accent-teal text-void-deep text-sm font-medium hover:bg-accent-teal-hover transition-colors"
             >
               Next: Pieces
               <ChevronRight size={16} />
@@ -289,7 +289,7 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
       {step === 'pieces' && (
         <div className="space-y-4">
           {fields.length === 0 ? (
-            <div className="text-center py-8 text-ink-secondary text-sm">
+            <div className="text-center py-8 text-text-dim text-sm">
               <p>No pieces added yet. Add warmup, main set, or cooldown pieces.</p>
             </div>
           ) : (
@@ -297,12 +297,12 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
               {fields.map((field, index) => (
                 <div
                   key={field.id}
-                  className="bg-ink-raised border border-ink-border rounded-lg p-3 space-y-3"
+                  className="bg-void-raised border border-edge-default rounded-lg p-3 space-y-3"
                 >
                   <div className="flex items-center justify-between">
                     <select
                       {...register(`pieces.${index}.segment`)}
-                      className="text-xs font-medium bg-ink-well border border-ink-border rounded px-2 py-1 text-ink-primary focus:outline-none focus:border-accent-copper"
+                      className="text-xs font-medium bg-void-deep border border-edge-default rounded px-2 py-1 text-text-bright focus:outline-none focus:border-accent-teal"
                     >
                       {SEGMENTS.map((seg) => (
                         <option key={seg.value} value={seg.value}>
@@ -313,7 +313,7 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
                     <button
                       type="button"
                       onClick={() => remove(index)}
-                      className="p-1 text-ink-muted hover:text-data-poor transition-colors"
+                      className="p-1 text-text-faint hover:text-data-poor transition-colors"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -322,7 +322,7 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
                   <input
                     {...register(`pieces.${index}.name`)}
                     placeholder="Piece name (e.g. 2k test)"
-                    className="w-full px-3 py-1.5 rounded-md bg-ink-base border border-ink-border text-sm text-ink-primary placeholder:text-ink-muted focus:outline-none focus:border-accent-copper transition-colors"
+                    className="w-full px-3 py-1.5 rounded-md bg-void-surface border border-edge-default text-sm text-text-bright placeholder:text-text-faint focus:outline-none focus:border-accent-teal transition-colors"
                   />
                   {errors.pieces?.[index]?.name && (
                     <p className="text-data-poor text-xs">{errors.pieces[index]?.name?.message}</p>
@@ -330,41 +330,41 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
 
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="block text-xs text-ink-muted mb-0.5">Distance (m)</label>
+                      <label className="block text-xs text-text-faint mb-0.5">Distance (m)</label>
                       <input
                         type="number"
                         {...register(`pieces.${index}.distance`, { valueAsNumber: true })}
                         placeholder="2000"
-                        className="w-full px-2 py-1 rounded-md bg-ink-base border border-ink-border text-sm text-ink-primary placeholder:text-ink-muted focus:outline-none focus:border-accent-copper transition-colors"
+                        className="w-full px-2 py-1 rounded-md bg-void-surface border border-edge-default text-sm text-text-bright placeholder:text-text-faint focus:outline-none focus:border-accent-teal transition-colors"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-ink-muted mb-0.5">Duration (sec)</label>
+                      <label className="block text-xs text-text-faint mb-0.5">Duration (sec)</label>
                       <input
                         type="number"
                         {...register(`pieces.${index}.duration`, { valueAsNumber: true })}
                         placeholder="480"
-                        className="w-full px-2 py-1 rounded-md bg-ink-base border border-ink-border text-sm text-ink-primary placeholder:text-ink-muted focus:outline-none focus:border-accent-copper transition-colors"
+                        className="w-full px-2 py-1 rounded-md bg-void-surface border border-edge-default text-sm text-text-bright placeholder:text-text-faint focus:outline-none focus:border-accent-teal transition-colors"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-ink-muted mb-0.5">
+                      <label className="block text-xs text-text-faint mb-0.5">
                         Target Split (s/500m)
                       </label>
                       <input
                         type="number"
                         {...register(`pieces.${index}.targetSplit`, { valueAsNumber: true })}
                         placeholder="115"
-                        className="w-full px-2 py-1 rounded-md bg-ink-base border border-ink-border text-sm text-ink-primary placeholder:text-ink-muted focus:outline-none focus:border-accent-copper transition-colors"
+                        className="w-full px-2 py-1 rounded-md bg-void-surface border border-edge-default text-sm text-text-bright placeholder:text-text-faint focus:outline-none focus:border-accent-teal transition-colors"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-ink-muted mb-0.5">Target Rate</label>
+                      <label className="block text-xs text-text-faint mb-0.5">Target Rate</label>
                       <input
                         type="number"
                         {...register(`pieces.${index}.targetRate`, { valueAsNumber: true })}
                         placeholder="28"
-                        className="w-full px-2 py-1 rounded-md bg-ink-base border border-ink-border text-sm text-ink-primary placeholder:text-ink-muted focus:outline-none focus:border-accent-copper transition-colors"
+                        className="w-full px-2 py-1 rounded-md bg-void-surface border border-edge-default text-sm text-text-bright placeholder:text-text-faint focus:outline-none focus:border-accent-teal transition-colors"
                       />
                     </div>
                   </div>
@@ -372,7 +372,7 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
                   <input
                     {...register(`pieces.${index}.notes`)}
                     placeholder="Notes for this piece..."
-                    className="w-full px-3 py-1.5 rounded-md bg-ink-base border border-ink-border text-sm text-ink-primary placeholder:text-ink-muted focus:outline-none focus:border-accent-copper transition-colors"
+                    className="w-full px-3 py-1.5 rounded-md bg-void-surface border border-edge-default text-sm text-text-bright placeholder:text-text-faint focus:outline-none focus:border-accent-teal transition-colors"
                   />
                 </div>
               ))}
@@ -384,7 +384,7 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
             <button
               type="button"
               onClick={() => addPiece('WARMUP')}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-ink-secondary hover:text-ink-primary hover:bg-ink-hover border border-ink-border transition-colors"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-text-dim hover:text-text-bright hover:bg-void-overlay border border-edge-default transition-colors"
             >
               <Plus size={12} />
               Warmup
@@ -392,7 +392,7 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
             <button
               type="button"
               onClick={() => addPiece('MAIN')}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-accent-copper hover:text-accent-copper-hover hover:bg-accent-copper/10 border border-accent-copper/30 transition-colors"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-accent-teal hover:text-accent-teal-hover hover:bg-accent-teal/10 border border-accent-teal/30 transition-colors"
             >
               <Plus size={12} />
               Main
@@ -400,7 +400,7 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
             <button
               type="button"
               onClick={() => addPiece('COOLDOWN')}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-ink-secondary hover:text-ink-primary hover:bg-ink-hover border border-ink-border transition-colors"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-text-dim hover:text-text-bright hover:bg-void-overlay border border-edge-default transition-colors"
             >
               <Plus size={12} />
               Cooldown
@@ -408,11 +408,11 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-between pt-3 border-t border-ink-border">
+          <div className="flex items-center justify-between pt-3 border-t border-edge-default">
             <button
               type="button"
               onClick={() => setStep('metadata')}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-ink-secondary hover:text-ink-body hover:bg-ink-hover transition-colors"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-text-dim hover:text-text-default hover:bg-void-overlay transition-colors"
             >
               <ChevronLeft size={16} />
               Back
@@ -420,7 +420,7 @@ export function SessionForm({ session, onSubmit, onCancel, isSubmitting }: Sessi
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 rounded-lg bg-accent-copper text-ink-deep text-sm font-medium hover:bg-accent-copper-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-4 py-2 rounded-lg bg-accent-teal text-void-deep text-sm font-medium hover:bg-accent-teal-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isSubmitting ? 'Saving...' : session ? 'Update Session' : 'Create Session'}
             </button>

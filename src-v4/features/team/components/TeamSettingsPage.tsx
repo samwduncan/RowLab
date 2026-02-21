@@ -31,12 +31,12 @@ export function TeamSettingsPage() {
     <div className="mx-auto max-w-5xl p-4 md:p-6 pb-20 md:pb-6">
       {/* Page header */}
       <div className="mb-8 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-ink-well">
-          <Settings size={20} className="text-ink-muted" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-void-deep">
+          <Settings size={20} className="text-text-faint" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-ink-primary">Team Settings</h1>
-          <p className="text-sm text-ink-secondary">{team.name}</p>
+          <h1 className="text-2xl font-bold text-text-bright">Team Settings</h1>
+          <p className="text-sm text-text-dim">{team.name}</p>
         </div>
       </div>
 
@@ -45,7 +45,7 @@ export function TeamSettingsPage() {
         {/* 1. General -- always visible */}
         <section id="general">
           <SectionHeading title="General" />
-          <div className="glass rounded-xl p-5">
+          <div className="panel rounded-xl p-5">
             <GeneralSection team={team} canEdit={canEdit} />
           </div>
         </section>
@@ -53,7 +53,7 @@ export function TeamSettingsPage() {
         {/* 2. Members -- always visible (actions vary by role) */}
         <section id="members">
           <SectionHeading title="Members" />
-          <div className="glass rounded-xl p-5">
+          <div className="panel rounded-xl p-5">
             <MembersSection team={team} />
           </div>
         </section>
@@ -62,7 +62,7 @@ export function TeamSettingsPage() {
         {canEdit && (
           <section id="invites">
             <SectionHeading title="Invites" />
-            <div className="glass rounded-xl p-5">
+            <div className="panel rounded-xl p-5">
               <InvitesSection teamId={team.id} />
             </div>
           </section>
@@ -72,7 +72,7 @@ export function TeamSettingsPage() {
         {canEdit && (
           <section id="integrations">
             <SectionHeading title="Integrations" />
-            <div className="glass rounded-xl p-5">
+            <div className="panel rounded-xl p-5">
               <IntegrationsSection />
             </div>
           </section>
@@ -96,7 +96,7 @@ export function TeamSettingsPage() {
 
 function SectionHeading({ title, danger = false }: { title: string; danger?: boolean }) {
   return (
-    <h2 className={`mb-3 text-lg font-semibold ${danger ? 'text-data-poor' : 'text-ink-primary'}`}>
+    <h2 className={`mb-3 text-lg font-semibold ${danger ? 'text-data-poor' : 'text-text-bright'}`}>
       {title}
     </h2>
   );

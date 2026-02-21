@@ -6,7 +6,7 @@
  * - Validates: 3-50 chars, alphanumeric + hyphens only
  * - Debounced availability check (400ms) via slugCheckOptions
  * - Visual feedback: pulse shimmer (loading), green check (available), red X (taken)
- * - Preview: shows rowlab.com/team/{slug} below input
+ * - Preview: shows oarbit.net/team/{slug} below input
  */
 import { useState, useEffect, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -64,7 +64,7 @@ export function SlugInput({ teamId, currentSlug, value, onChange, disabled }: Sl
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor="team-slug" className="text-sm font-medium text-ink-body">
+      <label htmlFor="team-slug" className="text-sm font-medium text-text-default">
         Custom URL slug
       </label>
       <div className="relative">
@@ -75,14 +75,14 @@ export function SlugInput({ teamId, currentSlug, value, onChange, disabled }: Sl
           onChange={handleChange}
           disabled={disabled}
           placeholder="my-team"
-          className="h-10 w-full rounded-xl px-3 pr-10 text-sm bg-ink-raised text-ink-primary border border-ink-border focus:border-accent-copper focus:ring-1 focus:ring-accent-copper/30 focus:outline-none transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed font-mono"
+          className="h-10 w-full rounded-xl px-3 pr-10 text-sm bg-void-raised text-text-bright border border-edge-default focus:border-accent-teal focus:ring-1 focus:ring-accent/30 focus:outline-none transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed font-mono"
           minLength={3}
           maxLength={50}
         />
         {/* Status indicator */}
         <div className="absolute right-3 top-1/2 -translate-y-1/2">
           {isFetching && value.length >= 3 && (
-            <div className="h-4 w-4 rounded bg-ink-border/50 animate-pulse" />
+            <div className="h-4 w-4 rounded bg-edge-default/50 animate-pulse" />
           )}
           {!isFetching && showIndicator && isAvailable && (
             <CheckCircle size={16} className="text-data-good" />
@@ -101,7 +101,7 @@ export function SlugInput({ teamId, currentSlug, value, onChange, disabled }: Sl
       )}
       {/* URL preview */}
       {value.length >= 3 && (
-        <span className="text-xs text-ink-muted font-mono">rowlab.com/team/{value}</span>
+        <span className="text-xs text-text-faint font-mono">oarbit.net/team/{value}</span>
       )}
     </div>
   );

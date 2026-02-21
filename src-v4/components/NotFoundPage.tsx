@@ -7,21 +7,21 @@ import { MapPinOff, Home, ArrowLeft } from 'lucide-react';
 
 export function NotFoundPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-ink-deep p-8">
+    <div className="flex min-h-screen items-center justify-center bg-void-deep p-8">
       <div className="max-w-md text-center">
-        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-ink-raised border border-ink-border">
-          <MapPinOff className="h-8 w-8 text-ink-muted" />
+        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-void-raised border border-edge-default">
+          <MapPinOff className="h-8 w-8 text-text-faint" />
         </div>
 
-        <h1 className="text-3xl font-bold text-ink-primary tracking-tight">Page Not Found</h1>
-        <p className="mt-3 text-sm text-ink-secondary leading-relaxed">
+        <h1 className="text-3xl font-bold text-text-bright tracking-tight">Page Not Found</h1>
+        <p className="mt-3 text-sm text-text-dim leading-relaxed">
           The page you're looking for doesn't exist or has been moved.
         </p>
 
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 rounded-xl bg-accent-copper px-5 py-2.5 text-sm font-medium text-ink-deep transition-colors hover:bg-accent-copper-hover"
+            className="inline-flex items-center gap-2 rounded-xl bg-accent-teal px-5 py-2.5 text-sm font-medium text-void-deep transition-colors hover:bg-accent-teal-hover"
           >
             <Home className="h-4 w-4" />
             Go Home
@@ -29,7 +29,7 @@ export function NotFoundPage() {
           <button
             type="button"
             onClick={() => window.history.back()}
-            className="inline-flex items-center gap-2 rounded-xl border border-ink-border px-5 py-2.5 text-sm font-medium text-ink-secondary transition-colors hover:bg-ink-hover hover:text-ink-primary"
+            className="inline-flex items-center gap-2 rounded-xl border border-edge-default px-5 py-2.5 text-sm font-medium text-text-dim transition-colors hover:bg-void-overlay hover:text-text-bright"
           >
             <ArrowLeft className="h-4 w-4" />
             Go Back

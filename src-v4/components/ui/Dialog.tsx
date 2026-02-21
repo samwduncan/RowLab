@@ -1,13 +1,22 @@
 /**
- * Dialog component using native <dialog> element.
- * Provides focus trap, Escape key handling, and backdrop click via the platform.
- * Uses spring animation for entrance/exit.
+ * Dialog component — oarbit design system.
+ *
+ * bg-void-overlay, border-edge-default, shadow-lg.
+ * radius-xl (12px). Padding space-6 (24px).
+ * Backdrop: oklch(0 0 0 / 0.6) — opaque, no blur.
+ * Uses native <dialog> for focus trap, Escape key, backdrop click.
+ * Spring animation (flow) for entrance/exit.
  */
 
 import { useEffect, useRef, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X } from 'lucide-react';
-import { SPRING_SNAPPY } from '../../lib/animations';
+import { motion as motionTokens } from '@/design-system';
+
+const SPRING_FLOW = {
+  type: 'spring' as const,
+  ...motionTokens.spring.flow,
+};
 
 interface DialogProps {
   open: boolean;
@@ -15,6 +24,7 @@ interface DialogProps {
   title?: string;
   description?: string;
   children: ReactNode;
+  /** Tailwind max-width class. Default: max-w-lg (640px) */
   maxWidth?: string;
   showClose?: boolean;
 }
@@ -46,10 +56,7 @@ export function Dialog({
     const dialog = dialogRef.current;
     if (!dialog) return;
 
-    const handleClose = () => {
-      onClose();
-    };
-
+    const handleClose = () => onClose();
     dialog.addEventListener('close', handleClose);
     return () => dialog.removeEventListener('close', handleClose);
   }, [onClose]);
@@ -59,7 +66,6 @@ export function Dialog({
     const dialog = dialogRef.current;
     if (!dialog) return;
 
-    // Click was on the dialog backdrop (not inside the content)
     const rect = dialog.getBoundingClientRect();
     const isInDialog =
       e.clientX >= rect.left &&
@@ -77,7 +83,7 @@ export function Dialog({
       ref={dialogRef}
       onClick={handleBackdropClick}
       className={`
-        backdrop:bg-black/60 backdrop:backdrop-blur-sm
+        backdrop:bg-black/60
         bg-transparent p-0 m-auto
         ${maxWidth} w-[calc(100%-2rem)]
         outline-none
@@ -86,35 +92,29 @@ export function Dialog({
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 8 }}
+            initial={{ opacity: 0, scale: 0.96, y: 8 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 8 }}
-            transition={SPRING_SNAPPY}
-            className="relative overflow-hidden glass rounded-xl shadow-card"
+            exit={{ opacity: 0, scale: 0.96, y: 8 }}
+            transition={SPRING_FLOW}
+            className="bg-void-overlay border border-edge-default rounded-[var(--radius-xl)] shadow-lg overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Noise texture overlay */}
-            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] pointer-events-none mix-blend-overlay" />
-
-            {/* Gradient top line */}
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-copper/30 to-transparent" />
-
             {/* Content */}
-            <div className="relative z-10 p-6">
+            <div className="p-6">
               {/* Header */}
               {(title || showClose) && (
                 <div className="flex items-start justify-between gap-3 mb-4">
                   <div className="flex-1 min-w-0">
-                    {title && <h2 className="text-lg font-semibold text-ink-primary">{title}</h2>}
+                    {title && <h2 className="text-lg font-semibold text-text-bright">{title}</h2>}
                     {description && (
-                      <p className="text-sm text-ink-secondary mt-1">{description}</p>
+                      <p className="text-sm text-text-dim mt-1">{description}</p>
                     )}
                   </div>
                   {showClose && (
                     <button
                       type="button"
                       onClick={onClose}
-                      className="p-1.5 rounded-lg text-ink-muted hover:text-ink-secondary hover:bg-ink-hover transition-colors duration-150 cursor-pointer"
+                      className="p-1.5 rounded-[var(--radius-sm)] text-text-faint hover:text-text-dim hover:bg-void-raised transition-colors duration-150 cursor-pointer"
                       aria-label="Close dialog"
                     >
                       <X className="w-4 h-4" />

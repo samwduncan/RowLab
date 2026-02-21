@@ -98,13 +98,13 @@ function AthletesPage() {
         {/* Header */}
         <motion.div variants={listItemVariants} transition={SPRING_SMOOTH} className="mb-6">
           <div className="flex items-center gap-2 mb-1">
-            <Users className="h-5 w-5 text-ink-muted" />
-            <p className="text-xs font-medium uppercase tracking-wider text-ink-muted">Team</p>
+            <Users className="h-5 w-5 text-text-faint" />
+            <p className="text-xs font-medium uppercase tracking-wider text-text-faint">Team</p>
           </div>
           <h1 className="text-2xl font-bold text-heading-gradient tracking-tight">
             Athletes
             {athletes.length > 0 && (
-              <span className="ml-2 text-base font-normal text-ink-muted">({athletes.length})</span>
+              <span className="ml-2 text-base font-normal text-text-faint">({athletes.length})</span>
             )}
           </h1>
         </motion.div>
@@ -116,16 +116,16 @@ function AthletesPage() {
           className="flex flex-col sm:flex-row gap-3 mb-5"
         >
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-muted" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-faint" />
             <input
               type="text"
               placeholder="Search athletes..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-lg bg-ink-well border border-ink-border pl-9 pr-3 py-2 text-sm text-ink-primary placeholder:text-ink-muted focus:outline-none focus:ring-1 focus:ring-accent-copper/50"
+              className="w-full rounded-lg bg-void-deep border border-edge-default pl-9 pr-3 py-2 text-sm text-text-bright placeholder:text-text-faint focus:outline-none focus:ring-1 focus:ring-accent/50"
             />
           </div>
-          <div className="flex gap-1 p-1 bg-ink-well/40 rounded-xl w-fit">
+          <div className="flex gap-1 p-1 bg-void-deep/40 rounded-xl w-fit">
             {SIDE_TABS.map((tab) => (
               <button
                 key={tab.value}
@@ -135,8 +135,8 @@ function AthletesPage() {
                   px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-150
                   ${
                     sideFilter === tab.value
-                      ? 'bg-ink-raised text-ink-primary shadow-sm'
-                      : 'text-ink-muted hover:text-ink-secondary'
+                      ? 'bg-void-raised text-text-bright shadow-sm'
+                      : 'text-text-faint hover:text-text-dim'
                   }
                 `.trim()}
               >
@@ -171,24 +171,24 @@ function AthletesPage() {
                 key={athlete.id}
                 variants={listItemVariants}
                 transition={SPRING_SMOOTH}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-ink-hover transition-colors"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-void-overlay transition-colors"
               >
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-ink-raised shrink-0">
-                  <User className="h-4 w-4 text-ink-muted" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-void-raised shrink-0">
+                  <User className="h-4 w-4 text-text-faint" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-ink-primary truncate">{athlete.name}</p>
-                  <div className="flex items-center gap-2 text-xs text-ink-muted">
+                  <p className="text-sm font-medium text-text-bright truncate">{athlete.name}</p>
+                  <div className="flex items-center gap-2 text-xs text-text-faint">
                     {athlete.side && <span>{athlete.side}</span>}
                     {athlete.weightClass && (
                       <>
-                        {athlete.side && <span className="text-ink-border">|</span>}
+                        {athlete.side && <span className="text-edge-default">|</span>}
                         <span>{athlete.weightClass}</span>
                       </>
                     )}
                     {athlete.year && (
                       <>
-                        <span className="text-ink-border">|</span>
+                        <span className="text-edge-default">|</span>
                         <span>{athlete.year}</span>
                       </>
                     )}
@@ -199,7 +199,7 @@ function AthletesPage() {
                     className={`shrink-0 text-xs px-2 py-0.5 rounded-full ${
                       athlete.status === 'active'
                         ? 'bg-data-good/10 text-data-good'
-                        : 'bg-ink-well text-ink-muted'
+                        : 'bg-void-deep text-text-faint'
                     }`}
                   >
                     {athlete.status}

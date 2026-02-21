@@ -34,7 +34,7 @@ export function BottomTabs() {
   return (
     <>
       <nav
-        className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center justify-around border-t border-ink-border bg-ink-base/95 backdrop-blur-xl"
+        className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center justify-around border-t border-edge-default bg-void-surface/95 backdrop-blur-xl"
         style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
         aria-label="Bottom navigation"
       >
@@ -54,7 +54,7 @@ export function BottomTabs() {
                 type="button"
                 onClick={() => setMoreOpen((prev) => !prev)}
                 className={`flex flex-col items-center justify-center gap-0.5 px-3 py-1 transition-colors ${
-                  active ? 'text-accent-copper' : 'text-ink-muted'
+                  active ? 'text-accent-teal' : 'text-text-faint'
                 }`}
               >
                 <Icon size={20} />
@@ -69,7 +69,7 @@ export function BottomTabs() {
               to={item.path}
               onClick={() => setMoreOpen(false)}
               className={`flex flex-col items-center justify-center gap-0.5 px-3 py-1 transition-colors ${
-                active ? 'text-accent-copper' : 'text-ink-muted'
+                active ? 'text-accent-teal' : 'text-text-faint'
               }`}
               aria-current={active ? 'page' : undefined}
             >
@@ -98,19 +98,19 @@ export function BottomTabs() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="fixed bottom-16 left-0 right-0 z-35 rounded-t-2xl border-t border-ink-border bg-ink-base/98 backdrop-blur-xl"
+              className="fixed bottom-16 left-0 right-0 z-35 rounded-t-2xl border-t border-edge-default bg-void-surface/98 backdrop-blur-xl"
               style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
             >
               <div className="p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-semibold text-ink-primary">Coach Tools</h3>
+                  <h3 className="text-sm font-semibold text-text-bright">Coach Tools</h3>
                   <button
                     type="button"
                     onClick={() => setMoreOpen(false)}
-                    className="p-1 rounded-md hover:bg-ink-hover transition-colors"
+                    className="p-1 rounded-md hover:bg-void-overlay transition-colors"
                     aria-label="Close"
                   >
-                    <X size={16} className="text-ink-muted" />
+                    <X size={16} className="text-text-faint" />
                   </button>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
@@ -129,8 +129,8 @@ export function BottomTabs() {
                         }}
                         className={`flex flex-col items-center gap-1.5 rounded-xl p-3 transition-colors ${
                           isActive
-                            ? 'bg-accent-copper/10 text-accent-copper'
-                            : 'text-ink-secondary hover:bg-ink-hover'
+                            ? 'bg-accent-teal/10 text-accent-teal'
+                            : 'text-text-dim hover:bg-void-overlay'
                         }`}
                       >
                         <ToolIcon size={20} />

@@ -64,9 +64,9 @@ const EVENT_CONFIG: Record<ActivityEventType, EventConfig> = {
   },
   announcement: {
     icon: Megaphone,
-    iconColor: 'text-accent-copper',
-    iconBg: 'bg-accent-copper/10',
-    borderColor: 'border-l-accent-copper/60',
+    iconColor: 'text-accent-teal',
+    iconBg: 'bg-accent-teal/10',
+    borderColor: 'border-l-accent/60',
     verb: (e) => {
       const truncated = e.title.length > 50 ? e.title.slice(0, 47) + '...' : e.title;
       return ` posted: "${truncated}"`;
@@ -81,15 +81,15 @@ const EVENT_CONFIG: Record<ActivityEventType, EventConfig> = {
   },
   team_updated: {
     icon: Settings,
-    iconColor: 'text-ink-secondary',
-    iconBg: 'bg-ink-well',
-    borderColor: 'border-l-ink-secondary/40',
+    iconColor: 'text-text-dim',
+    iconBg: 'bg-void-deep',
+    borderColor: 'border-l-text-dim/40',
     verb: () => ' updated team settings',
   },
   invite_generated: {
     icon: Link2,
-    iconColor: 'text-accent-primary',
-    iconBg: 'bg-accent-primary/10',
+    iconColor: 'text-accent-teal-primary',
+    iconBg: 'bg-accent-teal-primary/10',
     borderColor: 'border-l-accent-primary/60',
     verb: () => ' generated an invite link',
   },
@@ -132,9 +132,9 @@ const EVENT_CONFIG: Record<ActivityEventType, EventConfig> = {
 
 const FALLBACK_CONFIG: EventConfig = {
   icon: Settings,
-  iconColor: 'text-ink-muted',
-  iconBg: 'bg-ink-well',
-  borderColor: 'border-l-ink-border',
+  iconColor: 'text-text-faint',
+  iconBg: 'bg-void-deep',
+  borderColor: 'border-l-edge-default',
   verb: (e) => ` ${e.title}`,
 };
 
@@ -143,12 +143,12 @@ const FALLBACK_CONFIG: EventConfig = {
  * Returns a Tailwind bg class.
  */
 const AVATAR_COLORS = [
-  'bg-accent-copper/20',
-  'bg-accent-primary/20',
-  'bg-accent-primary/20',
+  'bg-accent-teal/20',
+  'bg-accent-teal-primary/20',
+  'bg-accent-teal-primary/20',
   'bg-data-good/20',
   'bg-data-warning/20',
-  'bg-accent-primary/20',
+  'bg-accent-teal-primary/20',
   'bg-data-excellent/20',
   'bg-data-warning/20',
 ];
@@ -193,7 +193,7 @@ export function ActivityItem({ event }: ActivityItemProps) {
 
   return (
     <div
-      className={`flex items-center gap-3 border-l-2 ${config.borderColor} rounded-lg px-3 py-2.5 transition-colors hover:bg-ink-hover/30`}
+      className={`flex items-center gap-3 border-l-2 ${config.borderColor} rounded-lg px-3 py-2.5 transition-colors hover:bg-void-overlay/30`}
     >
       {/* Avatar circle (photo > initials > action icon fallback) */}
       {event.actorAvatarUrl ? (
@@ -204,7 +204,7 @@ export function ActivityItem({ event }: ActivityItemProps) {
         />
       ) : event.actorName ? (
         <div
-          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${getAvatarColor(event.actorName)} text-xs font-semibold text-ink-primary`}
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${getAvatarColor(event.actorName)} text-xs font-semibold text-text-bright`}
         >
           {getInitials(event.actorName)}
         </div>
@@ -217,10 +217,10 @@ export function ActivityItem({ event }: ActivityItemProps) {
       )}
 
       {/* Rich text description */}
-      <p className="min-w-0 flex-1 text-sm leading-relaxed text-ink-secondary">
+      <p className="min-w-0 flex-1 text-sm leading-relaxed text-text-dim">
         {event.actorName ? (
           <>
-            <span className="font-semibold text-ink-primary">{event.actorName}</span>
+            <span className="font-semibold text-text-bright">{event.actorName}</span>
             {verb}
           </>
         ) : (
@@ -234,7 +234,7 @@ export function ActivityItem({ event }: ActivityItemProps) {
       {/* Relative timestamp */}
       <time
         dateTime={event.createdAt}
-        className="shrink-0 text-xs tabular-nums text-ink-muted"
+        className="shrink-0 text-xs tabular-nums text-text-faint"
         title={new Date(event.createdAt).toLocaleString()}
       >
         {timeAgo}

@@ -146,7 +146,7 @@ function InviteClaimPage() {
   // Loading state
   if (isLoading || !isInitialized) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-ink-deep p-4">
+      <div className="flex min-h-screen items-center justify-center bg-void-deep p-4">
         <div className="w-full max-w-md">
           <GlassCard padding="lg" className="rounded-2xl">
             <InviteSkeleton />
@@ -159,12 +159,12 @@ function InviteClaimPage() {
   // Invalid invite
   if (isError) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-ink-deep p-4">
+      <div className="flex min-h-screen items-center justify-center bg-void-deep p-4">
         <div className="w-full max-w-md">
           <GlassCard padding="lg" className="rounded-2xl text-center">
             <div className="mb-6">
-              <h1 className="text-3xl font-bold tracking-tight text-ink-primary font-display">
-                Row<span className="text-accent-copper">Lab</span>
+              <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
+                Row<span className="text-accent-teal">Lab</span>
               </h1>
             </div>
             <div className="flex flex-col gap-3">
@@ -174,7 +174,7 @@ function InviteClaimPage() {
               </div>
               <Link
                 to="/login"
-                className="mt-2 inline-flex items-center justify-center text-sm font-medium text-accent-copper hover:text-accent-copper-hover transition-colors duration-150"
+                className="mt-2 inline-flex items-center justify-center text-sm font-medium text-accent-teal hover:text-accent-teal-hover transition-colors duration-150"
               >
                 Go to login
               </Link>
@@ -195,10 +195,10 @@ function InviteClaimPage() {
 
   // Valid invite + not authenticated: redirecting to register (show loading)
   return (
-    <div className="flex min-h-screen items-center justify-center bg-ink-deep p-4">
+    <div className="flex min-h-screen items-center justify-center bg-void-deep p-4">
       <div className="w-full max-w-md">
         <GlassCard padding="lg" className="rounded-2xl text-center">
-          <p className="text-sm text-ink-secondary">Redirecting to registration...</p>
+          <p className="text-sm text-text-dim">Redirecting to registration...</p>
         </GlassCard>
       </div>
     </div>
@@ -244,22 +244,22 @@ function NewInviteClaimCard({
   });
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-ink-deep p-4">
+    <div className="flex min-h-screen items-center justify-center bg-void-deep p-4">
       <div className="w-full max-w-md">
         <GlassCard padding="lg" className="rounded-2xl text-center">
           <div className="mb-6">
-            <h1 className="text-3xl font-bold tracking-tight text-ink-primary font-display">
-              Row<span className="text-accent-copper">Lab</span>
+            <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
+              Row<span className="text-accent-teal">Lab</span>
             </h1>
           </div>
 
           <div className="flex flex-col gap-4">
-            <h2 className="text-lg font-semibold text-ink-primary">Team invitation</h2>
+            <h2 className="text-lg font-semibold text-text-bright">Team invitation</h2>
 
-            <p className="text-sm text-ink-body">
+            <p className="text-sm text-text-default">
               You've been invited to join{' '}
-              <span className="font-semibold text-ink-primary">{resolved.teamName}</span> as a{' '}
-              <span className="font-semibold text-accent-copper capitalize">
+              <span className="font-semibold text-text-bright">{resolved.teamName}</span> as a{' '}
+              <span className="font-semibold text-accent-teal capitalize">
                 {resolved.role.toLowerCase()}
               </span>
             </p>
@@ -318,28 +318,28 @@ function LegacyInviteClaimCard({
   });
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-ink-deep p-4">
+    <div className="flex min-h-screen items-center justify-center bg-void-deep p-4">
       <div className="w-full max-w-md">
         <GlassCard padding="lg" className="rounded-2xl text-center">
           <div className="mb-6">
-            <h1 className="text-3xl font-bold tracking-tight text-ink-primary font-display">
-              Row<span className="text-accent-copper">Lab</span>
+            <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
+              Row<span className="text-accent-teal">Lab</span>
             </h1>
           </div>
 
           <div className="flex flex-col gap-4">
-            <h2 className="text-lg font-semibold text-ink-primary">Team invitation</h2>
+            <h2 className="text-lg font-semibold text-text-bright">Team invitation</h2>
 
-            <p className="text-sm text-ink-body">
+            <p className="text-sm text-text-default">
               You've been invited to join{' '}
-              <span className="font-semibold text-ink-primary">
+              <span className="font-semibold text-text-bright">
                 {invitation.team?.name || 'a team'}
               </span>
               {invitation.role && (
                 <>
                   {' '}
                   as a{' '}
-                  <span className="font-semibold text-accent-copper capitalize">
+                  <span className="font-semibold text-accent-teal capitalize">
                     {invitation.role.toLowerCase()}
                   </span>
                 </>
@@ -373,12 +373,12 @@ function LegacyInviteClaimCard({
 function InviteSkeleton() {
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="h-8 w-32 rounded-lg bg-ink-raised animate-shimmer" />
-      <div className="h-5 w-48 rounded-sm bg-ink-raised animate-shimmer" />
-      <div className="h-4 w-64 rounded-sm bg-ink-raised animate-shimmer" />
+      <div className="h-8 w-32 rounded-lg bg-void-raised animate-shimmer" />
+      <div className="h-5 w-48 rounded-sm bg-void-raised animate-shimmer" />
+      <div className="h-4 w-64 rounded-sm bg-void-raised animate-shimmer" />
       <div className="flex gap-3 w-full mt-2">
-        <div className="flex-1 h-10 rounded-xl bg-ink-raised animate-shimmer" />
-        <div className="flex-1 h-10 rounded-xl bg-ink-raised animate-shimmer" />
+        <div className="flex-1 h-10 rounded-xl bg-void-raised animate-shimmer" />
+        <div className="flex-1 h-10 rounded-xl bg-void-raised animate-shimmer" />
       </div>
     </div>
   );

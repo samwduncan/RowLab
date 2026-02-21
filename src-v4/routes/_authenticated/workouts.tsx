@@ -183,14 +183,14 @@ function WorkoutsLayout() {
               onClick={() => setFilterOpen((prev) => !prev)}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                 filterOpen || activeFilterCount > 0
-                  ? 'bg-ink-raised text-ink-primary'
-                  : 'text-ink-secondary hover:text-ink-body hover:bg-ink-hover'
+                  ? 'bg-void-raised text-text-bright'
+                  : 'text-text-dim hover:text-text-default hover:bg-void-overlay'
               }`}
             >
               <Filter size={14} />
               <span className="hidden sm:inline">Filters</span>
               {activeFilterCount > 0 && (
-                <span className="ml-0.5 inline-flex items-center justify-center w-5 h-5 rounded-full bg-accent-copper text-ink-deep text-xs font-semibold">
+                <span className="ml-0.5 inline-flex items-center justify-center w-5 h-5 rounded-full bg-accent-teal text-void-deep text-xs font-semibold">
                   {activeFilterCount}
                 </span>
               )}
@@ -223,7 +223,7 @@ function WorkoutsLayout() {
           opacity: fabVisible ? 1 : 0,
         }}
         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-        className={`fixed z-30 w-11 h-11 bg-accent-copper hover:bg-accent-copper-hover text-ink-deep rounded-full shadow-glow-copper flex items-center justify-center transition-colors ${
+        className={`fixed z-30 w-11 h-11 bg-accent-teal hover:bg-accent-teal-hover text-void-deep rounded-full shadow-glow-accent flex items-center justify-center transition-colors ${
           isMobile ? 'bottom-20 right-4' : 'bottom-6 right-6'
         }`}
         aria-label="Log new workout"
@@ -278,18 +278,18 @@ function DeleteConfirmDialog({
       {/* Dialog */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div
-          className="bg-ink-base border border-ink-border rounded-xl shadow-card p-5 max-w-sm w-full"
+          className="bg-void-surface border border-edge-default rounded-xl shadow-md p-5 max-w-sm w-full"
           onClick={(e) => e.stopPropagation()}
         >
-          <h3 className="text-ink-primary text-base font-semibold mb-2">Delete workout?</h3>
-          <p className="text-ink-secondary text-sm mb-5">
+          <h3 className="text-text-bright text-base font-semibold mb-2">Delete workout?</h3>
+          <p className="text-text-dim text-sm mb-5">
             This cannot be undone. This workout will be permanently removed from your log.
           </p>
           <div className="flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-2 rounded-lg text-sm font-medium text-ink-secondary hover:text-ink-body hover:bg-ink-hover transition-colors"
+              className="px-4 py-2 rounded-lg text-sm font-medium text-text-dim hover:text-text-default hover:bg-void-overlay transition-colors"
             >
               Cancel
             </button>
@@ -297,7 +297,7 @@ function DeleteConfirmDialog({
               type="button"
               onClick={handleConfirm}
               disabled={deleteWorkout.isPending}
-              className="px-4 py-2 rounded-lg text-sm font-medium bg-data-poor text-ink-deep hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="px-4 py-2 rounded-lg text-sm font-medium bg-data-poor text-void-deep hover:opacity-90 transition-opacity disabled:opacity-50"
             >
               {deleteWorkout.isPending ? 'Deleting...' : 'Delete'}
             </button>

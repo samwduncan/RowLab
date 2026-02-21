@@ -88,9 +88,9 @@ export function AddBoatButton({ onAdd, readOnly = false }: AddBoatButtonProps) {
         className="
           inline-flex items-center gap-2 px-4 py-2.5 rounded-xl
           text-sm font-medium
-          border-2 border-dashed border-ink-border
-          text-ink-secondary hover:text-accent-copper
-          hover:border-accent-copper/40 hover:bg-accent-copper/5
+          border-2 border-dashed border-edge-default
+          text-text-dim hover:text-accent-teal
+          hover:border-accent-teal/40 hover:bg-accent-teal/5
           transition-all duration-150
         "
       >
@@ -103,7 +103,7 @@ export function AddBoatButton({ onAdd, readOnly = false }: AddBoatButtonProps) {
           className="
             absolute top-full mt-2 left-0 z-30
             w-60 py-1.5 rounded-xl
-            glass shadow-xl border border-ink-border
+            panel shadow-xl border border-edge-default
           "
           role="menu"
         >
@@ -115,18 +115,18 @@ export function AddBoatButton({ onAdd, readOnly = false }: AddBoatButtonProps) {
               className="
                 w-full flex items-center gap-3 px-3.5 py-2.5
                 text-left text-sm
-                hover:bg-ink-hover transition-colors duration-75
+                hover:bg-void-overlay transition-colors duration-75
               "
             >
               {/* Boat class badge */}
-              <span className="text-sm font-bold text-accent-copper w-7 text-center flex-shrink-0">
+              <span className="text-sm font-bold text-accent-teal w-7 text-center flex-shrink-0">
                 {option.boatClass}
               </span>
 
               {/* Label + info */}
               <div className="flex-1 min-w-0">
-                <span className="text-ink-primary font-medium">{option.label}</span>
-                <span className="text-ink-muted text-xs ml-2">
+                <span className="text-text-bright font-medium">{option.label}</span>
+                <span className="text-text-faint text-xs ml-2">
                   {option.seatCount} seat{option.seatCount > 1 ? 's' : ''}
                   {option.hasCoxswain ? ' + cox' : ''}
                 </span>

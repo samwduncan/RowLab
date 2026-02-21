@@ -113,30 +113,30 @@ export function TrainingPage({ teamId, readOnly }: TrainingPageProps) {
     <div className="mx-auto max-w-6xl p-4 pb-24 md:p-6">
       {/* Page header */}
       <div className="mb-6">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-muted mb-1">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-text-faint mb-1">
           COACH
         </p>
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-semibold text-ink-primary tracking-tight lg:text-3xl">
+          <h1 className="text-2xl font-semibold text-text-bright tracking-tight lg:text-3xl">
             Training
           </h1>
           {readOnly && <ReadOnlyBadge />}
         </div>
-        <p className="mt-1 text-sm text-ink-secondary">
+        <p className="mt-1 text-sm text-text-dim">
           Plan, schedule, and track training sessions
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 rounded-xl bg-ink-well/50 p-1 mb-6">
+      <div className="flex gap-1 rounded-xl bg-void-deep/50 p-1 mb-6">
         {TABS.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
             onClick={() => setActiveTab(key)}
             className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
               activeTab === key
-                ? 'bg-ink-raised text-ink-primary shadow-sm'
-                : 'text-ink-secondary hover:text-ink-primary'
+                ? 'bg-void-raised text-text-bright shadow-sm'
+                : 'text-text-dim hover:text-text-bright'
             }`}
           >
             <span className="flex items-center justify-center gap-2">
@@ -217,7 +217,7 @@ function CalendarTab({
             <select
               value={selectedPlanId}
               onChange={(e) => onSelectPlan(e.target.value)}
-              className="rounded-lg border border-white/[0.06] bg-ink-raised px-3 py-2 text-sm text-ink-primary transition-colors focus:border-accent-copper/50 focus:outline-none"
+              className="rounded-lg border border-white/[0.06] bg-void-raised px-3 py-2 text-sm text-text-bright transition-colors focus:border-accent-teal/50 focus:outline-none"
             >
               <option value="">All Plans</option>
               {activePlans.map((plan) => (

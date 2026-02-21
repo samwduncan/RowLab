@@ -30,7 +30,7 @@ const TONE_STYLES: Record<Insight['tone'], { bg: string; text: string; icon: str
   },
   info: {
     bg: 'bg-data-good/8',
-    text: 'text-ink-secondary',
+    text: 'text-text-dim',
     icon: 'text-data-good',
   },
   success: {

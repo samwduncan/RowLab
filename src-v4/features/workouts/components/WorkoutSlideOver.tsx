@@ -73,7 +73,7 @@ export function WorkoutSlideOver({
             /* Mobile: bottom sheet */
             <motion.div
               key="panel"
-              className="fixed bottom-0 left-0 right-0 z-50 h-[90vh] bg-ink-base border-t border-ink-border rounded-t-2xl flex flex-col"
+              className="fixed bottom-0 left-0 right-0 z-50 h-[90vh] bg-void-surface border-t border-edge-default rounded-t-2xl flex flex-col"
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
@@ -92,7 +92,7 @@ export function WorkoutSlideOver({
             /* Desktop: right panel */
             <motion.div
               key="panel"
-              className="fixed top-0 right-0 h-full z-50 w-[400px] bg-ink-base border-l border-ink-border flex flex-col"
+              className="fixed top-0 right-0 h-full z-50 w-[400px] bg-void-surface border-l border-edge-default flex flex-col"
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
@@ -122,15 +122,15 @@ export function WorkoutSlideOver({
 
 function SlideOverHeader({ title, onClose }: { title: string; onClose: () => void }) {
   return (
-    <div className="flex items-center justify-between px-5 py-4 border-b border-ink-border shrink-0">
-      <h2 className="text-lg font-display font-semibold text-ink-primary">{title}</h2>
+    <div className="flex items-center justify-between px-5 py-4 border-b border-edge-default shrink-0">
+      <h2 className="text-lg font-display font-semibold text-text-bright">{title}</h2>
       <button
         type="button"
         onClick={onClose}
-        className="p-1.5 rounded-md hover:bg-ink-hover transition-colors"
+        className="p-1.5 rounded-md hover:bg-void-overlay transition-colors"
         aria-label="Close"
       >
-        <X size={18} className="text-ink-tertiary" />
+        <X size={18} className="text-text-faint" />
       </button>
     </div>
   );

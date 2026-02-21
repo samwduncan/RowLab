@@ -13,7 +13,7 @@ interface TeamDashboardSkeletonProps {
 
 function SkeletonTabBar() {
   return (
-    <div className="flex gap-1 rounded-xl bg-ink-well/50 p-1" aria-hidden="true">
+    <div className="flex gap-1 rounded-xl bg-void-deep/50 p-1" aria-hidden="true">
       {Array.from({ length: 3 }).map((_, i) => (
         <div key={i} className="flex flex-1 items-center justify-center py-2.5">
           <Skeleton height="0.875rem" width="4rem" rounded="sm" />
@@ -25,7 +25,7 @@ function SkeletonTabBar() {
 
 function SkeletonStatsCard() {
   return (
-    <div className="glass rounded-xl p-5 space-y-3" aria-hidden="true">
+    <div className="panel rounded-xl p-5 space-y-3" aria-hidden="true">
       <Skeleton height="0.75rem" width="5rem" rounded="sm" />
       {Array.from({ length: 4 }).map((_, i) => (
         <div key={i} className="flex items-center gap-3">
@@ -54,7 +54,7 @@ function SkeletonActivityRow() {
 
 function SkeletonAnnouncementCard() {
   return (
-    <div className="space-y-2 border-b border-ink-well/40 pb-3 last:border-0" aria-hidden="true">
+    <div className="space-y-2 border-b border-surface-inset/40 pb-3 last:border-0" aria-hidden="true">
       <Skeleton height="0.875rem" width="80%" rounded="sm" />
       <Skeleton height="0.625rem" width="100%" rounded="sm" />
       <Skeleton height="0.5rem" width="40%" rounded="sm" />
@@ -82,7 +82,7 @@ function SkeletonOverviewContent() {
 
       {/* Right sidebar skeleton */}
       <div className="hidden lg:block w-72 shrink-0 space-y-4">
-        <div className="glass rounded-xl p-5 space-y-3" aria-hidden="true">
+        <div className="panel rounded-xl p-5 space-y-3" aria-hidden="true">
           <Skeleton height="0.75rem" width="6rem" rounded="sm" />
           <SkeletonAnnouncementCard />
           <SkeletonAnnouncementCard />

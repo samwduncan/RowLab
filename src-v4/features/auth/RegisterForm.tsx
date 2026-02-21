@@ -92,7 +92,7 @@ export function RegisterForm({
       )}
 
       {assignedRole && (
-        <div className="rounded-lg bg-accent-copper/10 border border-accent-copper/20 px-3 py-2.5 text-sm text-accent-copper text-center">
+        <div className="rounded-lg bg-accent-teal/10 border border-accent-teal/20 px-3 py-2.5 text-sm text-accent-teal text-center">
           You've been invited as a{' '}
           <span className="font-semibold capitalize">{assignedRole.toLowerCase()}</span>
         </div>

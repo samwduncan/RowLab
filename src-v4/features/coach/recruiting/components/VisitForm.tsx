@@ -95,7 +95,7 @@ export function VisitForm({ visit, onSubmit, onCancel, isPending = false }: Visi
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-5">
       {/* Recruit info */}
       <div className="space-y-3">
-        <h4 className="text-sm font-medium text-ink-secondary uppercase tracking-wider">
+        <h4 className="text-sm font-medium text-text-dim uppercase tracking-wider">
           Recruit Info
         </h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -126,7 +126,7 @@ export function VisitForm({ visit, onSubmit, onCancel, isPending = false }: Visi
 
       {/* Visit schedule */}
       <div className="space-y-3">
-        <h4 className="text-sm font-medium text-ink-secondary uppercase tracking-wider">
+        <h4 className="text-sm font-medium text-text-dim uppercase tracking-wider">
           Visit Schedule
         </h4>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -149,12 +149,12 @@ export function VisitForm({ visit, onSubmit, onCancel, isPending = false }: Visi
       {/* Status (edit only) */}
       {isEditing && (
         <div className="space-y-3">
-          <h4 className="text-sm font-medium text-ink-secondary uppercase tracking-wider">
+          <h4 className="text-sm font-medium text-text-dim uppercase tracking-wider">
             Status
           </h4>
           <select
             {...register('status')}
-            className="h-10 w-full rounded-xl px-3.5 text-sm bg-ink-raised text-ink-primary border border-ink-border focus:border-accent-copper focus:ring-1 focus:ring-accent-copper/30 focus:outline-none"
+            className="h-10 w-full rounded-xl px-3.5 text-sm bg-void-raised text-text-bright border border-edge-default focus:border-accent-teal focus:ring-1 focus:ring-accent/30 focus:outline-none"
           >
             {VISIT_STATUS_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -167,17 +167,17 @@ export function VisitForm({ visit, onSubmit, onCancel, isPending = false }: Visi
 
       {/* Notes */}
       <div className="space-y-3">
-        <h4 className="text-sm font-medium text-ink-secondary uppercase tracking-wider">Notes</h4>
+        <h4 className="text-sm font-medium text-text-dim uppercase tracking-wider">Notes</h4>
         <textarea
           {...register('notes')}
           rows={3}
-          className="w-full rounded-xl px-3.5 py-2.5 text-sm bg-ink-raised text-ink-primary border border-ink-border focus:border-accent-copper focus:ring-1 focus:ring-accent-copper/30 focus:outline-none resize-none placeholder:text-ink-muted"
+          className="w-full rounded-xl px-3.5 py-2.5 text-sm bg-void-raised text-text-bright border border-edge-default focus:border-accent-teal focus:ring-1 focus:ring-accent/30 focus:outline-none resize-none placeholder:text-text-faint"
           placeholder="Internal notes for coaching staff"
         />
       </div>
 
       {/* Actions */}
-      <div className="flex items-center justify-end gap-3 pt-3 border-t border-ink-border">
+      <div className="flex items-center justify-end gap-3 pt-3 border-t border-edge-default">
         <Button type="button" variant="ghost" onClick={onCancel}>
           Cancel
         </Button>

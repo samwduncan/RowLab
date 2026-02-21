@@ -68,13 +68,13 @@ export function WorkoutFeed({ filters, onEdit, onDelete, onCreateNew }: WorkoutF
     return (
       <div className="bg-data-poor/10 border border-data-poor/30 rounded-lg p-4">
         <p className="text-data-poor text-sm font-medium mb-1">Failed to load workouts</p>
-        <p className="text-ink-secondary text-sm mb-3">
+        <p className="text-text-dim text-sm mb-3">
           {error?.message ?? 'An unexpected error occurred.'}
         </p>
         <button
           type="button"
           onClick={() => refetch()}
-          className="inline-flex items-center gap-1.5 text-sm text-ink-primary hover:text-accent-copper transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-text-bright hover:text-accent-teal transition-colors"
         >
           <RefreshCw size={14} />
           Retry
@@ -103,10 +103,10 @@ export function WorkoutFeed({ filters, onEdit, onDelete, onCreateNew }: WorkoutF
         <motion.div key={group.dateKey} variants={listItemVariants} transition={SPRING_SMOOTH}>
           {/* Date header */}
           <div className="flex items-center gap-3 px-3 pt-4 pb-2">
-            <h3 className="text-ink-secondary text-sm font-medium uppercase tracking-wider shrink-0">
+            <h3 className="text-text-dim text-sm font-medium uppercase tracking-wider shrink-0">
               {group.label}
             </h3>
-            <div className="flex-1 h-px bg-ink-border" />
+            <div className="flex-1 h-px bg-edge-default" />
           </div>
 
           {/* Workout rows */}
@@ -142,10 +142,10 @@ export function WorkoutFeed({ filters, onEdit, onDelete, onCreateNew }: WorkoutF
         <div className="space-y-0.5 px-3 py-2">
           {[1, 2, 3].map((i) => (
             <div key={i} className="flex items-center gap-3 py-2">
-              <div className="w-9 h-9 rounded-lg bg-ink-raised animate-shimmer" />
-              <div className="h-4 w-20 rounded bg-ink-raised animate-shimmer" />
+              <div className="w-9 h-9 rounded-lg bg-void-raised animate-shimmer" />
+              <div className="h-4 w-20 rounded bg-void-raised animate-shimmer" />
               <div className="flex-1" />
-              <div className="h-4 w-14 rounded bg-ink-raised animate-shimmer" />
+              <div className="h-4 w-14 rounded bg-void-raised animate-shimmer" />
             </div>
           ))}
         </div>
@@ -153,7 +153,7 @@ export function WorkoutFeed({ filters, onEdit, onDelete, onCreateNew }: WorkoutF
 
       {/* End of feed */}
       {!hasNextPage && workouts.length > 0 && (
-        <p className="text-center text-ink-muted text-xs py-6">You&rsquo;ve reached the end</p>
+        <p className="text-center text-text-faint text-xs py-6">You&rsquo;ve reached the end</p>
       )}
     </motion.div>
   );

@@ -2,7 +2,7 @@
  * Cmd+K command palette: global search and command execution.
  *
  * - Cmd+K (Mac) / Ctrl+K (Windows) opens the palette
- * - rowlab:open-search custom event opens the palette (from TopBar button)
+ * - oarbit:open-search custom event opens the palette (from TopBar button)
  * - Escape or click outside closes
  * - ">" prefix switches to command mode
  * - Arrow keys navigate, Enter selects
@@ -27,7 +27,7 @@ import { SPRING_SNAPPY } from '@/lib/animations';
 
 /* === RECENTS (localStorage) === */
 
-const RECENTS_KEY = 'rowlab:recent-pages';
+const RECENTS_KEY = 'oarbit:recent-pages';
 const MAX_RECENTS = 5;
 
 interface RecentPage {
@@ -111,7 +111,7 @@ export function CommandPalette() {
       {
         switchTeam: () => {
           // Open team switcher -- dispatch event for UserMenu to handle
-          window.dispatchEvent(new CustomEvent('rowlab:open-team-switcher'));
+          window.dispatchEvent(new CustomEvent('oarbit:open-team-switcher'));
         },
         logout: () => {
           logout();
@@ -136,8 +136,8 @@ export function CommandPalette() {
       setOpen(true);
     }
 
-    window.addEventListener('rowlab:open-search', handleOpenSearch);
-    return () => window.removeEventListener('rowlab:open-search', handleOpenSearch);
+    window.addEventListener('oarbit:open-search', handleOpenSearch);
+    return () => window.removeEventListener('oarbit:open-search', handleOpenSearch);
   }, []);
 
   // Focus input when opened
@@ -229,13 +229,13 @@ export function CommandPalette() {
             onKeyDown={handleKeyDown}
           >
             <Command
-              className="command-palette overflow-hidden rounded-2xl border border-ink-border bg-ink-float/95 shadow-2xl backdrop-blur-xl"
+              className="command-palette overflow-hidden rounded-2xl border border-edge-default bg-void-overlay/95 shadow-2xl backdrop-blur-xl"
               shouldFilter={true}
               loop
             >
               {/* Search input */}
-              <div className="flex items-center gap-2 border-b border-ink-border/50 px-4">
-                <Search size={16} className="shrink-0 text-ink-muted" />
+              <div className="flex items-center gap-2 border-b border-edge-default/50 px-4">
+                <Search size={16} className="shrink-0 text-text-faint" />
                 <Command.Input
                   ref={inputRef}
                   value={search}
@@ -243,13 +243,13 @@ export function CommandPalette() {
                   placeholder={
                     isCommandMode ? 'Type a command...' : 'Search pages, commands, or athletes...'
                   }
-                  className="h-12 w-full bg-transparent text-sm text-ink-primary placeholder-ink-muted outline-none"
+                  className="h-12 w-full bg-transparent text-sm text-text-bright placeholder-text-tertiary outline-none"
                 />
                 {search.length > 0 && (
                   <button
                     type="button"
                     onClick={() => setSearch('')}
-                    className="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium text-ink-muted transition-colors hover:bg-ink-hover hover:text-ink-primary"
+                    className="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium text-text-faint transition-colors hover:bg-void-overlay hover:text-text-bright"
                   >
                     Clear
                   </button>
@@ -258,7 +258,7 @@ export function CommandPalette() {
 
               {/* Results */}
               <Command.List className="max-h-80 overflow-y-auto overscroll-contain px-2 py-2">
-                <Command.Empty className="py-8 text-center text-sm text-ink-muted">
+                <Command.Empty className="py-8 text-center text-sm text-text-faint">
                   No results found
                 </Command.Empty>
 
@@ -294,28 +294,28 @@ export function CommandPalette() {
               </Command.List>
 
               {/* Footer hints */}
-              <div className="flex items-center gap-4 border-t border-ink-border/50 px-4 py-2 text-[11px] text-ink-muted">
+              <div className="flex items-center gap-4 border-t border-edge-default/50 px-4 py-2 text-[11px] text-text-faint">
                 <span>
-                  <kbd className="rounded bg-ink-raised px-1 py-0.5 text-[10px] font-medium">
+                  <kbd className="rounded bg-void-raised px-1 py-0.5 text-[10px] font-medium">
                     {'\u2191\u2193'}
                   </kbd>{' '}
                   navigate
                 </span>
                 <span>
-                  <kbd className="rounded bg-ink-raised px-1 py-0.5 text-[10px] font-medium">
+                  <kbd className="rounded bg-void-raised px-1 py-0.5 text-[10px] font-medium">
                     {'\u21B5'}
                   </kbd>{' '}
                   select
                 </span>
                 <span>
-                  <kbd className="rounded bg-ink-raised px-1 py-0.5 text-[10px] font-medium">
+                  <kbd className="rounded bg-void-raised px-1 py-0.5 text-[10px] font-medium">
                     esc
                   </kbd>{' '}
                   close
                 </span>
                 <span className="ml-auto">
                   Type{' '}
-                  <kbd className="rounded bg-ink-raised px-1 py-0.5 text-[10px] font-medium">
+                  <kbd className="rounded bg-void-raised px-1 py-0.5 text-[10px] font-medium">
                     &gt;
                   </kbd>{' '}
                   for commands

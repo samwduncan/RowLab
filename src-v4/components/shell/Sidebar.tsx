@@ -55,10 +55,10 @@ export function Sidebar() {
   // Tablet: collapsed rail
   if (isTablet) {
     return (
-      <aside className="relative z-10 flex h-screen w-(--spacing-sidebar-sm) shrink-0 flex-col border-r border-ink-border bg-ink-base/80 backdrop-blur-xl">
+      <aside className="relative z-10 flex h-screen w-(--spacing-sidebar-sm) shrink-0 flex-col border-r border-edge-default bg-void-surface/80 backdrop-blur-xl">
         {/* App wordmark */}
         <div className="flex h-14 items-center justify-center">
-          <span className="text-base font-bold text-accent-copper">R</span>
+          <span className="text-base font-bold text-accent-teal">R</span>
         </div>
 
         {/* Nav items (icon only) */}
@@ -71,7 +71,7 @@ export function Sidebar() {
         </nav>
 
         {/* Footer items */}
-        <div className="space-y-1 border-t border-ink-border px-2 py-2">
+        <div className="space-y-1 border-t border-edge-default px-2 py-2">
           {sidebarFooterItems.map((item) => (
             <RailNavItem key={item.id} item={item} active={isActive(item)} />
           ))}
@@ -83,11 +83,11 @@ export function Sidebar() {
   // Desktop: full sidebar
   if (isDesktop) {
     return (
-      <aside className="relative z-10 flex h-screen w-(--spacing-sidebar) shrink-0 flex-col border-r border-ink-border bg-ink-base/80 backdrop-blur-xl">
+      <aside className="relative z-10 flex h-screen w-(--spacing-sidebar) shrink-0 flex-col border-r border-edge-default bg-void-surface/80 backdrop-blur-xl">
         {/* App wordmark */}
         <div className="flex h-14 items-center px-5">
-          <span className="font-display text-lg font-bold tracking-tight text-ink-primary">
-            Row<span className="text-accent-copper">Lab</span>
+          <span className="font-display text-lg font-bold tracking-tight text-text-bright">
+            Row<span className="text-accent-teal">Lab</span>
           </span>
         </div>
 
@@ -133,7 +133,7 @@ export function Sidebar() {
         </nav>
 
         {/* Footer */}
-        <div className="space-y-0.5 border-t border-ink-border px-3 py-2">
+        <div className="space-y-0.5 border-t border-edge-default px-3 py-2">
           {sidebarFooterItems.map((item) => (
             <FullNavItem
               key={item.id}
@@ -156,7 +156,7 @@ export function Sidebar() {
 
 function SectionHeader({ label }: { label: string }) {
   return (
-    <h3 className="mb-1 px-2 text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
+    <h3 className="mb-1 px-2 text-[11px] font-semibold uppercase tracking-wider text-text-faint">
       {label}
     </h3>
   );
@@ -178,21 +178,21 @@ function FullNavItem({ item, active, isFavorite: pinned, onToggleFavorite }: Ful
       search={item.search as never}
       className={`group relative flex items-center gap-3 rounded-lg px-2 py-1.5 text-sm transition-colors ${
         active
-          ? 'bg-ink-raised text-ink-primary'
-          : 'text-ink-secondary hover:bg-ink-hover hover:text-ink-primary'
+          ? 'bg-void-raised text-text-bright'
+          : 'text-text-dim hover:bg-void-overlay hover:text-text-bright'
       }`}
     >
       {/* Active indicator bar */}
       {active && (
-        <span className="absolute left-0 top-1/2 h-4 w-0.5 -translate-y-1/2 rounded-full bg-accent-copper" />
+        <span className="absolute left-0 top-1/2 h-4 w-0.5 -translate-y-1/2 rounded-full bg-accent-teal" />
       )}
 
-      <Icon size={18} className={active ? 'text-accent-copper' : 'text-ink-muted'} />
+      <Icon size={18} className={active ? 'text-accent-teal' : 'text-text-faint'} />
       <span className="flex-1 truncate">{item.label}</span>
 
       {/* Badge */}
       {item.badge != null && item.badge > 0 && (
-        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-accent-copper px-1.5 text-[10px] font-semibold text-ink-deep">
+        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-accent-teal px-1.5 text-[10px] font-semibold text-void-deep">
           {item.badge > 99 ? '99+' : item.badge}
         </span>
       )}
@@ -207,8 +207,8 @@ function FullNavItem({ item, active, isFavorite: pinned, onToggleFavorite }: Ful
         }}
         className={`shrink-0 rounded p-0.5 transition-opacity ${
           pinned
-            ? 'text-accent-copper opacity-100'
-            : 'text-ink-muted opacity-0 hover:text-accent-copper group-hover:opacity-100'
+            ? 'text-accent-teal opacity-100'
+            : 'text-text-faint opacity-0 hover:text-accent-teal group-hover:opacity-100'
         }`}
         aria-label={pinned ? `Unpin ${item.label}` : `Pin ${item.label}`}
       >
@@ -232,26 +232,26 @@ function RailNavItem({ item, active }: RailNavItemProps) {
       search={item.search as never}
       className={`group relative flex h-10 w-10 items-center justify-center rounded-lg transition-colors ${
         active
-          ? 'bg-ink-raised text-accent-copper'
-          : 'text-ink-muted hover:bg-ink-hover hover:text-ink-primary'
+          ? 'bg-void-raised text-accent-teal'
+          : 'text-text-faint hover:bg-void-overlay hover:text-text-bright'
       }`}
       title={item.label}
     >
       {/* Active indicator */}
       {active && (
-        <span className="absolute left-0 top-1/2 h-4 w-0.5 -translate-y-1/2 rounded-full bg-accent-copper" />
+        <span className="absolute left-0 top-1/2 h-4 w-0.5 -translate-y-1/2 rounded-full bg-accent-teal" />
       )}
       <Icon size={20} />
 
       {/* Badge for rail */}
       {item.badge != null && item.badge > 0 && (
-        <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent-copper px-1 text-[9px] font-bold text-ink-deep">
+        <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent-teal px-1 text-[9px] font-bold text-void-deep">
           {item.badge > 99 ? '99+' : item.badge}
         </span>
       )}
 
       {/* Tooltip */}
-      <span className="pointer-events-none absolute left-full ml-2 rounded-md bg-ink-float px-2 py-1 text-xs text-ink-primary opacity-0 shadow-card transition-opacity group-hover:opacity-100">
+      <span className="pointer-events-none absolute left-full ml-2 rounded-md bg-void-overlay px-2 py-1 text-xs text-text-bright opacity-0 shadow-md transition-opacity group-hover:opacity-100">
         {item.label}
       </span>
     </Link>

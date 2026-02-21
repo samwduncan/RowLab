@@ -142,27 +142,27 @@ export function WeeklyTimeline({ month, workouts }: WeeklyTimelineProps) {
   }, [displayWeek]);
 
   return (
-    <div className="bg-ink-base rounded-xl border border-ink-border p-4 space-y-4">
+    <div className="bg-void-surface rounded-xl border border-edge-default p-4 space-y-4">
       {/* Week navigation */}
       <div className="flex items-center justify-between">
         <button
           type="button"
           onClick={() => setWeekOffset((o) => o - 1)}
           disabled={!canGoPrev}
-          className="p-1.5 rounded-md hover:bg-ink-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          className="p-1.5 rounded-md hover:bg-void-overlay transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           aria-label="Previous week"
         >
-          <ChevronLeft size={16} className="text-ink-secondary" />
+          <ChevronLeft size={16} className="text-text-dim" />
         </button>
-        <span className="text-ink-secondary text-xs font-medium">{weekLabel}</span>
+        <span className="text-text-dim text-xs font-medium">{weekLabel}</span>
         <button
           type="button"
           onClick={() => setWeekOffset((o) => o + 1)}
           disabled={!canGoNext}
-          className="p-1.5 rounded-md hover:bg-ink-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          className="p-1.5 rounded-md hover:bg-void-overlay transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           aria-label="Next week"
         >
-          <ChevronRight size={16} className="text-ink-secondary" />
+          <ChevronRight size={16} className="text-text-dim" />
         </button>
       </div>
 
@@ -179,7 +179,7 @@ export function WeeklyTimeline({ month, workouts }: WeeklyTimelineProps) {
             <div key={d.dateKey} className="flex-1 flex flex-col items-center gap-1">
               {/* Volume label */}
               {d.totalMeters > 0 && (
-                <span className="text-[9px] font-mono text-ink-muted tabular-nums">
+                <span className="text-[9px] font-mono text-text-faint tabular-nums">
                   {formatDistance(d.totalMeters)}
                 </span>
               )}
@@ -187,7 +187,7 @@ export function WeeklyTimeline({ month, workouts }: WeeklyTimelineProps) {
               {/* Bar */}
               <div
                 className={`w-10 rounded-t-md overflow-hidden flex flex-col-reverse ${
-                  d.isToday ? 'ring-1 ring-accent-copper' : ''
+                  d.isToday ? 'ring-1 ring-accent' : ''
                 }`}
                 style={{ height: `${barHeight}px` }}
                 title={`${format(d.day, 'EEE, MMM d')}: ${formatDistance(d.totalMeters)}`}
@@ -208,24 +208,24 @@ export function WeeklyTimeline({ month, workouts }: WeeklyTimelineProps) {
                     );
                   })
                 ) : (
-                  <div className="w-full h-full bg-ink-border" />
+                  <div className="w-full h-full bg-edge-default" />
                 )}
               </div>
 
               {/* No-workout baseline */}
-              {d.totalMeters === 0 && <div className="w-10 h-0.5 bg-ink-border rounded-full" />}
+              {d.totalMeters === 0 && <div className="w-10 h-0.5 bg-edge-default rounded-full" />}
 
               {/* Day label */}
               <span
                 className={`text-xs leading-none ${
-                  d.isToday ? 'text-accent-copper font-medium' : 'text-ink-tertiary'
+                  d.isToday ? 'text-accent-teal font-medium' : 'text-text-faint'
                 }`}
               >
                 {format(d.day, 'EEE')}
               </span>
               <span
                 className={`text-[10px] leading-none ${
-                  d.isToday ? 'text-accent-copper' : 'text-ink-muted'
+                  d.isToday ? 'text-accent-teal' : 'text-text-faint'
                 }`}
               >
                 {d.day.getDate()}
@@ -237,14 +237,14 @@ export function WeeklyTimeline({ month, workouts }: WeeklyTimelineProps) {
 
       {/* Sport legend */}
       {visibleSports.length > 0 && (
-        <div className="flex items-center gap-3 pt-2 border-t border-ink-border/50">
+        <div className="flex items-center gap-3 pt-2 border-t border-edge-default/50">
           {visibleSports.map((sport) => (
             <div key={sport} className="flex items-center gap-1.5">
               <div
                 className="w-2.5 h-2.5 rounded-sm"
                 style={{ backgroundColor: `var(--color-${SPORT_CONFIG[sport].color})` }}
               />
-              <span className="text-[10px] text-ink-muted">{SPORT_CONFIG[sport].label}</span>
+              <span className="text-[10px] text-text-faint">{SPORT_CONFIG[sport].label}</span>
             </div>
           ))}
         </div>

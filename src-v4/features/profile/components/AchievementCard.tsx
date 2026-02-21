@@ -30,19 +30,19 @@ const CATEGORY_ICONS: Record<Achievement['category'], LucideIcon> = {
 /** Rarity color mapping using design tokens */
 const RARITY_COLORS: Record<Achievement['rarity'], { text: string; bg: string; border: string }> = {
   Common: {
-    text: 'text-ink-secondary',
-    bg: 'bg-ink-secondary/10',
-    border: 'border-ink-secondary/20',
+    text: 'text-text-dim',
+    bg: 'bg-text-dim/10',
+    border: 'border-text-dim/20',
   },
   Rare: {
-    text: 'text-accent-primary',
-    bg: 'bg-accent-primary/10',
-    border: 'border-accent-primary/20',
+    text: 'text-accent-teal-primary',
+    bg: 'bg-accent-teal-primary/10',
+    border: 'border-accent-teal-primary/20',
   },
   Epic: {
-    text: 'text-accent-copper',
-    bg: 'bg-accent-copper/10',
-    border: 'border-accent-copper/20',
+    text: 'text-accent-teal',
+    bg: 'bg-accent-teal/10',
+    border: 'border-accent-teal/20',
   },
   Legendary: {
     text: 'text-data-warning',
@@ -55,7 +55,7 @@ const RARITY_COLORS: Record<Achievement['rarity'], { text: string; bg: string; b
 const RARITY_GLOW: Record<Achievement['rarity'], string> = {
   Common: '',
   Rare: 'ring-1 ring-accent-primary/20',
-  Epic: 'ring-1 ring-accent-copper/30 shadow-[0_0_20px_-5px_oklch(0.62_0.12_55/0.2)]',
+  Epic: 'ring-1 ring-accent/30 shadow-[0_0_20px_-5px_oklch(0.62_0.12_55/0.2)]',
   Legendary: '', // Legendary uses a separate animated overlay
 };
 
@@ -100,7 +100,7 @@ export function AchievementCard({ achievement, compact = false }: AchievementCar
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <h3
-                className={`font-semibold text-ink-primary truncate ${compact ? 'text-sm' : 'text-base'}`}
+                className={`font-semibold text-text-bright truncate ${compact ? 'text-sm' : 'text-base'}`}
               >
                 {name}
               </h3>
@@ -111,9 +111,9 @@ export function AchievementCard({ achievement, compact = false }: AchievementCar
                 {rarity}
               </span>
             </div>
-            <p className="text-ink-secondary text-xs mt-0.5 line-clamp-2">{description}</p>
+            <p className="text-text-dim text-xs mt-0.5 line-clamp-2">{description}</p>
             {unlockedAt && (
-              <p className="text-ink-muted text-[11px] mt-1.5">
+              <p className="text-text-faint text-[11px] mt-1.5">
                 Unlocked {formatRelativeDate(unlockedAt)}
               </p>
             )}
@@ -147,29 +147,29 @@ export function AchievementCard({ achievement, compact = false }: AchievementCar
         <div className="flex items-start gap-3">
           {/* Dimmed grayscale icon */}
           <div
-            className={`flex-shrink-0 flex items-center justify-center rounded-lg bg-ink-well ${compact ? 'h-9 w-9' : 'h-11 w-11'}`}
+            className={`flex-shrink-0 flex items-center justify-center rounded-lg bg-void-deep ${compact ? 'h-9 w-9' : 'h-11 w-11'}`}
           >
-            <Icon size={compact ? 16 : 20} className="text-ink-muted" />
+            <Icon size={compact ? 16 : 20} className="text-text-faint" />
           </div>
 
           {/* Content */}
           <div className="flex-1 min-w-0">
             <h3
-              className={`font-medium text-ink-secondary truncate ${compact ? 'text-sm' : 'text-base'}`}
+              className={`font-medium text-text-dim truncate ${compact ? 'text-sm' : 'text-base'}`}
             >
               {name}
             </h3>
-            <p className="text-ink-muted text-xs mt-0.5 line-clamp-1">{description}</p>
+            <p className="text-text-faint text-xs mt-0.5 line-clamp-1">{description}</p>
 
             {/* Progress bar */}
             <div className="mt-2">
-              <div className="w-full h-1.5 bg-ink-border/30 rounded-full overflow-hidden">
+              <div className="w-full h-1.5 bg-edge-default/30 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-accent-copper rounded-full transition-all duration-500"
+                  className="h-full bg-accent-teal rounded-full transition-all duration-500"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
-              <p className="text-ink-muted text-[11px] mt-1">
+              <p className="text-text-faint text-[11px] mt-1">
                 {progress} / {target} ({Math.round(progressPercent)}%)
               </p>
             </div>

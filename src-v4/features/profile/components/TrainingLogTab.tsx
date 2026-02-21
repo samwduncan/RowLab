@@ -70,14 +70,14 @@ function TrainingLogSkeleton() {
       {Array.from({ length: 6 }).map((_, i) => (
         <div
           key={i}
-          className="glass rounded-lg px-3 py-2.5 flex items-center gap-3 animate-shimmer"
+          className="panel rounded-lg px-3 py-2.5 flex items-center gap-3 animate-shimmer"
         >
-          <div className="w-8 h-8 rounded-lg bg-ink-well shrink-0" />
+          <div className="w-8 h-8 rounded-lg bg-void-deep shrink-0" />
           <div className="flex-1 space-y-1.5">
-            <div className="h-3 w-20 rounded bg-ink-well" />
-            <div className="h-2.5 w-32 rounded bg-ink-well" />
+            <div className="h-3 w-20 rounded bg-void-deep" />
+            <div className="h-2.5 w-32 rounded bg-void-deep" />
           </div>
-          <div className="h-3 w-12 rounded bg-ink-well" />
+          <div className="h-3 w-12 rounded bg-void-deep" />
         </div>
       ))}
     </div>
@@ -90,10 +90,10 @@ function TrainingLogSkeleton() {
 
 function EmptyState() {
   return (
-    <div className="glass rounded-xl p-8 text-center">
-      <Activity size={32} className="text-ink-muted mx-auto mb-3" />
-      <p className="text-sm font-medium text-ink-secondary">No workouts yet</p>
-      <p className="text-xs text-ink-tertiary mt-1">Log your first workout to see it here.</p>
+    <div className="panel rounded-xl p-8 text-center">
+      <Activity size={32} className="text-text-faint mx-auto mb-3" />
+      <p className="text-sm font-medium text-text-dim">No workouts yet</p>
+      <p className="text-xs text-text-faint mt-1">Log your first workout to see it here.</p>
     </div>
   );
 }
@@ -130,30 +130,30 @@ function CompactRow({
     <motion.button
       type="button"
       onClick={handleClick}
-      className="flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-lg hover:bg-ink-hover transition-colors cursor-pointer group"
+      className="flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-lg hover:bg-void-overlay transition-colors cursor-pointer group"
       variants={listItemVariants}
       transition={SPRING_SMOOTH}
     >
       {/* Sport icon */}
-      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-ink-well">
+      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-void-deep">
         <Icon size={16} className={`text-${config.color}`} />
       </div>
 
       {/* Sport + date */}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-ink-primary truncate">{config.label}</p>
-        <p className="text-[10px] text-ink-tertiary">{formatRelativeDate(workout.date)}</p>
+        <p className="text-sm font-medium text-text-bright truncate">{config.label}</p>
+        <p className="text-[10px] text-text-faint">{formatRelativeDate(workout.date)}</p>
       </div>
 
       {/* Key metrics */}
       <div className="flex items-center gap-4 shrink-0">
-        <span className="font-mono text-xs text-ink-secondary tabular-nums">
+        <span className="font-mono text-xs text-text-dim tabular-nums">
           {formatDistance(workout.distanceM)}
         </span>
-        <span className="font-mono text-xs text-ink-muted tabular-nums hidden sm:inline">
+        <span className="font-mono text-xs text-text-faint tabular-nums hidden sm:inline">
           {formatDuration(workout.durationSeconds)}
         </span>
-        <span className="font-mono text-xs text-ink-muted tabular-nums hidden md:inline">
+        <span className="font-mono text-xs text-text-faint tabular-nums hidden md:inline">
           {workout.avgPace ? formatPace(workout.avgPace, workout.machineType) : DASH}
         </span>
       </div>
@@ -161,7 +161,7 @@ function CompactRow({
       {/* Chevron */}
       <ChevronRight
         size={14}
-        className="text-ink-muted shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+        className="text-text-faint shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
       />
     </motion.button>
   );
@@ -198,7 +198,7 @@ export function TrainingLogTab() {
         <button
           type="button"
           onClick={() => void navigate({ to: '/workouts' as string })}
-          className="text-sm font-medium text-accent-copper hover:text-accent-copper/80 transition-colors inline-flex items-center gap-1"
+          className="text-sm font-medium text-accent-teal hover:text-accent-teal/80 transition-colors inline-flex items-center gap-1"
         >
           View all workouts
           <ChevronRight size={14} />

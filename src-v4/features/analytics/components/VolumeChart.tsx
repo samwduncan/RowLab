@@ -30,9 +30,9 @@ import type { VolumeBucket, VolumeMetric, VolumeGranularity } from '../types';
 /* Constants                                                           */
 /* ------------------------------------------------------------------ */
 
-const GRID_COLOR = 'var(--color-ink-border)';
-const TICK_COLOR = 'var(--color-ink-tertiary)';
-const ROLLING_AVG_COLOR = 'var(--color-accent-copper)';
+const GRID_COLOR = 'var(--color-edge-default)';
+const TICK_COLOR = 'var(--color-text-faint)';
+const ROLLING_AVG_COLOR = 'var(--color-accent)';
 
 /** Map SPORT_CONFIG color tokens to CSS variable references */
 const SPORT_COLORS: Record<string, string> = Object.fromEntries(
@@ -117,7 +117,7 @@ function ToggleGroup<T extends string>({
   ariaLabel,
 }: ToggleGroupProps<T>) {
   return (
-    <div className="flex gap-1 rounded-lg bg-ink-base/50 p-0.5" role="group" aria-label={ariaLabel}>
+    <div className="flex gap-1 rounded-lg bg-void-surface/50 p-0.5" role="group" aria-label={ariaLabel}>
       {options.map((opt) => {
         const isActive = value === opt.value;
         return (
@@ -128,8 +128,8 @@ function ToggleGroup<T extends string>({
             aria-pressed={isActive}
             className={`px-2.5 py-1 text-[11px] font-medium rounded-md transition-colors ${
               isActive
-                ? 'bg-accent-copper/15 text-accent-copper'
-                : 'text-ink-tertiary hover:text-ink-secondary'
+                ? 'bg-accent-teal/15 text-accent-teal'
+                : 'text-text-faint hover:text-text-dim'
             }`}
           >
             {opt.label}
@@ -162,8 +162,8 @@ function VolumeTooltip({ active, payload, label, metric, granularity }: VolumeTo
   const total = sportEntries.reduce((sum, entry) => sum + ((entry.value as number) ?? 0), 0);
 
   return (
-    <div className="backdrop-blur-xl bg-ink-raised/95 border border-ink-border rounded-xl px-4 py-3 shadow-card min-w-[180px]">
-      <p className="text-[10px] uppercase tracking-wider text-ink-muted font-medium mb-2">
+    <div className="backdrop-blur-xl bg-void-raised/95 border border-edge-default rounded-xl px-4 py-3 shadow-md min-w-[180px]">
+      <p className="text-[10px] uppercase tracking-wider text-text-faint font-medium mb-2">
         {periodLabel}
       </p>
       <div className="space-y-1.5">
@@ -173,17 +173,17 @@ function VolumeTooltip({ active, payload, label, metric, granularity }: VolumeTo
               className="w-2 h-2 rounded-full shrink-0"
               style={{ backgroundColor: entry.color }}
             />
-            <span className="text-sm text-ink-secondary">{entry.name}:</span>
-            <span className="text-sm font-semibold text-ink-primary tabular-nums">
+            <span className="text-sm text-text-dim">{entry.name}:</span>
+            <span className="text-sm font-semibold text-text-bright tabular-nums">
               {formatTooltipValue((entry.value as number) ?? 0, metric)}
             </span>
           </div>
         ))}
       </div>
       {sportEntries.length > 1 && (
-        <div className="mt-2 pt-1.5 border-t border-ink-border/50 flex items-center justify-between">
-          <span className="text-xs text-ink-secondary">Total</span>
-          <span className="text-sm font-semibold text-ink-primary tabular-nums">
+        <div className="mt-2 pt-1.5 border-t border-edge-default/50 flex items-center justify-between">
+          <span className="text-xs text-text-dim">Total</span>
+          <span className="text-sm font-semibold text-text-bright tabular-nums">
             {formatTooltipValue(total, metric)}
           </span>
         </div>
@@ -264,10 +264,10 @@ export function VolumeChart({
   // Empty state
   if (data.length === 0) {
     return (
-      <div className="rounded-xl border border-ink-border bg-ink-raised p-8">
+      <div className="rounded-xl border border-edge-default bg-void-raised p-8">
         {/* Header row */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
-          <h3 className="text-sm font-semibold text-ink-primary">Volume Trends</h3>
+          <h3 className="text-sm font-semibold text-text-bright">Volume Trends</h3>
           <div className="flex items-center gap-2">
             <ToggleGroup
               options={METRIC_OPTIONS}
@@ -284,18 +284,18 @@ export function VolumeChart({
           </div>
         </div>
         <div className="h-[220px] md:h-[300px] flex flex-col items-center justify-center">
-          <p className="text-sm text-ink-tertiary mb-2">No workout data for this period</p>
-          <p className="text-xs text-ink-muted">Log a workout to see your volume trends</p>
+          <p className="text-sm text-text-faint mb-2">No workout data for this period</p>
+          <p className="text-xs text-text-faint">Log a workout to see your volume trends</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="rounded-xl border border-ink-border bg-ink-raised p-4">
+    <div className="rounded-xl border border-edge-default bg-void-raised p-4">
       {/* Header row */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-        <h3 className="text-sm font-semibold text-ink-primary">Volume Trends</h3>
+        <h3 className="text-sm font-semibold text-text-bright">Volume Trends</h3>
         <div className="flex items-center gap-2">
           <ToggleGroup
             options={METRIC_OPTIONS}
@@ -367,7 +367,7 @@ export function VolumeChart({
               iconSize={8}
               wrapperStyle={{ fontSize: 11, paddingTop: 8 }}
               formatter={(value: string) => (
-                <span className="text-ink-secondary text-[11px]">{value}</span>
+                <span className="text-text-dim text-[11px]">{value}</span>
               )}
             />
 

@@ -3,6 +3,7 @@
  *
  * Used by coach tool pages when usePermissions().isReadOnly(tool) returns true.
  * Designed to sit in the page header area (top-right).
+ * Updated to use new design system surface/border/text tokens.
  */
 
 interface ReadOnlyBadgeProps {
@@ -13,10 +14,10 @@ export function ReadOnlyBadge({ className = '' }: ReadOnlyBadgeProps) {
   return (
     <span
       className={`
-        inline-flex items-center gap-1.5 rounded-lg
-        bg-ink-raised/60 px-2.5 py-1
-        text-xs font-medium text-ink-tertiary
-        border border-ink-border/40
+        inline-flex items-center gap-1.5 rounded-[var(--radius-sm)]
+        bg-void-raised px-2.5 py-1
+        text-xs font-medium text-text-faint
+        border border-edge-default
         select-none
         ${className}
       `.trim()}

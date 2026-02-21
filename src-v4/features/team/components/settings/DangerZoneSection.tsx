@@ -56,8 +56,8 @@ export function DangerZoneSection({ team, isOwner }: DangerZoneSectionProps) {
         <div className="flex items-start gap-3">
           <LogOut size={18} className="text-data-poor mt-0.5 shrink-0" />
           <div className="flex-1">
-            <h3 className="text-sm font-semibold text-ink-primary">Leave team</h3>
-            <p className="text-xs text-ink-secondary mt-0.5">
+            <h3 className="text-sm font-semibold text-text-bright">Leave team</h3>
+            <p className="text-xs text-text-dim mt-0.5">
               Your personal workouts and data will be preserved. You can rejoin later with a new
               invite code.
             </p>
@@ -65,9 +65,9 @@ export function DangerZoneSection({ team, isOwner }: DangerZoneSectionProps) {
         </div>
 
         {isLastAdmin && (
-          <div className="flex items-center gap-2 rounded-lg bg-accent-copper/10 border border-accent-copper/20 px-3 py-2">
-            <AlertTriangle size={14} className="text-accent-copper shrink-0" />
-            <span className="text-xs text-accent-copper">
+          <div className="flex items-center gap-2 rounded-lg bg-accent-teal/10 border border-accent-teal/20 px-3 py-2">
+            <AlertTriangle size={14} className="text-accent-teal shrink-0" />
+            <span className="text-xs text-accent-teal">
               You are the only admin. Promote another member to admin before leaving.
             </span>
           </div>
@@ -85,11 +85,11 @@ export function DangerZoneSection({ team, isOwner }: DangerZoneSectionProps) {
             Leave team
           </Button>
         ) : (
-          <div className="flex flex-col gap-3 rounded-xl bg-ink-well/30 border border-ink-border p-4">
-            <p className="text-sm text-ink-primary">
+          <div className="flex flex-col gap-3 rounded-xl bg-void-deep/30 border border-edge-default p-4">
+            <p className="text-sm text-text-bright">
               Are you sure you want to leave <strong>{team.name}</strong>?
             </p>
-            <p className="text-xs text-ink-secondary">
+            <p className="text-xs text-text-dim">
               Your personal workouts and data will be preserved.
             </p>
             <div className="flex gap-2">
@@ -116,8 +116,8 @@ export function DangerZoneSection({ team, isOwner }: DangerZoneSectionProps) {
           <div className="flex items-start gap-3">
             <Trash2 size={18} className="text-data-poor mt-0.5 shrink-0" />
             <div className="flex-1">
-              <h3 className="text-sm font-semibold text-ink-primary">Delete team</h3>
-              <p className="text-xs text-ink-secondary mt-0.5">
+              <h3 className="text-sm font-semibold text-text-bright">Delete team</h3>
+              <p className="text-xs text-text-dim mt-0.5">
                 This action cannot be undone. All team data will be permanently deleted. Member
                 personal data is preserved.
               </p>
@@ -136,7 +136,7 @@ export function DangerZoneSection({ team, isOwner }: DangerZoneSectionProps) {
             </Button>
           ) : (
             <div className="flex flex-col gap-3 rounded-xl bg-data-poor/5 border border-data-poor/20 p-4">
-              <p className="text-sm text-ink-primary">
+              <p className="text-sm text-text-bright">
                 Type <strong className="font-mono">{team.name}</strong> to confirm deletion:
               </p>
               <input
@@ -144,7 +144,7 @@ export function DangerZoneSection({ team, isOwner }: DangerZoneSectionProps) {
                 value={deleteConfirmName}
                 onChange={(e) => setDeleteConfirmName(e.target.value)}
                 placeholder={team.name}
-                className="h-10 w-full rounded-xl px-3 text-sm bg-ink-raised text-ink-primary border border-data-poor/30 focus:border-data-poor focus:ring-1 focus:ring-data-poor/30 focus:outline-none transition-colors duration-150"
+                className="h-10 w-full rounded-xl px-3 text-sm bg-void-raised text-text-bright border border-data-poor/30 focus:border-data-poor focus:ring-1 focus:ring-data-poor/30 focus:outline-none transition-colors duration-150"
                 autoFocus
               />
               <div className="flex gap-2">

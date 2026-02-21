@@ -64,7 +64,7 @@ function DayCell({
       className={`
         relative flex flex-col items-center justify-start gap-1 p-1.5 rounded-lg
         transition-colors cursor-pointer min-h-[52px]
-        ${today ? 'bg-accent-copper/10 ring-1 ring-accent-copper' : 'hover:bg-ink-hover'}
+        ${today ? 'bg-accent-teal/10 ring-1 ring-accent' : 'hover:bg-void-overlay'}
         ${!isCurrentMonth ? 'opacity-40' : ''}
       `}
       aria-label={`${day.toLocaleDateString()}, ${dayWorkouts.length} workouts`}
@@ -73,10 +73,10 @@ function DayCell({
       <span
         className={`text-sm leading-none ${
           today
-            ? 'text-accent-copper font-semibold'
+            ? 'text-accent-teal font-semibold'
             : isCurrentMonth
-              ? 'text-ink-primary'
-              : 'text-ink-muted'
+              ? 'text-text-bright'
+              : 'text-text-faint'
         }`}
       >
         {day.getDate()}
@@ -97,7 +97,7 @@ function DayCell({
             );
           })}
           {overflow > 0 && (
-            <span className="text-[9px] text-ink-muted leading-none ml-0.5">+{overflow}</span>
+            <span className="text-[9px] text-text-faint leading-none ml-0.5">+{overflow}</span>
           )}
         </div>
       )}
@@ -133,13 +133,13 @@ export function MonthlyCalendar({ month, workouts, onDayClick }: MonthlyCalendar
   }, [calendarDays]);
 
   return (
-    <div className="bg-ink-base rounded-xl border border-ink-border p-3">
+    <div className="bg-void-surface rounded-xl border border-edge-default p-3">
       {/* Day headers */}
       <div className="grid grid-cols-7 gap-1 mb-1">
         {DAY_HEADERS.map((name) => (
           <div
             key={name}
-            className="text-center text-ink-tertiary text-xs uppercase tracking-wider py-1 font-medium"
+            className="text-center text-text-faint text-xs uppercase tracking-wider py-1 font-medium"
           >
             {name}
           </div>
@@ -151,7 +151,7 @@ export function MonthlyCalendar({ month, workouts, onDayClick }: MonthlyCalendar
         <div
           key={weekIdx}
           className={`grid grid-cols-7 gap-1 ${
-            weekIdx < weeks.length - 1 ? 'border-b border-ink-border/50 pb-1 mb-1' : ''
+            weekIdx < weeks.length - 1 ? 'border-b border-edge-default/50 pb-1 mb-1' : ''
           }`}
         >
           {week.map((day) => {

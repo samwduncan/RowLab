@@ -1,6 +1,9 @@
 /**
- * Skeleton shimmer loader component.
- * NEVER use spinners - design standard requires skeleton loaders with shimmer.
+ * Skeleton shimmer loader — oarbit design system.
+ *
+ * bg-void-raised with shimmer animation.
+ * Radius matches the element being replaced.
+ * NEVER use spinners — skeleton loaders only.
  */
 
 interface SkeletonProps {
@@ -11,16 +14,16 @@ interface SkeletonProps {
 }
 
 const roundedMap = {
-  sm: 'rounded-sm',
-  md: 'rounded-md',
-  lg: 'rounded-lg',
+  sm: 'rounded-[var(--radius-sm)]',
+  md: 'rounded-[var(--radius-md)]',
+  lg: 'rounded-[var(--radius-lg)]',
   full: 'rounded-full',
 } as const;
 
 export function Skeleton({ className = '', width, height, rounded = 'md' }: SkeletonProps) {
   return (
     <div
-      className={`bg-ink-raised animate-shimmer ${roundedMap[rounded]} ${className}`}
+      className={`bg-void-raised animate-shimmer ${roundedMap[rounded]} ${className}`}
       style={{ width, height }}
       aria-hidden="true"
     />
@@ -40,7 +43,7 @@ export function SkeletonGroup({ children, className = '' }: SkeletonGroupProps) 
   );
 }
 
-/** Pre-built skeleton patterns for common layouts */
+/** Pre-built skeleton: text block */
 export function SkeletonText({
   lines = 3,
   className = '',
@@ -57,11 +60,42 @@ export function SkeletonText({
   );
 }
 
+/** Pre-built skeleton: card */
 export function SkeletonCard({ className = '' }: { className?: string }) {
   return (
-    <div className={`bg-ink-raised rounded-xl p-5 ${className}`} aria-hidden="true">
+    <div
+      className={`bg-void-raised border border-edge-default rounded-[var(--radius-lg)] p-4 ${className}`}
+      aria-hidden="true"
+    >
       <Skeleton height="1.25rem" width="40%" rounded="sm" className="mb-4" />
       <SkeletonText lines={2} />
+    </div>
+  );
+}
+
+/** Pre-built skeleton: table row */
+export function SkeletonRow({
+  columns = 4,
+  className = '',
+}: {
+  columns?: number;
+  className?: string;
+}) {
+  return (
+    <div className={`flex gap-4 px-3 py-2 ${className}`} aria-hidden="true">
+      {Array.from({ length: columns }).map((_, i) => (
+        <Skeleton key={i} height="0.875rem" width={i === 0 ? '30%' : '15%'} rounded="sm" />
+      ))}
+    </div>
+  );
+}
+
+/** Pre-built skeleton: metric */
+export function SkeletonMetric({ className = '' }: { className?: string }) {
+  return (
+    <div className={`flex flex-col gap-1 ${className}`} aria-hidden="true">
+      <Skeleton height="0.75rem" width="60px" rounded="sm" />
+      <Skeleton height="1.5rem" width="80px" rounded="sm" />
     </div>
   );
 }

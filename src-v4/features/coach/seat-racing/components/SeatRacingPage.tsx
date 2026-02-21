@@ -67,31 +67,31 @@ function ShortcutsHelp({ onClose }: { onClose: () => void }) {
       onClick={onClose}
     >
       <motion.div
-        className="bg-ink-base border border-ink-border rounded-xl shadow-card p-5 w-full max-w-xs"
+        className="bg-void-surface border border-edge-default rounded-xl shadow-md p-5 w-full max-w-xs"
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-ink-primary flex items-center gap-2">
-            <Keyboard size={16} className="text-ink-tertiary" />
+          <h3 className="text-sm font-semibold text-text-bright flex items-center gap-2">
+            <Keyboard size={16} className="text-text-faint" />
             Keyboard Shortcuts
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded hover:bg-ink-hover transition-colors"
+            className="p-1 rounded hover:bg-void-overlay transition-colors"
             aria-label="Close"
           >
-            <X size={16} className="text-ink-tertiary" />
+            <X size={16} className="text-text-faint" />
           </button>
         </div>
         <div className="space-y-2.5">
           {shortcuts.map((s) => (
             <div key={s.key} className="flex items-center justify-between">
-              <span className="text-sm text-ink-secondary">{s.description}</span>
-              <kbd className="px-2 py-0.5 rounded bg-ink-well text-xs font-mono text-ink-primary border border-ink-border/50">
+              <span className="text-sm text-text-dim">{s.description}</span>
+              <kbd className="px-2 py-0.5 rounded bg-void-deep text-xs font-mono text-text-bright border border-edge-default/50">
                 {s.key}
               </kbd>
             </div>

@@ -29,7 +29,7 @@ function LiveSkeleton() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="bg-ink-raised border border-ink-border rounded-lg p-4 space-y-3">
+          <div key={i} className="bg-void-raised border border-edge-default rounded-lg p-4 space-y-3">
             <Skeleton height="0.875rem" width="8rem" rounded="sm" />
             <Skeleton height="2rem" width="5rem" rounded="sm" className="mx-auto" />
             <div className="grid grid-cols-2 gap-2">
@@ -103,12 +103,12 @@ export function LiveSessionPage({ sessionId }: LiveSessionPageProps) {
         <button
           type="button"
           onClick={() => void navigate({ to: '/training/sessions' })}
-          className="flex items-center gap-1 text-sm text-ink-secondary hover:text-ink-primary transition-colors mb-4"
+          className="flex items-center gap-1 text-sm text-text-dim hover:text-text-bright transition-colors mb-4"
         >
           <ChevronLeft size={16} />
           Back to Sessions
         </button>
-        <p className="text-ink-secondary text-sm">Session not found.</p>
+        <p className="text-text-dim text-sm">Session not found.</p>
       </div>
     );
   }
@@ -120,21 +120,21 @@ export function LiveSessionPage({ sessionId }: LiveSessionPageProps) {
         <button
           type="button"
           onClick={handleBack}
-          className="flex items-center gap-1 text-sm text-ink-secondary hover:text-ink-primary transition-colors mb-4"
+          className="flex items-center gap-1 text-sm text-text-dim hover:text-text-bright transition-colors mb-4"
         >
           <ChevronLeft size={16} />
           Back to Session
         </button>
         <div className="bg-data-warning/10 border border-data-warning/20 rounded-lg p-6">
           <p className="text-sm font-medium text-data-warning mb-2">Session Not Currently Active</p>
-          <p className="text-sm text-ink-secondary mb-4">
+          <p className="text-sm text-text-dim mb-4">
             This session is not currently active. The live dashboard is only available for active
             sessions.
           </p>
           <button
             type="button"
             onClick={handleBack}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-ink-border text-sm text-ink-secondary hover:text-ink-primary hover:bg-ink-hover transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-edge-default text-sm text-text-dim hover:text-text-bright hover:bg-void-overlay transition-colors"
           >
             <ChevronLeft size={14} />
             View Session Details
@@ -151,7 +151,7 @@ export function LiveSessionPage({ sessionId }: LiveSessionPageProps) {
   return (
     <div className="h-full flex flex-col">
       {/* Header with live indicator */}
-      <div className="px-4 lg:px-6 pt-4 lg:pt-6 pb-4 border-b border-ink-border/30">
+      <div className="px-4 lg:px-6 pt-4 lg:pt-6 pb-4 border-b border-edge-default/30">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
@@ -159,7 +159,7 @@ export function LiveSessionPage({ sessionId }: LiveSessionPageProps) {
               <button
                 type="button"
                 onClick={handleBack}
-                className="text-ink-secondary hover:text-ink-primary transition-colors flex-shrink-0"
+                className="text-text-dim hover:text-text-bright transition-colors flex-shrink-0"
                 aria-label="Back to session"
               >
                 <ChevronLeft size={20} />
@@ -176,10 +176,10 @@ export function LiveSessionPage({ sessionId }: LiveSessionPageProps) {
                 </span>
               </div>
 
-              <div className="hidden sm:block h-5 w-px bg-ink-border/30" />
+              <div className="hidden sm:block h-5 w-px bg-edge-default/30" />
 
               {/* Session name */}
-              <h1 className="text-lg sm:text-xl font-semibold text-ink-primary truncate">
+              <h1 className="text-lg sm:text-xl font-semibold text-text-bright truncate">
                 {session.name}
               </h1>
             </div>
@@ -191,7 +191,7 @@ export function LiveSessionPage({ sessionId }: LiveSessionPageProps) {
               disabled={endMutation.isPending}
               className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex-shrink-0 ${
                 confirmEnd
-                  ? 'bg-data-poor text-ink-deep hover:bg-data-poor/90'
+                  ? 'bg-data-poor text-void-deep hover:bg-data-poor/90'
                   : 'bg-data-poor/15 text-data-poor border border-data-poor/30 hover:bg-data-poor/25'
               } disabled:opacity-50`}
             >
@@ -215,8 +215,8 @@ export function LiveSessionPage({ sessionId }: LiveSessionPageProps) {
       </div>
 
       {/* Status footer */}
-      <div className="border-t border-ink-border/30 px-4 lg:px-6 py-2 bg-ink-well/20">
-        <div className="max-w-5xl mx-auto flex items-center justify-between text-[10px] font-mono text-ink-muted uppercase tracking-wider">
+      <div className="border-t border-edge-default/30 px-4 lg:px-6 py-2 bg-void-deep/20">
+        <div className="max-w-5xl mx-auto flex items-center justify-between text-[10px] font-mono text-text-faint uppercase tracking-wider">
           <span className="flex items-center gap-2">
             <Radio size={10} />
             {session.name}

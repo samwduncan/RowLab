@@ -24,8 +24,8 @@ import { getConfidenceLevel, getRatingColor, type AthleteRating } from '../types
 // Constants
 // ---------------------------------------------------------------------------
 
-const GRID_COLOR = 'var(--color-ink-border)';
-const TICK_COLOR = 'var(--color-ink-tertiary)';
+const GRID_COLOR = 'var(--color-edge-default)';
+const TICK_COLOR = 'var(--color-text-faint)';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -54,16 +54,16 @@ function ChartTooltip({ active, payload }: TooltipProps<number, string>) {
   if (!data) return null;
 
   return (
-    <div className="bg-ink-raised border border-ink-border rounded-lg shadow-card p-2.5 min-w-[140px]">
-      <p className="text-ink-primary text-sm font-medium mb-1">{data.name}</p>
+    <div className="bg-void-raised border border-edge-default rounded-lg shadow-md p-2.5 min-w-[140px]">
+      <p className="text-text-bright text-sm font-medium mb-1">{data.name}</p>
       <div className="space-y-0.5">
         <p className="font-mono text-sm" style={{ color: data.color }}>
           {Math.round(data.rating)} ELO
         </p>
-        <p className="text-ink-secondary text-xs">
+        <p className="text-text-dim text-xs">
           Confidence: {getConfidenceLevel(data.confidence)}
         </p>
-        <p className="text-ink-muted text-xs">{data.racesCount} pieces raced</p>
+        <p className="text-text-faint text-xs">{data.racesCount} pieces raced</p>
       </div>
     </div>
   );
@@ -114,7 +114,7 @@ export function EloChart({ ratings, maxAthletes = 15 }: EloChartProps) {
           />
           <Tooltip
             content={<ChartTooltip />}
-            cursor={{ fill: 'var(--color-ink-hover)', opacity: 0.5 }}
+            cursor={{ fill: 'var(--color-void-overlay)', opacity: 0.5 }}
           />
           <Bar dataKey="rating" radius={[0, 4, 4, 0]} maxBarSize={28}>
             {chartData.map((entry, idx) => (

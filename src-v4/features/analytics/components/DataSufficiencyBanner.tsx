@@ -26,18 +26,18 @@ export function DataSufficiencyBanner({
     <div className="rounded-xl border border-data-warning/20 bg-data-warning/5 px-4 py-3 flex items-start gap-3">
       <Info className="w-4 h-4 text-data-warning mt-0.5 shrink-0" />
       <div className="flex-1 min-w-0">
-        <p className="text-sm text-ink-secondary">
+        <p className="text-sm text-text-dim">
           {message ??
             'More training data will improve the accuracy of your fitness and fatigue curves.'}
         </p>
         <div className="mt-2 flex items-center gap-2">
-          <div className="flex-1 h-1.5 rounded-full bg-ink-border overflow-hidden">
+          <div className="flex-1 h-1.5 rounded-full bg-edge-default overflow-hidden">
             <div
               className="h-full rounded-full bg-data-warning transition-all duration-500"
               style={{ width: `${pct}%` }}
             />
           </div>
-          <span className="text-[10px] font-mono text-ink-tertiary shrink-0">
+          <span className="text-[10px] font-mono text-text-faint shrink-0">
             {daysWithData}/{daysNeeded} days
           </span>
         </div>

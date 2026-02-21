@@ -82,7 +82,7 @@ export function GeneralSection({ team, canEdit }: GeneralSectionProps) {
         <InfoRow label="Team name" value={team.name} />
         <InfoRow label="Description" value={team.description || 'No description'} />
         <InfoRow label="Sport" value={team.sport || 'Not specified'} />
-        {team.slug && <InfoRow label="Custom URL" value={`rowlab.com/team/${team.slug}`} mono />}
+        {team.slug && <InfoRow label="Custom URL" value={`oarbit.net/team/${team.slug}`} mono />}
       </div>
     );
   }
@@ -91,28 +91,28 @@ export function GeneralSection({ team, canEdit }: GeneralSectionProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
       {/* Team name */}
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="team-name" className="text-sm font-medium text-ink-body">
+        <label htmlFor="team-name" className="text-sm font-medium text-text-default">
           Team name
         </label>
         <input
           id="team-name"
           type="text"
           {...register('name')}
-          className="h-10 w-full rounded-xl px-3 text-sm bg-ink-raised text-ink-primary border border-ink-border focus:border-accent-copper focus:ring-1 focus:ring-accent-copper/30 focus:outline-none transition-colors duration-150"
+          className="h-10 w-full rounded-xl px-3 text-sm bg-void-raised text-text-bright border border-edge-default focus:border-accent-teal focus:ring-1 focus:ring-accent/30 focus:outline-none transition-colors duration-150"
         />
         {errors.name && <span className="text-xs text-data-poor">{errors.name.message}</span>}
       </div>
 
       {/* Description */}
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="team-description" className="text-sm font-medium text-ink-body">
+        <label htmlFor="team-description" className="text-sm font-medium text-text-default">
           Description
         </label>
         <textarea
           id="team-description"
           {...register('description')}
           rows={3}
-          className="w-full rounded-xl px-3 py-2.5 text-sm bg-ink-raised text-ink-primary border border-ink-border focus:border-accent-copper focus:ring-1 focus:ring-accent-copper/30 focus:outline-none transition-colors duration-150 resize-none"
+          className="w-full rounded-xl px-3 py-2.5 text-sm bg-void-raised text-text-bright border border-edge-default focus:border-accent-teal focus:ring-1 focus:ring-accent/30 focus:outline-none transition-colors duration-150 resize-none"
           placeholder="What is this team about?"
         />
         {errors.description && (
@@ -122,13 +122,13 @@ export function GeneralSection({ team, canEdit }: GeneralSectionProps) {
 
       {/* Sport */}
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="team-sport" className="text-sm font-medium text-ink-body">
+        <label htmlFor="team-sport" className="text-sm font-medium text-text-default">
           Sport
         </label>
         <select
           id="team-sport"
           {...register('sport')}
-          className="h-10 w-full rounded-xl px-3 text-sm bg-ink-raised text-ink-primary border border-ink-border focus:border-accent-copper focus:ring-1 focus:ring-accent-copper/30 focus:outline-none transition-colors duration-150 appearance-none cursor-pointer"
+          className="h-10 w-full rounded-xl px-3 text-sm bg-void-raised text-text-bright border border-edge-default focus:border-accent-teal focus:ring-1 focus:ring-accent/30 focus:outline-none transition-colors duration-150 appearance-none cursor-pointer"
         >
           <option value="">Select a sport</option>
           {SPORT_OPTIONS.map((s) => (
@@ -149,14 +149,14 @@ export function GeneralSection({ team, canEdit }: GeneralSectionProps) {
 
       {/* Welcome message */}
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="team-welcome" className="text-sm font-medium text-ink-body">
+        <label htmlFor="team-welcome" className="text-sm font-medium text-text-default">
           Welcome message
         </label>
         <textarea
           id="team-welcome"
           {...register('welcomeMessage')}
           rows={3}
-          className="w-full rounded-xl px-3 py-2.5 text-sm bg-ink-raised text-ink-primary border border-ink-border focus:border-accent-copper focus:ring-1 focus:ring-accent-copper/30 focus:outline-none transition-colors duration-150 resize-none"
+          className="w-full rounded-xl px-3 py-2.5 text-sm bg-void-raised text-text-bright border border-edge-default focus:border-accent-teal focus:ring-1 focus:ring-accent/30 focus:outline-none transition-colors duration-150 resize-none"
           placeholder="Message shown to new members when they join"
         />
         {errors.welcomeMessage && (
@@ -188,8 +188,8 @@ export function GeneralSection({ team, canEdit }: GeneralSectionProps) {
 function InfoRow({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="text-xs font-medium uppercase tracking-wider text-ink-muted">{label}</span>
-      <span className={`text-sm text-ink-primary ${mono ? 'font-mono' : ''}`}>{value}</span>
+      <span className="text-xs font-medium uppercase tracking-wider text-text-faint">{label}</span>
+      <span className={`text-sm text-text-bright ${mono ? 'font-mono' : ''}`}>{value}</span>
     </div>
   );
 }

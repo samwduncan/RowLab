@@ -53,12 +53,12 @@ function MiniStat({
 }) {
   return (
     <div className="flex items-center gap-1.5">
-      <Icon size={14} className={accent ? 'text-accent-copper' : 'text-ink-muted'} />
+      <Icon size={14} className={accent ? 'text-accent-teal' : 'text-text-faint'} />
       <div className="flex flex-col">
-        <span className="text-[10px] uppercase tracking-wider text-ink-muted leading-none">
+        <span className="text-[10px] uppercase tracking-wider text-text-faint leading-none">
           {label}
         </span>
-        <span className="text-sm font-mono font-semibold text-ink-primary tabular-nums">
+        <span className="text-sm font-mono font-semibold text-text-bright tabular-nums">
           {value}
         </span>
       </div>
@@ -93,11 +93,11 @@ export function ProfileCard({ userName, avatar, teamName, stats }: ProfileCardPr
               <img
                 src={avatar}
                 alt={userName}
-                className="w-14 h-14 rounded-xl object-cover ring-2 ring-accent-copper/20"
+                className="w-14 h-14 rounded-xl object-cover ring-2 ring-accent/20"
               />
             ) : (
-              <div className="w-14 h-14 rounded-xl bg-accent-copper/15 flex items-center justify-center ring-2 ring-accent-copper/20">
-                <span className="text-lg font-display font-bold text-accent-copper">
+              <div className="w-14 h-14 rounded-xl bg-accent-teal/15 flex items-center justify-center ring-2 ring-accent/20">
+                <span className="text-lg font-display font-bold text-accent-teal">
                   {initials}
                 </span>
               </div>
@@ -106,11 +106,11 @@ export function ProfileCard({ userName, avatar, teamName, stats }: ProfileCardPr
 
           {/* Name + team + greeting */}
           <div className="flex-1 min-w-0">
-            <p className="text-xs text-ink-muted">{greeting}</p>
+            <p className="text-xs text-text-faint">{greeting}</p>
             <h1 className="text-xl font-display font-bold text-heading-gradient truncate">
               {firstName}
             </h1>
-            {teamName && <p className="text-xs text-ink-tertiary truncate">{teamName}</p>}
+            {teamName && <p className="text-xs text-text-faint truncate">{teamName}</p>}
           </div>
 
           {/* Streak indicator */}
@@ -130,7 +130,7 @@ export function ProfileCard({ userName, avatar, teamName, stats }: ProfileCardPr
         </div>
 
         {/* Quick stats row */}
-        <div className="flex items-center gap-5 sm:gap-8 mt-4 pt-3 border-t border-ink-border/30">
+        <div className="flex items-center gap-5 sm:gap-8 mt-4 pt-3 border-t border-edge-default/30">
           <MiniStat
             icon={TrendingUp}
             label="This period"

@@ -27,11 +27,11 @@ export function TeamContext({ teamContext, className = '' }: TeamContextProps) {
 
   return (
     <motion.section {...slideUp} className={className} aria-label={`${teamContext.teamName} team`}>
-      <GlassCard padding="md" className="border-t-2 border-accent-copper/30">
+      <GlassCard padding="md" className="border-t-2 border-accent-teal/30">
         {/* Team header */}
         <div className="flex items-center gap-2 mb-4">
-          <Users size={18} className="text-accent-copper" aria-hidden="true" />
-          <h2 className="text-lg font-semibold text-ink-primary">{teamContext.teamName}</h2>
+          <Users size={18} className="text-accent-teal" aria-hidden="true" />
+          <h2 className="text-lg font-semibold text-text-bright">{teamContext.teamName}</h2>
         </div>
 
         {/* Two-column grid */}
@@ -39,17 +39,17 @@ export function TeamContext({ teamContext, className = '' }: TeamContextProps) {
           {/* Upcoming Events */}
           {hasEvents && (
             <div>
-              <h3 className="text-sm font-medium text-ink-secondary mb-3 flex items-center gap-1.5">
+              <h3 className="text-sm font-medium text-text-dim mb-3 flex items-center gap-1.5">
                 <CalendarDays size={14} aria-hidden="true" />
                 Upcoming Events
               </h3>
               <ul className="space-y-2">
                 {teamContext.upcomingEvents.map((event) => (
                   <li key={event.id} className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-accent-copper mt-1.5 shrink-0" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent-teal mt-1.5 shrink-0" />
                     <div className="min-w-0">
-                      <span className="text-sm text-ink-primary block truncate">{event.title}</span>
-                      <span className="text-xs text-ink-tertiary">
+                      <span className="text-sm text-text-bright block truncate">{event.title}</span>
+                      <span className="text-xs text-text-faint">
                         {formatRelativeDate(event.date)}
                       </span>
                     </div>
@@ -62,15 +62,15 @@ export function TeamContext({ teamContext, className = '' }: TeamContextProps) {
           {/* Team Notices */}
           {hasNotices && (
             <div>
-              <h3 className="text-sm font-medium text-ink-secondary mb-3 flex items-center gap-1.5">
+              <h3 className="text-sm font-medium text-text-dim mb-3 flex items-center gap-1.5">
                 <MessageCircle size={14} aria-hidden="true" />
                 Notices
               </h3>
               <ul className="space-y-2">
                 {teamContext.notices.map((notice) => (
                   <li key={notice.id} className="text-sm">
-                    <p className="text-ink-primary">{notice.message}</p>
-                    <span className="text-xs text-ink-tertiary">
+                    <p className="text-text-bright">{notice.message}</p>
+                    <span className="text-xs text-text-faint">
                       {notice.author} {'\u00b7'} {formatRelativeDate(notice.createdAt)}
                     </span>
                   </li>

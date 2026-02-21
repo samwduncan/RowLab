@@ -24,7 +24,7 @@ export function RecentWorkouts({ workouts, totalCount, className = '' }: RecentW
   if (workouts.length === 0) {
     return (
       <section className={className} aria-label="Recent Workouts">
-        <h2 className="text-lg font-semibold text-ink-primary mb-4">Recent Workouts</h2>
+        <h2 className="text-lg font-semibold text-text-bright mb-4">Recent Workouts</h2>
         <EmptyState
           icon={Dumbbell}
           title="No workouts yet"
@@ -43,11 +43,11 @@ export function RecentWorkouts({ workouts, totalCount, className = '' }: RecentW
     <section className={className} aria-label="Recent Workouts">
       {/* Header with View All link */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-ink-primary">Recent Workouts</h2>
+        <h2 className="text-lg font-semibold text-text-bright">Recent Workouts</h2>
         <button
           type="button"
           onClick={() => navigate({ to: '/workouts' as '/' })}
-          className="text-sm text-accent-copper hover:text-accent-copper-hover transition-colors"
+          className="text-sm text-accent-teal hover:text-accent-teal-hover transition-colors"
         >
           View all ({totalCount})
         </button>

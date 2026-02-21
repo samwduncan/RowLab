@@ -20,7 +20,7 @@ function SeatRacingRoute() {
 
   if (!activeTeamId) {
     return (
-      <div className="p-8 text-ink-secondary text-sm">Select a team to access seat racing.</div>
+      <div className="p-8 text-text-dim text-sm">Select a team to access seat racing.</div>
     );
   }
 

@@ -61,19 +61,19 @@ function SelectField({
   const selectId = label.toLowerCase().replace(/\s+/g, '-');
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={selectId} className="text-sm font-medium text-ink-body">
+      <label htmlFor={selectId} className="text-sm font-medium text-text-default">
         {label}
       </label>
       <select
         id={selectId}
         className={`
           h-10 w-full rounded-xl px-3.5 text-sm
-          bg-ink-raised text-ink-primary
+          bg-void-raised text-text-bright
           border transition-colors duration-150
           ${
             error
               ? 'border-data-poor focus:border-data-poor focus:ring-1 focus:ring-data-poor/30'
-              : 'border-ink-border focus:border-accent-copper focus:ring-1 focus:ring-accent-copper/30'
+              : 'border-edge-default focus:border-accent-teal focus:ring-1 focus:ring-accent/30'
           }
           focus:outline-none
           disabled:opacity-50 disabled:cursor-not-allowed
@@ -133,7 +133,7 @@ export function ShellForm({ shell, onSubmit, onCancel, isPending }: ShellFormPro
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <h2 className="text-lg font-semibold text-ink-primary">
+      <h2 className="text-lg font-semibold text-text-bright">
         {isEdit ? 'Edit Shell' : 'Add Shell'}
       </h2>
 
@@ -182,14 +182,14 @@ export function ShellForm({ shell, onSubmit, onCancel, isPending }: ShellFormPro
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="shell-notes" className="text-sm font-medium text-ink-body">
+        <label htmlFor="shell-notes" className="text-sm font-medium text-text-default">
           Notes
         </label>
         <textarea
           id="shell-notes"
           rows={3}
           placeholder="Optional notes..."
-          className="w-full rounded-xl px-3.5 py-2.5 text-sm bg-ink-raised text-ink-primary placeholder:text-ink-muted border border-ink-border focus:border-accent-copper focus:ring-1 focus:ring-accent-copper/30 focus:outline-none transition-colors duration-150 resize-none"
+          className="w-full rounded-xl px-3.5 py-2.5 text-sm bg-void-raised text-text-bright placeholder:text-text-faint border border-edge-default focus:border-accent-teal focus:ring-1 focus:ring-accent/30 focus:outline-none transition-colors duration-150 resize-none"
           {...register('notes')}
         />
       </div>

@@ -18,25 +18,25 @@ import type { Workout } from '../types';
 
 /** Map SPORT_CONFIG color tokens to CSS variable references. */
 const colorToCssVar: Record<string, string> = {
-  'accent-copper': 'var(--color-accent-copper)',
+  'accent': 'var(--color-accent)',
   'data-good': 'var(--color-data-good)',
   'data-warning': 'var(--color-data-warning)',
   'data-excellent': 'var(--color-data-excellent)',
   'accent-primary': 'var(--color-accent-primary)',
   'data-poor': 'var(--color-data-poor)',
-  'ink-secondary': 'var(--color-ink-secondary)',
+  'text-dim': 'var(--color-text-dim)',
 };
 
 function getSportColor(workout: Workout): string {
   const sport = getSportFromWorkout(workout);
   const token = SPORT_CONFIG[sport].color;
-  return colorToCssVar[token] ?? 'var(--color-accent-copper)';
+  return colorToCssVar[token] ?? 'var(--color-accent)';
 }
 
 /** Intensity level from average watts. */
 function getIntensityClass(avgWatts: number | null | undefined): string | null {
   if (avgWatts == null) return null;
-  if (avgWatts < 150) return 'text-ink-muted';
+  if (avgWatts < 150) return 'text-text-faint';
   if (avgWatts < 200) return 'text-data-good';
   if (avgWatts < 250) return 'text-data-warning';
   return 'text-data-poor';
@@ -48,8 +48,8 @@ interface WorkoutCardProps {
 }
 
 const sourceConfig: Record<Workout['source'], { icon: LucideIcon; colorClass: string }> = {
-  manual: { icon: PenLine, colorClass: 'text-ink-secondary' },
-  concept2: { icon: Dumbbell, colorClass: 'text-accent-copper' },
+  manual: { icon: PenLine, colorClass: 'text-text-dim' },
+  concept2: { icon: Dumbbell, colorClass: 'text-accent-teal' },
   strava: { icon: Bike, colorClass: 'text-data-warning' },
   garmin: { icon: Watch, colorClass: 'text-data-good' },
 };
@@ -72,7 +72,7 @@ function getWorkoutLabel(workout: Workout): string {
 
 function MetricChip({ children }: { children: React.ReactNode }) {
   return (
-    <span className="text-xs bg-ink-well px-2 py-0.5 rounded-md text-ink-secondary">
+    <span className="text-xs bg-void-deep px-2 py-0.5 rounded-md text-text-dim">
       {children}
     </span>
   );
@@ -116,7 +116,7 @@ export function WorkoutCard({ workout, className = '' }: WorkoutCardProps) {
       >
         {/* Source icon */}
         <div
-          className="w-8 h-8 rounded-full bg-ink-well flex items-center justify-center shrink-0"
+          className="w-8 h-8 rounded-full bg-void-deep flex items-center justify-center shrink-0"
           aria-hidden="true"
         >
           <SourceIcon size={16} className={colorClass} />
@@ -129,16 +129,16 @@ export function WorkoutCard({ workout, className = '' }: WorkoutCardProps) {
             <div className="flex items-center gap-1.5 min-w-0">
               {intervalInfo.isInterval ? (
                 <>
-                  <span className="text-sm font-medium text-accent-copper font-mono whitespace-nowrap">
+                  <span className="text-sm font-medium text-accent-teal font-mono whitespace-nowrap">
                     {intervalInfo.pattern}
                   </span>
-                  <span className="text-xs text-ink-muted truncate">{label}</span>
+                  <span className="text-xs text-text-faint truncate">{label}</span>
                 </>
               ) : (
-                <span className="text-sm font-medium text-ink-primary truncate">{label}</span>
+                <span className="text-sm font-medium text-text-bright truncate">{label}</span>
               )}
             </div>
-            <span className="text-xs text-ink-tertiary shrink-0">
+            <span className="text-xs text-text-faint shrink-0">
               {formatRelativeDate(workout.date)}
             </span>
           </div>

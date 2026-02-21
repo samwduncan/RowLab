@@ -25,7 +25,7 @@ export function FleetSkeleton() {
       {/* Table rows */}
       <SkeletonGroup className="gap-1">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="flex items-center gap-4 rounded-lg bg-ink-raised/40 px-4 py-3">
+          <div key={i} className="flex items-center gap-4 rounded-lg bg-void-raised/40 px-4 py-3">
             <Skeleton height="0.875rem" width="22%" rounded="sm" />
             <Skeleton height="0.875rem" width="10%" rounded="sm" />
             <Skeleton height="0.875rem" width="12%" rounded="sm" />

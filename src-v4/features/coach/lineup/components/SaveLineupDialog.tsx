@@ -117,15 +117,15 @@ export function SaveLineupDialog({
               pointer-events-none
             "
           >
-            <div className="glass rounded-2xl shadow-xl w-full max-w-md pointer-events-auto">
+            <div className="panel rounded-2xl shadow-xl w-full max-w-md pointer-events-auto">
               {/* Header */}
               <div className="flex items-center justify-between px-5 pt-5 pb-3">
-                <h2 className="text-lg font-semibold text-ink-primary">
+                <h2 className="text-lg font-semibold text-text-bright">
                   {isUpdate ? 'Update Lineup' : 'Save Lineup'}
                 </h2>
                 <button
                   onClick={onClose}
-                  className="p-1.5 rounded-lg text-ink-muted hover:text-ink-primary hover:bg-ink-hover transition-colors"
+                  className="p-1.5 rounded-lg text-text-faint hover:text-text-bright hover:bg-void-overlay transition-colors"
                   aria-label="Close"
                 >
                   <X size={18} />
@@ -143,7 +143,7 @@ export function SaveLineupDialog({
                 />
 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="lineup-notes" className="text-sm font-medium text-ink-body">
+                  <label htmlFor="lineup-notes" className="text-sm font-medium text-text-default">
                     Notes
                   </label>
                   <textarea
@@ -152,9 +152,9 @@ export function SaveLineupDialog({
                     placeholder="Optional notes about this lineup..."
                     className="
                       w-full rounded-xl px-3.5 py-2.5 text-sm
-                      bg-ink-raised text-ink-primary placeholder:text-ink-muted
-                      border border-ink-border
-                      focus:border-accent-copper focus:ring-1 focus:ring-accent-copper/30
+                      bg-void-raised text-text-bright placeholder:text-text-faint
+                      border border-edge-default
+                      focus:border-accent-teal focus:ring-1 focus:ring-accent/30
                       focus:outline-none transition-colors duration-150 resize-none
                     "
                     {...register('notes')}

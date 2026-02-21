@@ -92,8 +92,8 @@ function AnalyticsSettingsSection() {
     return (
       <div className="space-y-4">
         <div className="animate-shimmer space-y-4">
-          <div className="h-6 w-48 rounded bg-ink-border/50" />
-          <div className="h-64 rounded-xl bg-ink-border/30" />
+          <div className="h-6 w-48 rounded bg-edge-default/50" />
+          <div className="h-64 rounded-xl bg-edge-default/30" />
         </div>
       </div>
     );
@@ -102,15 +102,15 @@ function AnalyticsSettingsSection() {
   return (
     <div>
       <div className="flex items-center gap-2 mb-1">
-        <Activity className="w-4 h-4 text-accent-copper" />
-        <h2 className="text-lg font-semibold text-ink-primary">Analytics Thresholds</h2>
+        <Activity className="w-4 h-4 text-accent-teal" />
+        <h2 className="text-lg font-semibold text-text-bright">Analytics Thresholds</h2>
       </div>
-      <p className="text-sm text-ink-secondary mb-4">
+      <p className="text-sm text-text-dim mb-4">
         Configure your training zones for more accurate performance analytics. Leave blank to use
         defaults.
       </p>
 
-      <div className="glass rounded-xl p-5 space-y-5">
+      <div className="panel rounded-xl p-5 space-y-5">
         {/* Date of Birth */}
         <SettingsField
           label="Date of Birth"
@@ -179,7 +179,7 @@ function AnalyticsSettingsSection() {
             disabled={updateMutation.isPending}
             className="
               flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium
-              bg-accent-copper text-ink-deep hover:bg-accent-copper/90
+              bg-accent-teal text-void-deep hover:bg-accent-teal/90
               disabled:opacity-50 disabled:cursor-not-allowed
               transition-colors cursor-pointer
             "
@@ -228,8 +228,8 @@ function SettingsField({
   return (
     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
       <div className="sm:w-56 shrink-0">
-        <label className="text-sm font-medium text-ink-primary">{label}</label>
-        <p className="text-xs text-ink-muted">{description}</p>
+        <label className="text-sm font-medium text-text-bright">{label}</label>
+        <p className="text-xs text-text-faint">{description}</p>
       </div>
       <input
         type={type}
@@ -239,9 +239,9 @@ function SettingsField({
         onChange={(e) => onChange(e.target.value)}
         className="
           flex-1 px-3 py-2 rounded-lg text-sm
-          bg-ink-base border border-ink-border text-ink-primary
-          placeholder:text-ink-muted
-          focus:outline-none focus:ring-1 focus:ring-accent-copper/50 focus:border-accent-copper
+          bg-void-surface border border-edge-default text-text-bright
+          placeholder:text-text-faint
+          focus:outline-none focus:ring-1 focus:ring-accent/50 focus:border-accent-teal
           transition-colors
         "
       />
@@ -276,8 +276,8 @@ function SettingsSidebar({
               transition-colors duration-150 cursor-pointer
               ${
                 isActive
-                  ? 'bg-ink-well text-ink-primary font-medium'
-                  : 'text-ink-secondary hover:text-ink-primary hover:bg-ink-hover'
+                  ? 'bg-void-deep text-text-bright font-medium'
+                  : 'text-text-dim hover:text-text-bright hover:bg-void-overlay'
               }
             `.trim()}
           >
@@ -285,7 +285,7 @@ function SettingsSidebar({
             {isActive && (
               <motion.div
                 layoutId="settings-nav-indicator"
-                className="absolute left-0 top-2 bottom-2 w-0.5 rounded-full bg-accent-copper"
+                className="absolute left-0 top-2 bottom-2 w-0.5 rounded-full bg-accent-teal"
                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}
               />
             )}
@@ -328,8 +328,8 @@ function MobileTabBar({
               transition-colors duration-150 shrink-0 cursor-pointer
               ${
                 isActive
-                  ? 'bg-accent-copper/10 text-accent-copper font-medium'
-                  : 'text-ink-secondary hover:text-ink-primary hover:bg-ink-hover'
+                  ? 'bg-accent-teal/10 text-accent-teal font-medium'
+                  : 'text-text-dim hover:text-text-bright hover:bg-void-overlay'
               }
             `.trim()}
           >
@@ -338,7 +338,7 @@ function MobileTabBar({
             {isActive && (
               <motion.div
                 layoutId="settings-tab-indicator"
-                className="absolute inset-0 rounded-full border border-accent-copper/30"
+                className="absolute inset-0 rounded-full border border-accent-teal/30"
                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}
               />
             )}

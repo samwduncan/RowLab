@@ -48,13 +48,13 @@ export function AnalyticsSettingsCallout({ hasCustomSettings }: AnalyticsSetting
           transition={SPRING_SMOOTH}
           className="overflow-hidden"
         >
-          <div className="rounded-xl border border-ink-border bg-ink-raised px-4 py-3 flex items-center gap-3 mb-4">
-            <Settings className="w-4 h-4 text-accent-copper shrink-0" />
-            <p className="text-sm text-ink-secondary flex-1">
+          <div className="rounded-xl border border-edge-default bg-void-raised px-4 py-3 flex items-center gap-3 mb-4">
+            <Settings className="w-4 h-4 text-accent-teal shrink-0" />
+            <p className="text-sm text-text-dim flex-1">
               Set your max heart rate, lactate threshold, and FTP in{' '}
               <Link
                 to={'/settings' as string}
-                className="text-accent-copper hover:text-accent-copper/80 font-medium transition-colors"
+                className="text-accent-teal hover:text-accent-teal/80 font-medium transition-colors"
               >
                 Settings
               </Link>{' '}
@@ -63,7 +63,7 @@ export function AnalyticsSettingsCallout({ hasCustomSettings }: AnalyticsSetting
             <button
               type="button"
               onClick={handleDismiss}
-              className="p-1 rounded-md text-ink-muted hover:text-ink-secondary hover:bg-ink-border/50 transition-colors shrink-0"
+              className="p-1 rounded-md text-text-faint hover:text-text-dim hover:bg-edge-default/50 transition-colors shrink-0"
               aria-label="Dismiss analytics settings callout"
             >
               <X className="w-3.5 h-3.5" />

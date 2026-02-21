@@ -131,10 +131,10 @@ export const SESSION_TYPE_CONFIG: Record<
   { label: string; color: string; defaultDuration: number }
 > = {
   ERG: { label: 'Erg', color: 'text-data-excellent', defaultDuration: 60 },
-  ROW: { label: 'On Water', color: 'text-accent-primary', defaultDuration: 90 },
+  ROW: { label: 'On Water', color: 'text-accent-teal-primary', defaultDuration: 90 },
   LIFT: { label: 'Lift', color: 'text-data-warning', defaultDuration: 45 },
   RUN: { label: 'Run', color: 'text-data-warning', defaultDuration: 45 },
-  CROSS_TRAIN: { label: 'Cross-Train', color: 'text-accent-primary', defaultDuration: 45 },
+  CROSS_TRAIN: { label: 'Cross-Train', color: 'text-accent-teal-primary', defaultDuration: 45 },
   RECOVERY: { label: 'Recovery', color: 'text-data-excellent', defaultDuration: 30 },
 };
 
@@ -144,8 +144,8 @@ export const SESSION_STATUS_CONFIG: Record<
 > = {
   PLANNED: {
     label: 'Draft',
-    color: 'text-ink-secondary',
-    bgColor: 'bg-ink-well',
+    color: 'text-text-dim',
+    bgColor: 'bg-void-deep',
   },
   ACTIVE: {
     label: 'Active',
@@ -154,8 +154,8 @@ export const SESSION_STATUS_CONFIG: Record<
   },
   COMPLETED: {
     label: 'Completed',
-    color: 'text-ink-muted',
-    bgColor: 'bg-ink-well/60',
+    color: 'text-text-faint',
+    bgColor: 'bg-void-deep/60',
   },
   CANCELLED: {
     label: 'Cancelled',

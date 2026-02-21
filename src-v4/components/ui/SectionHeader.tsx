@@ -1,6 +1,11 @@
 /**
- * Section header with title, description, icon, and action slot.
- * Provides consistent heading layout across feature sections.
+ * Section header — oarbit design system.
+ *
+ * Typography-driven. text-h2 (18px semibold) title, text-primary.
+ * Optional description (text-small, text-secondary).
+ * Optional right-aligned action slot.
+ * No icon container, no background, no border.
+ * Bottom margin space-4 (16px) to section content.
  */
 
 import type { ReactNode } from 'react';
@@ -9,29 +14,17 @@ interface SectionHeaderProps {
   title: string;
   description?: string;
   action?: ReactNode;
+  /** @deprecated Not used in new design system. Kept for compat. */
   icon?: ReactNode;
   className?: string;
 }
 
-export function SectionHeader({
-  title,
-  description,
-  action,
-  icon,
-  className = '',
-}: SectionHeaderProps) {
+export function SectionHeader({ title, description, action, className = '' }: SectionHeaderProps) {
   return (
-    <div className={`flex items-start sm:items-center justify-between gap-3 ${className}`}>
-      <div className="flex items-start sm:items-center gap-3 min-w-0">
-        {icon && (
-          <div className="w-8 h-8 rounded-lg bg-ink-well flex items-center justify-center shrink-0 text-ink-secondary">
-            {icon}
-          </div>
-        )}
-        <div className="min-w-0">
-          <h2 className="text-lg font-semibold text-ink-primary">{title}</h2>
-          {description && <p className="text-sm text-ink-secondary mt-0.5">{description}</p>}
-        </div>
+    <div className={`flex items-start sm:items-center justify-between gap-3 mb-4 ${className}`}>
+      <div className="min-w-0">
+        <h2 className="text-lg font-semibold text-text-bright leading-[1.3]">{title}</h2>
+        {description && <p className="text-[0.8125rem] text-text-dim mt-1">{description}</p>}
       </div>
       {action && <div className="shrink-0">{action}</div>}
     </div>

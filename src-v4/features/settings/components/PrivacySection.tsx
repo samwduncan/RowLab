@@ -46,8 +46,8 @@ function RadioOption<T extends string>({
         flex items-start gap-3 w-full p-3 rounded-xl text-left transition-all duration-150 cursor-pointer
         ${
           selected
-            ? 'ring-1 ring-accent-copper bg-accent-copper/5'
-            : 'border border-ink-border hover:border-ink-bright/20'
+            ? 'ring-1 ring-accent bg-accent-teal/5'
+            : 'border border-edge-default hover:border-text-primary/20'
         }
       `.trim()}
     >
@@ -56,15 +56,15 @@ function RadioOption<T extends string>({
         className={`
           mt-0.5 shrink-0 w-4 h-4 rounded-full border-2 transition-colors duration-150
           flex items-center justify-center
-          ${selected ? 'border-accent-copper' : 'border-ink-muted'}
+          ${selected ? 'border-accent-teal' : 'border-text-faint'}
         `.trim()}
       >
-        {selected && <div className="w-2 h-2 rounded-full bg-accent-copper" />}
+        {selected && <div className="w-2 h-2 rounded-full bg-accent-teal" />}
       </div>
 
       <div className="min-w-0">
-        <p className="text-sm font-medium text-ink-primary">{label}</p>
-        <p className="text-xs text-ink-muted mt-0.5">{description}</p>
+        <p className="text-sm font-medium text-text-bright">{label}</p>
+        <p className="text-xs text-text-faint mt-0.5">{description}</p>
       </div>
     </button>
   );
@@ -90,8 +90,8 @@ function ToggleSwitch({
   return (
     <div className="flex items-center justify-between gap-4 py-2">
       <div className="min-w-0">
-        <p className="text-sm font-medium text-ink-primary">{label}</p>
-        {description && <p className="text-xs text-ink-muted mt-0.5">{description}</p>}
+        <p className="text-sm font-medium text-text-bright">{label}</p>
+        {description && <p className="text-xs text-text-faint mt-0.5">{description}</p>}
       </div>
       <button
         type="button"
@@ -102,7 +102,7 @@ function ToggleSwitch({
         onClick={() => onChange(!checked)}
         className={`
           relative shrink-0 w-11 h-6 rounded-full transition-colors duration-150 cursor-pointer
-          ${checked ? 'bg-accent-copper' : 'bg-ink-well'}
+          ${checked ? 'bg-accent-teal' : 'bg-void-deep'}
           ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
         `.trim()}
       >
@@ -147,8 +147,8 @@ export function PrivacySection() {
       {/* Profile Visibility */}
       <GlassCard>
         <div className="flex items-center gap-2 mb-4">
-          <Eye className="w-4 h-4 text-accent-copper" />
-          <h3 className="text-sm font-semibold text-ink-primary">Profile Visibility</h3>
+          <Eye className="w-4 h-4 text-accent-teal" />
+          <h3 className="text-sm font-semibold text-text-bright">Profile Visibility</h3>
         </div>
         <div className="space-y-2" role="radiogroup" aria-label="Profile visibility">
           <RadioOption
@@ -178,8 +178,8 @@ export function PrivacySection() {
       {/* Workout Visibility */}
       <GlassCard>
         <div className="flex items-center gap-2 mb-4">
-          <Eye className="w-4 h-4 text-accent-copper" />
-          <h3 className="text-sm font-semibold text-ink-primary">Workout Visibility</h3>
+          <Eye className="w-4 h-4 text-accent-teal" />
+          <h3 className="text-sm font-semibold text-text-bright">Workout Visibility</h3>
         </div>
         <div className="space-y-2" role="radiogroup" aria-label="Workout visibility">
           <RadioOption
@@ -209,8 +209,8 @@ export function PrivacySection() {
       {/* Leaderboard Toggle */}
       <GlassCard>
         <div className="flex items-center gap-2 mb-3">
-          <Trophy className="w-4 h-4 text-accent-copper" />
-          <h3 className="text-sm font-semibold text-ink-primary">Leaderboards</h3>
+          <Trophy className="w-4 h-4 text-accent-teal" />
+          <h3 className="text-sm font-semibold text-text-bright">Leaderboards</h3>
         </div>
         <ToggleSwitch
           label="Show in Team Leaderboards"

@@ -25,18 +25,18 @@ import type { TrendBucket } from '../types';
 /* Constants                                                           */
 /* ------------------------------------------------------------------ */
 
-const COPPER = 'var(--color-accent-copper)';
-const GRID_COLOR = 'var(--color-ink-border)';
-const TICK_COLOR = 'var(--color-ink-tertiary)';
+const COPPER = 'var(--color-accent)';
+const GRID_COLOR = 'var(--color-edge-default)';
+const TICK_COLOR = 'var(--color-text-faint)';
 
 /** Sport color mapping for stacked bar segments */
 const SPORT_COLORS: Record<string, string> = {
-  RowErg: 'var(--color-accent-copper)',
+  RowErg: 'var(--color-accent)',
   SkiErg: 'var(--color-data-good)',
   BikeErg: 'var(--color-data-warning)',
   Running: 'var(--color-data-excellent)',
   Strength: 'var(--color-data-poor)',
-  Other: 'var(--color-ink-tertiary)',
+  Other: 'var(--color-text-faint)',
 };
 
 /* ------------------------------------------------------------------ */
@@ -58,7 +58,7 @@ interface TrendChartProps {
 function resolveAccentColor(): string {
   if (typeof document === 'undefined') return 'oklch(0.62 0.12 55)';
   const style = getComputedStyle(document.documentElement);
-  return style.getPropertyValue('--color-accent-copper').trim() || 'oklch(0.62 0.12 55)';
+  return style.getPropertyValue('--color-accent').trim() || 'oklch(0.62 0.12 55)';
 }
 
 /* ------------------------------------------------------------------ */
@@ -77,25 +77,25 @@ function formatKValue(value: number): string {
 }
 
 /* ------------------------------------------------------------------ */
-/* Custom glass tooltip                                                */
+/* Custom panel tooltip                                                */
 /* ------------------------------------------------------------------ */
 
 function ChartTooltip({ active, payload, label }: TooltipProps<number, string>) {
   if (!active || !payload || payload.length === 0) return null;
 
   return (
-    <div className="backdrop-blur-xl bg-ink-raised/90 border border-ink-border rounded-xl px-3 py-2 shadow-card min-w-[120px]">
-      <p className="text-ink-muted text-[10px] uppercase tracking-wider mb-1.5">{label}</p>
+    <div className="backdrop-blur-xl bg-void-raised/90 border border-edge-default rounded-xl px-3 py-2 shadow-md min-w-[120px]">
+      <p className="text-text-faint text-[10px] uppercase tracking-wider mb-1.5">{label}</p>
       {payload.map((entry) => (
         <div key={entry.name} className="flex items-center gap-2 py-0.5">
           <span
             className="w-2 h-2 rounded-full flex-shrink-0"
             style={{ backgroundColor: entry.color }}
           />
-          <p className="text-ink-primary font-medium text-sm">
+          <p className="text-text-bright font-medium text-sm">
             {typeof entry.value === 'number' ? formatKValue(entry.value) : entry.value}
           </p>
-          <p className="text-ink-muted text-xs">{entry.name}</p>
+          <p className="text-text-faint text-xs">{entry.name}</p>
         </div>
       ))}
     </div>
@@ -115,14 +115,14 @@ export function TrendChart({ data, dataKey, type, label }: TrendChartProps) {
 
   if (data.length === 0) {
     return (
-      <div className="bg-ink-raised rounded-xl border border-ink-border p-4">
+      <div className="bg-void-raised rounded-xl border border-edge-default p-4">
         {label && (
-          <p className="text-xs uppercase tracking-wider text-ink-muted font-medium mb-3">
+          <p className="text-xs uppercase tracking-wider text-text-faint font-medium mb-3">
             {label}
           </p>
         )}
         <div className="h-[200px] flex items-center justify-center">
-          <p className="text-sm text-ink-tertiary">No trend data available</p>
+          <p className="text-sm text-text-faint">No trend data available</p>
         </div>
       </div>
     );
@@ -133,9 +133,9 @@ export function TrendChart({ data, dataKey, type, label }: TrendChartProps) {
     type === 'stacked-bar' ? Array.from(new Set(data.flatMap((b) => Object.keys(b.byType)))) : [];
 
   return (
-    <div className="bg-ink-raised rounded-xl border border-ink-border p-4">
+    <div className="bg-void-raised rounded-xl border border-edge-default p-4">
       {label && (
-        <p className="text-xs uppercase tracking-wider text-ink-muted font-medium mb-3">{label}</p>
+        <p className="text-xs uppercase tracking-wider text-text-faint font-medium mb-3">{label}</p>
       )}
       <div className="h-[200px] w-full">
         <ResponsiveContainer width="100%" height="100%">

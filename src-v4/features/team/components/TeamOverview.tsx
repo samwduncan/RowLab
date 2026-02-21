@@ -73,7 +73,7 @@ export function TeamOverview({ team }: TeamOverviewProps) {
           {isCoach && <AnnouncementCompose teamId={team.id} />}
           {!isCoach && <UpcomingEventsPlaceholder />}
           <SectionDivider spacing="my-4" />
-          <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-ink-muted">
+          <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-text-faint">
             Recent Activity
           </h3>
           <TeamActivityFeed teamId={team.id} compact />
@@ -122,7 +122,7 @@ export function TeamOverview({ team }: TeamOverviewProps) {
       <SectionDivider spacing="my-2" />
 
       <motion.div variants={listItemVariants} transition={SPRING_SMOOTH}>
-        <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-ink-muted">
+        <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-text-faint">
           Recent Activity
         </h3>
         <TeamActivityFeed teamId={team.id} compact />
@@ -147,13 +147,13 @@ function StatsPanel({
       icon: Gauge,
       label: 'Total Meters',
       value: formatNumber(overview.totalMeters),
-      iconColor: 'text-accent-copper',
+      iconColor: 'text-accent-teal',
     },
     {
       icon: Users,
       label: 'Members',
       value: String(memberCount),
-      iconColor: 'text-accent-primary',
+      iconColor: 'text-accent-teal-primary',
     },
     {
       icon: TrendingUp,
@@ -165,13 +165,13 @@ function StatsPanel({
       icon: Dumbbell,
       label: 'Workouts This Week',
       value: String(overview.workoutsThisWeek),
-      iconColor: 'text-accent-primary',
+      iconColor: 'text-accent-teal-primary',
     },
   ];
 
   return (
     <section>
-      <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-ink-muted">
+      <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-text-faint">
         Team Stats
       </h3>
       <div className="grid grid-cols-2 gap-3">
@@ -180,12 +180,12 @@ function StatsPanel({
           return (
             <GlassCard key={stat.label} padding="sm" interactive hover>
               <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-ink-well">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-void-deep">
                   <Icon size={16} className={stat.iconColor} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xl font-bold tabular-nums text-ink-primary">{stat.value}</p>
-                  <p className="truncate text-[11px] text-ink-muted">{stat.label}</p>
+                  <p className="text-xl font-bold tabular-nums text-text-bright">{stat.value}</p>
+                  <p className="truncate text-[11px] text-text-faint">{stat.label}</p>
                 </div>
               </div>
             </GlassCard>
@@ -226,7 +226,7 @@ function CoachTools({ teamIdentifier }: { teamIdentifier: string }) {
 
   return (
     <GlassCard padding="md" as="section">
-      <h3 className="mb-4 text-sm font-medium uppercase tracking-wider text-ink-muted">
+      <h3 className="mb-4 text-sm font-medium uppercase tracking-wider text-text-faint">
         Coach Tools
       </h3>
       <div className="space-y-2">
@@ -236,14 +236,14 @@ function CoachTools({ teamIdentifier }: { teamIdentifier: string }) {
             <button
               key={tool.label}
               onClick={() => navigate({ to: tool.route as string })}
-              className="flex w-full items-center gap-3 rounded-lg p-2.5 text-left transition-colors hover:bg-ink-well/50"
+              className="flex w-full items-center gap-3 rounded-lg p-2.5 text-left transition-colors hover:bg-void-deep/50"
             >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-ink-well">
-                <Icon size={16} className="text-accent-copper" />
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-void-deep">
+                <Icon size={16} className="text-accent-teal" />
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-medium text-ink-primary">{tool.label}</p>
-                <p className="text-xs text-ink-muted">{tool.desc}</p>
+                <p className="text-sm font-medium text-text-bright">{tool.label}</p>
+                <p className="text-xs text-text-faint">{tool.desc}</p>
               </div>
             </button>
           );
@@ -282,10 +282,10 @@ function AnnouncementCompose({ teamId }: { teamId: string }) {
     return (
       <button
         onClick={() => setIsExpanded(true)}
-        className="flex w-full items-center gap-3 rounded-xl border border-dashed border-ink-well/60 p-4 text-left transition-colors hover:border-accent-copper/40 hover:bg-ink-well/30"
+        className="flex w-full items-center gap-3 rounded-xl border border-dashed border-surface-inset/60 p-4 text-left transition-colors hover:border-accent-teal/40 hover:bg-void-deep/30"
       >
-        <Megaphone size={18} className="text-ink-muted" />
-        <span className="text-sm text-ink-muted">Post an announcement...</span>
+        <Megaphone size={18} className="text-text-faint" />
+        <span className="text-sm text-text-faint">Post an announcement...</span>
       </button>
     );
   }
@@ -294,15 +294,15 @@ function AnnouncementCompose({ teamId }: { teamId: string }) {
     <GlassCard padding="md" as="section">
       <form onSubmit={handleSubmit} className="space-y-3">
         <div className="flex items-center gap-2">
-          <Megaphone size={18} className="text-accent-copper" />
-          <h3 className="text-sm font-medium text-ink-primary">New Announcement</h3>
+          <Megaphone size={18} className="text-accent-teal" />
+          <h3 className="text-sm font-medium text-text-bright">New Announcement</h3>
         </div>
         <input
           type="text"
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full rounded-lg bg-ink-well/50 px-3 py-2 text-sm text-ink-primary placeholder:text-ink-muted outline-none focus:ring-1 focus:ring-accent-copper/50"
+          className="w-full rounded-lg bg-void-deep/50 px-3 py-2 text-sm text-text-bright placeholder:text-text-faint outline-none focus:ring-1 focus:ring-accent/50"
           autoFocus
         />
         <textarea
@@ -310,20 +310,20 @@ function AnnouncementCompose({ teamId }: { teamId: string }) {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           rows={3}
-          className="w-full resize-none rounded-lg bg-ink-well/50 px-3 py-2 text-sm text-ink-primary placeholder:text-ink-muted outline-none focus:ring-1 focus:ring-accent-copper/50"
+          className="w-full resize-none rounded-lg bg-void-deep/50 px-3 py-2 text-sm text-text-bright placeholder:text-text-faint outline-none focus:ring-1 focus:ring-accent/50"
         />
         <div className="flex items-center justify-end gap-2">
           <button
             type="button"
             onClick={() => setIsExpanded(false)}
-            className="rounded-lg px-3 py-1.5 text-sm text-ink-muted transition-colors hover:text-ink-secondary"
+            className="rounded-lg px-3 py-1.5 text-sm text-text-faint transition-colors hover:text-text-dim"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={!title.trim() || !content.trim() || createMutation.isPending}
-            className="flex items-center gap-1.5 rounded-lg bg-accent-copper px-3 py-1.5 text-sm font-medium text-ink-deep transition-colors hover:bg-accent-copper/90 disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-lg bg-accent-teal px-3 py-1.5 text-sm font-medium text-void-deep transition-colors hover:bg-accent-teal/90 disabled:opacity-50"
           >
             <Send size={14} />
             Post
@@ -348,10 +348,10 @@ function AnnouncementsSidebar({
   if (pinned.length === 0 && recent.length === 0) {
     return (
       <GlassCard padding="md" as="section">
-        <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-ink-muted">
+        <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-text-faint">
           Announcements
         </h3>
-        <p className="text-sm text-ink-tertiary">No announcements yet.</p>
+        <p className="text-sm text-text-faint">No announcements yet.</p>
       </GlassCard>
     );
   }
@@ -360,7 +360,7 @@ function AnnouncementsSidebar({
     <div className="space-y-4">
       {pinned.length > 0 && (
         <GlassCard padding="md" as="section">
-          <h3 className="mb-3 flex items-center gap-1.5 text-sm font-medium uppercase tracking-wider text-ink-muted">
+          <h3 className="mb-3 flex items-center gap-1.5 text-sm font-medium uppercase tracking-wider text-text-faint">
             <Pin size={14} />
             Pinned
           </h3>
@@ -373,7 +373,7 @@ function AnnouncementsSidebar({
       )}
       {recent.length > 0 && (
         <GlassCard padding="md" as="section">
-          <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-ink-muted">
+          <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-text-faint">
             Recent
           </h3>
           <div className="space-y-3">
@@ -394,10 +394,10 @@ function AnnouncementCard({ announcement }: { announcement: Announcement }) {
   });
 
   return (
-    <div className="border-b border-ink-well/40 pb-3 last:border-0 last:pb-0">
-      <p className="text-sm font-medium text-ink-primary">{announcement.title}</p>
-      <p className="mt-1 line-clamp-2 text-xs text-ink-secondary">{announcement.content}</p>
-      <p className="mt-1.5 text-xs text-ink-tertiary">
+    <div className="border-b border-surface-inset/40 pb-3 last:border-0 last:pb-0">
+      <p className="text-sm font-medium text-text-bright">{announcement.title}</p>
+      <p className="mt-1 line-clamp-2 text-xs text-text-dim">{announcement.content}</p>
+      <p className="mt-1.5 text-xs text-text-faint">
         {announcement.authorName} &middot; {dateStr}
       </p>
     </div>
@@ -411,14 +411,14 @@ function AnnouncementCard({ announcement }: { announcement: Announcement }) {
 function UpcomingEventsPlaceholder() {
   return (
     <GlassCard padding="md" as="section">
-      <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-ink-muted">
+      <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-text-faint">
         Upcoming Team Events
       </h3>
-      <div className="flex items-center gap-3 rounded-lg bg-ink-well/30 p-4">
-        <Calendar size={20} className="text-ink-muted" />
+      <div className="flex items-center gap-3 rounded-lg bg-void-deep/30 p-4">
+        <Calendar size={20} className="text-text-faint" />
         <div>
-          <p className="text-sm text-ink-secondary">No upcoming events scheduled.</p>
-          <p className="text-xs text-ink-tertiary">
+          <p className="text-sm text-text-dim">No upcoming events scheduled.</p>
+          <p className="text-xs text-text-faint">
             Your coach will post events and practice schedules here.
           </p>
         </div>

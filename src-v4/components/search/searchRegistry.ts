@@ -247,7 +247,7 @@ const commandTemplates: CommandTemplate[] = [
   {
     id: 'cmd-logout',
     label: 'Logout',
-    description: 'Sign out of RowLab',
+    description: 'Sign out of oarbit',
     icon: LogOut,
     keywords: ['logout', 'sign out', 'exit', 'leave'],
     actionType: 'action',

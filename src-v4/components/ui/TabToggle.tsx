@@ -1,10 +1,22 @@
 /**
- * Pill-style tab toggle with animated sliding indicator.
- * Uses motion layoutId for smooth transitions between tabs.
+ * Tab toggle — oarbit design system.
+ *
+ * Container: bg-void-deep, radius-md (6px), space-1 (4px) padding.
+ * Active indicator: bg-void-raised behind active tab, animated via layoutId.
+ * Active text: text-primary, weight medium.
+ * Inactive text: text-secondary. Inactive hover: text-primary.
+ * Animation: spring-standard via motion layoutId.
+ * Every TabGroup instance MUST have a unique layoutId prop.
  */
 
 import type { ReactNode } from 'react';
 import { motion } from 'motion/react';
+import { motion as motionTokens } from '@/design-system';
+
+const SPRING_STANDARD = {
+  type: 'spring' as const,
+  ...motionTokens.spring.standard,
+};
 
 export interface Tab {
   id: string;
@@ -38,7 +50,7 @@ export function TabToggle({
 }: TabToggleProps) {
   return (
     <div
-      className={`${fullWidth ? 'flex' : 'inline-flex'} items-center gap-1 p-1 rounded-xl bg-ink-well/60 ${className}`}
+      className={`${fullWidth ? 'flex' : 'inline-flex'} items-center gap-1 p-1 rounded-[var(--radius-md)] bg-void-deep ${className}`}
       role="tablist"
     >
       {tabs.map((tab) => {
@@ -54,16 +66,16 @@ export function TabToggle({
               relative flex items-center justify-center gap-1.5
               ${sizeStyles[size]}
               ${fullWidth ? 'flex-1' : ''}
-              rounded-lg font-medium cursor-pointer
+              rounded-[var(--radius-sm)] font-medium cursor-pointer
               transition-colors duration-150
-              ${isActive ? 'text-ink-primary' : 'text-ink-muted hover:text-ink-secondary'}
+              ${isActive ? 'text-text-bright' : 'text-text-dim hover:text-text-bright'}
             `.trim()}
           >
             {isActive && (
               <motion.div
                 layoutId={layoutId}
-                className="absolute inset-0 glass shadow-card rounded-lg"
-                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                className="absolute inset-0 bg-void-raised rounded-[var(--radius-sm)] shadow-sm"
+                transition={SPRING_STANDARD}
               />
             )}
             <span className="relative z-10 flex items-center gap-1.5">

@@ -1,13 +1,16 @@
 /**
- * SVG sparkline with gradient fill for inline trend visualization.
- * Renders an area chart with a smooth line and gradient fill.
- * Decorative only -- marked aria-hidden.
+ * SVG sparkline — oarbit design system.
+ *
+ * Area chart with smooth line and gradient fill.
+ * Default color: accent (Regatta Gold).
+ * Decorative only — marked aria-hidden.
  */
 
 interface SparklineProps {
   data: number[];
   width?: number;
   height?: number;
+  /** oklch color string. Defaults to Regatta Gold accent. */
   color?: string;
   id?: string;
   className?: string;
@@ -17,7 +20,7 @@ export function Sparkline({
   data,
   width = 100,
   height = 32,
-  color = 'oklch(0.62 0.12 55)',
+  color = 'oklch(0.71 0.16 65)',
   id = 'sparkline',
   className = '',
 }: SparklineProps) {

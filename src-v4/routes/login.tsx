@@ -35,15 +35,15 @@ function LoginPage() {
   const [loginEmail, setLoginEmail] = useState('');
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-ink-deep p-4">
+    <div className="flex min-h-screen items-center justify-center bg-void-deep p-4">
       <div className="w-full max-w-md">
         <GlassCard padding="lg" className="rounded-2xl">
           {/* App wordmark */}
           <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold tracking-tight text-ink-primary font-display">
-              Row<span className="text-accent-copper">Lab</span>
+            <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
+              Row<span className="text-accent-teal">Lab</span>
             </h1>
-            <p className="mt-1.5 text-sm text-ink-secondary">Sign in to your account</p>
+            <p className="mt-1.5 text-sm text-text-dim">Sign in to your account</p>
           </div>
 
           {/* Email/password form */}
@@ -51,9 +51,9 @@ function LoginPage() {
 
           {/* Divider */}
           <div className="my-5 flex items-center gap-3">
-            <div className="h-px flex-1 bg-ink-border" />
-            <span className="text-xs text-ink-muted uppercase tracking-wider">or</span>
-            <div className="h-px flex-1 bg-ink-border" />
+            <div className="h-px flex-1 bg-edge-default" />
+            <span className="text-xs text-text-faint uppercase tracking-wider">or</span>
+            <div className="h-px flex-1 bg-edge-default" />
           </div>
 
           {/* Google OAuth */}
@@ -65,12 +65,12 @@ function LoginPage() {
           </div>
 
           {/* Registration link */}
-          <div className="mt-6 border-t border-ink-border pt-5 text-center">
-            <p className="text-sm text-ink-secondary">
+          <div className="mt-6 border-t border-edge-default pt-5 text-center">
+            <p className="text-sm text-text-dim">
               Have an invite?{' '}
               <Link
                 to="/register"
-                className="text-accent-copper hover:text-accent-copper-hover font-medium transition-colors duration-150"
+                className="text-accent-teal hover:text-accent-teal-hover font-medium transition-colors duration-150"
               >
                 Create an account
               </Link>

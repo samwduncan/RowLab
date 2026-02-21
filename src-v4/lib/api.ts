@@ -60,7 +60,7 @@ api.interceptors.response.use(
           .catch(() => {
             setAccessToken(null);
             // Emit event for AuthProvider to handle redirect
-            window.dispatchEvent(new CustomEvent('rowlab:auth:expired'));
+            window.dispatchEvent(new CustomEvent('oarbit:auth:expired'));
             return null;
           })
           .finally(() => {

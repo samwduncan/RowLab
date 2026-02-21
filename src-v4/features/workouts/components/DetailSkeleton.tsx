@@ -8,7 +8,7 @@
 /* ------------------------------------------------------------------ */
 
 function Shimmer({ className }: { className?: string }) {
-  return <div className={`bg-ink-hover rounded animate-shimmer ${className ?? ''}`} />;
+  return <div className={`bg-void-overlay rounded animate-shimmer ${className ?? ''}`} />;
 }
 
 /* ------------------------------------------------------------------ */
@@ -31,7 +31,7 @@ export function DetailSkeleton() {
           <Shimmer className="h-10 w-10 rounded-lg" />
         </div>
 
-        <div className="flex-1 bg-ink-raised rounded-xl p-6">
+        <div className="flex-1 bg-void-raised rounded-xl p-6">
           {/* Top row */}
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center gap-3">
@@ -66,9 +66,9 @@ export function DetailSkeleton() {
         <Shimmer className="h-6 w-16" />
 
         {/* Table skeleton */}
-        <div className="bg-ink-raised rounded-xl border border-ink-border overflow-hidden">
+        <div className="bg-void-raised rounded-xl border border-edge-default overflow-hidden">
           {/* Header */}
-          <div className="flex items-center gap-4 px-4 py-3 border-b border-ink-border">
+          <div className="flex items-center gap-4 px-4 py-3 border-b border-edge-default">
             <Shimmer className="h-3 w-10" />
             <Shimmer className="h-3 w-14 ml-auto" />
             <Shimmer className="h-3 w-14" />
@@ -78,7 +78,7 @@ export function DetailSkeleton() {
           {Array.from({ length: 8 }).map((_, i) => (
             <div
               key={i}
-              className="flex items-center gap-4 px-4 py-2.5 border-b border-ink-border last:border-0"
+              className="flex items-center gap-4 px-4 py-2.5 border-b border-edge-default last:border-0"
             >
               <Shimmer className="h-4 w-6" />
               <Shimmer className="h-4 w-16 ml-auto" />
@@ -90,7 +90,7 @@ export function DetailSkeleton() {
       </div>
 
       {/* Notes skeleton */}
-      <div className="bg-ink-raised rounded-xl border border-ink-border p-4 space-y-2">
+      <div className="bg-void-raised rounded-xl border border-edge-default p-4 space-y-2">
         <Shimmer className="h-4 w-12" />
         <Shimmer className="h-4 w-full" />
         <Shimmer className="h-4 w-3/4" />

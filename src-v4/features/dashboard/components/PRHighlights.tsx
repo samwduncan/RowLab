@@ -53,7 +53,7 @@ export function PRHighlights({ records, className = '' }: PRHighlightsProps) {
   if (sorted.length === 0) {
     return (
       <section className={className} aria-label="Personal Records">
-        <h2 className="text-lg font-semibold text-ink-primary mb-4">Personal Records</h2>
+        <h2 className="text-lg font-semibold text-text-bright mb-4">Personal Records</h2>
         <EmptyState
           icon={Trophy}
           title="No personal records yet"
@@ -66,7 +66,7 @@ export function PRHighlights({ records, className = '' }: PRHighlightsProps) {
 
   return (
     <section className={className} aria-label="Personal Records">
-      <h2 className="text-lg font-semibold text-ink-primary mb-4">Personal Records</h2>
+      <h2 className="text-lg font-semibold text-text-bright mb-4">Personal Records</h2>
 
       <motion.div
         initial="hidden"

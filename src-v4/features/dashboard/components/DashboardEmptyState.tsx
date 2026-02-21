@@ -29,7 +29,7 @@ function RowingIllustration() {
       {/* Water wave lines */}
       <path
         d="M 10 110 Q 50 95 100 110 Q 150 125 190 110"
-        className="stroke-accent-copper"
+        className="stroke-accent"
         strokeWidth="2"
         strokeLinecap="round"
         opacity="0.6"
@@ -43,7 +43,7 @@ function RowingIllustration() {
       </path>
       <path
         d="M 20 125 Q 60 113 110 125 Q 160 137 195 125"
-        className="stroke-accent-copper"
+        className="stroke-accent"
         strokeWidth="1.5"
         strokeLinecap="round"
         opacity="0.3"
@@ -59,7 +59,7 @@ function RowingIllustration() {
       {/* Boat hull — sleek racing shell shape */}
       <path
         d="M 30 100 Q 100 92 170 100 L 185 104 Q 100 108 15 104 Z"
-        className="fill-ink-raised stroke-accent-copper"
+        className="fill-void-raised stroke-accent"
         strokeWidth="1.5"
       />
 
@@ -69,7 +69,7 @@ function RowingIllustration() {
         y1="70"
         x2="140"
         y2="100"
-        className="stroke-ink-muted"
+        className="stroke-text-faint"
         strokeWidth="2"
         strokeLinecap="round"
       />
@@ -78,24 +78,18 @@ function RowingIllustration() {
         y1="100"
         x2="115"
         y2="70"
-        className="stroke-ink-muted"
+        className="stroke-text-faint"
         strokeWidth="2"
         strokeLinecap="round"
       />
 
       {/* Rower silhouette — abstract geometric figure */}
-      <circle
-        cx="100"
-        cy="62"
-        r="8"
-        className="fill-ink-raised stroke-accent-copper"
-        strokeWidth="1.5"
-      >
+      <circle cx="100" cy="62" r="8" className="fill-void-raised stroke-accent" strokeWidth="1.5">
         <animate attributeName="cy" values="62;60;62" dur="3s" repeatCount="indefinite" />
       </circle>
       <path
         d="M 92 72 L 100 90 L 108 72"
-        className="fill-ink-raised stroke-accent-copper"
+        className="fill-void-raised stroke-accent"
         strokeWidth="1.5"
         strokeLinejoin="round"
       >
@@ -113,7 +107,7 @@ function RowingIllustration() {
         y1="98"
         x2="25"
         y2="98"
-        className="stroke-accent-copper"
+        className="stroke-accent"
         strokeWidth="1"
         opacity="0.4"
         strokeLinecap="round"
@@ -125,7 +119,7 @@ function RowingIllustration() {
         y1="103"
         x2="18"
         y2="103"
-        className="stroke-accent-copper"
+        className="stroke-accent"
         strokeWidth="1"
         opacity="0.3"
         strokeLinecap="round"
@@ -174,8 +168,8 @@ export function DashboardEmptyState() {
 
       {/* Welcome copy */}
       <motion.div variants={itemVariants} className="mb-8 space-y-3">
-        <h1 className="text-2xl font-semibold text-ink-primary">Welcome to RowLab</h1>
-        <p className="text-ink-secondary text-base leading-relaxed max-w-sm mx-auto">
+        <h1 className="text-2xl font-semibold text-text-bright">Welcome to oarbit</h1>
+        <p className="text-text-dim text-base leading-relaxed max-w-sm mx-auto">
           Your personal training hub starts here. Log your first workout to see your stats come to
           life.
         </p>

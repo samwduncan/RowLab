@@ -78,8 +78,8 @@ export function JoinTeamFlow({ onJoined }: JoinTeamFlowProps) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-      <div className="flex items-center gap-2 text-sm font-medium text-ink-body">
-        <Link2 size={14} className="text-ink-muted" />
+      <div className="flex items-center gap-2 text-sm font-medium text-text-default">
+        <Link2 size={14} className="text-text-faint" />
         Join with invite code
       </div>
 

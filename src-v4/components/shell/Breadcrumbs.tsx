@@ -37,13 +37,13 @@ export function Breadcrumbs() {
     <nav aria-label="Breadcrumb" className="flex items-center gap-1 text-sm">
       {visibleCrumbs.map((crumb, i) => (
         <span key={crumb.path} className="flex items-center gap-1">
-          {i > 0 && <span className="text-ink-muted">/</span>}
+          {i > 0 && <span className="text-text-faint">/</span>}
           {i === visibleCrumbs.length - 1 ? (
-            <span className="text-ink-primary font-medium">{crumb.label}</span>
+            <span className="text-text-bright font-medium">{crumb.label}</span>
           ) : (
             <Link
               to={crumb.path}
-              className="text-ink-secondary transition-colors hover:text-ink-primary"
+              className="text-text-dim transition-colors hover:text-text-bright"
             >
               {crumb.label}
             </Link>

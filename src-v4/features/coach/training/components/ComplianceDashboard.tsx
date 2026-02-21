@@ -152,7 +152,7 @@ export function ComplianceDashboard({ teamId: _teamId }: ComplianceDashboardProp
       </div>
 
       {/* Week label */}
-      <p className="text-xs text-ink-muted">
+      <p className="text-xs text-text-faint">
         Week of{' '}
         {new Date(weekStart + 'T00:00:00').toLocaleDateString('en-US', {
           month: 'long',
@@ -163,20 +163,20 @@ export function ComplianceDashboard({ teamId: _teamId }: ComplianceDashboardProp
       </p>
 
       {/* Athlete table */}
-      <div className="overflow-x-auto rounded-xl border border-white/[0.06] bg-ink-raised">
+      <div className="overflow-x-auto rounded-xl border border-white/[0.06] bg-void-raised">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-white/[0.06]">
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ink-muted">
+              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-faint">
                 Athlete
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ink-muted">
+              <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-faint">
                 Weekly Hours
               </th>
-              <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-ink-muted">
+              <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-text-faint">
                 Sessions
               </th>
-              <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-ink-muted">
+              <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider text-text-faint">
                 Status
               </th>
             </tr>
@@ -188,13 +188,13 @@ export function ComplianceDashboard({ teamId: _teamId }: ComplianceDashboardProp
               const pct = Math.min((athlete.hours / maxHours) * 100, 100);
 
               return (
-                <tr key={athlete.id} className="transition-colors hover:bg-ink-well/30">
+                <tr key={athlete.id} className="transition-colors hover:bg-void-deep/30">
                   <td className="px-4 py-3">
-                    <span className="font-medium text-ink-primary">{athlete.name}</span>
+                    <span className="font-medium text-text-bright">{athlete.name}</span>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <div className="flex-1 h-2 rounded-full bg-ink-well/50 overflow-hidden">
+                      <div className="flex-1 h-2 rounded-full bg-void-deep/50 overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all ${styles.bar}`}
                           style={{ width: `${pct}%` }}
@@ -208,7 +208,7 @@ export function ComplianceDashboard({ teamId: _teamId }: ComplianceDashboardProp
                     </div>
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <span className="font-mono text-xs text-ink-secondary">{athlete.sessions}</span>
+                    <span className="font-mono text-xs text-text-dim">{athlete.sessions}</span>
                   </td>
                   <td className="px-4 py-3 text-center">
                     <span
@@ -253,16 +253,16 @@ function StatCard({
       <div className="flex items-center gap-2">
         <Icon
           className={`h-4 w-4 ${
-            alert ? 'text-data-poor' : highlight ? 'text-data-excellent' : 'text-ink-muted'
+            alert ? 'text-data-poor' : highlight ? 'text-data-excellent' : 'text-text-faint'
           }`}
         />
-        <span className="text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-text-faint">
           {label}
         </span>
       </div>
       <p
         className={`mt-1 text-lg font-bold font-mono ${
-          alert ? 'text-data-poor' : highlight ? 'text-data-excellent' : 'text-ink-primary'
+          alert ? 'text-data-poor' : highlight ? 'text-data-excellent' : 'text-text-bright'
         }`}
       >
         {value}
@@ -280,13 +280,13 @@ function ComplianceSkeleton() {
     <SkeletonGroup>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="glass rounded-xl p-3 space-y-2">
+          <div key={i} className="panel rounded-xl p-3 space-y-2">
             <Skeleton width="4rem" height="0.625rem" />
             <Skeleton width="3rem" height="1.5rem" />
           </div>
         ))}
       </div>
-      <div className="rounded-xl bg-ink-raised p-4 space-y-3 mt-4">
+      <div className="rounded-xl bg-void-raised p-4 space-y-3 mt-4">
         {Array.from({ length: 4 }).map((_, i) => (
           <div key={i} className="flex items-center gap-4">
             <Skeleton width="30%" height="0.875rem" />

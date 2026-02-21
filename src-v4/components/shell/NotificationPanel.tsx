@@ -60,16 +60,16 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -4, scale: 0.96 }}
           transition={SPRING_SNAPPY}
-          className="absolute right-0 top-full z-40 mt-2 w-80 overflow-hidden rounded-2xl border border-ink-border bg-ink-float/95 shadow-card backdrop-blur-xl"
+          className="absolute right-0 top-full z-40 mt-2 w-80 overflow-hidden rounded-2xl border border-edge-default bg-void-overlay/95 shadow-md backdrop-blur-xl"
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-ink-border/50 px-4 py-3">
-            <h3 className="text-sm font-semibold text-ink-primary">Notifications</h3>
+          <div className="flex items-center justify-between border-b border-edge-default/50 px-4 py-3">
+            <h3 className="text-sm font-semibold text-text-bright">Notifications</h3>
             {unreadCount > 0 && (
               <button
                 type="button"
                 onClick={handleMarkAllRead}
-                className="text-xs text-accent-copper transition-colors hover:text-accent-copper-hover"
+                className="text-xs text-accent-teal transition-colors hover:text-accent-teal-hover"
                 disabled={markAllRead.isPending}
               >
                 Mark all read
@@ -96,12 +96,12 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
             ) : !notifications || notifications.length === 0 ? (
               /* Empty state */
               <div className="flex flex-col items-center gap-3 px-4 py-10 text-center">
-                <div className="rounded-xl bg-ink-raised p-3">
-                  <Bell size={24} className="text-ink-muted" />
+                <div className="rounded-xl bg-void-raised p-3">
+                  <Bell size={24} className="text-text-faint" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-ink-secondary">No notifications yet</p>
-                  <p className="mt-0.5 text-xs text-ink-muted">
+                  <p className="text-sm font-medium text-text-dim">No notifications yet</p>
+                  <p className="mt-0.5 text-xs text-text-faint">
                     We'll let you know when something happens
                   </p>
                 </div>

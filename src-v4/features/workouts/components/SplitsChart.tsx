@@ -52,11 +52,11 @@ type ChartMode = 'bar' | 'line';
 /* Constants                                                           */
 /* ------------------------------------------------------------------ */
 
-const COPPER = 'var(--color-accent-copper)';
+const COPPER = 'var(--color-accent)';
 const BLUE = 'var(--color-accent-primary)';
-const REST_COLOR = 'var(--color-ink-tertiary)';
-const GRID_COLOR = 'var(--color-ink-border)';
-const TICK_COLOR = 'var(--color-ink-tertiary)';
+const REST_COLOR = 'var(--color-text-faint)';
+const GRID_COLOR = 'var(--color-edge-default)';
+const TICK_COLOR = 'var(--color-text-faint)';
 
 /** Zone color CSS variables */
 const ZONE_COLORS: Record<TrainingZone, string> = {
@@ -132,7 +132,7 @@ function detectIntervals(splits: WorkoutSplit[]): boolean[] {
 }
 
 /* ------------------------------------------------------------------ */
-/* Custom glass tooltip                                                */
+/* Custom panel tooltip                                                */
 /* ------------------------------------------------------------------ */
 
 function ChartTooltip({ active, payload }: TooltipProps<number, string>) {
@@ -143,9 +143,9 @@ function ChartTooltip({ active, payload }: TooltipProps<number, string>) {
   const zoneColor = ZONE_COLORS[data.zone];
 
   return (
-    <div className="backdrop-blur-xl bg-ink-raised/90 border border-ink-border rounded-xl shadow-card px-3 py-2 min-w-[130px]">
+    <div className="backdrop-blur-xl bg-void-raised/90 border border-edge-default rounded-xl shadow-md px-3 py-2 min-w-[130px]">
       <div className="flex items-center justify-between gap-3 mb-1">
-        <p className="text-ink-tertiary text-[10px] uppercase tracking-wider">Split {data.split}</p>
+        <p className="text-text-faint text-[10px] uppercase tracking-wider">Split {data.split}</p>
         {!data.isRest && (
           <span
             className="text-[10px] font-semibold px-1.5 py-0.5 rounded"
@@ -159,20 +159,20 @@ function ChartTooltip({ active, payload }: TooltipProps<number, string>) {
         )}
       </div>
       {data.watts != null && (
-        <p className="font-mono text-sm font-semibold text-ink-primary">{data.watts}w</p>
+        <p className="font-mono text-sm font-semibold text-text-bright">{data.watts}w</p>
       )}
       {data.pace != null && (
-        <p className="font-mono text-xs text-ink-secondary">
+        <p className="font-mono text-xs text-text-dim">
           {formatPace(Math.round(data.pace * 10))}
         </p>
       )}
       {data.spm != null && (
-        <p className="font-mono text-xs text-ink-muted">
+        <p className="font-mono text-xs text-text-faint">
           {data.spm} {data.rateLabel}
         </p>
       )}
       {data.isRest && (
-        <span className="inline-block mt-1 text-[10px] text-ink-muted bg-ink-hover px-1.5 py-0.5 rounded">
+        <span className="inline-block mt-1 text-[10px] text-text-faint bg-void-overlay px-1.5 py-0.5 rounded">
           Rest
         </span>
       )}
@@ -190,7 +190,7 @@ function ZoneLegend() {
       {(Object.keys(ZONE_COLORS) as TrainingZone[]).map((zone) => (
         <div key={zone} className="flex items-center gap-1">
           <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: ZONE_COLORS[zone] }} />
-          <span className="text-[10px] text-ink-muted font-medium">{ZONE_LABELS[zone]}</span>
+          <span className="text-[10px] text-text-faint font-medium">{ZONE_LABELS[zone]}</span>
         </div>
       ))}
     </div>
@@ -241,7 +241,7 @@ export function SplitsChart({ splits, machineType }: SplitsChartProps) {
   const showZoneColors = hasWatts && maxWatts > 0;
 
   return (
-    <div className="bg-ink-raised rounded-xl border border-ink-border p-4">
+    <div className="bg-void-raised rounded-xl border border-edge-default p-4">
       {/* Toggle */}
       <div className="flex items-center justify-end gap-1 mb-3">
         <ToggleButton
@@ -287,7 +287,7 @@ export function SplitsChart({ splits, machineType }: SplitsChartProps) {
               />
               <Tooltip
                 content={<ChartTooltip />}
-                cursor={{ fill: 'var(--color-ink-hover)', opacity: 0.5 }}
+                cursor={{ fill: 'var(--color-void-overlay)', opacity: 0.5 }}
               />
               <Bar
                 dataKey="watts"
@@ -388,7 +388,7 @@ function ToggleButton({
       type="button"
       onClick={onClick}
       className={`p-1.5 rounded-md transition-colors ${
-        active ? 'bg-ink-raised text-ink-primary' : 'text-ink-muted hover:text-ink-secondary'
+        active ? 'bg-void-raised text-text-bright' : 'text-text-faint hover:text-text-dim'
       }`}
       aria-label={label}
       aria-pressed={active}

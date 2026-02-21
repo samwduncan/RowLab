@@ -49,11 +49,11 @@ export function SearchResults({
               onSelect={() => entry.path && onSelectPage(entry.path)}
               className="search-item"
             >
-              <entry.icon size={16} className="shrink-0 text-ink-muted" />
+              <entry.icon size={16} className="shrink-0 text-text-faint" />
               <div className="min-w-0 flex-1">
-                <span className="text-ink-primary">{entry.label}</span>
+                <span className="text-text-bright">{entry.label}</span>
                 {entry.description && (
-                  <span className="ml-2 text-xs text-ink-tertiary">{entry.description}</span>
+                  <span className="ml-2 text-xs text-text-faint">{entry.description}</span>
                 )}
               </div>
             </Command.Item>
@@ -71,11 +71,11 @@ export function SearchResults({
               onSelect={() => onSelectCommand(entry)}
               className="search-item"
             >
-              <entry.icon size={16} className="shrink-0 text-accent-copper" />
+              <entry.icon size={16} className="shrink-0 text-accent-teal" />
               <div className="min-w-0 flex-1">
-                <span className="text-ink-primary">{entry.label}</span>
+                <span className="text-text-bright">{entry.label}</span>
                 {entry.description && (
-                  <span className="ml-2 text-xs text-ink-tertiary">{entry.description}</span>
+                  <span className="ml-2 text-xs text-text-faint">{entry.description}</span>
                 )}
               </div>
             </Command.Item>
@@ -109,17 +109,17 @@ export function SearchResults({
                 onSelect={() => onSelectAthlete(athlete)}
                 className="search-item"
               >
-                <User size={16} className="shrink-0 text-ink-muted" />
+                <User size={16} className="shrink-0 text-text-faint" />
                 <div className="min-w-0 flex-1">
-                  <span className="text-ink-primary">{athlete.name}</span>
+                  <span className="text-text-bright">{athlete.name}</span>
                   {athlete.email && (
-                    <span className="ml-2 text-xs text-ink-tertiary">{athlete.email}</span>
+                    <span className="ml-2 text-xs text-text-faint">{athlete.email}</span>
                   )}
                 </div>
               </Command.Item>
             ))
           ) : (
-            <div className="px-3 py-4 text-center text-sm text-ink-muted">No athletes found</div>
+            <div className="px-3 py-4 text-center text-sm text-text-faint">No athletes found</div>
           )}
         </Command.Group>
       )}
@@ -147,7 +147,7 @@ export function SearchEmptyState({ recents, onSelectRecent, onSelectSuggestion }
               onSelect={() => onSelectRecent(item.path)}
               className="search-item"
             >
-              <span className="text-ink-primary">{item.label}</span>
+              <span className="text-text-bright">{item.label}</span>
             </Command.Item>
           ))}
         </Command.Group>
@@ -159,21 +159,21 @@ export function SearchEmptyState({ recents, onSelectRecent, onSelectSuggestion }
           onSelect={() => onSelectSuggestion('/workouts/new')}
           className="search-item"
         >
-          <span className="text-ink-primary">Log workout</span>
+          <span className="text-text-bright">Log workout</span>
         </Command.Item>
         <Command.Item
           value="suggestion-view-stats"
           onSelect={() => onSelectSuggestion('/stats')}
           className="search-item"
         >
-          <span className="text-ink-primary">View stats</span>
+          <span className="text-text-bright">View stats</span>
         </Command.Item>
         <Command.Item
           value="suggestion-settings"
           onSelect={() => onSelectSuggestion('/settings')}
           className="search-item"
         >
-          <span className="text-ink-primary">Go to settings</span>
+          <span className="text-text-bright">Go to settings</span>
         </Command.Item>
       </Command.Group>
     </>

@@ -35,14 +35,14 @@ function TeamSettingsRoute() {
       fallback={
         <div className="mx-auto max-w-5xl p-4 md:p-6 pb-20 md:pb-6">
           <div className="mb-6">
-            <div className="h-8 w-48 bg-ink-well/50 animate-shimmer rounded-lg" />
-            <div className="mt-2 h-4 w-64 bg-ink-well/30 animate-shimmer rounded" />
+            <div className="h-8 w-48 bg-void-deep/50 animate-shimmer rounded-lg" />
+            <div className="mt-2 h-4 w-64 bg-void-deep/30 animate-shimmer rounded" />
           </div>
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="mb-6 glass rounded-xl p-5">
-              <div className="h-5 w-32 bg-ink-well/50 animate-shimmer rounded mb-4" />
-              <div className="h-4 w-full bg-ink-well/30 animate-shimmer rounded mb-2" />
-              <div className="h-4 w-3/4 bg-ink-well/30 animate-shimmer rounded" />
+            <div key={i} className="mb-6 panel rounded-xl p-5">
+              <div className="h-5 w-32 bg-void-deep/50 animate-shimmer rounded mb-4" />
+              <div className="h-4 w-full bg-void-deep/30 animate-shimmer rounded mb-2" />
+              <div className="h-4 w-3/4 bg-void-deep/30 animate-shimmer rounded" />
             </div>
           ))}
         </div>

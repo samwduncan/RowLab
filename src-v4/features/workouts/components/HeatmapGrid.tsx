@@ -28,11 +28,11 @@ const DAY_HEADERS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 /** Color intensity levels (Tailwind classes). */
 const INTENSITY_CLASSES = [
-  'bg-ink-well', // 0 workouts
-  'bg-accent-copper/20', // low
-  'bg-accent-copper/40', // medium
-  'bg-accent-copper/70', // high
-  'bg-accent-copper', // max
+  'bg-void-deep', // 0 workouts
+  'bg-accent-teal/20', // low
+  'bg-accent-teal/40', // medium
+  'bg-accent-teal/70', // high
+  'bg-accent-teal', // max
 ] as const;
 
 /* ------------------------------------------------------------------ */
@@ -118,13 +118,13 @@ export function HeatmapGrid({ month, workouts }: HeatmapGridProps) {
   }, [dayDataList]);
 
   return (
-    <div className="bg-ink-base rounded-xl border border-ink-border p-3 space-y-3">
+    <div className="bg-void-surface rounded-xl border border-edge-default p-3 space-y-3">
       {/* Day headers */}
       <div className="grid grid-cols-7 gap-1">
         {DAY_HEADERS.map((name) => (
           <div
             key={name}
-            className="text-center text-ink-tertiary text-xs uppercase tracking-wider py-1 font-medium"
+            className="text-center text-text-faint text-xs uppercase tracking-wider py-1 font-medium"
           >
             {name}
           </div>
@@ -160,12 +160,12 @@ export function HeatmapGrid({ month, workouts }: HeatmapGridProps) {
                   transition-colors
                   ${intensityClass}
                   ${!d.isCurrentMonth ? 'opacity-30' : ''}
-                  ${today ? 'ring-1 ring-accent-copper ring-offset-1 ring-offset-ink-base' : ''}
+                  ${today ? 'ring-1 ring-accent ring-offset-1 ring-offset-void-surface' : ''}
                 `}
               >
                 <span
                   className={`text-xs leading-none ${
-                    level >= 3 ? 'text-ink-deep font-medium' : 'text-ink-secondary'
+                    level >= 3 ? 'text-void-deep font-medium' : 'text-text-dim'
                   }`}
                 >
                   {d.day.getDate()}
@@ -178,11 +178,11 @@ export function HeatmapGrid({ month, workouts }: HeatmapGridProps) {
 
       {/* Legend */}
       <div className="flex items-center justify-end gap-1.5 pt-1">
-        <span className="text-[10px] text-ink-muted mr-1">Less</span>
+        <span className="text-[10px] text-text-faint mr-1">Less</span>
         {INTENSITY_CLASSES.map((cls, i) => (
           <div key={i} className={`w-3 h-3 rounded-sm ${cls}`} />
         ))}
-        <span className="text-[10px] text-ink-muted ml-1">More</span>
+        <span className="text-[10px] text-text-faint ml-1">More</span>
       </div>
     </div>
   );

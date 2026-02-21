@@ -102,10 +102,10 @@ function OverviewStat({ icon: Icon, label, value, footnote, sparklineData }: Ove
       <div className="flex flex-col gap-2" aria-label={`${label}: ${value}`} role="group">
         <div className="flex items-center justify-between">
           <div
-            className="w-9 h-9 rounded-lg bg-ink-well flex items-center justify-center"
+            className="w-9 h-9 rounded-lg bg-void-deep flex items-center justify-center"
             aria-hidden="true"
           >
-            <Icon size={18} className="text-accent-copper" />
+            <Icon size={18} className="text-accent-teal" />
           </div>
           {sparklineData && sparklineData.length >= 2 && (
             <Sparkline
@@ -116,11 +116,11 @@ function OverviewStat({ icon: Icon, label, value, footnote, sparklineData }: Ove
             />
           )}
         </div>
-        <span className="text-[10px] uppercase tracking-wider text-ink-muted font-medium">
+        <span className="text-[10px] uppercase tracking-wider text-text-faint font-medium">
           {label}
         </span>
-        <span className="text-xl lg:text-2xl font-bold text-ink-primary tabular-nums">{value}</span>
-        {footnote && <span className="text-[10px] text-ink-tertiary">{footnote}</span>}
+        <span className="text-xl lg:text-2xl font-bold text-text-bright tabular-nums">{value}</span>
+        {footnote && <span className="text-[10px] text-text-faint">{footnote}</span>}
       </div>
     </GlassCard>
   );
@@ -135,14 +135,14 @@ function OverviewSkeleton() {
     <div className="space-y-6">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="glass rounded-xl p-5 space-y-3 animate-shimmer">
-            <div className="w-9 h-9 rounded-lg bg-ink-well" />
-            <div className="h-3 w-16 rounded bg-ink-well" />
-            <div className="h-6 w-24 rounded bg-ink-well" />
+          <div key={i} className="panel rounded-xl p-5 space-y-3 animate-shimmer">
+            <div className="w-9 h-9 rounded-lg bg-void-deep" />
+            <div className="h-3 w-16 rounded bg-void-deep" />
+            <div className="h-6 w-24 rounded bg-void-deep" />
           </div>
         ))}
       </div>
-      <div className="h-[200px] glass rounded-xl animate-shimmer" />
+      <div className="h-[200px] panel rounded-xl animate-shimmer" />
     </div>
   );
 }
@@ -243,8 +243,8 @@ export function OverviewTab({ profile }: OverviewTabProps) {
             onClick={() => setSelectedRange(range)}
             className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
               selectedRange === range
-                ? 'bg-accent-copper/15 text-accent-copper'
-                : 'text-ink-muted hover:text-ink-secondary hover:bg-ink-hover'
+                ? 'bg-accent-teal/15 text-accent-teal'
+                : 'text-text-faint hover:text-text-dim hover:bg-void-overlay'
             }`}
             aria-pressed={selectedRange === range}
           >
@@ -275,16 +275,16 @@ export function OverviewTab({ profile }: OverviewTabProps) {
       {/* C2 integration status */}
       {profile.integrations.concept2 && (
         <motion.div
-          className="glass rounded-xl p-4 flex items-center gap-3"
+          className="panel rounded-xl p-4 flex items-center gap-3"
           variants={listItemVariants}
           transition={SPRING_SMOOTH}
         >
-          <div className="w-8 h-8 rounded-lg bg-accent-copper/10 flex items-center justify-center">
-            <Waves size={16} className="text-accent-copper" />
+          <div className="w-8 h-8 rounded-lg bg-accent-teal/10 flex items-center justify-center">
+            <Waves size={16} className="text-accent-teal" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-ink-primary">Concept2 Logbook</p>
-            <p className="text-xs text-ink-tertiary truncate">
+            <p className="text-sm font-medium text-text-bright">Concept2 Logbook</p>
+            <p className="text-xs text-text-faint truncate">
               {profile.integrations.concept2.connected
                 ? `Connected as ${profile.integrations.concept2.username ?? 'user'}`
                 : 'Not connected'}
@@ -294,7 +294,7 @@ export function OverviewTab({ profile }: OverviewTabProps) {
             className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${
               profile.integrations.concept2.connected
                 ? 'bg-data-good/15 text-data-good'
-                : 'bg-ink-well text-ink-muted'
+                : 'bg-void-deep text-text-faint'
             }`}
           >
             {profile.integrations.concept2.connected ? 'Syncing' : 'Disconnected'}

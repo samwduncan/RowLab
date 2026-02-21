@@ -101,7 +101,7 @@ function DialogOverlay({
         {open && (
           <motion.div
             {...slideUp}
-            className="bg-ink-base border border-ink-border rounded-xl p-6 shadow-card"
+            className="bg-void-surface border border-edge-default rounded-xl p-6 shadow-md"
           >
             {children}
           </motion.div>
@@ -128,7 +128,7 @@ function DeleteConfirm({
 }) {
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs text-ink-secondary">Delete {name}?</span>
+      <span className="text-xs text-text-dim">Delete {name}?</span>
       <Button
         variant="ghost"
         size="sm"
@@ -172,24 +172,24 @@ function ShellsTable({
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-ink-border/50">
-            <th className="text-left py-2.5 px-3 text-xs font-medium text-ink-tertiary uppercase tracking-wider">
+          <tr className="border-b border-edge-default/50">
+            <th className="text-left py-2.5 px-3 text-xs font-medium text-text-faint uppercase tracking-wider">
               Name
             </th>
-            <th className="text-left py-2.5 px-3 text-xs font-medium text-ink-tertiary uppercase tracking-wider">
+            <th className="text-left py-2.5 px-3 text-xs font-medium text-text-faint uppercase tracking-wider">
               Type
             </th>
-            <th className="text-left py-2.5 px-3 text-xs font-medium text-ink-tertiary uppercase tracking-wider hidden sm:table-cell">
+            <th className="text-left py-2.5 px-3 text-xs font-medium text-text-faint uppercase tracking-wider hidden sm:table-cell">
               Weight
             </th>
-            <th className="text-left py-2.5 px-3 text-xs font-medium text-ink-tertiary uppercase tracking-wider hidden md:table-cell">
+            <th className="text-left py-2.5 px-3 text-xs font-medium text-text-faint uppercase tracking-wider hidden md:table-cell">
               Rigging
             </th>
-            <th className="text-left py-2.5 px-3 text-xs font-medium text-ink-tertiary uppercase tracking-wider">
+            <th className="text-left py-2.5 px-3 text-xs font-medium text-text-faint uppercase tracking-wider">
               Status
             </th>
             {!readOnly && (
-              <th className="text-right py-2.5 px-3 text-xs font-medium text-ink-tertiary uppercase tracking-wider">
+              <th className="text-right py-2.5 px-3 text-xs font-medium text-text-faint uppercase tracking-wider">
                 Actions
               </th>
             )}
@@ -200,7 +200,7 @@ function ShellsTable({
             <motion.tr
               key={shell.id}
               layout
-              className="border-b border-ink-border/20 hover:bg-ink-hover/30 transition-colors"
+              className="border-b border-edge-default/20 hover:bg-void-overlay/30 transition-colors"
             >
               <td className="py-2.5 px-3">
                 <div className="flex items-center gap-2">
@@ -209,16 +209,16 @@ function ShellsTable({
                     title={STATUS_DISPLAY[shell.status]}
                   />
                   <div>
-                    <span className="font-medium text-ink-primary">{shell.name}</span>
-                    <span className="block text-xs text-ink-muted">{shell.boatClass}</span>
+                    <span className="font-medium text-text-bright">{shell.name}</span>
+                    <span className="block text-xs text-text-faint">{shell.boatClass}</span>
                   </div>
                 </div>
               </td>
-              <td className="py-2.5 px-3 text-ink-secondary">{SHELL_TYPE_DISPLAY[shell.type]}</td>
-              <td className="py-2.5 px-3 text-ink-secondary hidden sm:table-cell">
+              <td className="py-2.5 px-3 text-text-dim">{SHELL_TYPE_DISPLAY[shell.type]}</td>
+              <td className="py-2.5 px-3 text-text-dim hidden sm:table-cell">
                 {WEIGHT_CLASS_DISPLAY[shell.weightClass]}
               </td>
-              <td className="py-2.5 px-3 text-ink-secondary hidden md:table-cell">
+              <td className="py-2.5 px-3 text-text-dim hidden md:table-cell">
                 {shell.rigging === 'SWEEP' ? 'Sweep' : 'Scull'}
               </td>
               <td className="py-2.5 px-3">
@@ -239,14 +239,14 @@ function ShellsTable({
                     <div className="flex items-center justify-end gap-1">
                       <button
                         onClick={() => onEdit(shell)}
-                        className="p-1.5 rounded-lg text-ink-muted hover:text-ink-primary hover:bg-ink-hover transition-colors"
+                        className="p-1.5 rounded-lg text-text-faint hover:text-text-bright hover:bg-void-overlay transition-colors"
                         aria-label={`Edit ${shell.name}`}
                       >
                         <Pencil size={14} />
                       </button>
                       <button
                         onClick={() => onDelete(shell.id)}
-                        className="p-1.5 rounded-lg text-ink-muted hover:text-data-poor hover:bg-data-poor/10 transition-colors"
+                        className="p-1.5 rounded-lg text-text-faint hover:text-data-poor hover:bg-data-poor/10 transition-colors"
                         aria-label={`Delete ${shell.name}`}
                       >
                         <Trash2 size={14} />
@@ -290,21 +290,21 @@ function OarSetsTable({
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-ink-border/50">
-            <th className="text-left py-2.5 px-3 text-xs font-medium text-ink-tertiary uppercase tracking-wider">
+          <tr className="border-b border-edge-default/50">
+            <th className="text-left py-2.5 px-3 text-xs font-medium text-text-faint uppercase tracking-wider">
               Name
             </th>
-            <th className="text-left py-2.5 px-3 text-xs font-medium text-ink-tertiary uppercase tracking-wider">
+            <th className="text-left py-2.5 px-3 text-xs font-medium text-text-faint uppercase tracking-wider">
               Type
             </th>
-            <th className="text-left py-2.5 px-3 text-xs font-medium text-ink-tertiary uppercase tracking-wider">
+            <th className="text-left py-2.5 px-3 text-xs font-medium text-text-faint uppercase tracking-wider">
               Count
             </th>
-            <th className="text-left py-2.5 px-3 text-xs font-medium text-ink-tertiary uppercase tracking-wider">
+            <th className="text-left py-2.5 px-3 text-xs font-medium text-text-faint uppercase tracking-wider">
               Status
             </th>
             {!readOnly && (
-              <th className="text-right py-2.5 px-3 text-xs font-medium text-ink-tertiary uppercase tracking-wider">
+              <th className="text-right py-2.5 px-3 text-xs font-medium text-text-faint uppercase tracking-wider">
                 Actions
               </th>
             )}
@@ -315,18 +315,18 @@ function OarSetsTable({
             <motion.tr
               key={oarSet.id}
               layout
-              className="border-b border-ink-border/20 hover:bg-ink-hover/30 transition-colors"
+              className="border-b border-edge-default/20 hover:bg-void-overlay/30 transition-colors"
             >
               <td className="py-2.5 px-3">
-                <span className="font-medium text-ink-primary">{oarSet.name}</span>
+                <span className="font-medium text-text-bright">{oarSet.name}</span>
                 {oarSet.notes && (
-                  <span className="block text-xs text-ink-muted truncate max-w-[200px]">
+                  <span className="block text-xs text-text-faint truncate max-w-[200px]">
                     {oarSet.notes}
                   </span>
                 )}
               </td>
-              <td className="py-2.5 px-3 text-ink-secondary">{OAR_TYPE_DISPLAY[oarSet.type]}</td>
-              <td className="py-2.5 px-3 text-ink-secondary">{oarSet.count}</td>
+              <td className="py-2.5 px-3 text-text-dim">{OAR_TYPE_DISPLAY[oarSet.type]}</td>
+              <td className="py-2.5 px-3 text-text-dim">{oarSet.count}</td>
               <td className="py-2.5 px-3">
                 <span className={`text-xs font-medium ${STATUS_COLOR[oarSet.status]}`}>
                   {STATUS_DISPLAY[oarSet.status]}
@@ -345,14 +345,14 @@ function OarSetsTable({
                     <div className="flex items-center justify-end gap-1">
                       <button
                         onClick={() => onEdit(oarSet)}
-                        className="p-1.5 rounded-lg text-ink-muted hover:text-ink-primary hover:bg-ink-hover transition-colors"
+                        className="p-1.5 rounded-lg text-text-faint hover:text-text-bright hover:bg-void-overlay transition-colors"
                         aria-label={`Edit ${oarSet.name}`}
                       >
                         <Pencil size={14} />
                       </button>
                       <button
                         onClick={() => onDelete(oarSet.id)}
-                        className="p-1.5 rounded-lg text-ink-muted hover:text-data-poor hover:bg-data-poor/10 transition-colors"
+                        className="p-1.5 rounded-lg text-text-faint hover:text-data-poor hover:bg-data-poor/10 transition-colors"
                         aria-label={`Delete ${oarSet.name}`}
                       >
                         <Trash2 size={14} />

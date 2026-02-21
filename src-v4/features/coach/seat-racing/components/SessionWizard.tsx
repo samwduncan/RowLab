@@ -196,7 +196,7 @@ export function SessionWizard({ isOpen, onClose, onSuccess, teamId }: SessionWiz
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-ink-base border border-ink-border rounded-xl shadow-card w-full max-w-xl max-h-[85vh] flex flex-col"
+              className="bg-void-surface border border-edge-default rounded-xl shadow-md w-full max-w-xl max-h-[85vh] flex flex-col"
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
@@ -204,22 +204,22 @@ export function SessionWizard({ isOpen, onClose, onSuccess, teamId }: SessionWiz
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-5 py-4 border-b border-ink-border shrink-0">
-                <h2 className="text-lg font-display font-semibold text-ink-primary">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-edge-default shrink-0">
+                <h2 className="text-lg font-display font-semibold text-text-bright">
                   New Seat Race Session
                 </h2>
                 <button
                   type="button"
                   onClick={onClose}
-                  className="p-1.5 rounded-md hover:bg-ink-hover transition-colors"
+                  className="p-1.5 rounded-md hover:bg-void-overlay transition-colors"
                   aria-label="Close"
                 >
-                  <X size={18} className="text-ink-tertiary" />
+                  <X size={18} className="text-text-faint" />
                 </button>
               </div>
 
               {/* Step indicator */}
-              <div className="px-5 py-3 border-b border-ink-border/50 shrink-0">
+              <div className="px-5 py-3 border-b border-edge-default/50 shrink-0">
                 <div className="flex items-center gap-1">
                   {STEPS.map((s, idx) => {
                     const StepIcon = s.icon;
@@ -230,9 +230,9 @@ export function SessionWizard({ isOpen, onClose, onSuccess, teamId }: SessionWiz
                         <div
                           className={`
                             flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium transition-colors
-                            ${isActive ? 'bg-accent-copper/10 text-accent-copper' : ''}
+                            ${isActive ? 'bg-accent-teal/10 text-accent-teal' : ''}
                             ${isDone ? 'text-data-excellent' : ''}
-                            ${!isActive && !isDone ? 'text-ink-muted' : ''}
+                            ${!isActive && !isDone ? 'text-text-faint' : ''}
                           `.trim()}
                         >
                           <StepIcon size={13} />
@@ -241,7 +241,7 @@ export function SessionWizard({ isOpen, onClose, onSuccess, teamId }: SessionWiz
                         {idx < STEPS.length - 1 && (
                           <div
                             className={`w-4 h-px mx-0.5 ${
-                              idx < step ? 'bg-data-excellent' : 'bg-ink-border'
+                              idx < step ? 'bg-data-excellent' : 'bg-edge-default'
                             }`}
                           />
                         )}
@@ -288,7 +288,7 @@ export function SessionWizard({ isOpen, onClose, onSuccess, teamId }: SessionWiz
               </div>
 
               {/* Footer navigation */}
-              <div className="flex items-center justify-between px-5 py-3 border-t border-ink-border shrink-0">
+              <div className="flex items-center justify-between px-5 py-3 border-t border-edge-default shrink-0">
                 <div>
                   {!isFirstStep && (
                     <Button
@@ -348,7 +348,7 @@ function Step1SessionInfo({ form }: { form: ReturnType<typeof useForm<SessionFor
       <Input label="Date" type="date" {...register('date', { required: true })} />
 
       <div>
-        <label className="text-sm font-medium text-ink-body block mb-1.5">Boat Class</label>
+        <label className="text-sm font-medium text-text-default block mb-1.5">Boat Class</label>
         <div className="flex flex-wrap gap-2">
           {BOAT_CLASSES.map((bc) => (
             <button
@@ -359,8 +359,8 @@ function Step1SessionInfo({ form }: { form: ReturnType<typeof useForm<SessionFor
                 px-3 py-1.5 rounded-lg text-sm font-medium transition-all
                 ${
                   selectedClass === bc
-                    ? 'bg-accent-copper text-ink-deep shadow-glow-copper'
-                    : 'bg-ink-raised text-ink-secondary border border-ink-border hover:border-ink-border-strong'
+                    ? 'bg-accent-teal text-void-deep shadow-glow-accent'
+                    : 'bg-void-raised text-text-dim border border-edge-default hover:border-edge-hover'
                 }
               `.trim()}
             >
@@ -371,7 +371,7 @@ function Step1SessionInfo({ form }: { form: ReturnType<typeof useForm<SessionFor
       </div>
 
       <div>
-        <label className="text-sm font-medium text-ink-body block mb-1.5">Conditions</label>
+        <label className="text-sm font-medium text-text-default block mb-1.5">Conditions</label>
         <div className="flex gap-2">
           {CONDITIONS.map((c) => (
             <button
@@ -382,8 +382,8 @@ function Step1SessionInfo({ form }: { form: ReturnType<typeof useForm<SessionFor
                 px-3 py-1.5 rounded-lg text-sm font-medium transition-all
                 ${
                   selectedConditions === c.value
-                    ? 'bg-accent-copper text-ink-deep shadow-glow-copper'
-                    : 'bg-ink-raised text-ink-secondary border border-ink-border hover:border-ink-border-strong'
+                    ? 'bg-accent-teal text-void-deep shadow-glow-accent'
+                    : 'bg-void-raised text-text-dim border border-edge-default hover:border-edge-hover'
                 }
               `.trim()}
             >
@@ -412,23 +412,23 @@ function Step2Athletes({
 }) {
   return (
     <div className="space-y-4">
-      <p className="text-sm text-ink-secondary">
+      <p className="text-sm text-text-dim">
         Select athletes from your team roster to participate in this seat race.
       </p>
 
-      <div className="rounded-lg border border-ink-border/50 p-6 text-center">
-        <Users size={32} className="mx-auto text-ink-muted mb-3" />
-        <p className="text-sm text-ink-secondary">
+      <div className="rounded-lg border border-edge-default/50 p-6 text-center">
+        <Users size={32} className="mx-auto text-text-faint mb-3" />
+        <p className="text-sm text-text-dim">
           Athlete selection will load from your team roster.
         </p>
-        <p className="text-xs text-ink-tertiary mt-1">
+        <p className="text-xs text-text-faint mt-1">
           {selected.length > 0
             ? `${selected.length} athletes selected`
             : 'No athletes selected yet'}
         </p>
       </div>
 
-      <p className="text-xs text-ink-muted">
+      <p className="text-xs text-text-faint">
         Tip: Athletes are assigned to boats in step 4. You can proceed without selecting here.
       </p>
     </div>
@@ -452,12 +452,12 @@ function Step3Boats({
 }) {
   return (
     <div className="space-y-5">
-      <p className="text-sm text-ink-secondary">
+      <p className="text-sm text-text-dim">
         Configure how many boats and seats per boat for this session.
       </p>
 
       <div>
-        <label className="text-sm font-medium text-ink-body block mb-1.5">Number of Boats</label>
+        <label className="text-sm font-medium text-text-default block mb-1.5">Number of Boats</label>
         <div className="flex gap-2">
           {[2, 3, 4].map((n) => (
             <button
@@ -468,8 +468,8 @@ function Step3Boats({
                 w-12 h-10 rounded-lg text-sm font-medium transition-all
                 ${
                   boatCount === n
-                    ? 'bg-accent-copper text-ink-deep shadow-glow-copper'
-                    : 'bg-ink-raised text-ink-secondary border border-ink-border hover:border-ink-border-strong'
+                    ? 'bg-accent-teal text-void-deep shadow-glow-accent'
+                    : 'bg-void-raised text-text-dim border border-edge-default hover:border-edge-hover'
                 }
               `.trim()}
             >
@@ -480,7 +480,7 @@ function Step3Boats({
       </div>
 
       <div>
-        <label className="text-sm font-medium text-ink-body block mb-1.5">Seats per Boat</label>
+        <label className="text-sm font-medium text-text-default block mb-1.5">Seats per Boat</label>
         <div className="flex gap-2">
           {[1, 2, 4, 8].map((n) => (
             <button
@@ -491,8 +491,8 @@ function Step3Boats({
                 w-12 h-10 rounded-lg text-sm font-medium transition-all
                 ${
                   seatsPerBoat === n
-                    ? 'bg-accent-copper text-ink-deep shadow-glow-copper'
-                    : 'bg-ink-raised text-ink-secondary border border-ink-border hover:border-ink-border-strong'
+                    ? 'bg-accent-teal text-void-deep shadow-glow-accent'
+                    : 'bg-void-raised text-text-dim border border-edge-default hover:border-edge-hover'
                 }
               `.trim()}
             >
@@ -502,7 +502,7 @@ function Step3Boats({
         </div>
       </div>
 
-      <div className="mt-3 p-3 rounded-lg bg-ink-well/40 text-xs text-ink-secondary">
+      <div className="mt-3 p-3 rounded-lg bg-void-deep/40 text-xs text-text-dim">
         Configuration: {boatCount} boats with {seatsPerBoat} seat{seatsPerBoat !== 1 ? 's' : ''}{' '}
         each ({boatCount * seatsPerBoat} total positions)
       </div>
@@ -525,19 +525,19 @@ function Step4Assignments({
 }) {
   return (
     <div className="space-y-4">
-      <p className="text-sm text-ink-secondary">
+      <p className="text-sm text-text-dim">
         Assign athletes to boats and seat positions. Athletes can be dragged between seats.
       </p>
 
       <div className="space-y-3">
         {Array.from({ length: boatCount }, (_, i) => (
-          <div key={i} className="rounded-lg border border-ink-border/50 p-4">
-            <h4 className="text-sm font-medium text-ink-primary mb-2">Boat {i + 1}</h4>
+          <div key={i} className="rounded-lg border border-edge-default/50 p-4">
+            <h4 className="text-sm font-medium text-text-bright mb-2">Boat {i + 1}</h4>
             <div className="grid grid-cols-4 gap-2">
               {Array.from({ length: seatsPerBoat }, (_, s) => (
                 <div
                   key={s}
-                  className="h-9 rounded bg-ink-well/40 flex items-center justify-center text-xs text-ink-muted border border-dashed border-ink-border/30"
+                  className="h-9 rounded bg-void-deep/40 flex items-center justify-center text-xs text-text-faint border border-dashed border-edge-default/30"
                 >
                   Seat {s + 1}
                 </div>
@@ -547,7 +547,7 @@ function Step4Assignments({
         ))}
       </div>
 
-      <p className="text-xs text-ink-muted">
+      <p className="text-xs text-text-faint">
         {athletes.length > 0
           ? `${athletes.length} athletes available for assignment`
           : 'No athletes selected. You can add assignments after creation.'}
@@ -563,20 +563,20 @@ function Step4Assignments({
 function Step5Times({ boatCount }: { boatCount: number }) {
   return (
     <div className="space-y-4">
-      <p className="text-sm text-ink-secondary">
+      <p className="text-sm text-text-dim">
         Enter piece times for each boat. Times can also be entered after session creation.
       </p>
 
       <div className="space-y-3">
         {Array.from({ length: boatCount }, (_, i) => (
           <div key={i} className="flex items-center gap-3">
-            <span className="text-sm font-medium text-ink-primary w-16">Boat {i + 1}</span>
+            <span className="text-sm font-medium text-text-bright w-16">Boat {i + 1}</span>
             <Input placeholder="mm:ss.t" className="font-mono" />
           </div>
         ))}
       </div>
 
-      <div className="mt-3 p-3 rounded-lg bg-accent-copper/5 border border-accent-copper/20 text-xs text-ink-secondary">
+      <div className="mt-3 p-3 rounded-lg bg-accent-teal/5 border border-accent-teal/20 text-xs text-text-dim">
         Tip: You can skip times now and enter them later in the session detail view. Click "Create
         Session" to save with the current configuration.
       </div>

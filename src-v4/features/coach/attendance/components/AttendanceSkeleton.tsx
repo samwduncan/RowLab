@@ -12,7 +12,7 @@ interface AttendanceSkeletonProps {
 
 function SkeletonRow() {
   return (
-    <div className="flex items-center gap-4 rounded-lg bg-ink-raised p-3" aria-hidden="true">
+    <div className="flex items-center gap-4 rounded-lg bg-void-raised p-3" aria-hidden="true">
       {/* Avatar */}
       <Skeleton height="2.5rem" width="2.5rem" rounded="full" />
 

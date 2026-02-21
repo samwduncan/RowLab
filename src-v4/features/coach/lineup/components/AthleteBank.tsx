@@ -128,14 +128,14 @@ export function AthleteBank({
       ref={bankRef}
       className={`
         flex flex-col h-full rounded-xl overflow-hidden transition-all duration-150
-        ${isDropOver ? 'ring-2 ring-accent-copper/40 bg-accent-copper/5' : 'glass'}
+        ${isDropOver ? 'ring-2 ring-accent/40 bg-accent-teal/5' : 'panel'}
       `}
     >
       {/* Header */}
-      <div className="px-4 py-3 border-b border-ink-border/30">
+      <div className="px-4 py-3 border-b border-edge-default/30">
         <div className="flex items-center justify-between mb-2.5">
-          <h3 className="text-sm font-semibold text-ink-primary">Athletes</h3>
-          <span className="text-xs font-medium text-ink-muted bg-ink-raised px-2 py-0.5 rounded-md">
+          <h3 className="text-sm font-semibold text-text-bright">Athletes</h3>
+          <span className="text-xs font-medium text-text-faint bg-void-raised px-2 py-0.5 rounded-md">
             {unassignedIds.length}
           </span>
         </div>
@@ -143,7 +143,7 @@ export function AthleteBank({
         {/* Search */}
         <div className="relative mb-2">
           <svg
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-muted"
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-text-faint"
             width="14"
             height="14"
             viewBox="0 0 14 14"
@@ -165,9 +165,9 @@ export function AthleteBank({
             onChange={(e) => setSearchQuery(e.target.value)}
             className="
               w-full pl-8 pr-3 py-1.5 rounded-lg text-xs
-              bg-ink-well border border-ink-border
-              text-ink-primary placeholder:text-ink-muted
-              focus:outline-none focus:border-accent-copper focus:ring-1 focus:ring-accent-copper/30
+              bg-void-deep border border-edge-default
+              text-text-bright placeholder:text-text-faint
+              focus:outline-none focus:border-accent-teal focus:ring-1 focus:ring-accent/30
               transition-colors
             "
           />
@@ -183,8 +183,8 @@ export function AthleteBank({
                 flex-1 text-[10px] font-semibold py-1 rounded-md transition-colors
                 ${
                   sideFilter === f.value
-                    ? 'bg-accent-copper/15 text-accent-copper'
-                    : 'text-ink-muted hover:text-ink-secondary hover:bg-ink-hover'
+                    ? 'bg-accent-teal/15 text-accent-teal'
+                    : 'text-text-faint hover:text-text-dim hover:bg-void-overlay'
                 }
               `}
             >
@@ -199,11 +199,11 @@ export function AthleteBank({
         {isLoading ? (
           // Skeleton loading state
           Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="h-11 rounded-lg bg-ink-raised animate-shimmer" />
+            <div key={i} className="h-11 rounded-lg bg-void-raised animate-shimmer" />
           ))
         ) : filteredAthletes.length === 0 ? (
           <div className="px-3 py-6 text-center">
-            <p className="text-xs text-ink-muted">
+            <p className="text-xs text-text-faint">
               {searchQuery
                 ? 'No athletes match'
                 : unassignedIds.length === 0
@@ -235,8 +235,8 @@ export function AthleteBank({
 
       {/* Footer hint */}
       {!readOnly && (
-        <div className="px-3 py-2 border-t border-ink-border/20">
-          <p className="text-[10px] text-ink-muted text-center">Drag to seat or tap to select</p>
+        <div className="px-3 py-2 border-t border-edge-default/20">
+          <p className="text-[10px] text-text-faint text-center">Drag to seat or tap to select</p>
         </div>
       )}
     </div>

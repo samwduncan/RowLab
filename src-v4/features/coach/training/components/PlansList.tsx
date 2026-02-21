@@ -21,10 +21,10 @@ import { slideUp, listContainerVariants, listItemVariants } from '@/lib/animatio
 // ---------------------------------------------------------------------------
 
 const PHASE_COLORS: Record<TrainingPhase, { bg: string; text: string }> = {
-  Base: { bg: 'bg-accent-primary/15', text: 'text-accent-primary' },
+  Base: { bg: 'bg-accent-teal-primary/15', text: 'text-accent-teal-primary' },
   Build: { bg: 'bg-data-warning/15', text: 'text-data-warning' },
   Peak: { bg: 'bg-data-poor/15', text: 'text-data-poor' },
-  Taper: { bg: 'bg-accent-primary/15', text: 'text-accent-primary' },
+  Taper: { bg: 'bg-accent-teal-primary/15', text: 'text-accent-teal-primary' },
   Recovery: { bg: 'bg-data-excellent/15', text: 'text-data-excellent' },
 };
 
@@ -84,14 +84,14 @@ export function PlansList({ teamId: _teamId, readOnly, onSelectPlan }: PlansList
     <div className="space-y-4">
       {/* Quick stats */}
       <div className="flex items-center gap-4">
-        <span className="flex items-center gap-1.5 text-xs text-ink-secondary">
+        <span className="flex items-center gap-1.5 text-xs text-text-dim">
           <Layers className="h-3.5 w-3.5" />
-          <span className="font-mono font-semibold text-ink-primary">{activePlans.length}</span>
+          <span className="font-mono font-semibold text-text-bright">{activePlans.length}</span>
           active plans
         </span>
-        <span className="flex items-center gap-1.5 text-xs text-ink-secondary">
+        <span className="flex items-center gap-1.5 text-xs text-text-dim">
           <FileText className="h-3.5 w-3.5" />
-          <span className="font-mono font-semibold text-ink-primary">{templates.length}</span>
+          <span className="font-mono font-semibold text-text-bright">{templates.length}</span>
           templates
         </span>
       </div>
@@ -149,11 +149,11 @@ export function PlansList({ teamId: _teamId, readOnly, onSelectPlan }: PlansList
           {templates.length > 0 && (
             <>
               <div className="flex items-center gap-3 pt-3">
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-ink-border/40 to-ink-border/40" />
-                <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-muted">
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-edge-default/40 to-edge-default/40" />
+                <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-text-faint">
                   TEMPLATES
                 </span>
-                <div className="h-px flex-1 bg-gradient-to-l from-transparent via-ink-border/40 to-ink-border/40" />
+                <div className="h-px flex-1 bg-gradient-to-l from-transparent via-edge-default/40 to-edge-default/40" />
               </div>
               {templates.map((plan) => (
                 <motion.div key={plan.id} variants={listItemVariants}>
@@ -193,25 +193,25 @@ function PlanCard({
       onClick={() => onSelect(plan.id)}
       className={`w-full text-left rounded-xl p-4 transition-all ${
         isSelected
-          ? 'bg-ink-raised border border-accent-copper/30 shadow-sm'
-          : 'bg-ink-raised/60 border border-white/[0.04] hover:bg-ink-raised hover:border-white/[0.08]'
+          ? 'bg-void-raised border border-accent-teal/30 shadow-sm'
+          : 'bg-void-raised/60 border border-white/[0.04] hover:bg-void-raised hover:border-white/[0.08]'
       }`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 mb-1">
-            <h3 className="text-sm font-semibold text-ink-primary truncate">{plan.name}</h3>
+            <h3 className="text-sm font-semibold text-text-bright truncate">{plan.name}</h3>
             {plan.phase && <PhaseBadge phase={plan.phase} />}
             {plan.isTemplate && (
-              <span className="inline-flex items-center rounded-md bg-ink-well/50 px-1.5 py-0.5 text-[10px] font-medium text-ink-muted uppercase tracking-wider">
+              <span className="inline-flex items-center rounded-md bg-void-deep/50 px-1.5 py-0.5 text-[10px] font-medium text-text-faint uppercase tracking-wider">
                 Template
               </span>
             )}
           </div>
           {plan.description && (
-            <p className="text-xs text-ink-secondary line-clamp-2 mb-1.5">{plan.description}</p>
+            <p className="text-xs text-text-dim line-clamp-2 mb-1.5">{plan.description}</p>
           )}
-          <div className="flex items-center gap-3 text-[11px] text-ink-muted">
+          <div className="flex items-center gap-3 text-[11px] text-text-faint">
             <span className="font-mono">
               {workoutCount} workout{workoutCount !== 1 ? 's' : ''}
             </span>
@@ -227,8 +227,8 @@ function PlanCard({
           </div>
         </div>
         <ChevronRight
-          className={`h-4 w-4 shrink-0 text-ink-muted transition-transform ${
-            isSelected ? 'rotate-90 text-accent-copper' : ''
+          className={`h-4 w-4 shrink-0 text-text-faint transition-transform ${
+            isSelected ? 'rotate-90 text-accent-teal' : ''
           }`}
         />
       </div>
@@ -270,7 +270,7 @@ function CreatePlanForm({ onCreated, onCancel }: { onCreated: () => void; onCanc
   return (
     <GlassCard padding="md">
       <form onSubmit={handleSubmit} className="space-y-3">
-        <h3 className="text-sm font-semibold text-ink-primary">New Training Plan</h3>
+        <h3 className="text-sm font-semibold text-text-bright">New Training Plan</h3>
 
         <input
           type="text"
@@ -279,7 +279,7 @@ function CreatePlanForm({ onCreated, onCancel }: { onCreated: () => void; onCanc
           onChange={(e) => setName(e.target.value)}
           required
           autoFocus
-          className="w-full rounded-lg border border-white/[0.06] bg-ink-well/50 px-3 py-2 text-sm text-ink-primary placeholder:text-ink-muted transition-colors focus:border-accent-copper/50 focus:outline-none"
+          className="w-full rounded-lg border border-white/[0.06] bg-void-deep/50 px-3 py-2 text-sm text-text-bright placeholder:text-text-faint transition-colors focus:border-accent-teal/50 focus:outline-none"
         />
 
         <textarea
@@ -287,14 +287,14 @@ function CreatePlanForm({ onCreated, onCancel }: { onCreated: () => void; onCanc
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={2}
-          className="w-full rounded-lg border border-white/[0.06] bg-ink-well/50 px-3 py-2 text-sm text-ink-primary placeholder:text-ink-muted transition-colors focus:border-accent-copper/50 focus:outline-none resize-none"
+          className="w-full rounded-lg border border-white/[0.06] bg-void-deep/50 px-3 py-2 text-sm text-text-bright placeholder:text-text-faint transition-colors focus:border-accent-teal/50 focus:outline-none resize-none"
         />
 
         <div className="flex items-center gap-3">
           <select
             value={phase}
             onChange={(e) => setPhase(e.target.value as TrainingPhase | '')}
-            className="rounded-lg border border-white/[0.06] bg-ink-well/50 px-3 py-2 text-sm text-ink-primary transition-colors focus:border-accent-copper/50 focus:outline-none"
+            className="rounded-lg border border-white/[0.06] bg-void-deep/50 px-3 py-2 text-sm text-text-bright transition-colors focus:border-accent-teal/50 focus:outline-none"
           >
             <option value="">No phase</option>
             {PHASES.map((p) => (
@@ -304,12 +304,12 @@ function CreatePlanForm({ onCreated, onCancel }: { onCreated: () => void; onCanc
             ))}
           </select>
 
-          <label className="flex items-center gap-2 text-xs text-ink-secondary cursor-pointer">
+          <label className="flex items-center gap-2 text-xs text-text-dim cursor-pointer">
             <input
               type="checkbox"
               checked={isTemplate}
               onChange={(e) => setIsTemplate(e.target.checked)}
-              className="rounded border-ink-border text-accent-copper focus:ring-accent-copper/50"
+              className="rounded border-edge-default text-accent-teal focus:ring-accent/50"
             />
             Template
           </label>
@@ -345,7 +345,7 @@ function PlansListSkeleton() {
         <Skeleton width="5rem" height="1rem" />
       </div>
       {Array.from({ length: 3 }).map((_, i) => (
-        <div key={i} className="rounded-xl bg-ink-raised/60 p-4 space-y-2">
+        <div key={i} className="rounded-xl bg-void-raised/60 p-4 space-y-2">
           <div className="flex items-center gap-2">
             <Skeleton width="40%" height="1rem" />
             <Skeleton width="3rem" height="1.25rem" rounded="md" />

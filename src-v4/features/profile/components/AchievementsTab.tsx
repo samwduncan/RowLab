@@ -63,13 +63,13 @@ export function AchievementsTab() {
       <GlassCard padding="sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Trophy size={18} className="text-accent-copper" />
-            <span className="text-ink-primary font-semibold">
+            <Trophy size={18} className="text-accent-teal" />
+            <span className="text-text-bright font-semibold">
               {summary.unlocked} / {summary.total}
             </span>
-            <span className="text-ink-secondary text-sm">Achievements Unlocked</span>
+            <span className="text-text-dim text-sm">Achievements Unlocked</span>
           </div>
-          <div className="text-ink-tertiary text-xs">
+          <div className="text-text-faint text-xs">
             {Math.round((summary.unlocked / Math.max(summary.total, 1)) * 100)}% complete
           </div>
         </div>
@@ -78,7 +78,7 @@ export function AchievementsTab() {
       {/* Unlocked section */}
       {unlocked.length > 0 && (
         <section>
-          <h3 className="text-sm font-medium text-ink-secondary uppercase tracking-wider mb-3">
+          <h3 className="text-sm font-medium text-text-dim uppercase tracking-wider mb-3">
             Unlocked
           </h3>
           <motion.div
@@ -97,7 +97,7 @@ export function AchievementsTab() {
       {/* Locked section */}
       {locked.length > 0 && (
         <section>
-          <h3 className="text-sm font-medium text-ink-muted uppercase tracking-wider mb-3">
+          <h3 className="text-sm font-medium text-text-faint uppercase tracking-wider mb-3">
             Locked
           </h3>
           <motion.div
@@ -119,7 +119,7 @@ export function AchievementsTab() {
 function AchievementsTabSkeleton() {
   return (
     <div className="space-y-6">
-      <div className="glass rounded-xl p-3">
+      <div className="panel rounded-xl p-3">
         <Skeleton height="1.5rem" width="240px" />
       </div>
       <SkeletonGroup>

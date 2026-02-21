@@ -124,8 +124,8 @@ export function IntegrationsSection() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-semibold text-ink-primary mb-1">Integrations</h2>
-        <p className="text-sm text-ink-secondary">
+        <h2 className="text-lg font-semibold text-text-bright mb-1">Integrations</h2>
+        <p className="text-sm text-text-dim">
           Connect your accounts to automatically sync workouts and training data.
         </p>
       </div>
@@ -133,8 +133,8 @@ export function IntegrationsSection() {
       <div className="space-y-4">
         {/* Concept2 Logbook */}
         <IntegrationCard
-          icon={<BarChart3 className="w-6 h-6 text-accent-copper" />}
-          iconBg="bg-accent-copper/20"
+          icon={<BarChart3 className="w-6 h-6 text-accent-teal" />}
+          iconBg="bg-accent-teal/20"
           title="Concept2 Logbook"
           description="Import erg workouts automatically from your C2 logbook"
           connected={c2Connected}
@@ -149,7 +149,7 @@ export function IntegrationsSection() {
           connectLoading={c2Connecting}
           disconnectLoading={c2Disconnecting}
           syncLoading={c2Syncing}
-          accentColor="text-accent-copper"
+          accentColor="text-accent-teal"
         />
 
         {/* Strava Activities -- Brand color exception: #FC4C02 per Strava brand guidelines */}
@@ -182,7 +182,7 @@ export function IntegrationsSection() {
           connectLabel="Import .FIT File"
           accentColor="text-data-good"
         />
-        <p className="text-xs text-ink-tertiary -mt-2 ml-16">
+        <p className="text-xs text-text-faint -mt-2 ml-16">
           Direct Garmin API sync is not yet available. Export .FIT files from Garmin Connect and
           import them from the workouts page.
         </p>

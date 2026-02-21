@@ -37,9 +37,9 @@ export function WhiteboardPage() {
     return (
       <div className="mx-auto max-w-5xl p-4 md:p-6">
         <div className="space-y-4">
-          <div className="h-8 w-48 animate-shimmer rounded-lg bg-ink-border/50" />
-          <div className="h-4 w-32 animate-shimmer rounded bg-ink-border/30" />
-          <div className="mt-6 h-64 animate-shimmer rounded-xl bg-ink-border/30" />
+          <div className="h-8 w-48 animate-shimmer rounded-lg bg-edge-default/50" />
+          <div className="h-4 w-32 animate-shimmer rounded bg-edge-default/30" />
+          <div className="mt-6 h-64 animate-shimmer rounded-xl bg-edge-default/30" />
         </div>
       </div>
     );
@@ -56,7 +56,7 @@ export function WhiteboardPage() {
             icon={<ClipboardList className="h-4 w-4" />}
             action={
               readOnly ? (
-                <span className="inline-flex items-center gap-1.5 rounded-lg bg-ink-well px-3 py-1.5 text-xs text-ink-muted border border-ink-border">
+                <span className="inline-flex items-center gap-1.5 rounded-lg bg-void-deep px-3 py-1.5 text-xs text-text-faint border border-edge-default">
                   <ShieldAlert className="h-3.5 w-3.5" />
                   Read Only
                 </span>

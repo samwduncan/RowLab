@@ -87,7 +87,7 @@ export function PRTable({ records, machineType }: PRTableProps) {
     >
       <table className="w-full text-sm">
         <thead>
-          <tr className="bg-ink-well/40 text-ink-muted text-xs font-medium uppercase tracking-wider">
+          <tr className="bg-void-deep/40 text-text-faint text-xs font-medium uppercase tracking-wider">
             <th className="text-left py-2.5 pr-4 pl-3 font-medium">Distance</th>
             <th className="text-right py-2.5 px-3 font-medium">Time</th>
             <th className="text-right py-2.5 px-3 font-medium">{paceLabel}</th>
@@ -106,16 +106,16 @@ export function PRTable({ records, machineType }: PRTableProps) {
                 key={dist}
                 variants={listItemVariants}
                 className={`
-                  border-b border-ink-border/20 last:border-b-0
-                  hover:bg-ink-hover/50 transition-colors
-                  ${hasPR ? 'text-ink-primary' : 'text-ink-muted'}
-                  ${recent ? 'bg-accent-copper/5 border-l-2 border-l-accent-copper' : ''}
+                  border-b border-edge-default/20 last:border-b-0
+                  hover:bg-void-overlay/50 transition-colors
+                  ${hasPR ? 'text-text-bright' : 'text-text-faint'}
+                  ${recent ? 'bg-accent-teal/5 border-l-2 border-l-accent' : ''}
                 `}
               >
                 <td className="py-3 pr-4 pl-3">
                   <div className="flex items-center gap-2">
                     {hasPR && (
-                      <div className="w-0.5 h-5 rounded-full bg-accent-copper" aria-hidden="true" />
+                      <div className="w-0.5 h-5 rounded-full bg-accent-teal" aria-hidden="true" />
                     )}
                     <span className={hasPR ? 'font-medium' : ''}>
                       {machineType === 'bikerg'
@@ -123,7 +123,7 @@ export function PRTable({ records, machineType }: PRTableProps) {
                         : DISTANCE_LABELS[dist]}
                     </span>
                     {recent && (
-                      <span className="text-[9px] font-semibold uppercase tracking-wider text-accent-copper bg-accent-copper/10 px-1.5 py-0.5 rounded">
+                      <span className="text-[9px] font-semibold uppercase tracking-wider text-accent-teal bg-accent-teal/10 px-1.5 py-0.5 rounded">
                         New
                       </span>
                     )}
@@ -132,13 +132,13 @@ export function PRTable({ records, machineType }: PRTableProps) {
                 <td className="text-right py-3 px-3 font-mono tabular-nums">
                   {hasPR ? formatErgTime(record!.bestTime) : DASH}
                 </td>
-                <td className="text-right py-3 px-3 font-mono tabular-nums text-ink-secondary">
+                <td className="text-right py-3 px-3 font-mono tabular-nums text-text-dim">
                   {hasPR ? computePaceDisplay(record!.bestTime!, dist, machineType) : DASH}
                 </td>
-                <td className="text-right py-3 px-3 font-mono tabular-nums text-ink-secondary">
+                <td className="text-right py-3 px-3 font-mono tabular-nums text-text-dim">
                   {record?.avgWatts != null ? formatNumber(record.avgWatts) : DASH}
                 </td>
-                <td className="text-right py-3 pl-3 pr-3 text-ink-tertiary text-xs">
+                <td className="text-right py-3 pl-3 pr-3 text-text-faint text-xs">
                   {record?.bestDate ? formatRelativeDate(record.bestDate) : DASH}
                 </td>
               </motion.tr>

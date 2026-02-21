@@ -1,7 +1,7 @@
 /**
- * Gradient border wrapper using the padding-trick pattern.
- * Renders a 1px gradient border around children by using
- * an outer gradient div with p-px and an inner solid-bg div.
+ * @deprecated Gradient borders are banned in the new design system.
+ * Use a standard 1px solid border or left-accent border instead.
+ * This file exists for backward compatibility during migration.
  */
 
 interface GradientBorderProps {
@@ -13,16 +13,16 @@ interface GradientBorderProps {
   radius?: string;
   /** Gradient class for the outer border */
   gradient?: string;
-  /** Inline styles for the outer container (e.g. dynamic glow shadow) */
+  /** Inline styles for the outer container */
   style?: React.CSSProperties;
 }
 
 export function GradientBorder({
   children,
   className = '',
-  innerBg = 'bg-ink-base',
-  radius = 'rounded-2xl',
-  gradient = 'bg-gradient-to-b from-ink-bright/15 to-ink-bright/0',
+  innerBg = 'bg-void-surface',
+  radius = 'rounded-[var(--radius-lg)]',
+  gradient = 'bg-gradient-to-b from-text-bright/15 to-text-bright/0',
   style,
 }: GradientBorderProps) {
   return (

@@ -31,8 +31,8 @@ import type { PMCDataPoint } from '../types';
 /* Constants                                                           */
 /* ------------------------------------------------------------------ */
 
-const GRID_COLOR = 'var(--color-ink-border)';
-const TICK_COLOR = 'var(--color-ink-tertiary)';
+const GRID_COLOR = 'var(--color-edge-default)';
+const TICK_COLOR = 'var(--color-text-faint)';
 
 /** Resolved CSS variable colors (needs runtime getComputedStyle) */
 function resolveChartColors() {
@@ -42,7 +42,7 @@ function resolveChartColors() {
     atl: style.getPropertyValue('--color-data-poor').trim() || 'oklch(0.58 0.2 25)',
     tsb: style.getPropertyValue('--color-data-excellent').trim() || 'oklch(0.72 0.17 142)',
     tssBar: 'oklch(1 0 0 / 0.08)',
-    grid: style.getPropertyValue('--color-ink-border').trim() || 'oklch(0.3 0 0)',
+    grid: style.getPropertyValue('--color-edge-default').trim() || 'oklch(0.3 0 0)',
   };
 }
 
@@ -178,35 +178,35 @@ function PMCTooltip({ active, payload, label }: TooltipProps<number, string>) {
   const tsbColor = data.tsb >= 0 ? 'text-data-good' : 'text-data-poor';
 
   return (
-    <div className="backdrop-blur-xl bg-ink-raised/95 border border-ink-border rounded-xl px-4 py-3 shadow-card min-w-[180px]">
-      <p className="text-[10px] uppercase tracking-wider text-ink-muted font-medium mb-2">
+    <div className="backdrop-blur-xl bg-void-raised/95 border border-edge-default rounded-xl px-4 py-3 shadow-md min-w-[180px]">
+      <p className="text-[10px] uppercase tracking-wider text-text-faint font-medium mb-2">
         {dateLabel}
       </p>
       <div className="space-y-1.5">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-data-good" />
-          <span className="text-sm text-ink-secondary">CTL:</span>
-          <span className="text-sm font-semibold text-ink-primary tabular-nums">
+          <span className="text-sm text-text-dim">CTL:</span>
+          <span className="text-sm font-semibold text-text-bright tabular-nums">
             {data.ctl.toFixed(1)}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-data-poor" />
-          <span className="text-sm text-ink-secondary">ATL:</span>
-          <span className="text-sm font-semibold text-ink-primary tabular-nums">
+          <span className="text-sm text-text-dim">ATL:</span>
+          <span className="text-sm font-semibold text-text-bright tabular-nums">
             {data.atl.toFixed(1)}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-data-excellent" />
-          <span className="text-sm text-ink-secondary">TSB:</span>
+          <span className="text-sm text-text-dim">TSB:</span>
           <span className={`text-sm font-semibold tabular-nums ${tsbColor}`}>
             {data.tsb.toFixed(1)}
           </span>
         </div>
         {data.tss > 0 && (
-          <div className="pt-1 mt-1 border-t border-ink-border/50">
-            <span className="text-xs text-ink-tertiary tabular-nums">
+          <div className="pt-1 mt-1 border-t border-edge-default/50">
+            <span className="text-xs text-text-faint tabular-nums">
               Daily TSS: {data.tss.toFixed(0)}
             </span>
           </div>
@@ -250,9 +250,9 @@ function PMCLegend({
             }`}
           >
             <span className={`inline-block w-2.5 h-0.5 rounded-full ${entry.colorClass}`} />
-            <span className="text-ink-secondary">
+            <span className="text-text-dim">
               {entry.label}:{' '}
-              <span className="font-mono text-ink-primary">{entry.currentValue.toFixed(1)}</span>
+              <span className="font-mono text-text-bright">{entry.currentValue.toFixed(1)}</span>
             </span>
           </button>
         );
@@ -310,7 +310,7 @@ export function PMCChart({ data, currentCTL, currentATL, currentTSB, onDayClick 
   if (chartData.length === 0) {
     return (
       <div className="h-[250px] md:h-[350px] flex items-center justify-center">
-        <p className="text-sm text-ink-tertiary">No PMC data available</p>
+        <p className="text-sm text-text-faint">No PMC data available</p>
       </div>
     );
   }

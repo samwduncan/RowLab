@@ -58,14 +58,14 @@ function DetailSkeleton() {
         <Skeleton height="0.875rem" width="6rem" rounded="sm" />
         <Skeleton height="2rem" width="14rem" rounded="sm" />
       </div>
-      <div className="bg-ink-raised border border-ink-border rounded-lg p-5 space-y-3">
+      <div className="bg-void-raised border border-edge-default rounded-lg p-5 space-y-3">
         <Skeleton height="1.5rem" width="5rem" rounded="md" />
         <Skeleton height="0.875rem" width="12rem" rounded="sm" />
         <Skeleton height="0.875rem" width="8rem" rounded="sm" />
       </div>
       <div className="space-y-2">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="bg-ink-raised border border-ink-border rounded-lg p-3">
+          <div key={i} className="bg-void-raised border border-edge-default rounded-lg p-3">
             <Skeleton height="0.875rem" width="10rem" rounded="sm" />
           </div>
         ))}
@@ -155,12 +155,12 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
         <button
           type="button"
           onClick={handleBack}
-          className="flex items-center gap-1 text-sm text-ink-secondary hover:text-ink-primary transition-colors mb-4"
+          className="flex items-center gap-1 text-sm text-text-dim hover:text-text-bright transition-colors mb-4"
         >
           <ChevronLeft size={16} />
           Back to Sessions
         </button>
-        <p className="text-ink-secondary text-sm">Session not found.</p>
+        <p className="text-text-dim text-sm">Session not found.</p>
       </div>
     );
   }
@@ -182,12 +182,12 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
         <button
           type="button"
           onClick={() => setEditing(false)}
-          className="flex items-center gap-1 text-sm text-ink-secondary hover:text-ink-primary transition-colors mb-4"
+          className="flex items-center gap-1 text-sm text-text-dim hover:text-text-bright transition-colors mb-4"
         >
           <ChevronLeft size={16} />
           Cancel Edit
         </button>
-        <h2 className="text-lg font-semibold text-ink-primary mb-4">Edit Session</h2>
+        <h2 className="text-lg font-semibold text-text-bright mb-4">Edit Session</h2>
         <SessionForm
           session={session}
           onSubmit={handleUpdate}
@@ -204,7 +204,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
       <button
         type="button"
         onClick={handleBack}
-        className="flex items-center gap-1 text-sm text-ink-secondary hover:text-ink-primary transition-colors mb-4"
+        className="flex items-center gap-1 text-sm text-text-dim hover:text-text-bright transition-colors mb-4"
       >
         <ChevronLeft size={16} />
         All Sessions
@@ -221,7 +221,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
               {statusConfig.label}
             </span>
           </div>
-          <h1 className="text-2xl font-display font-semibold text-ink-primary break-words">
+          <h1 className="text-2xl font-display font-semibold text-text-bright break-words">
             {session.name}
           </h1>
         </div>
@@ -233,7 +233,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
               type="button"
               onClick={handleStart}
               disabled={startMutation.isPending}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-data-good text-ink-deep text-sm font-medium hover:bg-data-good/90 disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-data-good text-void-deep text-sm font-medium hover:bg-data-good/90 disabled:opacity-50 transition-colors"
             >
               <Play size={14} />
               Start
@@ -244,7 +244,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
               type="button"
               onClick={handleEnd}
               disabled={endMutation.isPending}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-data-warning text-ink-deep text-sm font-medium hover:bg-data-warning/90 disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-data-warning text-void-deep text-sm font-medium hover:bg-data-warning/90 disabled:opacity-50 transition-colors"
             >
               <Square size={14} />
               End
@@ -253,7 +253,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
           <button
             type="button"
             onClick={() => setEditing(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-ink-border text-sm font-medium text-ink-secondary hover:text-ink-primary hover:bg-ink-hover transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-edge-default text-sm font-medium text-text-dim hover:text-text-bright hover:bg-void-overlay transition-colors"
           >
             <Pencil size={14} />
             Edit
@@ -262,7 +262,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
             type="button"
             onClick={handleDelete}
             disabled={deleteMutation.isPending}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-ink-border text-sm font-medium text-ink-secondary hover:text-data-poor hover:border-data-poor/30 disabled:opacity-50 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-edge-default text-sm font-medium text-text-dim hover:text-data-poor hover:border-data-poor/30 disabled:opacity-50 transition-colors"
           >
             <Trash2 size={14} />
           </button>
@@ -270,8 +270,8 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
       </div>
 
       {/* Session info panel */}
-      <div className="bg-ink-raised border border-ink-border rounded-lg p-4 mb-6">
-        <div className="flex flex-wrap items-center gap-4 text-sm text-ink-secondary">
+      <div className="bg-void-raised border border-edge-default rounded-lg p-4 mb-6">
+        <div className="flex flex-wrap items-center gap-4 text-sm text-text-dim">
           <span className="flex items-center gap-1.5">
             <Calendar size={14} />
             {new Date(session.date).toLocaleDateString(undefined, {
@@ -287,21 +287,21 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
               {session.startTime}
             </span>
           )}
-          <span className="text-ink-muted">
+          <span className="text-text-faint">
             {session.pieces.length} {session.pieces.length === 1 ? 'piece' : 'pieces'}
           </span>
         </div>
 
-        {session.notes && <p className="mt-3 text-sm text-ink-body">{session.notes}</p>}
+        {session.notes && <p className="mt-3 text-sm text-text-default">{session.notes}</p>}
 
         {session.sessionCode && (
-          <div className="mt-3 flex items-center gap-2 border-t border-ink-border pt-3">
-            <span className="text-xs text-ink-muted">Session Code:</span>
-            <span className="font-mono font-bold text-ink-primary">{session.sessionCode}</span>
+          <div className="mt-3 flex items-center gap-2 border-t border-edge-default pt-3">
+            <span className="text-xs text-text-faint">Session Code:</span>
+            <span className="font-mono font-bold text-text-bright">{session.sessionCode}</span>
             <button
               type="button"
               onClick={handleCopyCode}
-              className="p-1 text-ink-muted hover:text-ink-primary transition-colors"
+              className="p-1 text-text-faint hover:text-text-bright transition-colors"
               title="Copy code"
             >
               {copied ? <Check size={14} className="text-data-good" /> : <Copy size={14} />}
@@ -312,25 +312,25 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
 
       {/* Pieces by segment */}
       {piecesBySegment.length === 0 ? (
-        <p className="text-sm text-ink-secondary text-center py-8">
+        <p className="text-sm text-text-dim text-center py-8">
           No pieces defined for this session.
         </p>
       ) : (
         <div className="space-y-5">
           {piecesBySegment.map((group) => (
             <div key={group.segment}>
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-ink-muted mb-2">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-text-faint mb-2">
                 {group.label}
               </h3>
               <div className="space-y-1.5">
                 {group.pieces.map((piece) => (
                   <div
                     key={piece.id}
-                    className="bg-ink-raised border border-ink-border rounded-lg p-3"
+                    className="bg-void-raised border border-edge-default rounded-lg p-3"
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-sm font-medium text-ink-primary">{piece.name}</span>
-                      <div className="flex items-center gap-3 text-xs text-ink-secondary font-mono flex-shrink-0">
+                      <span className="text-sm font-medium text-text-bright">{piece.name}</span>
+                      <div className="flex items-center gap-3 text-xs text-text-dim font-mono flex-shrink-0">
                         {piece.distance && <span>{piece.distance}m</span>}
                         {piece.duration && <span>{formatTime(piece.duration)}</span>}
                         {piece.targetSplit && <span>@{formatTime(piece.targetSplit)}/500m</span>}
@@ -338,9 +338,9 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
                       </div>
                     </div>
                     {piece.description && (
-                      <p className="text-xs text-ink-secondary mt-1">{piece.description}</p>
+                      <p className="text-xs text-text-dim mt-1">{piece.description}</p>
                     )}
-                    {piece.notes && <p className="text-xs text-ink-muted mt-1">{piece.notes}</p>}
+                    {piece.notes && <p className="text-xs text-text-faint mt-1">{piece.notes}</p>}
                   </div>
                 ))}
               </div>

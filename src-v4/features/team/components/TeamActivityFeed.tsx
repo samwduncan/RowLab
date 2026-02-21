@@ -73,14 +73,14 @@ export function TeamActivityFeed({ teamId, compact }: TeamActivityFeedProps) {
         {Array.from({ length: 4 }).map((_, i) => (
           <div
             key={i}
-            className="flex items-center gap-3 animate-shimmer rounded-lg bg-ink-raised p-3"
+            className="flex items-center gap-3 animate-shimmer rounded-lg bg-void-raised p-3"
           >
-            <div className="h-10 w-10 rounded-full bg-ink-well" />
+            <div className="h-10 w-10 rounded-full bg-void-deep" />
             <div className="flex-1 space-y-2">
-              <div className="h-3 w-3/4 rounded bg-ink-well" />
-              <div className="h-2 w-1/3 rounded bg-ink-well" />
+              <div className="h-3 w-3/4 rounded bg-void-deep" />
+              <div className="h-2 w-1/3 rounded bg-void-deep" />
             </div>
-            <div className="h-2 w-8 rounded bg-ink-well" />
+            <div className="h-2 w-8 rounded bg-void-deep" />
           </div>
         ))}
       </div>
@@ -94,7 +94,7 @@ export function TeamActivityFeed({ teamId, compact }: TeamActivityFeedProps) {
       <GlassCard padding="md">
         <div className="flex flex-col items-center gap-2 py-8 text-center">
           <svg
-            className="h-10 w-10 text-ink-muted"
+            className="h-10 w-10 text-text-faint"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
@@ -106,8 +106,8 @@ export function TeamActivityFeed({ teamId, compact }: TeamActivityFeedProps) {
               d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <p className="text-sm text-ink-secondary">No team activity yet.</p>
-          <p className="text-xs text-ink-tertiary">
+          <p className="text-sm text-text-dim">No team activity yet.</p>
+          <p className="text-xs text-text-faint">
             Activity will appear here as team members train and interact.
           </p>
         </div>
@@ -127,13 +127,13 @@ export function TeamActivityFeed({ teamId, compact }: TeamActivityFeedProps) {
       {grouped.map((group) => (
         <motion.div key={group.label} variants={listItemVariants} transition={SPRING_SMOOTH}>
           <div className="mb-2 flex items-center gap-3">
-            <h4 className="text-xs font-medium uppercase tracking-wider text-ink-muted">
+            <h4 className="text-xs font-medium uppercase tracking-wider text-text-faint">
               {group.label}
             </h4>
             {group.label === 'Today' && (
               <span className="h-1.5 w-1.5 rounded-full bg-data-good animate-pulse" title="Live" />
             )}
-            <div className="flex-1 border-t border-ink-well/30" />
+            <div className="flex-1 border-t border-surface-inset/30" />
           </div>
           <motion.div
             variants={listContainerVariants}
@@ -156,7 +156,7 @@ export function TeamActivityFeed({ teamId, compact }: TeamActivityFeedProps) {
           <button
             onClick={() => fetchNextPage()}
             disabled={isFetchingNextPage}
-            className="rounded-lg bg-ink-well/50 px-4 py-2 text-sm text-ink-secondary transition-colors hover:bg-ink-well hover:text-ink-primary disabled:opacity-50"
+            className="rounded-lg bg-void-deep/50 px-4 py-2 text-sm text-text-dim transition-colors hover:bg-void-deep hover:text-text-bright disabled:opacity-50"
           >
             {isFetchingNextPage ? 'Loading more\u2026' : 'Load more'}
           </button>

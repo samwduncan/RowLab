@@ -8,7 +8,7 @@ import { Skeleton, SkeletonGroup, SkeletonCard } from '@/components/ui/Skeleton'
 
 function SkeletonStatCard() {
   return (
-    <div className="bg-ink-raised rounded-xl p-4" aria-hidden="true">
+    <div className="bg-void-raised rounded-xl p-4" aria-hidden="true">
       <Skeleton height="0.75rem" width="60%" rounded="sm" className="mb-3" />
       <Skeleton height="1.75rem" width="40%" rounded="sm" className="mb-2" />
       <Skeleton height="0.625rem" width="80%" rounded="sm" />
@@ -18,7 +18,7 @@ function SkeletonStatCard() {
 
 function SkeletonWorkoutRow() {
   return (
-    <div className="flex items-center gap-4 bg-ink-raised rounded-xl p-4" aria-hidden="true">
+    <div className="flex items-center gap-4 bg-void-raised rounded-xl p-4" aria-hidden="true">
       <Skeleton height="2.5rem" width="2.5rem" rounded="lg" />
       <div className="flex-1 space-y-2">
         <Skeleton height="0.875rem" width="50%" rounded="sm" />

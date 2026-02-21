@@ -98,7 +98,7 @@ export function ProfileHero({ profile, stats }: ProfileHeroProps) {
             <img
               src={profile.avatarUrl}
               alt={profile.name}
-              className="w-24 h-24 rounded-full object-cover border-4 border-ink-deep"
+              className="w-24 h-24 rounded-full object-cover border-4 border-void-deep"
             />
           ) : (
             <AvatarInitials name={profile.name} size={96} />
@@ -133,7 +133,7 @@ export function ProfileHero({ profile, stats }: ProfileHeroProps) {
             onSave={handleNameSave}
             placeholder="Your name"
             as="h1"
-            className="text-2xl font-display font-semibold text-ink-primary"
+            className="text-2xl font-display font-semibold text-text-bright"
             maxLength={100}
           />
           <div className="mt-1">
@@ -142,7 +142,7 @@ export function ProfileHero({ profile, stats }: ProfileHeroProps) {
               onSave={handleBioSave}
               placeholder="Add a bio"
               as="p"
-              className="text-sm text-ink-secondary"
+              className="text-sm text-text-dim"
               maxLength={300}
             />
           </div>
@@ -170,11 +170,11 @@ export function ProfileHero({ profile, stats }: ProfileHeroProps) {
             {profile.teams.map((team) => (
               <span
                 key={team.teamId}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-ink-well text-ink-secondary border border-ink-border"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-void-deep text-text-dim border border-edge-default"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-accent-copper" />
+                <span className="w-1.5 h-1.5 rounded-full bg-accent-teal" />
                 {team.teamName}
-                <span className="text-ink-tertiary capitalize">({team.role})</span>
+                <span className="text-text-faint capitalize">({team.role})</span>
               </span>
             ))}
           </div>
@@ -198,13 +198,13 @@ function HeadlineStat({
   value: string;
 }) {
   return (
-    <div className="glass rounded-xl p-3 flex items-center gap-3">
-      <div className="w-9 h-9 rounded-lg bg-ink-well flex items-center justify-center shrink-0">
-        <Icon size={16} className="text-accent-copper" />
+    <div className="panel rounded-xl p-3 flex items-center gap-3">
+      <div className="w-9 h-9 rounded-lg bg-void-deep flex items-center justify-center shrink-0">
+        <Icon size={16} className="text-accent-teal" />
       </div>
       <div className="min-w-0">
-        <div className="text-ink-primary text-base font-semibold truncate">{value}</div>
-        <div className="text-ink-tertiary text-xs truncate">{label}</div>
+        <div className="text-text-bright text-base font-semibold truncate">{value}</div>
+        <div className="text-text-faint text-xs truncate">{label}</div>
       </div>
     </div>
   );
@@ -224,7 +224,7 @@ function AvatarInitials({ name, size = 80 }: { name: string; size?: number }) {
 
   return (
     <div
-      className="flex items-center justify-center rounded-full font-semibold text-ink-bright border-4 border-ink-deep"
+      className="flex items-center justify-center rounded-full font-semibold text-text-bright border-4 border-void-deep"
       style={{
         width: size,
         height: size,

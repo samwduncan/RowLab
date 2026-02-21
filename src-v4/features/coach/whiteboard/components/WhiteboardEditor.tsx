@@ -81,9 +81,9 @@ export function WhiteboardEditor({
   return (
     <GlassCard padding="none">
       {/* Header */}
-      <div className="px-6 py-4 border-b border-ink-border">
-        <h2 className="text-base font-semibold text-ink-primary">Edit Whiteboard</h2>
-        <p className="text-xs text-ink-muted mt-0.5">
+      <div className="px-6 py-4 border-b border-edge-default">
+        <h2 className="text-base font-semibold text-text-bright">Edit Whiteboard</h2>
+        <p className="text-xs text-text-faint mt-0.5">
           {new Date().toLocaleDateString('en-US', {
             weekday: 'long',
             month: 'long',
@@ -93,7 +93,7 @@ export function WhiteboardEditor({
       </div>
 
       {/* Toolbar */}
-      <div className="flex items-center gap-1 px-6 py-2 border-b border-ink-border/50">
+      <div className="flex items-center gap-1 px-6 py-2 border-b border-edge-default/50">
         {toolbarActions.map(({ icon: Icon, label, action }) => (
           <button
             key={label}
@@ -103,12 +103,12 @@ export function WhiteboardEditor({
               const ta = document.getElementById('whiteboard-editor') as HTMLTextAreaElement | null;
               if (ta) action(ta);
             }}
-            className="rounded-md p-1.5 text-ink-muted transition-colors hover:bg-ink-hover hover:text-ink-secondary"
+            className="rounded-md p-1.5 text-text-faint transition-colors hover:bg-void-overlay hover:text-text-dim"
           >
             <Icon className="h-4 w-4" />
           </button>
         ))}
-        <span className="ml-2 text-[10px] text-ink-tertiary">Markdown supported</span>
+        <span className="ml-2 text-[10px] text-text-faint">Markdown supported</span>
       </div>
 
       {/* Textarea */}
@@ -119,16 +119,16 @@ export function WhiteboardEditor({
           onChange={(e) => setContent(e.target.value)}
           placeholder="Enter today's whiteboard content (markdown supported)..."
           rows={16}
-          className="w-full resize-y rounded-lg border border-ink-border bg-ink-base px-4 py-3 text-sm text-ink-primary placeholder:text-ink-muted focus:border-accent-copper focus:outline-none focus:ring-1 focus:ring-accent-copper/50 font-mono leading-relaxed"
+          className="w-full resize-y rounded-lg border border-edge-default bg-void-surface px-4 py-3 text-sm text-text-bright placeholder:text-text-faint focus:border-accent-teal focus:outline-none focus:ring-1 focus:ring-accent/50 font-mono leading-relaxed"
           maxLength={50000}
         />
-        <p className="mt-1 text-right text-[10px] text-ink-tertiary">
+        <p className="mt-1 text-right text-[10px] text-text-faint">
           {content.length.toLocaleString()} / 50,000
         </p>
       </div>
 
       {/* Actions */}
-      <div className="flex justify-end gap-3 px-6 py-4 border-t border-ink-border">
+      <div className="flex justify-end gap-3 px-6 py-4 border-t border-edge-default">
         <Button variant="ghost" onClick={onCancel} disabled={isSaving}>
           <X className="h-4 w-4" />
           Cancel

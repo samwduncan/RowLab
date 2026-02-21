@@ -114,15 +114,15 @@ export function InviteCodeGenerator({ teamId, compact = false }: InviteCodeGener
       <div className="flex flex-col gap-3">
         {/* Role toggle */}
         <div className="flex flex-col gap-1.5">
-          <span className="text-sm font-medium text-ink-body">Invite as</span>
+          <span className="text-sm font-medium text-text-default">Invite as</span>
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => setRole('COACH')}
               className={`flex-1 flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-medium border transition-colors ${
                 role === 'COACH'
-                  ? 'border-accent-copper bg-accent-copper/10 text-accent-copper'
-                  : 'border-ink-border bg-ink-raised text-ink-secondary hover:bg-ink-hover'
+                  ? 'border-accent-teal bg-accent-teal/10 text-accent-teal'
+                  : 'border-edge-default bg-void-raised text-text-dim hover:bg-void-overlay'
               }`}
             >
               <Shield size={14} />
@@ -133,8 +133,8 @@ export function InviteCodeGenerator({ teamId, compact = false }: InviteCodeGener
               onClick={() => setRole('ATHLETE')}
               className={`flex-1 flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-medium border transition-colors ${
                 role === 'ATHLETE'
-                  ? 'border-accent-copper bg-accent-copper/10 text-accent-copper'
-                  : 'border-ink-border bg-ink-raised text-ink-secondary hover:bg-ink-hover'
+                  ? 'border-accent-teal bg-accent-teal/10 text-accent-teal'
+                  : 'border-edge-default bg-void-raised text-text-dim hover:bg-void-overlay'
               }`}
             >
               <Users size={14} />
@@ -146,14 +146,14 @@ export function InviteCodeGenerator({ teamId, compact = false }: InviteCodeGener
         {/* Expiry + max uses row */}
         <div className="flex gap-3">
           <div className="flex-1 flex flex-col gap-1.5">
-            <label htmlFor="invite-expiry" className="text-sm font-medium text-ink-body">
+            <label htmlFor="invite-expiry" className="text-sm font-medium text-text-default">
               Expires
             </label>
             <select
               id="invite-expiry"
               value={expiry}
               onChange={(e) => setExpiry(e.target.value as ExpiryOption)}
-              className="h-10 w-full rounded-xl px-3 text-sm bg-ink-raised text-ink-primary border border-ink-border focus:border-accent-copper focus:ring-1 focus:ring-accent-copper/30 focus:outline-none transition-colors duration-150 appearance-none cursor-pointer"
+              className="h-10 w-full rounded-xl px-3 text-sm bg-void-raised text-text-bright border border-edge-default focus:border-accent-teal focus:ring-1 focus:ring-accent/30 focus:outline-none transition-colors duration-150 appearance-none cursor-pointer"
             >
               {EXPIRY_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -163,7 +163,7 @@ export function InviteCodeGenerator({ teamId, compact = false }: InviteCodeGener
             </select>
           </div>
           <div className="flex-1 flex flex-col gap-1.5">
-            <label htmlFor="invite-max-uses" className="text-sm font-medium text-ink-body">
+            <label htmlFor="invite-max-uses" className="text-sm font-medium text-text-default">
               Max uses
             </label>
             <select
@@ -174,7 +174,7 @@ export function InviteCodeGenerator({ teamId, compact = false }: InviteCodeGener
                   e.target.value === 'unlimited' ? null : (Number(e.target.value) as MaxUsesOption)
                 )
               }
-              className="h-10 w-full rounded-xl px-3 text-sm bg-ink-raised text-ink-primary border border-ink-border focus:border-accent-copper focus:ring-1 focus:ring-accent-copper/30 focus:outline-none transition-colors duration-150 appearance-none cursor-pointer"
+              className="h-10 w-full rounded-xl px-3 text-sm bg-void-raised text-text-bright border border-edge-default focus:border-accent-teal focus:ring-1 focus:ring-accent/30 focus:outline-none transition-colors duration-150 appearance-none cursor-pointer"
             >
               {MAX_USES_OPTIONS.map((opt) => (
                 <option key={String(opt.value)} value={opt.value ?? 'unlimited'}>
@@ -200,12 +200,12 @@ export function InviteCodeGenerator({ teamId, compact = false }: InviteCodeGener
 
       {/* Generated code display */}
       {generatedCode && (
-        <div className="rounded-xl border border-accent-copper/20 bg-accent-copper/5 p-4 flex flex-col gap-3">
+        <div className="rounded-xl border border-accent-teal/20 bg-accent-teal/5 p-4 flex flex-col gap-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium uppercase tracking-wider text-ink-muted">
+            <span className="text-xs font-medium uppercase tracking-wider text-text-faint">
               {generatedCode.role} invite
             </span>
-            <span className="font-mono text-lg font-bold tracking-widest text-accent-copper">
+            <span className="font-mono text-lg font-bold tracking-widest text-accent-teal">
               {generatedCode.code}
             </span>
           </div>
@@ -214,7 +214,7 @@ export function InviteCodeGenerator({ teamId, compact = false }: InviteCodeGener
               type="text"
               readOnly
               value={getInviteUrl(generatedCode.code, generatedCode.role)}
-              className="flex-1 h-9 rounded-lg px-3 text-xs bg-ink-raised text-ink-secondary border border-ink-border font-mono truncate"
+              className="flex-1 h-9 rounded-lg px-3 text-xs bg-void-raised text-text-dim border border-edge-default font-mono truncate"
               onClick={(e) => (e.target as HTMLInputElement).select()}
             />
             <button
@@ -222,7 +222,7 @@ export function InviteCodeGenerator({ teamId, compact = false }: InviteCodeGener
               onClick={() =>
                 void handleCopy(generatedCode.code, generatedCode.role, generatedCode.id)
               }
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-ink-border bg-ink-raised text-ink-secondary hover:bg-ink-hover hover:text-ink-primary transition-colors"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-edge-default bg-void-raised text-text-dim hover:bg-void-overlay hover:text-text-bright transition-colors"
               title="Copy link"
             >
               {copiedId === generatedCode.id ? (
@@ -238,7 +238,7 @@ export function InviteCodeGenerator({ teamId, compact = false }: InviteCodeGener
       {/* Existing codes list (full mode only) */}
       {!compact && existingCodes && existingCodes.length > 0 && (
         <div className="flex flex-col gap-2">
-          <h4 className="text-sm font-medium text-ink-body">Active invite codes</h4>
+          <h4 className="text-sm font-medium text-text-default">Active invite codes</h4>
           <div className="flex flex-col gap-1.5">
             {existingCodes.map((code) => (
               <InviteCodeRow
@@ -282,25 +282,25 @@ function InviteCodeRow({
     : `${code.usesCount} uses`;
 
   return (
-    <div className="flex items-center gap-3 rounded-lg bg-ink-raised/50 border border-ink-border px-3 py-2">
+    <div className="flex items-center gap-3 rounded-lg bg-void-raised/50 border border-edge-default px-3 py-2">
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-sm font-semibold text-ink-primary tracking-wide">
+          <span className="font-mono text-sm font-semibold text-text-bright tracking-wide">
             {code.code}
           </span>
           <span
             className={`text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded ${
               code.role === 'COACH'
-                ? 'bg-accent-copper/10 text-accent-copper'
-                : 'bg-ink-border/50 text-ink-secondary'
+                ? 'bg-accent-teal/10 text-accent-teal'
+                : 'bg-edge-default/50 text-text-dim'
             }`}
           >
             {code.role}
           </span>
         </div>
-        <div className="flex items-center gap-2 text-xs text-ink-muted mt-0.5">
+        <div className="flex items-center gap-2 text-xs text-text-faint mt-0.5">
           <span>{expiryText}</span>
-          <span className="text-ink-border">|</span>
+          <span className="text-edge-default">|</span>
           <span>{usesText}</span>
         </div>
       </div>
@@ -308,7 +308,7 @@ function InviteCodeRow({
         <button
           type="button"
           onClick={onCopy}
-          className="flex h-7 w-7 items-center justify-center rounded-md text-ink-muted hover:text-ink-primary hover:bg-ink-hover transition-colors"
+          className="flex h-7 w-7 items-center justify-center rounded-md text-text-faint hover:text-text-bright hover:bg-void-overlay transition-colors"
           title="Copy invite link"
         >
           {copiedId === code.id ? (
@@ -321,7 +321,7 @@ function InviteCodeRow({
           type="button"
           onClick={onRevoke}
           disabled={isRevoking}
-          className="flex h-7 w-7 items-center justify-center rounded-md text-ink-muted hover:text-data-poor hover:bg-data-poor/10 transition-colors disabled:opacity-50"
+          className="flex h-7 w-7 items-center justify-center rounded-md text-text-faint hover:text-data-poor hover:bg-data-poor/10 transition-colors disabled:opacity-50"
           title="Revoke code"
         >
           <Trash2 size={13} />

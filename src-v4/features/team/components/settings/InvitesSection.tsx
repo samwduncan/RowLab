@@ -14,7 +14,7 @@ interface InvitesSectionProps {
 export function InvitesSection({ teamId }: InvitesSectionProps) {
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-sm text-ink-secondary mb-2">
+      <p className="text-sm text-text-dim mb-2">
         Generate invite links to share with new team members. Each code can be configured with a
         role, expiry, and usage limit.
       </p>

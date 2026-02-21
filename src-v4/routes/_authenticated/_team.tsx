@@ -28,10 +28,10 @@ function TeamLayout() {
 function TeamlessFallback() {
   return (
     <div className="flex flex-1 items-center justify-center p-8">
-      <div className="glass max-w-md rounded-2xl p-8 text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-ink-raised">
+      <div className="panel max-w-md rounded-2xl p-8 text-center">
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-void-raised">
           <svg
-            className="h-7 w-7 text-accent-copper"
+            className="h-7 w-7 text-accent-teal"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
@@ -45,8 +45,8 @@ function TeamlessFallback() {
           </svg>
         </div>
 
-        <h2 className="text-xl font-semibold text-ink-primary">Join a Team</h2>
-        <p className="mt-2 text-sm text-ink-secondary">
+        <h2 className="text-xl font-semibold text-text-bright">Join a Team</h2>
+        <p className="mt-2 text-sm text-text-dim">
           Team features require an active team. Ask your coach for an invite link, or create your
           own team to get started.
         </p>
@@ -54,7 +54,7 @@ function TeamlessFallback() {
         <div className="mt-6 flex flex-col gap-3">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-xl bg-accent-copper px-4 py-2.5 text-sm font-medium text-ink-deep transition-colors hover:bg-accent-copper-hover"
+            className="inline-flex items-center justify-center rounded-xl bg-accent-teal px-4 py-2.5 text-sm font-medium text-void-deep transition-colors hover:bg-accent-teal-hover"
           >
             Go to Personal Dashboard
           </Link>

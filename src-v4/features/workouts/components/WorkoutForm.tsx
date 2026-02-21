@@ -280,7 +280,7 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 pt-4">
       {/* Sport selector */}
       <div>
-        <label className="text-xs font-medium text-ink-secondary uppercase tracking-wider mb-2 block">
+        <label className="text-xs font-medium text-text-dim uppercase tracking-wider mb-2 block">
           Sport
         </label>
         <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-none">
@@ -296,8 +296,8 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
                 onClick={() => setValue('sport', sport)}
                 className={`flex flex-col items-center gap-1 min-w-[60px] py-2 px-2 rounded-lg text-xs transition-all shrink-0 ${
                   isActive
-                    ? 'bg-ink-raised ring-2 ring-accent-copper text-ink-primary'
-                    : 'bg-ink-well text-ink-secondary hover:bg-ink-hover hover:text-ink-body'
+                    ? 'bg-void-raised ring-2 ring-accent text-text-bright'
+                    : 'bg-void-deep text-text-dim hover:bg-void-overlay hover:text-text-default'
                 }`}
               >
                 <Icon size={18} className={isActive ? `text-${config.color}` : ''} />
@@ -313,7 +313,7 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
       <div>
         <label
           htmlFor="workout-date"
-          className="text-xs font-medium text-ink-secondary uppercase tracking-wider mb-1.5 block"
+          className="text-xs font-medium text-text-dim uppercase tracking-wider mb-1.5 block"
         >
           Date
         </label>
@@ -321,7 +321,7 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
           id="workout-date"
           type="date"
           {...register('date')}
-          className="w-full bg-ink-well border border-ink-border rounded-md text-ink-primary text-sm px-3 py-2 focus:ring-2 focus:ring-accent-copper focus:border-accent-copper outline-none"
+          className="w-full bg-void-deep border border-edge-default rounded-md text-text-bright text-sm px-3 py-2 focus:ring-2 focus:ring-accent focus:border-accent-teal outline-none"
         />
         {errors.date && <p className="text-data-poor text-xs mt-1">{errors.date.message}</p>}
       </div>
@@ -330,7 +330,7 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
       <div>
         <label
           htmlFor="workout-distance"
-          className="text-xs font-medium text-ink-secondary uppercase tracking-wider mb-1.5 block"
+          className="text-xs font-medium text-text-dim uppercase tracking-wider mb-1.5 block"
         >
           Distance (m)
         </label>
@@ -340,13 +340,13 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
           step="1"
           placeholder="e.g. 2000"
           {...register('distanceM', { valueAsNumber: true })}
-          className="w-full bg-ink-well border border-ink-border rounded-md text-ink-primary placeholder:text-ink-muted text-sm px-3 py-2 focus:ring-2 focus:ring-accent-copper focus:border-accent-copper outline-none font-mono tabular-nums"
+          className="w-full bg-void-deep border border-edge-default rounded-md text-text-bright placeholder:text-text-faint text-sm px-3 py-2 focus:ring-2 focus:ring-accent focus:border-accent-teal outline-none font-mono tabular-nums"
         />
       </div>
 
       {/* Duration */}
       <div>
-        <label className="text-xs font-medium text-ink-secondary uppercase tracking-wider mb-1.5 block">
+        <label className="text-xs font-medium text-text-dim uppercase tracking-wider mb-1.5 block">
           Time
         </label>
         <div className="flex items-center gap-2">
@@ -357,13 +357,13 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
               min="0"
               placeholder="0"
               {...register('durationMinutes', { valueAsNumber: true })}
-              className="w-full bg-ink-well border border-ink-border rounded-md text-ink-primary placeholder:text-ink-muted text-sm pl-3 pr-10 py-2 focus:ring-2 focus:ring-accent-copper focus:border-accent-copper outline-none font-mono tabular-nums"
+              className="w-full bg-void-deep border border-edge-default rounded-md text-text-bright placeholder:text-text-faint text-sm pl-3 pr-10 py-2 focus:ring-2 focus:ring-accent focus:border-accent-teal outline-none font-mono tabular-nums"
             />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-ink-muted">
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-text-faint">
               min
             </span>
           </div>
-          <span className="text-ink-muted font-mono">:</span>
+          <span className="text-text-faint font-mono">:</span>
           <div className="flex-1 relative">
             <input
               type="number"
@@ -372,9 +372,9 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
               max="59"
               placeholder="00"
               {...register('durationSeconds', { valueAsNumber: true })}
-              className="w-full bg-ink-well border border-ink-border rounded-md text-ink-primary placeholder:text-ink-muted text-sm pl-3 pr-10 py-2 focus:ring-2 focus:ring-accent-copper focus:border-accent-copper outline-none font-mono tabular-nums"
+              className="w-full bg-void-deep border border-edge-default rounded-md text-text-bright placeholder:text-text-faint text-sm pl-3 pr-10 py-2 focus:ring-2 focus:ring-accent focus:border-accent-teal outline-none font-mono tabular-nums"
             />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-ink-muted">
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-text-faint">
               sec
             </span>
           </div>
@@ -383,8 +383,8 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
 
       {/* Pace */}
       <div>
-        <label className="text-xs font-medium text-ink-secondary uppercase tracking-wider mb-1.5 block">
-          Pace {paceUnit && <span className="text-ink-muted normal-case">({paceUnit})</span>}
+        <label className="text-xs font-medium text-text-dim uppercase tracking-wider mb-1.5 block">
+          Pace {paceUnit && <span className="text-text-faint normal-case">({paceUnit})</span>}
         </label>
         <div className="flex items-center gap-2">
           <div className="flex-1 relative">
@@ -394,13 +394,13 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
               min="0"
               placeholder="0"
               {...register('paceMinutes', { valueAsNumber: true })}
-              className="w-full bg-ink-well border border-ink-border rounded-md text-ink-primary placeholder:text-ink-muted text-sm pl-3 pr-10 py-2 focus:ring-2 focus:ring-accent-copper focus:border-accent-copper outline-none font-mono tabular-nums"
+              className="w-full bg-void-deep border border-edge-default rounded-md text-text-bright placeholder:text-text-faint text-sm pl-3 pr-10 py-2 focus:ring-2 focus:ring-accent focus:border-accent-teal outline-none font-mono tabular-nums"
             />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-ink-muted">
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-text-faint">
               min
             </span>
           </div>
-          <span className="text-ink-muted font-mono">:</span>
+          <span className="text-text-faint font-mono">:</span>
           <div className="flex-1 relative">
             <input
               type="number"
@@ -409,9 +409,9 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
               max="59.9"
               placeholder="00.0"
               {...register('paceSeconds', { valueAsNumber: true })}
-              className="w-full bg-ink-well border border-ink-border rounded-md text-ink-primary placeholder:text-ink-muted text-sm pl-3 pr-10 py-2 focus:ring-2 focus:ring-accent-copper focus:border-accent-copper outline-none font-mono tabular-nums"
+              className="w-full bg-void-deep border border-edge-default rounded-md text-text-bright placeholder:text-text-faint text-sm pl-3 pr-10 py-2 focus:ring-2 focus:ring-accent focus:border-accent-teal outline-none font-mono tabular-nums"
             />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-ink-muted">
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-text-faint">
               sec
             </span>
           </div>
@@ -423,7 +423,7 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
         <div>
           <label
             htmlFor="workout-watts"
-            className="text-xs font-medium text-ink-secondary uppercase tracking-wider mb-1.5 block"
+            className="text-xs font-medium text-text-dim uppercase tracking-wider mb-1.5 block"
           >
             Watts
           </label>
@@ -434,7 +434,7 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
             min="0"
             placeholder="e.g. 250"
             {...register('avgWatts', { valueAsNumber: true })}
-            className="w-full bg-ink-well border border-ink-border rounded-md text-ink-primary placeholder:text-ink-muted text-sm px-3 py-2 focus:ring-2 focus:ring-accent-copper focus:border-accent-copper outline-none font-mono tabular-nums"
+            className="w-full bg-void-deep border border-edge-default rounded-md text-text-bright placeholder:text-text-faint text-sm px-3 py-2 focus:ring-2 focus:ring-accent focus:border-accent-teal outline-none font-mono tabular-nums"
           />
         </div>
       )}
@@ -443,7 +443,7 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
       <div>
         <label
           htmlFor="workout-notes"
-          className="text-xs font-medium text-ink-secondary uppercase tracking-wider mb-1.5 block"
+          className="text-xs font-medium text-text-dim uppercase tracking-wider mb-1.5 block"
         >
           Notes
         </label>
@@ -452,7 +452,7 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
           rows={3}
           placeholder="How did it feel?"
           {...register('notes')}
-          className="w-full bg-ink-well border border-ink-border rounded-md text-ink-primary placeholder:text-ink-muted text-sm px-3 py-2 focus:ring-2 focus:ring-accent-copper focus:border-accent-copper outline-none resize-none"
+          className="w-full bg-void-deep border border-edge-default rounded-md text-text-bright placeholder:text-text-faint text-sm px-3 py-2 focus:ring-2 focus:ring-accent focus:border-accent-teal outline-none resize-none"
         />
       </div>
 
@@ -465,7 +465,7 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
       <button
         type="submit"
         disabled={isPending}
-        className="w-full bg-accent-copper hover:bg-accent-copper-hover text-ink-deep font-medium py-2.5 rounded-lg transition-colors disabled:opacity-50"
+        className="w-full bg-accent-teal hover:bg-accent-teal-hover text-void-deep font-medium py-2.5 rounded-lg transition-colors disabled:opacity-50"
       >
         {isPending ? 'Saving...' : 'Save Workout'}
       </button>

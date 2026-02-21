@@ -3,10 +3,10 @@
  *
  * Top 3 athletes get medal treatment:
  *   #1 Gold -- amber-400 accent with trophy icon
- *   #2 Silver -- ink-secondary accent
- *   #3 Bronze -- accent-copper accent
+ *   #2 Silver -- text-secondary accent
+ *   #3 Bronze -- accent accent
  *
- * Features: glass-styled headers, staggered list animation, sparkline ELO
+ * Features: panel-styled headers, staggered list animation, sparkline ELO
  * trends, confidence badges, side badges. Skeleton loading state.
  */
 
@@ -49,15 +49,15 @@ const MEDAL_CONFIG: Record<
     icon: Trophy,
   },
   2: {
-    bgClass: 'bg-ink-secondary/5',
-    borderClass: 'border-l-2 border-ink-secondary',
-    textClass: 'text-ink-secondary',
+    bgClass: 'bg-text-dim/5',
+    borderClass: 'border-l-2 border-text-dim',
+    textClass: 'text-text-dim',
     icon: Medal,
   },
   3: {
-    bgClass: 'bg-accent-copper/5',
-    borderClass: 'border-l-2 border-accent-copper',
-    textClass: 'text-accent-copper',
+    bgClass: 'bg-accent-teal/5',
+    borderClass: 'border-l-2 border-accent-teal',
+    textClass: 'text-accent-teal',
     icon: Medal,
   },
 };
@@ -67,7 +67,7 @@ const MEDAL_CONFIG: Record<
 // ---------------------------------------------------------------------------
 
 function SideBadge({ side }: { side: string | null }) {
-  if (!side) return <span className="text-ink-muted">--</span>;
+  if (!side) return <span className="text-text-faint">--</span>;
 
   const colors: Record<string, string> = {
     Port: 'text-data-poor bg-data-poor/15',
@@ -75,7 +75,7 @@ function SideBadge({ side }: { side: string | null }) {
     Cox: 'text-data-good bg-data-good/15',
   };
 
-  const cls = colors[side] ?? 'text-ink-muted bg-ink-hover';
+  const cls = colors[side] ?? 'text-text-faint bg-void-overlay';
 
   return (
     <span className={`inline-flex px-2 py-0.5 rounded-md text-xs font-medium ${cls}`}>{side}</span>
@@ -108,7 +108,7 @@ function RankDisplay({ rank }: { rank: number }) {
     );
   }
 
-  return <span className="text-2xl font-bold tabular-nums text-ink-muted">{rank}</span>;
+  return <span className="text-2xl font-bold tabular-nums text-text-faint">{rank}</span>;
 }
 
 /**
@@ -138,7 +138,7 @@ function RankingsTableSkeleton() {
   return (
     <SkeletonGroup className="w-full">
       {/* Header */}
-      <div className="grid grid-cols-[3rem_1fr_5rem_5rem_6rem] gap-4 px-4 py-3 bg-ink-well/40">
+      <div className="grid grid-cols-[3rem_1fr_5rem_5rem_6rem] gap-4 px-4 py-3 bg-void-deep/40">
         <Skeleton height="0.75rem" width="2rem" />
         <Skeleton height="0.75rem" width="5rem" />
         <Skeleton height="0.75rem" width="3rem" />
@@ -186,32 +186,32 @@ export function RankingsTable({ ratings, isLoading = false, onAthleteClick }: Ra
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="bg-ink-well/40">
-            <th className="px-4 py-3 text-left text-xs font-medium text-ink-muted uppercase tracking-wider w-16">
+          <tr className="bg-void-deep/40">
+            <th className="px-4 py-3 text-left text-xs font-medium text-text-faint uppercase tracking-wider w-16">
               #
             </th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs font-medium text-text-faint uppercase tracking-wider">
               Athlete
             </th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs font-medium text-text-faint uppercase tracking-wider">
               Side
             </th>
-            <th className="px-4 py-3 text-right text-xs font-medium text-ink-muted uppercase tracking-wider">
+            <th className="px-4 py-3 text-right text-xs font-medium text-text-faint uppercase tracking-wider">
               ELO
             </th>
-            <th className="px-4 py-3 text-center text-xs font-medium text-ink-muted uppercase tracking-wider w-[120px]">
+            <th className="px-4 py-3 text-center text-xs font-medium text-text-faint uppercase tracking-wider w-[120px]">
               Trend
             </th>
-            <th className="px-4 py-3 text-right text-xs font-medium text-ink-muted uppercase tracking-wider">
+            <th className="px-4 py-3 text-right text-xs font-medium text-text-faint uppercase tracking-wider">
               Pieces
             </th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-ink-muted uppercase tracking-wider">
+            <th className="px-4 py-3 text-left text-xs font-medium text-text-faint uppercase tracking-wider">
               Confidence
             </th>
           </tr>
         </thead>
         <motion.tbody
-          className="divide-y divide-ink-border/20"
+          className="divide-y divide-edge-default/20"
           variants={listContainerVariants}
           initial="hidden"
           animate="visible"
@@ -231,7 +231,7 @@ export function RankingsTable({ ratings, isLoading = false, onAthleteClick }: Ra
                   ${
                     medal
                       ? `${medal.bgClass} ${medal.borderClass}`
-                      : 'hover:bg-ink-hover/50 border-l-2 border-transparent'
+                      : 'hover:bg-void-overlay/50 border-l-2 border-transparent'
                   }
                 `.trim()}
                 onClick={() => onAthleteClick?.(rating.athleteId)}
@@ -240,7 +240,7 @@ export function RankingsTable({ ratings, isLoading = false, onAthleteClick }: Ra
                   <RankDisplay rank={rank} />
                 </td>
                 <td className="px-4 py-3">
-                  <span className="font-medium text-ink-primary">
+                  <span className="font-medium text-text-bright">
                     {rating.athlete.lastName}, {rating.athlete.firstName}
                   </span>
                 </td>
@@ -263,12 +263,12 @@ export function RankingsTable({ ratings, isLoading = false, onAthleteClick }: Ra
                         id={`elo-trend-${rating.id}`}
                       />
                     ) : (
-                      <span className="text-xs text-ink-muted">--</span>
+                      <span className="text-xs text-text-faint">--</span>
                     )}
                   </div>
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <span className="font-mono text-ink-secondary">{rating.racesCount}</span>
+                  <span className="font-mono text-text-dim">{rating.racesCount}</span>
                 </td>
                 <td className="px-4 py-3">
                   <ConfidenceBadge score={rating.confidenceScore} />

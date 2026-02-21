@@ -74,7 +74,7 @@ export function InlineEdit({
 
   if (isEditing) {
     const isMultiline = Tag === 'p';
-    const sharedClasses = `w-full bg-transparent outline-none ring-1 ring-accent-copper/30 rounded-md px-2 py-1 ${className}`;
+    const sharedClasses = `w-full bg-transparent outline-none ring-1 ring-accent/30 rounded-md px-2 py-1 ${className}`;
 
     if (isMultiline) {
       return (
@@ -118,13 +118,13 @@ export function InlineEdit({
     <button
       type="button"
       onClick={() => setIsEditing(true)}
-      className={`group inline-flex items-center gap-1.5 text-left rounded-md px-2 py-0.5 -mx-2 -my-0.5 transition-colors hover:bg-ink-hover ${className}`}
+      className={`group inline-flex items-center gap-1.5 text-left rounded-md px-2 py-0.5 -mx-2 -my-0.5 transition-colors hover:bg-void-overlay ${className}`}
       aria-label={`Edit ${Tag === 'h1' ? 'name' : 'bio'}`}
     >
-      <Tag className={isEmpty ? 'text-ink-tertiary italic' : ''}>{displayValue}</Tag>
+      <Tag className={isEmpty ? 'text-text-faint italic' : ''}>{displayValue}</Tag>
       <Pencil
         size={Tag === 'h1' ? 14 : 12}
-        className="text-ink-tertiary opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+        className="text-text-faint opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
       />
     </button>
   );

@@ -28,14 +28,14 @@ interface TeamSwitcherProps {
 
 /** Deterministic color from team name for the initial circle */
 const TEAM_COLORS = [
-  'bg-accent-copper/20 text-accent-copper',
-  'bg-accent-primary/20 text-accent-primary',
+  'bg-accent-teal/20 text-accent-teal',
+  'bg-accent-teal-primary/20 text-accent-teal-primary',
   'bg-data-excellent/20 text-data-excellent',
-  'bg-accent-primary/20 text-accent-primary',
+  'bg-accent-teal-primary/20 text-accent-teal-primary',
   'bg-data-warning/20 text-data-warning',
   'bg-data-poor/20 text-data-poor',
-  'bg-accent-primary/20 text-accent-primary',
-  'bg-accent-primary/20 text-accent-primary',
+  'bg-accent-teal-primary/20 text-accent-teal-primary',
+  'bg-accent-teal-primary/20 text-accent-teal-primary',
 ];
 
 function getTeamColor(name: string): string {
@@ -50,9 +50,9 @@ function getTeamColor(name: string): string {
 function getRoleBadgeClass(role: string): string {
   const upper = role.toUpperCase();
   if (upper === 'OWNER') {
-    return 'bg-accent-copper/15 text-accent-copper';
+    return 'bg-accent-teal/15 text-accent-teal';
   }
-  return 'bg-ink-raised text-ink-secondary';
+  return 'bg-void-raised text-text-dim';
 }
 
 /**
@@ -150,9 +150,9 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
         <button
           type="button"
           onClick={() => void navigate({ to: '/create-team' as string })}
-          className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm text-ink-secondary transition-colors hover:bg-ink-hover hover:text-ink-primary"
+          className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm text-text-dim transition-colors hover:bg-void-overlay hover:text-text-bright"
         >
-          <Users size={16} className="text-ink-muted" />
+          <Users size={16} className="text-text-faint" />
           <span>Join or create a team</span>
         </button>
       </div>
@@ -173,7 +173,7 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
         onClick={() => setIsOpen(!isOpen)}
         animate={{ opacity: isSwitching ? 0.6 : 1 }}
         transition={{ duration: 0.2 }}
-        className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition-colors hover:bg-ink-hover"
+        className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition-colors hover:bg-void-overlay"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
       >
@@ -186,13 +186,13 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
 
         {/* Team name + role */}
         <div className="hidden min-w-0 flex-col items-start sm:flex">
-          <span className="max-w-[120px] truncate text-sm font-medium text-ink-primary">
+          <span className="max-w-[120px] truncate text-sm font-medium text-text-bright">
             {activeTeam?.name ?? 'Select team'}
           </span>
-          {roleLabel && <span className="text-[10px] font-medium text-ink-muted">{roleLabel}</span>}
+          {roleLabel && <span className="text-[10px] font-medium text-text-faint">{roleLabel}</span>}
         </div>
 
-        <ChevronsUpDown size={14} className="shrink-0 text-ink-muted" />
+        <ChevronsUpDown size={14} className="shrink-0 text-text-faint" />
       </motion.button>
 
       {/* Dropdown */}
@@ -203,7 +203,7 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
             transition={SPRING_SNAPPY}
-            className="absolute left-0 top-full z-50 mt-1 w-72 overflow-hidden rounded-xl border border-ink-border bg-ink-float/95 shadow-card backdrop-blur-xl"
+            className="absolute left-0 top-full z-50 mt-1 w-72 overflow-hidden rounded-xl border border-edge-default bg-void-overlay/95 shadow-md backdrop-blur-xl"
             role="listbox"
             aria-label="Select team"
           >
@@ -221,8 +221,8 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
                     role="option"
                     aria-selected={isActive}
                     onClick={() => void handleSwitch(team)}
-                    className={`flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-ink-hover ${
-                      isActive ? 'bg-ink-raised/50' : ''
+                    className={`flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-void-overlay ${
+                      isActive ? 'bg-void-raised/50' : ''
                     }`}
                   >
                     {/* Team initial circle */}
@@ -235,7 +235,7 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
                     {/* Name + role + member count */}
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="truncate text-sm font-medium text-ink-primary">
+                        <span className="truncate text-sm font-medium text-text-bright">
                           {team.name}
                         </span>
                         <span
@@ -245,21 +245,21 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
                         </span>
                       </div>
                       {team.memberCount != null && (
-                        <span className="text-xs text-ink-muted">
+                        <span className="text-xs text-text-faint">
                           {team.memberCount} {team.memberCount === 1 ? 'member' : 'members'}
                         </span>
                       )}
                     </div>
 
                     {/* Active checkmark */}
-                    {isActive && <Check size={16} className="shrink-0 text-accent-copper" />}
+                    {isActive && <Check size={16} className="shrink-0 text-accent-teal" />}
                   </button>
                 );
               })}
             </div>
 
             {/* Divider */}
-            <div className="border-t border-ink-border" />
+            <div className="border-t border-edge-default" />
 
             {/* Create team shortcut */}
             <button
@@ -268,9 +268,9 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
                 setIsOpen(false);
                 void navigate({ to: '/create-team' as string });
               }}
-              className="flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm text-ink-secondary transition-colors hover:bg-ink-hover hover:text-ink-primary"
+              className="flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm text-text-dim transition-colors hover:bg-void-overlay hover:text-text-bright"
             >
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-dashed border-ink-border text-ink-muted">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-dashed border-edge-default text-text-faint">
                 <Plus size={16} />
               </div>
               <span>Create team</span>

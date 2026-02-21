@@ -76,7 +76,7 @@ export function ForgotPassword({ defaultEmail = '' }: ForgotPasswordProps) {
       <button
         type="button"
         onClick={handleToggle}
-        className="text-sm text-ink-secondary hover:text-accent-copper transition-colors duration-150"
+        className="text-sm text-text-dim hover:text-accent-teal transition-colors duration-150"
       >
         {isOpen ? 'Back to login' : 'Forgot your password?'}
       </button>

@@ -69,7 +69,7 @@ export function MembersSection({ team }: MembersSectionProps) {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
-        <span className="text-sm text-ink-secondary">
+        <span className="text-sm text-text-dim">
           {members.length} member{members.length !== 1 ? 's' : ''}
         </span>
       </div>
@@ -84,10 +84,10 @@ export function MembersSection({ team }: MembersSectionProps) {
           return (
             <div
               key={member.id}
-              className="flex items-center gap-3 rounded-xl bg-ink-raised/50 border border-ink-border px-4 py-3"
+              className="flex items-center gap-3 rounded-xl bg-void-raised/50 border border-edge-default px-4 py-3"
             >
               {/* Avatar */}
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ink-well text-xs font-semibold text-ink-muted uppercase">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-void-deep text-xs font-semibold text-text-faint uppercase">
                 {member.avatarUrl ? (
                   <img
                     src={member.avatarUrl}
@@ -106,13 +106,13 @@ export function MembersSection({ team }: MembersSectionProps) {
               {/* Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-ink-primary truncate">
+                  <span className="text-sm font-medium text-text-bright truncate">
                     {member.name}
-                    {isMe && <span className="ml-1 text-xs text-ink-muted font-normal">(you)</span>}
+                    {isMe && <span className="ml-1 text-xs text-text-faint font-normal">(you)</span>}
                   </span>
                   <RoleBadge role={member.role} />
                 </div>
-                <span className="text-xs text-ink-muted truncate block">{member.email}</span>
+                <span className="text-xs text-text-faint truncate block">{member.email}</span>
               </div>
 
               {/* Actions */}
@@ -126,7 +126,7 @@ export function MembersSection({ team }: MembersSectionProps) {
                         handleRoleChange(member.userId, memberIsCoach ? 'OWNER' : 'COACH')
                       }
                       disabled={roleMutation.isPending}
-                      className="flex h-7 w-7 items-center justify-center rounded-md text-ink-muted hover:text-data-good hover:bg-data-good/10 transition-colors disabled:opacity-50"
+                      className="flex h-7 w-7 items-center justify-center rounded-md text-text-faint hover:text-data-good hover:bg-data-good/10 transition-colors disabled:opacity-50"
                       title={memberIsCoach ? 'Promote to Admin' : 'Promote to Coach'}
                     >
                       <ChevronUp size={14} />
@@ -137,7 +137,7 @@ export function MembersSection({ team }: MembersSectionProps) {
                       type="button"
                       onClick={() => handleRoleChange(member.userId, 'COACH')}
                       disabled={roleMutation.isPending}
-                      className="flex h-7 w-7 items-center justify-center rounded-md text-ink-muted hover:text-data-good hover:bg-data-good/10 transition-colors disabled:opacity-50"
+                      className="flex h-7 w-7 items-center justify-center rounded-md text-text-faint hover:text-data-good hover:bg-data-good/10 transition-colors disabled:opacity-50"
                       title="Promote to Coach"
                     >
                       <ChevronUp size={14} />
@@ -150,7 +150,7 @@ export function MembersSection({ team }: MembersSectionProps) {
                       type="button"
                       onClick={() => handleRoleChange(member.userId, 'COACH')}
                       disabled={roleMutation.isPending}
-                      className="flex h-7 w-7 items-center justify-center rounded-md text-ink-muted hover:text-ink-secondary hover:bg-ink-hover transition-colors disabled:opacity-50"
+                      className="flex h-7 w-7 items-center justify-center rounded-md text-text-faint hover:text-text-dim hover:bg-void-overlay transition-colors disabled:opacity-50"
                       title="Demote to Coach"
                     >
                       <ChevronDown size={14} />
@@ -161,7 +161,7 @@ export function MembersSection({ team }: MembersSectionProps) {
                       type="button"
                       onClick={() => handleRoleChange(member.userId, 'ATHLETE')}
                       disabled={roleMutation.isPending}
-                      className="flex h-7 w-7 items-center justify-center rounded-md text-ink-muted hover:text-ink-secondary hover:bg-ink-hover transition-colors disabled:opacity-50"
+                      className="flex h-7 w-7 items-center justify-center rounded-md text-text-faint hover:text-text-dim hover:bg-void-overlay transition-colors disabled:opacity-50"
                       title="Demote to Athlete"
                     >
                       <ChevronDown size={14} />
@@ -173,7 +173,7 @@ export function MembersSection({ team }: MembersSectionProps) {
                     <button
                       type="button"
                       onClick={() => setRemovingUserId(member.userId)}
-                      className="flex h-7 w-7 items-center justify-center rounded-md text-ink-muted hover:text-data-poor hover:bg-data-poor/10 transition-colors"
+                      className="flex h-7 w-7 items-center justify-center rounded-md text-text-faint hover:text-data-poor hover:bg-data-poor/10 transition-colors"
                       title="Remove member"
                     >
                       <UserMinus size={14} />
@@ -207,7 +207,7 @@ export function MembersSection({ team }: MembersSectionProps) {
 
       {/* Last admin warning */}
       {amAdmin && adminCount <= 1 && (
-        <p className="text-xs text-ink-muted mt-1">
+        <p className="text-xs text-text-faint mt-1">
           You are the only admin. Promote another member to admin before leaving or being demoted.
         </p>
       )}
@@ -219,10 +219,10 @@ export function MembersSection({ team }: MembersSectionProps) {
 // Role badge
 // ---------------------------------------------------------------------------
 
-const DEFAULT_ROLE_CONFIG = { icon: Users, color: 'text-ink-secondary bg-ink-border/50' };
+const DEFAULT_ROLE_CONFIG = { icon: Users, color: 'text-text-dim bg-edge-default/50' };
 
 const ROLE_CONFIG: Record<string, { icon: typeof Crown; color: string }> = {
-  OWNER: { icon: Crown, color: 'text-accent-copper bg-accent-copper/10' },
+  OWNER: { icon: Crown, color: 'text-accent-teal bg-accent-teal/10' },
   COACH: { icon: Shield, color: 'text-data-info bg-data-info/10' },
   ATHLETE: DEFAULT_ROLE_CONFIG,
 };

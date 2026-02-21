@@ -78,7 +78,7 @@ export function UserMenu() {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-ink-raised text-xs font-semibold text-ink-primary transition-colors hover:bg-ink-hover"
+        className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-void-raised text-xs font-semibold text-text-bright transition-colors hover:bg-void-overlay"
         aria-expanded={isOpen}
         aria-haspopup="menu"
         aria-label="User menu"
@@ -95,7 +95,7 @@ export function UserMenu() {
 
         {/* Role badge */}
         {roleBadge && (
-          <span className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-accent-copper text-[8px] font-bold text-ink-deep">
+          <span className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-accent-teal text-[8px] font-bold text-void-deep">
             {roleBadge}
           </span>
         )}
@@ -109,17 +109,17 @@ export function UserMenu() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
             transition={SPRING_SNAPPY}
-            className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-xl border border-ink-border bg-ink-float/95 shadow-card backdrop-blur-xl"
+            className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-xl border border-edge-default bg-void-overlay/95 shadow-md backdrop-blur-xl"
             role="menu"
           >
             {/* User info */}
-            <div className="border-b border-ink-border px-4 py-3">
-              <p className="text-sm font-medium text-ink-primary">{user.name}</p>
-              <p className="text-xs text-ink-muted">{user.email}</p>
+            <div className="border-b border-edge-default px-4 py-3">
+              <p className="text-sm font-medium text-text-bright">{user.name}</p>
+              <p className="text-xs text-text-faint">{user.email}</p>
             </div>
 
             {/* Navigation items */}
-            <div className="border-b border-ink-border py-1">
+            <div className="border-b border-edge-default py-1">
               <MenuLink
                 to="/profile"
                 icon={User}
@@ -136,8 +136,8 @@ export function UserMenu() {
 
             {/* Team switcher (inline, only if 2+ teams) */}
             {teams.length >= 2 && (
-              <div className="border-b border-ink-border py-1">
-                <p className="px-4 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
+              <div className="border-b border-edge-default py-1">
+                <p className="px-4 py-1 text-[10px] font-semibold uppercase tracking-wider text-text-faint">
                   Switch Team
                 </p>
                 {teams.map((team) => (
@@ -146,14 +146,14 @@ export function UserMenu() {
                     type="button"
                     role="menuitem"
                     onClick={() => void handleSwitchTeam(team.id)}
-                    className="flex w-full items-center gap-2 px-4 py-1.5 text-left text-sm text-ink-secondary transition-colors hover:bg-ink-hover hover:text-ink-primary"
+                    className="flex w-full items-center gap-2 px-4 py-1.5 text-left text-sm text-text-dim transition-colors hover:bg-void-overlay hover:text-text-bright"
                   >
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-ink-border/30 text-[9px] font-semibold text-ink-muted">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-edge-default/30 text-[9px] font-semibold text-text-faint">
                       {team.name.charAt(0).toUpperCase()}
                     </span>
                     <span className="flex-1 truncate">{team.name}</span>
                     {team.id === activeTeamId && (
-                      <Check size={14} className="shrink-0 text-accent-copper" />
+                      <Check size={14} className="shrink-0 text-accent-teal" />
                     )}
                   </button>
                 ))}
@@ -166,7 +166,7 @@ export function UserMenu() {
                 type="button"
                 role="menuitem"
                 onClick={() => void handleLogout()}
-                className="flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-data-poor transition-colors hover:bg-ink-hover"
+                className="flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-data-poor transition-colors hover:bg-void-overlay"
               >
                 <LogOut size={16} />
                 <span>Log out</span>
@@ -193,7 +193,7 @@ function MenuLink({ to, icon: Icon, label, onClick }: MenuLinkProps) {
     <Link
       to={to}
       onClick={onClick}
-      className="flex items-center gap-3 px-4 py-2 text-sm text-ink-secondary transition-colors hover:bg-ink-hover hover:text-ink-primary"
+      className="flex items-center gap-3 px-4 py-2 text-sm text-text-dim transition-colors hover:bg-void-overlay hover:text-text-bright"
       role="menuitem"
     >
       <Icon size={16} />

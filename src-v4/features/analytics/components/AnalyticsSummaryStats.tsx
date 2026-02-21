@@ -59,7 +59,7 @@ function TrendArrow({ direction }: { direction: TrendDirection }) {
     );
   }
   return (
-    <span className="text-ink-tertiary text-sm" aria-label="Stable">
+    <span className="text-text-faint text-sm" aria-label="Stable">
       &mdash;
     </span>
   );
@@ -89,12 +89,12 @@ function StatCard({
   return (
     <GlassCard interactive padding="none" className={`border-l-[3px] ${borderColorClass}`}>
       <div className="px-4 py-3">
-        <p className="text-[10px] uppercase tracking-wider text-ink-muted font-medium mb-1">
+        <p className="text-[10px] uppercase tracking-wider text-text-faint font-medium mb-1">
           {label}
         </p>
         <div className="flex items-end justify-between gap-2">
           <div className="flex items-center gap-1.5">
-            <p className="text-xl font-mono font-bold text-ink-primary tabular-nums">{value}</p>
+            <p className="text-xl font-mono font-bold text-text-bright tabular-nums">{value}</p>
             <TrendArrow direction={trend} />
           </div>
           {sparklineData.length >= 2 && (
@@ -175,7 +175,7 @@ export function AnalyticsSummaryStats({
   const blueColor =
     style.getPropertyValue('--color-accent-primary').trim() || 'oklch(0.55 0.18 255)';
   const copperColor =
-    style.getPropertyValue('--color-accent-copper').trim() || 'oklch(0.62 0.12 55)';
+    style.getPropertyValue('--color-accent').trim() || 'oklch(0.62 0.12 55)';
   const amberColor = style.getPropertyValue('--color-data-warning').trim() || 'oklch(0.75 0.14 75)';
 
   return (
@@ -191,7 +191,7 @@ export function AnalyticsSummaryStats({
       <StatCard
         label="Total Hours"
         value={formatHours(summary.totalDuration)}
-        borderColorClass="border-accent-primary"
+        borderColorClass="border-accent-teal-primary"
         sparklineData={durSpark}
         sparklineColor={blueColor}
         trend={computeTrend(durSpark)}
@@ -199,7 +199,7 @@ export function AnalyticsSummaryStats({
       <StatCard
         label="Total Sessions"
         value={String(summary.totalSessions)}
-        borderColorClass="border-accent-copper"
+        borderColorClass="border-accent-teal"
         sparklineData={sessSpark}
         sparklineColor={copperColor}
         trend={computeTrend(sessSpark)}

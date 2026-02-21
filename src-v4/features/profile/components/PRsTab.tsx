@@ -28,7 +28,7 @@ export function PRsTab() {
   return (
     <motion.div className="space-y-4" {...slideUp}>
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-ink-primary">Personal Records</h2>
+        <h2 className="text-lg font-semibold text-text-bright">Personal Records</h2>
         <MachineTabs activeMachine={activeMachine} onMachineChange={setActiveMachine} />
       </div>
 
@@ -50,7 +50,7 @@ function PRsTabSkeleton() {
           <Skeleton width="75px" height="2rem" rounded="lg" />
         </div>
       </div>
-      <div className="glass rounded-xl p-5">
+      <div className="panel rounded-xl p-5">
         <SkeletonGroup>
           {Array.from({ length: 8 }).map((_, i) => (
             <Skeleton key={i} height="2.5rem" className="w-full" />

@@ -59,12 +59,12 @@ function InsightBanner({ insight }: { insight: InsightItem }) {
       variants={listItemVariants}
       transition={SPRING_SMOOTH}
       className={`
-        flex items-start gap-3 rounded-xl border border-ink-border ${style.border} border-l-2
+        flex items-start gap-3 rounded-xl border border-edge-default ${style.border} border-l-2
         ${style.bg} px-4 py-3
       `}
     >
       <Icon className={`w-4 h-4 ${style.icon} mt-0.5 shrink-0`} />
-      <p className="text-sm text-ink-secondary leading-relaxed">{insight.message}</p>
+      <p className="text-sm text-text-dim leading-relaxed">{insight.message}</p>
     </motion.div>
   );
 }
@@ -79,11 +79,11 @@ function InsightsPlaceholder({ daysWithData }: { daysWithData: number }) {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={SPRING_SMOOTH}
-      className="rounded-xl border border-ink-border bg-ink-raised px-4 py-4 flex items-start gap-3"
+      className="rounded-xl border border-edge-default bg-void-raised px-4 py-4 flex items-start gap-3"
     >
-      <Info className="w-4 h-4 text-ink-muted mt-0.5 shrink-0" />
+      <Info className="w-4 h-4 text-text-faint mt-0.5 shrink-0" />
       <div>
-        <p className="text-sm text-ink-secondary">
+        <p className="text-sm text-text-dim">
           Analytics insights need ~6 weeks of training data to provide meaningful recommendations.
           You have {daysWithData} day{daysWithData !== 1 ? 's' : ''} so far -- keep logging
           workouts!
@@ -101,7 +101,7 @@ export function TrainingInsights({ insights, daysWithData, isReliable }: Trainin
   if (!isReliable) {
     return (
       <div>
-        <h3 className="text-sm font-semibold text-ink-primary mb-3">Training Insights</h3>
+        <h3 className="text-sm font-semibold text-text-bright mb-3">Training Insights</h3>
         <InsightsPlaceholder daysWithData={daysWithData} />
       </div>
     );
@@ -109,17 +109,17 @@ export function TrainingInsights({ insights, daysWithData, isReliable }: Trainin
 
   return (
     <div>
-      <h3 className="text-sm font-semibold text-ink-primary mb-3">Training Insights</h3>
+      <h3 className="text-sm font-semibold text-text-bright mb-3">Training Insights</h3>
 
       {insights.length === 0 ? (
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={SPRING_SMOOTH}
-          className="rounded-xl border border-ink-border bg-ink-raised px-4 py-3 flex items-start gap-3"
+          className="rounded-xl border border-edge-default bg-void-raised px-4 py-3 flex items-start gap-3"
         >
-          <Info className="w-4 h-4 text-ink-muted mt-0.5 shrink-0" />
-          <p className="text-sm text-ink-secondary">
+          <Info className="w-4 h-4 text-text-faint mt-0.5 shrink-0" />
+          <p className="text-sm text-text-dim">
             No notable training patterns detected. Keep training consistently!
           </p>
         </motion.div>
