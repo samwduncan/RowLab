@@ -57,14 +57,12 @@ export function CosmicAtmosphere() {
         <div key={`tl-${i}`} className={`twinkle-star-lg twinkle-lg-${i + 1}`} aria-hidden="true" />
       ))}
 
-      {/* Shooting comets (4) */}
-      {Array.from({ length: COMET_COUNT }, (_, i) => (
-        <div
-          key={`sc-${i}`}
-          className={`shooting-star shooting-star-${i + 1}`}
-          aria-hidden="true"
-        />
-      ))}
+      {/* Shooting stars (4) — rotated field creates diagonal movement */}
+      <div className="shooting-star-field" aria-hidden="true">
+        {Array.from({ length: COMET_COUNT }, (_, i) => (
+          <div key={`sc-${i}`} className={`shooting-star shooting-star-${i + 1}`} />
+        ))}
+      </div>
     </>
   );
 }

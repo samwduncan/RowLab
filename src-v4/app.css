@@ -227,87 +227,37 @@
   }
 }
 
-@keyframes shoot-comet-1 {
+/* Shooting star keyframes — Nakaya technique: tail width animates, translateX moves the star */
+@keyframes shooting-tail {
   0% {
-    transform: translateX(-600px) rotate(-8deg);
-    opacity: 0;
-  }
-  3% {
-    opacity: 0.8;
-  }
-  28% {
-    opacity: 0.9;
-  }
-  38% {
-    transform: translateX(calc(100vw + 200px)) rotate(-8deg);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(calc(100vw + 200px)) rotate(-8deg);
-    opacity: 0;
-  }
-}
-
-@keyframes shoot-comet-2 {
-  0% {
-    transform: translateX(-600px) rotate(-12deg);
-    opacity: 0;
-  }
-  2% {
-    opacity: 0.7;
-  }
-  22% {
-    opacity: 0.8;
-  }
-  32% {
-    transform: translateX(calc(100vw + 200px)) rotate(-12deg);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(calc(100vw + 200px)) rotate(-12deg);
-    opacity: 0;
-  }
-}
-
-@keyframes shoot-comet-3 {
-  0% {
-    transform: translateX(-600px) rotate(-5deg);
-    opacity: 0;
-  }
-  3% {
-    opacity: 0.6;
-  }
-  25% {
-    opacity: 0.7;
-  }
-  35% {
-    transform: translateX(calc(100vw + 200px)) rotate(-5deg);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(calc(100vw + 200px)) rotate(-5deg);
-    opacity: 0;
-  }
-}
-
-@keyframes shoot-comet-4 {
-  0% {
-    transform: translateX(-600px) rotate(-14deg);
-    opacity: 0;
-  }
-  2% {
-    opacity: 0.75;
-  }
-  20% {
-    opacity: 0.85;
+    width: 0;
   }
   30% {
-    transform: translateX(calc(100vw + 200px)) rotate(-14deg);
-    opacity: 0;
+    width: 80px;
   }
   100% {
-    transform: translateX(calc(100vw + 200px)) rotate(-14deg);
-    opacity: 0;
+    width: 0;
+  }
+}
+
+@keyframes shooting-flare {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 20px;
+  }
+  100% {
+    width: 0;
+  }
+}
+
+@keyframes shooting-move {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(300px);
   }
 }
 
@@ -504,83 +454,108 @@
   animation: twinkle-bright 6s ease-in-out infinite 1.6s;
 }
 
-/* --- Shooting Comets --- */
-.shooting-star {
+/* --- Shooting Stars (Nakaya technique) ---
+   Container is rotated so translateX creates diagonal movement.
+   The star body's width animates (tail grows & shrinks).
+   ::before and ::after create a cross-flare at the head.
+*/
+.shooting-star-field {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
+  inset: 0;
   pointer-events: none;
   z-index: 2;
+  transform: rotateZ(45deg);
+  overflow: hidden;
 }
 
-/* Comet head */
+.shooting-star {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 1.5px;
+  background: linear-gradient(-45deg, oklch(0.72 0.08 195 / 0.55), oklch(0.72 0.08 195 / 0));
+  border-radius: 999px;
+  filter: drop-shadow(0 0 4px oklch(0.65 0.1 195 / 0.4));
+  animation:
+    shooting-tail 3s ease-in-out infinite,
+    shooting-move 3s ease-in-out infinite;
+}
+
+/* Flare cross — vertical arm */
 .shooting-star::before {
   content: '';
   position: absolute;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: oklch(0.95 0.01 195);
-  filter: drop-shadow(0 0 4px oklch(0.85 0.02 195 / 0.8))
-    drop-shadow(0 0 8px oklch(0.65 0.04 195 / 0.4)) drop-shadow(0 0 16px oklch(0.55 0.06 195 / 0.2));
+  top: calc(50% - 1px);
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    -45deg,
+    oklch(0.72 0.08 195 / 0),
+    oklch(0.85 0.05 195 / 0.5),
+    oklch(0.72 0.08 195 / 0)
+  );
+  transform: translateX(50%) rotateZ(45deg);
+  border-radius: 100%;
+  animation: shooting-flare 3s ease-in-out infinite;
 }
 
-/* Comet trail */
+/* Flare cross — horizontal arm */
 .shooting-star::after {
   content: '';
   position: absolute;
-  top: 0;
-  right: 3px;
-  height: 1.5px;
+  top: calc(50% - 1px);
+  right: 0;
+  height: 2px;
   background: linear-gradient(
-    90deg,
-    oklch(0.7 0.05 195 / 0.7) 0%,
-    oklch(0.55 0.04 195 / 0.35) 35%,
-    transparent 100%
+    -45deg,
+    oklch(0.72 0.08 195 / 0),
+    oklch(0.85 0.05 195 / 0.5),
+    oklch(0.72 0.08 195 / 0)
   );
-  filter: blur(1.2px);
-  mask-image: linear-gradient(90deg, transparent 0%, black 12%, black 75%, transparent 100%);
-  -webkit-mask-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    black 12%,
-    black 75%,
-    transparent 100%
-  );
+  transform: translateX(50%) rotateZ(-45deg);
+  border-radius: 100%;
+  animation: shooting-flare 3s ease-in-out infinite;
 }
 
+/* Stagger each star's position and delay — spread across viewport */
 .shooting-star-1 {
-  top: 15%;
-  animation: shoot-comet-1 12s var(--ease-comet) infinite 0s;
+  top: calc(50% - 220px);
+  left: calc(50% - 150px);
+  animation-delay: 1s;
 }
+.shooting-star-1::before,
 .shooting-star-1::after {
-  width: 180px;
+  animation-delay: 1s;
 }
 
 .shooting-star-2 {
-  top: 35%;
-  animation: shoot-comet-2 14s var(--ease-comet) infinite 4s;
+  top: calc(50% + 80px);
+  left: calc(50% - 280px);
+  animation-delay: 7s;
 }
+.shooting-star-2::before,
 .shooting-star-2::after {
-  width: 150px;
+  animation-delay: 7s;
 }
 
 .shooting-star-3 {
-  top: 55%;
-  animation: shoot-comet-3 10s var(--ease-comet) infinite 7s;
+  top: calc(50% - 100px);
+  left: calc(50% + 180px);
+  animation-delay: 13s;
 }
+.shooting-star-3::before,
 .shooting-star-3::after {
-  width: 220px;
+  animation-delay: 13s;
 }
 
 .shooting-star-4 {
-  top: 75%;
-  animation: shoot-comet-4 16s var(--ease-comet) infinite 13s;
+  top: calc(50% + 200px);
+  left: calc(50% - 60px);
+  animation-delay: 19s;
 }
+.shooting-star-4::before,
 .shooting-star-4::after {
-  width: 120px;
+  animation-delay: 19s;
 }
 
 /* ================================================================
@@ -815,11 +790,7 @@ html {
   .nebula-2,
   .twinkle-star,
   .twinkle-star-lg,
-  .shooting-star {
-    animation: none !important;
-  }
-
-  .shooting-star {
+  .shooting-star-field {
     display: none;
   }
 
