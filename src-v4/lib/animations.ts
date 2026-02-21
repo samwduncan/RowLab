@@ -1,45 +1,38 @@
 /**
- * Motion animation presets for consistent animations across the app.
+ * oarbit motion animation presets.
  * Uses `motion` package (v12+) — import from 'motion/react'.
  *
- * Spring configs define the physics of motion.
+ * Spring configs align with design-system/tokens.ts motion tokens.
  * Transition presets are ready-to-spread motion component props.
  */
 
 import type { Transition, Variant } from 'motion/react';
+import { motion as motionTokens } from '@/design-system';
 
-/* === SPRING CONFIGS === */
+/* === SPRING CONFIGS (from design system) === */
 
-/** Smooth, natural motion for most UI transitions */
+/** Standard: panel open/close, dropdown, accordion */
 export const SPRING_SMOOTH: Transition = {
   type: 'spring',
-  stiffness: 300,
-  damping: 30,
-  mass: 0.8,
+  ...motionTokens.spring.standard,
 };
 
-/** Quick, snappy for micro-interactions (toggles, buttons) */
+/** Snap: button press, toggle flip, checkbox */
 export const SPRING_SNAPPY: Transition = {
   type: 'spring',
-  stiffness: 500,
-  damping: 35,
-  mass: 0.5,
+  ...motionTokens.spring.snap,
 };
 
-/** Gentle, relaxed for larger elements (modals, panels) */
+/** Flow: page transitions, modal entrance */
 export const SPRING_GENTLE: Transition = {
   type: 'spring',
-  stiffness: 200,
-  damping: 25,
-  mass: 1,
+  ...motionTokens.spring.flow,
 };
 
-/** Dramatic entrance for hero elements */
-export const SPRING_DRAMATIC: Transition = {
+/** Data: number count-up, chart draw-in (zero overshoot) */
+export const SPRING_DATA: Transition = {
   type: 'spring',
-  stiffness: 180,
-  damping: 20,
-  mass: 1.2,
+  ...motionTokens.spring.data,
 };
 
 /* === TRANSITION PRESETS === */
@@ -58,12 +51,12 @@ export const slideUp = {
   transition: SPRING_SMOOTH,
 } as const;
 
-/** Dramatic entrance with deeper offset — for hero/feature elements */
+/** Deeper offset for hero/feature elements */
 export const slideUpDramatic = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: 12 },
-  transition: SPRING_DRAMATIC,
+  transition: SPRING_GENTLE,
 } as const;
 
 export const slideInFromLeft = {
@@ -82,13 +75,13 @@ export const scaleIn = {
 
 /* === CARD INTERACTION PRESETS === */
 
-/** Hover state for interactive cards -- subtle upward lift */
+/** Hover state for interactive cards — subtle upward lift */
 export const cardHover = {
   y: -2,
   transition: { type: 'spring', stiffness: 400, damping: 25 } as Transition,
 } as const;
 
-/** Tap/active state for interactive cards -- press down effect */
+/** Tap/active state for interactive cards — press down effect */
 export const cardTap = {
   y: 0,
   scale: 0.99,
@@ -120,7 +113,7 @@ export const listContainerVariants: Record<string, Variant> = {
   },
 };
 
-/** Dramatic stagger for feature sections — deeper Y offset */
+/** Dramatic stagger for feature sections */
 export const dramaticContainerVariants: Record<string, Variant> = {
   hidden: { opacity: 0 },
   visible: {
@@ -137,7 +130,7 @@ export const dramaticItemVariants: Record<string, Variant> = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: SPRING_DRAMATIC,
+    transition: SPRING_GENTLE,
   },
 };
 
@@ -147,5 +140,5 @@ export const pageTransition = {
   initial: { opacity: 0, y: 6 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -4 },
-  transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
+  transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] },
 } as const;
