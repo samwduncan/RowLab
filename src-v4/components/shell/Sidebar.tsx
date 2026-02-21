@@ -87,7 +87,7 @@ export function Sidebar() {
         {/* App wordmark */}
         <div className="flex h-14 items-center px-5">
           <span className="font-display text-lg font-bold tracking-tight text-text-bright">
-            Row<span className="text-accent-teal">Lab</span>
+            oar<span className="text-accent-teal">bit</span>
           </span>
         </div>
 

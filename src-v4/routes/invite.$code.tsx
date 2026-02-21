@@ -164,7 +164,7 @@ function InviteClaimPage() {
           <GlassCard padding="lg" className="rounded-2xl text-center">
             <div className="mb-6">
               <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
-                Row<span className="text-accent-teal">Lab</span>
+                oar<span className="text-accent-teal">bit</span>
               </h1>
             </div>
             <div className="flex flex-col gap-3">
@@ -249,7 +249,7 @@ function NewInviteClaimCard({
         <GlassCard padding="lg" className="rounded-2xl text-center">
           <div className="mb-6">
             <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
-              Row<span className="text-accent-teal">Lab</span>
+              oar<span className="text-accent-teal">bit</span>
             </h1>
           </div>
 
@@ -323,7 +323,7 @@ function LegacyInviteClaimCard({
         <GlassCard padding="lg" className="rounded-2xl text-center">
           <div className="mb-6">
             <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
-              Row<span className="text-accent-teal">Lab</span>
+              oar<span className="text-accent-teal">bit</span>
             </h1>
           </div>
 

@@ -205,7 +205,7 @@ export function CreateTeamWizard() {
       {/* Header */}
       <div className="mb-6 text-center">
         <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
-          Row<span className="text-accent-teal">Lab</span>
+          oar<span className="text-accent-teal">bit</span>
         </h1>
         <p className="mt-1 text-sm text-text-dim">Create your team</p>
       </div>
