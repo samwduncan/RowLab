@@ -1,16 +1,17 @@
 /**
- * Card component — oarbit design system.
+ * Card component — oarbit Deep Voyager design system.
  *
- * Opaque void-raised background with border. NO panel/blur/transparency.
+ * Opaque void-surface background with border and floating shadow.
+ * Cards FLOAT above the starfield — shadow depth is mandatory.
  *
  * Variants:
- *   default     — bg-void-raised, border-edge-default, optional shadow-sm
- *   interactive — hover lift + shadow-md on hover
+ *   default     — void-surface bg, edge border, shadow-card (floating)
+ *   interactive — hover lift + deeper shadow on hover
  *   elevated    — bg-void-overlay, shadow-md (for modals/popovers)
  *   inset       — bg-void-deep, border-edge-default (recessed wells)
  *
  * Padding: none | sm (12px) | md (16px) | lg (24px)
- * Radius: radius-lg (8px)
+ * Radius: radius-lg (6px)
  *
  * Backward-compatible: also exported as GlassCard for migration.
  */
@@ -38,9 +39,9 @@ const paddingMap = {
 } as const;
 
 const variantClasses = {
-  default: 'bg-void-raised border border-edge-default rounded-[var(--radius-lg)]',
+  default: 'bg-void-surface border border-edge-default rounded-[var(--radius-lg)] shadow-card',
   interactive: [
-    'bg-void-raised border border-edge-default rounded-[var(--radius-lg)]',
+    'bg-void-surface border border-edge-default rounded-[var(--radius-lg)] shadow-card',
     'card-interactive hover-lift',
   ].join(' '),
   elevated: 'bg-void-overlay border border-edge-default rounded-[var(--radius-lg)] shadow-md',
