@@ -23,7 +23,7 @@ const MACHINE_DOT_COLORS: Record<string, string> = {
 
 function formatPace(tenths: number | null): string {
   if (!tenths) return '--';
-  const totalSeconds = tenths / 10;
+  const totalSeconds = Math.round(Number(tenths)) / 10;
   const min = Math.floor(totalSeconds / 60);
   const sec = Math.floor(totalSeconds % 60);
   return `${min}:${sec.toString().padStart(2, '0')}/500m`;
@@ -37,9 +37,10 @@ function formatDistance(meters: number | null): string {
 
 function formatDuration(seconds: number | null): string {
   if (!seconds) return '--';
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = seconds % 60;
+  const total = Math.round(Number(seconds));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
   if (h > 0) return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
