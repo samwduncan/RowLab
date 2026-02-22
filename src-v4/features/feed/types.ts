@@ -13,7 +13,7 @@ export interface FeedUser {
 export interface FeedItem {
   id: string;
   date: string;
-  source: string;
+  source: 'manual' | 'concept2_sync' | 'strava_sync' | 'garmin';
   machineType: string | null;
   distanceM: number | null;
   durationSeconds: number | null;
