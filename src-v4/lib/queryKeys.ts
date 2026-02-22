@@ -49,6 +49,11 @@ export const queryKeys = {
     volume: (filters: { range: string; granularity: string; metric: string }) =>
       [...queryKeys.analytics.all, 'volume', filters] as const,
   },
+  feed: {
+    all: ['feed'] as const,
+    list: (filters: { filter: string }) => [...queryKeys.feed.all, 'list', filters] as const,
+    followStats: () => [...queryKeys.feed.all, 'followStats'] as const,
+  },
   settings: {
     all: ['settings'] as const,
     user: () => [...queryKeys.settings.all, 'user'] as const,
