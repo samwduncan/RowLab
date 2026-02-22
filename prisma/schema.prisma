@@ -47,8 +47,45 @@ model User {
   shareCards             ShareCard[]
   notifications          Notification[]
   passwordResetTokens    PasswordResetToken[]
+  personalWorkouts       Workout[]             @relation("UserWorkouts")
+  followers              Follow[]              @relation("UserFollowing")
+  following              Follow[]              @relation("UserFollowers")
+  workoutLikes           WorkoutLike[]
 
   @@map("users")
+}
+
+// ============================================
+// SOCIAL: Follows and Likes
+// ============================================
+
+model Follow {
+  id          String   @id @default(uuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowing", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+  @@map("follows")
+}
+
+model WorkoutLike {
+  id        String   @id @default(uuid())
+  userId    String
+  workoutId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workout Workout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, workoutId])
+  @@index([workoutId])
+  @@map("workout_likes")
 }
 
 model Team {
@@ -435,10 +472,12 @@ model Workout {
   createdAt        DateTime @default(now())
 
   athlete     Athlete?            @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  user        User?               @relation("UserWorkouts", fields: [userId], references: [id], onDelete: SetNull)
   team        Team?               @relation(fields: [teamId], references: [id], onDelete: SetNull)
   telemetry   WorkoutTelemetry?
   completions WorkoutCompletion[]
   splits      WorkoutSplit[]
+  likes       WorkoutLike[]
 
   @@index([teamId])
   @@index([athleteId])
