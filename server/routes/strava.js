@@ -5,10 +5,12 @@
  * Following the same patterns as concept2.js
  */
 
+import express from 'express';
 import { Router } from 'express';
 import { authenticateToken as authenticate, optionalAuth } from '../middleware/auth.js';
 import stravaService from '../services/stravaService.js';
 import { verifyOAuthState } from '../utils/oauthState.js';
+import { verifyHmacSignature } from '../utils/encryption.js';
 import { prisma } from '../db/connection.js';
 
 const router = Router();
@@ -352,13 +354,48 @@ router.get('/webhook', (req, res) => {
 /**
  * POST /api/v1/strava/webhook
  * Event receiver - Strava sends activity create/update/delete events here.
- * Always responds 200 immediately (Strava retries on non-200), then processes async.
+ *
+ * Security: Validates HMAC signature via STRAVA_WEBHOOK_SECRET before processing.
+ * Uses express.raw() for raw body access needed by signature verification.
+ * Always responds 200 after verification passes (Strava retries on non-200).
  */
-router.post('/webhook', async (req, res) => {
-  // Always acknowledge receipt immediately
+router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  // Verify webhook signature if secret is configured
+  const webhookSecret = process.env.STRAVA_WEBHOOK_SECRET;
+
+  if (webhookSecret) {
+    const signature = req.headers['x-hub-signature'];
+    if (!signature) {
+      console.warn('Strava webhook: missing X-Hub-Signature header');
+      return res.status(401).json({
+        success: false,
+        error: { code: 'MISSING_SIGNATURE', message: 'Webhook signature required' },
+      });
+    }
+
+    const rawBody = Buffer.isBuffer(req.body) ? req.body.toString() : JSON.stringify(req.body);
+    if (!verifyHmacSignature(rawBody, signature, webhookSecret)) {
+      console.warn('Strava webhook: signature verification failed');
+      return res.status(401).json({
+        success: false,
+        error: { code: 'INVALID_SIGNATURE', message: 'Webhook signature verification failed' },
+      });
+    }
+  } else {
+    // No secret configured -- log warning but allow processing
+    // TODO(phase-54): Configure STRAVA_WEBHOOK_SECRET in production for webhook verification
+    console.warn(
+      'Strava webhook: STRAVA_WEBHOOK_SECRET not configured, skipping signature verification'
+    );
+  }
+
+  // Parse body if it was raw
+  const payload = Buffer.isBuffer(req.body) ? JSON.parse(req.body.toString()) : req.body;
+
+  // Acknowledge receipt immediately after verification
   res.status(200).json({ received: true });
 
-  const { object_type, object_id, aspect_type, owner_id } = req.body;
+  const { object_type, object_id, aspect_type, owner_id } = payload;
 
   // Only process activity events
   if (object_type !== 'activity') {
