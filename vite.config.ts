@@ -42,9 +42,16 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist-v4',
-    sourcemap: true,
+    sourcemap: false,
     rollupOptions: {
       input: path.resolve(__dirname, 'index.html'),
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom'],
+          router: ['@tanstack/react-router', '@tanstack/react-query'],
+          motion: ['motion/react'],
+        },
+      },
     },
   },
 });

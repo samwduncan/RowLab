@@ -415,22 +415,42 @@ export async function deleteUserWorkout(userId, workoutId) {
 export async function getUserStats(userId, range = 'all') {
   const athleteIds = await getAllUserAthleteIds(userId);
   const baseWhere = buildUserWorkoutWhere(userId, athleteIds);
+  const dateFilter = getDateFilter(range);
 
-  // Fetch all workouts for this user (all-time) with minimal fields
-  const allWorkouts = await prisma.workout.findMany({
-    where: baseWhere,
-    select: {
-      id: true,
-      date: true,
-      distanceM: true,
-      durationSeconds: true,
-      teamId: true,
-    },
-    orderBy: { date: 'desc' },
-  });
+  // Run aggregate queries + date-only fetch in parallel (avoids loading all workouts into memory)
+  const [allTimeAgg, rangeAgg, teamGroups, dateRows] = await Promise.all([
+    // All-time aggregate
+    prisma.workout.aggregate({
+      where: baseWhere,
+      _sum: { distanceM: true, durationSeconds: true },
+      _count: true,
+      _min: { date: true },
+    }),
+    // Range-filtered aggregate
+    dateFilter
+      ? prisma.workout.aggregate({
+          where: { AND: [baseWhere, { date: dateFilter }] },
+          _sum: { distanceM: true, durationSeconds: true },
+          _count: true,
+        })
+      : null,
+    // Per-team groupBy
+    prisma.workout.groupBy({
+      by: ['teamId'],
+      where: { AND: [baseWhere, { teamId: { not: null } }] },
+      _sum: { distanceM: true },
+      _count: true,
+    }),
+    // Only fetch dates for streak + active-day calculation
+    prisma.workout.findMany({
+      where: baseWhere,
+      select: { date: true },
+      orderBy: { date: 'desc' },
+    }),
+  ]);
 
   // Empty state
-  if (allWorkouts.length === 0) {
+  if (allTimeAgg._count === 0) {
     return {
       allTime: {
         totalMeters: 0,
@@ -445,56 +465,45 @@ export async function getUserStats(userId, range = 'all') {
     };
   }
 
-  // All-time stats
-  const totalMeters = allWorkouts.reduce((sum, w) => sum + (w.distanceM || 0), 0);
-  const totalDurationSeconds = allWorkouts.reduce(
-    (sum, w) => sum + (Number(w.durationSeconds) || 0),
-    0
-  );
-  const allDates = allWorkouts.map((w) => w.date);
+  const allDates = dateRows.map((w) => w.date);
   const uniqueAllDays = new Set(allDates.map((d) => d.toISOString().split('T')[0]));
-  const firstWorkoutDate = allWorkouts[allWorkouts.length - 1].date.toISOString();
 
-  // Range-filtered stats
-  const dateFilter = getDateFilter(range);
-  let rangeWorkouts = allWorkouts;
+  // Range active days (filter dates in JS — cheaper than a separate query)
+  let uniqueRangeDays;
   if (dateFilter) {
-    rangeWorkouts = allWorkouts.filter((w) => w.date >= dateFilter.gte);
+    uniqueRangeDays = new Set(
+      allDates.filter((d) => d >= dateFilter.gte).map((d) => d.toISOString().split('T')[0])
+    );
+  } else {
+    uniqueRangeDays = uniqueAllDays;
   }
-  const rangeMeters = rangeWorkouts.reduce((sum, w) => sum + (w.distanceM || 0), 0);
-  const rangeDurationSeconds = rangeWorkouts.reduce(
-    (sum, w) => sum + (Number(w.durationSeconds) || 0),
-    0
-  );
-  const uniqueRangeDays = new Set(rangeWorkouts.map((w) => w.date.toISOString().split('T')[0]));
 
   // Per-team breakdown
   const byTeam = {};
-  for (const w of allWorkouts) {
-    if (w.teamId) {
-      if (!byTeam[w.teamId]) {
-        byTeam[w.teamId] = { totalMeters: 0, workoutCount: 0 };
-      }
-      byTeam[w.teamId].totalMeters += w.distanceM || 0;
-      byTeam[w.teamId].workoutCount++;
+  for (const g of teamGroups) {
+    if (g.teamId) {
+      byTeam[g.teamId] = {
+        totalMeters: g._sum.distanceM || 0,
+        workoutCount: g._count,
+      };
     }
   }
 
-  // Streak
   const streak = calculateStreak(allDates);
+  const effectiveRange = rangeAgg || allTimeAgg;
 
   return {
     allTime: {
-      totalMeters,
-      totalDurationSeconds,
-      workoutCount: allWorkouts.length,
+      totalMeters: allTimeAgg._sum.distanceM || 0,
+      totalDurationSeconds: Number(allTimeAgg._sum.durationSeconds) || 0,
+      workoutCount: allTimeAgg._count,
       activeDays: uniqueAllDays.size,
-      firstWorkoutDate,
+      firstWorkoutDate: allTimeAgg._min.date?.toISOString() || null,
     },
     range: {
-      meters: rangeMeters,
-      durationSeconds: rangeDurationSeconds,
-      workouts: rangeWorkouts.length,
+      meters: effectiveRange._sum.distanceM || 0,
+      durationSeconds: Number(effectiveRange._sum.durationSeconds) || 0,
+      workouts: effectiveRange._count,
       activeDays: uniqueRangeDays.size,
       period: range,
     },
@@ -767,60 +776,73 @@ function findBestSplitWindow(splits, targetDistanceM, workoutAvgWatts) {
 
 /**
  * Scan all user workouts with splits to find best-split PRs.
- * Only scans workouts longer than the target distance.
+ * Single query fetches all qualifying workouts, then processes in-memory.
  *
  * @param {object} baseWhere - Prisma WHERE clause for user's workouts
  * @returns {Promise<object>} - { rower: { '500m': {...}, ... }, bikerg: { ... } }
  */
 async function scanBestSplitPRs(baseWhere) {
+  // Single query: all erg workouts with splits for relevant machine types
+  const allWorkouts = await prisma.workout.findMany({
+    where: {
+      AND: [
+        baseWhere,
+        { type: 'erg' },
+        { machineType: { in: ['rower', 'skierg', 'bikerg'] } },
+        { distanceM: { gt: 500 } },
+      ],
+    },
+    select: {
+      id: true,
+      date: true,
+      distanceM: true,
+      avgWatts: true,
+      machineType: true,
+      splits: {
+        select: { distanceM: true, timeSeconds: true, watts: true, splitNumber: true },
+        orderBy: { splitNumber: 'asc' },
+      },
+    },
+  });
+
+  // Group by machine type for efficient lookup
+  const byMachine = {};
+  for (const w of allWorkouts) {
+    const mt = w.machineType || 'rower';
+    if (!byMachine[mt]) byMachine[mt] = [];
+    byMachine[mt].push(w);
+  }
+
   const results = {};
 
   for (const [machineType, distances] of Object.entries(BEST_SPLIT_DISTANCES)) {
     results[machineType] = {};
+    const machineWorkouts = byMachine[machineType] || [];
 
     for (const [label, targetM] of Object.entries(distances)) {
-      // Find workouts longer than the target distance with splits
-      const workouts = await prisma.workout.findMany({
-        where: {
-          AND: [baseWhere, { type: 'erg' }, { machineType }, { distanceM: { gt: targetM } }],
-        },
-        select: {
-          id: true,
-          date: true,
-          distanceM: true,
-          avgWatts: true,
-          splits: {
-            select: { distanceM: true, timeSeconds: true, watts: true, splitNumber: true },
-            orderBy: { splitNumber: 'asc' },
-          },
-        },
-      });
-
       let bestTime = Infinity;
       let bestRecord = null;
 
-      for (const workout of workouts) {
+      for (const workout of machineWorkouts) {
+        if (workout.distanceM <= targetM) continue;
         if (workout.splits.length < 2) continue;
 
         const result = findBestSplitWindow(workout.splits, targetM, workout.avgWatts);
         if (result && result.timeSeconds < bestTime) {
           bestTime = result.timeSeconds;
           bestRecord = {
-            time: Math.round(result.timeSeconds * 10), // tenths for consistency
+            time: Math.round(result.timeSeconds * 10),
             date: workout.date.toISOString(),
             workoutId: workout.id,
             workoutDistanceM: workout.distanceM,
-            watts: null, // computed below
+            watts: null,
           };
         }
       }
 
       if (bestRecord) {
-        // Compute watts from the best split time
         const paceTenths = Math.round(bestRecord.time / (targetM / 500));
         bestRecord.watts = wattsFromPace(paceTenths, machineType);
-
-        // Sanity: discard results with impossible wattage (>700W = beyond world records)
         if (bestRecord.watts > 700) {
           bestRecord = null;
         }
@@ -1022,25 +1044,7 @@ export async function getUserPRs(userId) {
       orderBy: { testDate: 'desc' },
     });
 
-    // Also query ALL non-rower erg workouts (any distance) to build exclusion set
-    const nonRowerWorkouts = await prisma.workout.findMany({
-      where: {
-        AND: [
-          baseWhere,
-          { type: 'erg' },
-          { machineType: { not: 'rower' } },
-          { machineType: { not: null } },
-        ],
-      },
-      select: { distanceM: true, date: true, durationSeconds: true },
-    });
-
-    // Build exclusion set: date + distance of all non-rower workouts
-    for (const w of nonRowerWorkouts) {
-      if (w.distanceM && w.date) {
-        nonRowerDayDistance.add(`${w.date.toISOString().slice(0, 10)}-${w.distanceM}`);
-      }
-    }
+    // nonRowerDayDistance set was already populated during the ergWorkouts loop above
 
     for (const test of ergTests) {
       const tt = test.testType;

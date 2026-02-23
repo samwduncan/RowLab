@@ -182,7 +182,7 @@ export const motion = {
   spring: {
     snap: { stiffness: 400, damping: 30, mass: 0.8 },
     standard: { stiffness: 250, damping: 25, mass: 1.0 },
-    flow: { stiffness: 120, damping: 20, mass: 1.0 },
+    flow: { stiffness: 160, damping: 28, mass: 1.0 },
     data: { stiffness: 300, damping: 35, mass: 1.0 },
   },
 

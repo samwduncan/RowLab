@@ -6,13 +6,6 @@
  *   Mobile:  CompactHero → SocialFeed → Sidebar sections
  */
 import { motion } from 'motion/react';
-import {
-  dramaticContainerVariants,
-  dramaticItemVariants,
-  listContainerVariants,
-  listItemVariants,
-  SPRING_SMOOTH,
-} from '@/lib/animations';
 import { SectionDivider } from '@/components/ui/SectionDivider';
 import { CompactHero } from './CompactHero';
 import { MiniProfileCard } from './MiniProfileCard';
@@ -39,65 +32,41 @@ export function DashboardContent({
   teamContext,
 }: DashboardContentProps) {
   return (
-    <div className="mx-auto max-w-[1100px] px-4 sm:px-8 pb-20 md:pb-6 pt-6">
-      <motion.div variants={dramaticContainerVariants} initial="hidden" animate="visible">
-        {/* Compact Hero — full width */}
-        <motion.div variants={dramaticItemVariants}>
-          <CompactHero userName={userName} stats={data.stats} />
-        </motion.div>
+    <motion.div
+      className="mx-auto max-w-[1100px] px-4 sm:px-8 pb-20 md:pb-6 pt-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.15 }}
+    >
+      {/* Compact Hero — full width */}
+      <CompactHero userName={userName} stats={data.stats} />
 
-        {/* Two-column layout: Feed + Sidebar */}
-        <div className="mt-6 flex flex-col lg:flex-row gap-6">
-          {/* Main feed column (~65%) */}
-          <motion.div
-            className="w-full lg:w-[65%] min-w-0"
-            variants={listContainerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <motion.div variants={listItemVariants} transition={SPRING_SMOOTH}>
-              <SocialFeed />
-            </motion.div>
-          </motion.div>
-
-          {/* Sidebar column (~35%) */}
-          <motion.div
-            className="w-full lg:w-[35%] space-y-4 lg:sticky lg:top-[80px] lg:self-start lg:max-h-[calc(100vh-96px)] lg:overflow-y-auto lg:scrollbar-thin"
-            variants={listContainerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <motion.div variants={listItemVariants} transition={SPRING_SMOOTH}>
-              <MiniProfileCard userName={userName} username={username} avatar={avatar} />
-            </motion.div>
-
-            <motion.div variants={listItemVariants} transition={SPRING_SMOOTH}>
-              <ThisWeekStats stats={data.stats} />
-            </motion.div>
-
-            {data.stats.streak.current > 0 && (
-              <motion.div variants={listItemVariants} transition={SPRING_SMOOTH}>
-                <StreakDisplay streak={data.stats.streak} />
-              </motion.div>
-            )}
-
-            <SectionDivider spacing="my-1" />
-
-            <motion.div variants={listItemVariants} transition={SPRING_SMOOTH}>
-              <PRHighlights records={data.prs.records} />
-            </motion.div>
-
-            {teamContext && (
-              <>
-                <SectionDivider spacing="my-1" />
-                <motion.div variants={listItemVariants} transition={SPRING_SMOOTH}>
-                  <TeamContext teamContext={teamContext} />
-                </motion.div>
-              </>
-            )}
-          </motion.div>
+      {/* Two-column layout: Feed + Sidebar */}
+      <div className="mt-6 flex flex-col lg:flex-row gap-6">
+        {/* Main feed column (~65%) */}
+        <div className="w-full lg:w-[65%] min-w-0">
+          <SocialFeed />
         </div>
-      </motion.div>
-    </div>
+
+        {/* Sidebar column (~35%) */}
+        <div className="w-full lg:w-[35%] space-y-4 lg:sticky lg:top-[80px] lg:self-start lg:max-h-[calc(100vh-96px)] lg:overflow-y-auto lg:scrollbar-thin">
+          <MiniProfileCard userName={userName} username={username} avatar={avatar} />
+          <ThisWeekStats stats={data.stats} />
+
+          {data.stats.streak.current > 0 && <StreakDisplay streak={data.stats.streak} />}
+
+          <SectionDivider spacing="my-1" />
+
+          <PRHighlights records={data.prs.records} />
+
+          {teamContext && (
+            <>
+              <SectionDivider spacing="my-1" />
+              <TeamContext teamContext={teamContext} />
+            </>
+          )}
+        </div>
+      </div>
+    </motion.div>
   );
 }

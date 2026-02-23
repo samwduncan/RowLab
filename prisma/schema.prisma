@@ -482,6 +482,7 @@ model Workout {
   @@index([teamId])
   @@index([athleteId])
   @@index([userId])
+  @@index([userId, type, machineType])
   @@map("workouts")
 }
 
