@@ -58,7 +58,7 @@ export function DashboardContent({ data, userName, avatar, teamContext }: Dashbo
 
           {/* Sidebar column (~35%) */}
           <motion.div
-            className="w-full lg:w-[35%] space-y-4 lg:sticky lg:top-[80px] lg:self-start"
+            className="w-full lg:w-[35%] space-y-4 lg:sticky lg:top-[80px] lg:self-start lg:max-h-[calc(100vh-96px)] lg:overflow-y-auto lg:scrollbar-thin"
             variants={listContainerVariants}
             initial="hidden"
             animate="visible"
