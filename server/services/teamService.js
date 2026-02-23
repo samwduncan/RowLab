@@ -284,10 +284,8 @@ export async function getTeamRoster(teamId) {
     avatarUrl: m.user.avatarUrl,
     role: m.role,
     joinedAt: m.createdAt,
-    recentActivity: {
-      lastWorkoutDate: lastWorkoutMap[m.userId] || null,
-      workoutsLast30Days: countMap[m.userId] || 0,
-    },
+    lastWorkoutDate: lastWorkoutMap[m.userId] || null,
+    workoutsLast30Days: countMap[m.userId] || 0,
   }));
 }
 
@@ -313,14 +311,12 @@ export async function getTeamAnnouncements(teamId) {
     title: a.title,
     content: a.content,
     priority: a.priority,
-    pinned: a.pinned,
+    isPinned: a.pinned,
     createdAt: a.createdAt,
     updatedAt: a.updatedAt,
-    author: {
-      id: a.author.id,
-      name: a.author.name,
-      avatarUrl: a.author.avatarUrl,
-    },
+    authorId: a.author.id,
+    authorName: a.author.name,
+    authorAvatarUrl: a.author.avatarUrl,
   }));
 }
 
@@ -367,13 +363,11 @@ export async function createAnnouncement({ teamId, userId, title, content, isPin
     title: announcement.title,
     content: announcement.content,
     priority: announcement.priority,
-    pinned: announcement.pinned,
+    isPinned: announcement.pinned,
     createdAt: announcement.createdAt,
-    author: {
-      id: announcement.author.id,
-      name: announcement.author.name,
-      avatarUrl: announcement.author.avatarUrl,
-    },
+    authorId: announcement.author.id,
+    authorName: announcement.author.name,
+    authorAvatarUrl: announcement.author.avatarUrl,
   };
 }
 
