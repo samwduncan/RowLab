@@ -63,6 +63,7 @@ import dashboardExceptionsRoutes from './routes/dashboardExceptions.js';
 import shareCardRoutes from './routes/shareCards.js';
 import notificationRoutes from './routes/notifications.js';
 import featureFlagRoutes from './routes/featureFlags.js';
+import ogRoutes from './routes/og.js';
 import userScopedRoutes from './routes/u/index.js';
 import { getStorageInfo } from './utils/storageMonitor.js';
 import { startBackgroundSync } from './services/backgroundSyncService.js';
@@ -174,6 +175,9 @@ app.use('/api/v1/dashboard', apiLimiter, dashboardExceptionsRoutes);
 app.use('/api/v1/share-cards', apiLimiter, shareCardRoutes);
 app.use('/api/v1/notifications', apiLimiter, notificationRoutes);
 app.use('/api/v1/teams/:teamId/feature-flags', apiLimiter, featureFlagRoutes);
+
+// Dynamic OG image generation (no auth, public, cached)
+app.use('/api/v1/og', ogRoutes);
 
 // User-scoped API routes (no team context required)
 app.use('/api/u', userScopedRoutes);
