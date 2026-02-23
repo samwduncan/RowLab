@@ -129,7 +129,7 @@ router.get('/callback', async (req, res) => {
             <h1>${success ? 'Connected!' : 'Connection Failed'}</h1>
             <p>${success ? 'You can close this window.' : escapeHtml(data.error) || 'Please try again.'}</p>
           </div>
-          <script>
+          <script nonce="${res.locals.cspNonce}">
             // Send message to opener window
             // Message is base64 encoded to prevent XSS
             if (window.opener) {

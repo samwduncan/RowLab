@@ -14,15 +14,23 @@ import cors from 'cors';
 
 /**
  * Helmet configuration for security headers
+ *
+ * CSP uses per-request nonces for scriptSrc instead of 'unsafe-inline'.
+ * The nonce is generated in server/index.js middleware (res.locals.cspNonce)
+ * and must be set BEFORE this middleware runs.
+ *
+ * In development, CSP is report-only to avoid breaking Vite HMR scripts.
+ * In production, CSP is enforced.
  */
 export const securityHeaders = helmet({
   contentSecurityPolicy: {
+    reportOnly: process.env.NODE_ENV !== 'production',
     directives: {
       defaultSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
       fontSrc: ["'self'", 'fonts.gstatic.com'],
       imgSrc: ["'self'", 'data:', 'blob:', 'https:'],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'", (req, res) => `'nonce-${res.locals.cspNonce}'`],
       connectSrc: [
         "'self'",
         'http://localhost:*',

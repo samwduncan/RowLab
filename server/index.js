@@ -4,6 +4,7 @@ import { createServer } from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs/promises';
+import crypto from 'crypto';
 import cookieParser from 'cookie-parser';
 
 // Routes
@@ -94,6 +95,12 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 // Trust proxy for rate limiting behind reverse proxy (nginx, cloudflare, etc.)
 // Setting to 1 trusts the first proxy
 app.set('trust proxy', 1);
+
+// Generate per-request CSP nonce (must run before Helmet so nonce is available for CSP directive)
+app.use((req, res, next) => {
+  res.locals.cspNonce = crypto.randomBytes(16).toString('base64');
+  next();
+});
 
 // Security middleware
 app.use(securityHeaders);
