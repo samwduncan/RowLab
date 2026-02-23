@@ -66,7 +66,7 @@ const EVENT_CONFIG: Record<ActivityEventType, EventConfig> = {
     icon: Megaphone,
     iconColor: 'text-accent-teal',
     iconBg: 'bg-accent-teal/10',
-    borderColor: 'border-l-accent/60',
+    borderColor: 'border-l-accent-teal/60',
     verb: (e) => {
       const truncated = e.title.length > 50 ? e.title.slice(0, 47) + '...' : e.title;
       return ` posted: "${truncated}"`;
@@ -88,9 +88,9 @@ const EVENT_CONFIG: Record<ActivityEventType, EventConfig> = {
   },
   invite_generated: {
     icon: Link2,
-    iconColor: 'text-accent-teal-primary',
-    iconBg: 'bg-accent-teal-primary/10',
-    borderColor: 'border-l-accent-primary/60',
+    iconColor: 'text-accent-teal',
+    iconBg: 'bg-accent-teal/10',
+    borderColor: 'border-l-accent-teal/60',
     verb: () => ' generated an invite link',
   },
   workout: {

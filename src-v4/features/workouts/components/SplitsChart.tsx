@@ -52,8 +52,8 @@ type ChartMode = 'bar' | 'line';
 /* Constants                                                           */
 /* ------------------------------------------------------------------ */
 
-const COPPER = 'var(--color-accent)';
-const BLUE = 'var(--color-accent-primary)';
+const COPPER = 'var(--color-accent-teal)';
+const BLUE = 'var(--color-machine-otw)';
 const REST_COLOR = 'var(--color-text-faint)';
 const GRID_COLOR = 'var(--color-edge-default)';
 const TICK_COLOR = 'var(--color-text-faint)';

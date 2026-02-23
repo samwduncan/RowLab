@@ -29,7 +29,7 @@ function RowingIllustration() {
       {/* Water wave lines */}
       <path
         d="M 10 110 Q 50 95 100 110 Q 150 125 190 110"
-        className="stroke-accent"
+        className="stroke-accent-teal"
         strokeWidth="2"
         strokeLinecap="round"
         opacity="0.6"
@@ -43,7 +43,7 @@ function RowingIllustration() {
       </path>
       <path
         d="M 20 125 Q 60 113 110 125 Q 160 137 195 125"
-        className="stroke-accent"
+        className="stroke-accent-teal"
         strokeWidth="1.5"
         strokeLinecap="round"
         opacity="0.3"
@@ -59,7 +59,7 @@ function RowingIllustration() {
       {/* Boat hull — sleek racing shell shape */}
       <path
         d="M 30 100 Q 100 92 170 100 L 185 104 Q 100 108 15 104 Z"
-        className="fill-void-raised stroke-accent"
+        className="fill-void-raised stroke-accent-teal"
         strokeWidth="1.5"
       />
 
@@ -84,12 +84,18 @@ function RowingIllustration() {
       />
 
       {/* Rower silhouette — abstract geometric figure */}
-      <circle cx="100" cy="62" r="8" className="fill-void-raised stroke-accent" strokeWidth="1.5">
+      <circle
+        cx="100"
+        cy="62"
+        r="8"
+        className="fill-void-raised stroke-accent-teal"
+        strokeWidth="1.5"
+      >
         <animate attributeName="cy" values="62;60;62" dur="3s" repeatCount="indefinite" />
       </circle>
       <path
         d="M 92 72 L 100 90 L 108 72"
-        className="fill-void-raised stroke-accent"
+        className="fill-void-raised stroke-accent-teal"
         strokeWidth="1.5"
         strokeLinejoin="round"
       >
@@ -107,7 +113,7 @@ function RowingIllustration() {
         y1="98"
         x2="25"
         y2="98"
-        className="stroke-accent"
+        className="stroke-accent-teal"
         strokeWidth="1"
         opacity="0.4"
         strokeLinecap="round"
@@ -119,7 +125,7 @@ function RowingIllustration() {
         y1="103"
         x2="18"
         y2="103"
-        className="stroke-accent"
+        className="stroke-accent-teal"
         strokeWidth="1"
         opacity="0.3"
         strokeLinecap="round"

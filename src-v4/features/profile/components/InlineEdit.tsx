@@ -74,7 +74,7 @@ export function InlineEdit({
 
   if (isEditing) {
     const isMultiline = Tag === 'p';
-    const sharedClasses = `w-full bg-transparent outline-none ring-1 ring-accent/30 rounded-md px-2 py-1 ${className}`;
+    const sharedClasses = `w-full bg-transparent outline-none ring-1 ring-accent-teal/30 rounded-md px-2 py-1 ${className}`;
 
     if (isMultiline) {
       return (

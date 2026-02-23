@@ -105,7 +105,7 @@ export function SessionList({ sessions, isLoading, selectedId, onSelect }: Sessi
                 w-full text-left p-4 rounded-xl panel transition-all
                 ${
                   isSelected
-                    ? 'ring-1 ring-accent shadow-glow-accent/30'
+                    ? 'ring-1 ring-accent-teal shadow-focus'
                     : 'hover:bg-void-overlay/30 hover:shadow-lg'
                 }
               `.trim()}

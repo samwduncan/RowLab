@@ -18,19 +18,22 @@ import type { Workout } from '../types';
 
 /** Map SPORT_CONFIG color tokens to CSS variable references. */
 const colorToCssVar: Record<string, string> = {
-  'accent': 'var(--color-accent)',
+  'machine-rower': 'var(--color-machine-rower)',
+  'machine-bike': 'var(--color-machine-bike)',
+  'machine-ski': 'var(--color-machine-ski)',
+  'machine-otw': 'var(--color-machine-otw)',
   'data-good': 'var(--color-data-good)',
   'data-warning': 'var(--color-data-warning)',
   'data-excellent': 'var(--color-data-excellent)',
-  'accent-primary': 'var(--color-accent-primary)',
   'data-poor': 'var(--color-data-poor)',
   'text-dim': 'var(--color-text-dim)',
+  'accent-teal': 'var(--color-accent-teal)',
 };
 
 function getSportColor(workout: Workout): string {
   const sport = getSportFromWorkout(workout);
   const token = SPORT_CONFIG[sport].color;
-  return colorToCssVar[token] ?? 'var(--color-accent)';
+  return colorToCssVar[token] ?? 'var(--color-accent-teal)';
 }
 
 /** Intensity level from average watts. */
@@ -72,9 +75,7 @@ function getWorkoutLabel(workout: Workout): string {
 
 function MetricChip({ children }: { children: React.ReactNode }) {
   return (
-    <span className="text-xs bg-void-deep px-2 py-0.5 rounded-md text-text-dim">
-      {children}
-    </span>
+    <span className="text-xs bg-void-deep px-2 py-0.5 rounded-md text-text-dim">{children}</span>
   );
 }
 

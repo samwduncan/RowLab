@@ -302,7 +302,7 @@ function AnnouncementCompose({ teamId }: { teamId: string }) {
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full rounded-lg bg-void-deep/50 px-3 py-2 text-sm text-text-bright placeholder:text-text-faint outline-none focus:ring-1 focus:ring-accent/50"
+          className="w-full rounded-lg bg-void-deep/50 px-3 py-2 text-sm text-text-bright placeholder:text-text-faint outline-none focus:ring-1 focus:ring-accent-teal/50"
           autoFocus
         />
         <textarea
@@ -310,7 +310,7 @@ function AnnouncementCompose({ teamId }: { teamId: string }) {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           rows={3}
-          className="w-full resize-none rounded-lg bg-void-deep/50 px-3 py-2 text-sm text-text-bright placeholder:text-text-faint outline-none focus:ring-1 focus:ring-accent/50"
+          className="w-full resize-none rounded-lg bg-void-deep/50 px-3 py-2 text-sm text-text-bright placeholder:text-text-faint outline-none focus:ring-1 focus:ring-accent-teal/50"
         />
         <div className="flex items-center justify-end gap-2">
           <button

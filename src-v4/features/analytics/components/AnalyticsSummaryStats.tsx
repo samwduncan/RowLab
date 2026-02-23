@@ -170,9 +170,9 @@ export function AnalyticsSummaryStats({
   // Resolve accent colors via CSS variables for Recharts SVG props
   const style = getComputedStyle(document.documentElement);
   const greenColor = style.getPropertyValue('--color-data-good').trim() || 'oklch(0.62 0.17 255)';
-  const blueColor =
-    style.getPropertyValue('--color-accent-primary').trim() || 'oklch(0.55 0.18 255)';
-  const copperColor = style.getPropertyValue('--color-accent').trim() || 'oklch(0.62 0.12 55)';
+  const blueColor = style.getPropertyValue('--color-accent-teal').trim() || 'oklch(0.55 0.06 195)';
+  const copperColor =
+    style.getPropertyValue('--color-accent-teal').trim() || 'oklch(0.55 0.06 195)';
   const amberColor = style.getPropertyValue('--color-data-warning').trim() || 'oklch(0.75 0.14 75)';
 
   return (

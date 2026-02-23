@@ -85,7 +85,7 @@ export function Button({
         inline-flex items-center justify-center font-medium
         rounded-[var(--radius-sm)]
         transition-all duration-150 ease-out
-        focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2
+        focus-visible:outline-2 focus-visible:outline-accent-teal focus-visible:outline-offset-2
         disabled:opacity-50 disabled:pointer-events-none
         cursor-pointer
         ${variantStyles[variant]}

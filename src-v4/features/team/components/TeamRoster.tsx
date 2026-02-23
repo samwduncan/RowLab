@@ -55,7 +55,7 @@ export function TeamRoster({ teamId }: TeamRosterProps) {
           placeholder="Search members..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-xl bg-void-deep/50 py-2.5 pl-10 pr-4 text-sm text-text-bright placeholder:text-text-faint outline-none transition-colors focus:ring-1 focus:ring-accent/50"
+          className="w-full rounded-xl bg-void-deep/50 py-2.5 pl-10 pr-4 text-sm text-text-bright placeholder:text-text-faint outline-none transition-colors focus:ring-1 focus:ring-accent-teal/50"
         />
       </div>
 

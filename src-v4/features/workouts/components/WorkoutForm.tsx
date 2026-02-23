@@ -296,7 +296,7 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
                 onClick={() => setValue('sport', sport)}
                 className={`flex flex-col items-center gap-1 min-w-[60px] py-2 px-2 rounded-lg text-xs transition-all shrink-0 ${
                   isActive
-                    ? 'bg-void-raised ring-2 ring-accent text-text-bright'
+                    ? 'bg-void-raised ring-2 ring-accent-teal text-text-bright'
                     : 'bg-void-deep text-text-dim hover:bg-void-overlay hover:text-text-default'
                 }`}
               >

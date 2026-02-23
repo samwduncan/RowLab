@@ -32,7 +32,7 @@ import type { VolumeBucket, VolumeMetric, VolumeGranularity } from '../types';
 
 const GRID_COLOR = 'var(--color-edge-default)';
 const TICK_COLOR = 'var(--color-text-faint)';
-const ROLLING_AVG_COLOR = 'var(--color-accent)';
+const ROLLING_AVG_COLOR = 'var(--color-accent-teal)';
 
 // SPORT_COLORS removed: was unused (resolveSportColors() used instead for SVG gradients)
 
@@ -42,7 +42,7 @@ function resolveSportColors(): Record<string, string> {
   return Object.fromEntries(
     Object.entries(SPORT_CONFIG).map(([key, cfg]) => [
       key,
-      style.getPropertyValue(`--color-${cfg.color}`).trim() || '#888',
+      style.getPropertyValue(`--color-${cfg.color}`).trim() || 'oklch(0.55 0.01 270)',
     ])
   );
 }
@@ -324,7 +324,7 @@ export function VolumeChart({
             {/* Gradient definitions for sport bar fills */}
             <defs>
               {activeSportKeys.map((sport) => {
-                const color = resolvedColors[sport] || '#888';
+                const color = resolvedColors[sport] || 'oklch(0.55 0.01 270)';
                 return (
                   <linearGradient
                     key={`gradFill-${sport}`}

@@ -54,8 +54,8 @@ const RARITY_COLORS: Record<Achievement['rarity'], { text: string; bg: string; b
 /** Rarity glow wrapper classes for unlocked cards */
 const RARITY_GLOW: Record<Achievement['rarity'], string> = {
   Common: '',
-  Rare: 'ring-1 ring-accent-primary/20',
-  Epic: 'ring-1 ring-accent/30 shadow-[0_0_20px_-5px_oklch(0.62_0.12_55/0.2)]',
+  Rare: 'ring-1 ring-accent-teal/20',
+  Epic: 'ring-1 ring-accent-teal/30 shadow-focus',
   Legendary: '', // Legendary uses a separate animated overlay
 };
 

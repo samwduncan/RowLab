@@ -132,7 +132,7 @@ export function FilterPopover({
                         onClick={() => onFilterChange('type', isActive ? undefined : filterValue)}
                         className={`flex flex-col items-center gap-1 py-2 px-1 rounded-lg text-xs transition-all ${
                           isActive
-                            ? 'bg-void-raised ring-2 ring-accent text-text-bright'
+                            ? 'bg-void-raised ring-2 ring-accent-teal text-text-bright'
                             : 'bg-void-deep text-text-dim hover:bg-void-overlay hover:text-text-default'
                         }`}
                       >
@@ -160,7 +160,7 @@ export function FilterPopover({
                         onClick={() => onFilterChange('source', isActive ? undefined : opt.key)}
                         className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                           isActive
-                            ? 'bg-void-raised ring-2 ring-accent text-text-bright'
+                            ? 'bg-void-raised ring-2 ring-accent-teal text-text-bright'
                             : 'bg-void-deep text-text-dim hover:bg-void-overlay hover:text-text-default'
                         }`}
                       >

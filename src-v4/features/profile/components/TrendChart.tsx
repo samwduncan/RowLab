@@ -25,13 +25,13 @@ import type { TrendBucket } from '../types';
 /* Constants                                                           */
 /* ------------------------------------------------------------------ */
 
-const COPPER = 'var(--color-accent)';
+const COPPER = 'var(--color-accent-teal)';
 const GRID_COLOR = 'var(--color-edge-default)';
 const TICK_COLOR = 'var(--color-text-faint)';
 
 /** Sport color mapping for stacked bar segments */
 const SPORT_COLORS: Record<string, string> = {
-  RowErg: 'var(--color-accent)',
+  RowErg: 'var(--color-machine-rower)',
   SkiErg: 'var(--color-data-good)',
   BikeErg: 'var(--color-data-warning)',
   Running: 'var(--color-data-excellent)',
@@ -58,7 +58,7 @@ interface TrendChartProps {
 function resolveAccentColor(): string {
   if (typeof document === 'undefined') return 'oklch(0.62 0.12 55)';
   const style = getComputedStyle(document.documentElement);
-  return style.getPropertyValue('--color-accent').trim() || 'oklch(0.62 0.12 55)';
+  return style.getPropertyValue('--color-accent-teal').trim() || 'oklch(0.55 0.06 195)';
 }
 
 /* ------------------------------------------------------------------ */

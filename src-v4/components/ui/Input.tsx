@@ -39,7 +39,7 @@ const baseInputClasses = `
 `.trim();
 
 const normalBorder =
-  'border-edge-default focus:border-edge-hover focus:ring-2 focus:ring-accent-focus-ring';
+  'border-edge-default focus:border-edge-hover focus:ring-2 focus:ring-accent-teal/20';
 const errorBorder = 'border-data-poor focus:border-data-poor focus:ring-2 focus:ring-data-poor/30';
 
 export function Input(props: InputProps) {

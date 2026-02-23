@@ -86,9 +86,7 @@ function SplitsTable({
                 key={split.splitNumber}
                 className={`border-b border-edge-default last:border-0 ${isRest ? 'opacity-40' : ''}`}
               >
-                <td className="py-1.5 pr-3 text-text-dim">
-                  {isRest ? 'R' : split.splitNumber}
-                </td>
+                <td className="py-1.5 pr-3 text-text-dim">{isRest ? 'R' : split.splitNumber}</td>
                 <td className="py-1.5 px-3 text-right text-text-dim tabular-nums">
                   {split.distanceM != null ? formatDistance(split.distanceM) : DASH}
                 </td>
@@ -148,7 +146,11 @@ function WattsChart({ splits }: { splits: WorkoutSplit[] }) {
     <div className="h-[160px] w-full">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 4, right: 4, bottom: 4, left: 4 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="var(--color-edge-default)" vertical={false} />
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke="var(--color-edge-default)"
+            vertical={false}
+          />
           <XAxis
             dataKey="split"
             tick={{ fontSize: 11, fill: 'var(--color-text-faint)' }}
@@ -167,7 +169,7 @@ function WattsChart({ splits }: { splits: WorkoutSplit[] }) {
           />
           <Bar
             dataKey="watts"
-            fill="var(--color-accent)"
+            fill="var(--color-accent-teal)"
             radius={[3, 3, 0, 0]}
             maxBarSize={32}
           />

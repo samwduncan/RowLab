@@ -93,10 +93,10 @@ export function ProfileCard({ userName, avatar, teamName, stats }: ProfileCardPr
               <img
                 src={avatar}
                 alt={userName}
-                className="w-14 h-14 rounded-xl object-cover ring-2 ring-accent/20"
+                className="w-14 h-14 rounded-xl object-cover ring-2 ring-accent-teal/20"
               />
             ) : (
-              <div className="w-14 h-14 rounded-xl bg-accent-teal/15 flex items-center justify-center ring-2 ring-accent/20">
+              <div className="w-14 h-14 rounded-xl bg-accent-teal/15 flex items-center justify-center ring-2 ring-accent-teal/20">
                 <span className="text-lg font-display font-bold text-accent-teal">{initials}</span>
               </div>
             )}

@@ -187,7 +187,7 @@ export function WeeklyTimeline({ month, workouts }: WeeklyTimelineProps) {
               {/* Bar */}
               <div
                 className={`w-10 rounded-t-md overflow-hidden flex flex-col-reverse ${
-                  d.isToday ? 'ring-1 ring-accent' : ''
+                  d.isToday ? 'ring-1 ring-accent-teal' : ''
                 }`}
                 style={{ height: `${barHeight}px` }}
                 title={`${format(d.day, 'EEE, MMM d')}: ${formatDistance(d.totalMeters)}`}

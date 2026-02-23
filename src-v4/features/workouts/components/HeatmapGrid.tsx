@@ -160,7 +160,7 @@ export function HeatmapGrid({ month, workouts }: HeatmapGridProps) {
                   transition-colors
                   ${intensityClass}
                   ${!d.isCurrentMonth ? 'opacity-30' : ''}
-                  ${today ? 'ring-1 ring-accent ring-offset-1 ring-offset-void-surface' : ''}
+                  ${today ? 'ring-1 ring-accent-teal ring-offset-1 ring-offset-void-surface' : ''}
                 `}
               >
                 <span

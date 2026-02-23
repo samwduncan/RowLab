@@ -124,7 +124,7 @@ function AthletesPage() {
               placeholder="Search athletes..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-lg bg-void-deep border border-edge-default pl-9 pr-3 py-2 text-sm text-text-bright placeholder:text-text-faint focus:outline-none focus:ring-1 focus:ring-accent/50"
+              className="w-full rounded-lg bg-void-deep border border-edge-default pl-9 pr-3 py-2 text-sm text-text-bright placeholder:text-text-faint focus:outline-none focus:ring-1 focus:ring-accent-teal/50"
             />
           </div>
           <div className="flex gap-1 p-1 bg-void-deep/40 rounded-xl w-fit">

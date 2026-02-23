@@ -34,8 +34,8 @@ const localizer = dateFnsLocalizer({
 // ---------------------------------------------------------------------------
 
 const WORKOUT_TYPE_COLORS: Record<WorkoutType, string> = {
-  erg: 'oklch(0.55 0.18 255)', // accent-primary blue
-  row: 'oklch(0.62 0.12 55)', // accent
+  erg: 'oklch(0.55 0.06 195)', // accent-teal
+  row: 'oklch(0.55 0.07 200)', // machine-otw
   cross_train: 'oklch(0.72 0.17 142)', // data-excellent green
   strength: 'oklch(0.75 0.14 75)', // data-warning amber
   rest: 'oklch(0.435 0.005 285)', // text-tertiary

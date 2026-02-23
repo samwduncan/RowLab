@@ -7,7 +7,7 @@ export const SPORT_CONFIG = {
     type: 'erg',
     machineType: 'rower',
     icon: 'Waves',
-    color: 'accent',
+    color: 'machine-rower',
     label: 'RowErg',
     paceUnit: '/500m',
   },
@@ -47,7 +47,7 @@ export const SPORT_CONFIG = {
     type: 'cardio',
     machineType: null,
     icon: 'Waves',
-    color: 'accent-primary',
+    color: 'machine-otw',
     label: 'Swimming',
     paceUnit: '/100m',
   },
@@ -83,7 +83,7 @@ export const SPORT_LIST = Object.keys(SPORT_CONFIG) as SportType[];
 
 export const SOURCE_CONFIG = {
   manual: { label: 'Manual', icon: 'Pencil', color: 'text-faint' },
-  concept2: { label: 'Concept2', icon: 'Zap', color: 'accent' },
+  concept2: { label: 'Concept2', icon: 'Zap', color: 'accent-teal' },
   strava: { label: 'Strava', icon: 'Activity', color: 'data-warning' },
   garmin: { label: 'Garmin', icon: 'Watch', color: 'data-good' },
 } as const;

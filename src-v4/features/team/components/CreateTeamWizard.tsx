@@ -425,7 +425,7 @@ function Step2Configure({
           aria-checked={isPublic}
           onClick={() => onTogglePublic(!isPublic)}
           className={`
-            relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent/60
+            relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-teal/60
             ${isPublic ? 'bg-accent-teal' : 'bg-edge-default'}
           `}
         >

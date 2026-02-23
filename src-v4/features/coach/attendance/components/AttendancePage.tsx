@@ -299,11 +299,11 @@ function DailyTab({ teamId, date, setDate, readOnly }: DailyTabProps) {
               <div key={athlete.userId}>
                 {isFirstMarked && (
                   <div className="flex items-center gap-3 py-3">
-                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-accent/20 to-accent/20" />
+                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-accent-teal/20 to-accent-teal/20" />
                     <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-accent-teal">
                       MARKED
                     </span>
-                    <div className="h-px flex-1 bg-gradient-to-l from-transparent via-accent/20 to-accent/20" />
+                    <div className="h-px flex-1 bg-gradient-to-l from-transparent via-accent-teal/20 to-accent-teal/20" />
                   </div>
                 )}
 
