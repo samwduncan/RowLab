@@ -93,7 +93,9 @@ export async function register(data: RegisterRequest) {
 }
 
 export async function refreshSession() {
-  const res = await api.post<ApiResponse<RefreshResponse>>('/api/v1/auth/refresh');
+  const res = await api.post<ApiResponse<RefreshResponse>>('/api/v1/auth/refresh', null, {
+    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+  });
   return res.data.data;
 }
 

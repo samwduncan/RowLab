@@ -51,7 +51,9 @@ api.interceptors.response.use(
       // Mutex: share a single refresh promise across concurrent 401s
       if (!refreshPromise) {
         refreshPromise = api
-          .post('/api/v1/auth/refresh')
+          .post('/api/v1/auth/refresh', null, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          })
           .then((res) => {
             const token = res.data?.data?.accessToken as string | undefined;
             setAccessToken(token ?? null);

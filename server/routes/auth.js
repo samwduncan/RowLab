@@ -34,6 +34,21 @@ const validateRequest = (req, res, next) => {
 };
 
 /**
+ * CSRF protection for token refresh -- requires X-Requested-With header.
+ * Browsers don't add custom headers to cross-origin simple requests,
+ * so this prevents cross-site form POSTs from obtaining fresh access tokens.
+ */
+function requireCustomHeader(req, res, next) {
+  if (!req.headers['x-requested-with']) {
+    return res.status(403).json({
+      success: false,
+      error: { code: 'CSRF_REJECTED', message: 'Missing required header' },
+    });
+  }
+  next();
+}
+
+/**
  * POST /api/v1/auth/register
  * Create new user account
  */
@@ -91,7 +106,7 @@ router.post(
       res.cookie('refreshToken', result.refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });
 
@@ -130,7 +145,7 @@ router.post(
  * POST /api/v1/auth/refresh
  * Refresh access token using refresh token
  */
-router.post('/refresh', async (req, res) => {
+router.post('/refresh', requireCustomHeader, async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
@@ -165,7 +180,7 @@ router.post('/refresh', async (req, res) => {
     res.cookie('refreshToken', result.newRefreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -279,9 +294,8 @@ router.post('/dev-login', async (req, res) => {
     });
   }
 
-  // Check source IP
-  const forwarded = req.headers['x-forwarded-for'];
-  const rawIp = forwarded ? String(forwarded).split(',')[0].trim() : req.socket.remoteAddress;
+  // Check source IP -- use socket address only, X-Forwarded-For is trivially spoofable
+  const rawIp = req.socket.remoteAddress;
   const ip = rawIp?.replace(/^::ffff:/, '') || '';
 
   const isLocal = ip === '127.0.0.1' || ip === '::1' || ip === 'localhost';
@@ -330,8 +344,8 @@ router.post('/dev-login', async (req, res) => {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -376,6 +390,7 @@ const forgotPasswordLimiter = rateLimit({
     success: false,
     error: { code: 'RATE_LIMITED', message: 'Too many password reset requests, try again later' },
   },
+  validate: { keyGeneratorIpFallback: false },
 });
 
 /**
