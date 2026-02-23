@@ -1,13 +1,13 @@
 /**
  * Animated stat card for dashboard quick stats.
  * Values count-up from 0 on first route mount only.
- * Wraps GlassCard with icon, label, value, footnote, and sparkline placeholder.
+ * Wraps Card with icon, label, value, footnote, and sparkline placeholder.
  */
 
 import { useEffect, useState } from 'react';
 import { useMotionValue, useTransform, animate } from 'motion/react';
 import type { LucideIcon } from 'lucide-react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { Sparkline } from '@/components/ui/Sparkline';
 import { formatNumber } from '@/lib/format';
 
@@ -143,7 +143,7 @@ function StatCardShell({
   className?: string;
 }) {
   return (
-    <GlassCard padding="md" className={className} as="article" interactive>
+    <Card padding="md" className={className} as="article" variant="interactive">
       <div className="flex flex-col gap-3" aria-label={`${label}: ${displayValue}`} role="group">
         {/* Icon */}
         <div
@@ -154,7 +154,9 @@ function StatCardShell({
         </div>
 
         {/* Label */}
-        <span className="text-xs uppercase tracking-wider text-text-faint font-medium">{label}</span>
+        <span className="text-xs uppercase tracking-wider text-text-faint font-medium">
+          {label}
+        </span>
 
         {/* Value */}
         <span className="text-2xl lg:text-3xl font-bold text-text-bright tabular-nums">
@@ -177,6 +179,6 @@ function StatCardShell({
         {/* Footnote */}
         {footnote && <span className="text-xs text-text-faint">{footnote}</span>}
       </div>
-    </GlassCard>
+    </Card>
   );
 }

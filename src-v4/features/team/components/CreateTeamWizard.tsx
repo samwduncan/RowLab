@@ -18,7 +18,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/useAuth';
@@ -213,7 +213,7 @@ export function CreateTeamWizard() {
       <div className="w-full max-w-xl">
         <StepIndicator current={step} />
 
-        <GlassCard padding="lg" className="rounded-2xl overflow-hidden">
+        <Card padding="lg" className="rounded-2xl overflow-hidden">
           <AnimatePresence mode="wait" custom={direction}>
             {step === 1 && (
               <motion.div
@@ -268,7 +268,7 @@ export function CreateTeamWizard() {
               </motion.div>
             )}
           </AnimatePresence>
-        </GlassCard>
+        </Card>
       </div>
     </div>
   );

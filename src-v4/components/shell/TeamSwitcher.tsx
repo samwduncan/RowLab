@@ -189,7 +189,9 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
           <span className="max-w-[120px] truncate text-sm font-medium text-text-bright">
             {activeTeam?.name ?? 'Select team'}
           </span>
-          {roleLabel && <span className="text-[10px] font-medium text-text-faint">{roleLabel}</span>}
+          {roleLabel && (
+            <span className="text-[10px] font-medium text-text-faint">{roleLabel}</span>
+          )}
         </div>
 
         <ChevronsUpDown size={14} className="shrink-0 text-text-faint" />
@@ -203,7 +205,7 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
             transition={SPRING_SNAPPY}
-            className="absolute left-0 top-full z-50 mt-1 w-72 overflow-hidden rounded-xl border border-edge-default bg-void-overlay/95 shadow-md backdrop-blur-xl"
+            className="absolute left-0 top-full z-50 mt-1 w-72 overflow-hidden rounded-xl border border-edge-default bg-void-overlay shadow-md"
             role="listbox"
             aria-label="Select team"
           >

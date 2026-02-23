@@ -11,7 +11,7 @@ import { motion } from 'motion/react';
 import { profilePRsQueryOptions } from '../api';
 import { MachineTabs, type MachineType } from './MachineTabs';
 import { PRTable } from './PRTable';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
 import { slideUp } from '@/lib/animations';
 
@@ -32,9 +32,9 @@ export function PRsTab() {
         <MachineTabs activeMachine={activeMachine} onMachineChange={setActiveMachine} />
       </div>
 
-      <GlassCard padding="md">
+      <Card padding="md">
         <PRTable records={records} machineType={activeMachine} />
-      </GlassCard>
+      </Card>
     </motion.div>
   );
 }

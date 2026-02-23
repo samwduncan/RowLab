@@ -6,7 +6,7 @@ import { useState, useRef, useCallback } from 'react';
 import { User, Camera, Check } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { profileQueryOptions, useUpdateProfile, useUploadAvatar } from '@/features/profile/api';
 
@@ -93,7 +93,7 @@ export function ProfileSection() {
       />
 
       {/* Avatar */}
-      <GlassCard>
+      <Card>
         <div className="flex items-center gap-4">
           <div className="relative">
             {profile?.avatarUrl ? (
@@ -135,10 +135,10 @@ export function ProfileSection() {
             className="hidden"
           />
         </div>
-      </GlassCard>
+      </Card>
 
       {/* Display Name */}
-      <GlassCard>
+      <Card>
         <label className="block text-sm font-medium text-text-bright mb-1.5">Display Name</label>
         <div className="flex items-center gap-3">
           <input
@@ -171,10 +171,10 @@ export function ProfileSection() {
             )}
           </Button>
         </div>
-      </GlassCard>
+      </Card>
 
       {/* Bio */}
-      <GlassCard>
+      <Card>
         <label className="block text-sm font-medium text-text-bright mb-1.5">Bio</label>
         <textarea
           value={bio}
@@ -210,7 +210,7 @@ export function ProfileSection() {
             )}
           </Button>
         </div>
-      </GlassCard>
+      </Card>
     </div>
   );
 }

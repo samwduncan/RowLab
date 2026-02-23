@@ -179,7 +179,7 @@ export function SessionWizard({ isOpen, onClose, onSuccess, teamId }: SessionWiz
           {/* Backdrop */}
           <motion.div
             key="wizard-backdrop"
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            className="fixed inset-0 bg-black/60 z-40"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

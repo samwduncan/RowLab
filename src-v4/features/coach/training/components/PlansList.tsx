@@ -12,7 +12,7 @@ import { plansOptions, createPlan, trainingKeys } from '../api';
 import type { TrainingPlan, TrainingPhase, CreateTrainingPlanInput } from '../types';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Button } from '@/components/ui/Button';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
 import { slideUp, listContainerVariants, listItemVariants } from '@/lib/animations';
 
@@ -268,7 +268,7 @@ function CreatePlanForm({ onCreated, onCancel }: { onCreated: () => void; onCanc
   );
 
   return (
-    <GlassCard padding="md">
+    <Card padding="md">
       <form onSubmit={handleSubmit} className="space-y-3">
         <h3 className="text-sm font-semibold text-text-bright">New Training Plan</h3>
 
@@ -329,7 +329,7 @@ function CreatePlanForm({ onCreated, onCancel }: { onCreated: () => void; onCanc
           <p className="text-xs text-data-poor">Failed to create plan. Please try again.</p>
         )}
       </form>
-    </GlassCard>
+    </Card>
   );
 }
 

@@ -8,7 +8,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { RefreshCw } from 'lucide-react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { ratingsOptions, useRecalculate } from '../api';
 import type { Side } from '../types';
@@ -105,7 +105,7 @@ export function RankingsView({ teamId }: RankingsViewProps) {
       </div>
 
       {/* ELO Distribution chart */}
-      <GlassCard padding="md">
+      <Card padding="md">
         <h3 className="text-sm font-medium text-text-dim uppercase tracking-wider mb-4">
           ELO Distribution
         </h3>
@@ -114,12 +114,12 @@ export function RankingsView({ teamId }: RankingsViewProps) {
         ) : (
           <EloChart ratings={ratings} />
         )}
-      </GlassCard>
+      </Card>
 
       {/* Rankings table */}
-      <GlassCard padding="none">
+      <Card padding="none">
         <RankingsTable ratings={ratings} isLoading={isLoading} />
-      </GlassCard>
+      </Card>
     </div>
   );
 }

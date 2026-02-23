@@ -25,7 +25,7 @@ import {
 import { listContainerVariants, listItemVariants, SPRING_SMOOTH } from '@/lib/animations';
 import { formatNumber } from '@/lib/format';
 import { useIsDesktop } from '@/hooks/useBreakpoint';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { SectionDivider } from '@/components/ui/SectionDivider';
 import { useTeamData } from '../hooks/useTeamData';
 import { useCreateAnnouncement } from '../hooks/useTeamMutations';
@@ -132,7 +132,7 @@ export function TeamOverview({ team }: TeamOverviewProps) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Stats Panel -- individual GlassCards per stat with icons             */
+/* Stats Panel -- individual Cards per stat with icons                  */
 /* ------------------------------------------------------------------ */
 
 function StatsPanel({
@@ -178,7 +178,7 @@ function StatsPanel({
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <GlassCard key={stat.label} padding="sm" interactive hover>
+            <Card key={stat.label} padding="sm" variant="interactive">
               <div className="flex items-center gap-2.5">
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-void-deep">
                   <Icon size={16} className={stat.iconColor} />
@@ -188,7 +188,7 @@ function StatsPanel({
                   <p className="truncate text-[11px] text-text-faint">{stat.label}</p>
                 </div>
               </div>
-            </GlassCard>
+            </Card>
           );
         })}
       </div>
@@ -225,7 +225,7 @@ function CoachTools({ teamIdentifier }: { teamIdentifier: string }) {
   ];
 
   return (
-    <GlassCard padding="md" as="section">
+    <Card padding="md" as="section">
       <h3 className="mb-4 text-sm font-medium uppercase tracking-wider text-text-faint">
         Coach Tools
       </h3>
@@ -249,7 +249,7 @@ function CoachTools({ teamIdentifier }: { teamIdentifier: string }) {
           );
         })}
       </div>
-    </GlassCard>
+    </Card>
   );
 }
 
@@ -291,7 +291,7 @@ function AnnouncementCompose({ teamId }: { teamId: string }) {
   }
 
   return (
-    <GlassCard padding="md" as="section">
+    <Card padding="md" as="section">
       <form onSubmit={handleSubmit} className="space-y-3">
         <div className="flex items-center gap-2">
           <Megaphone size={18} className="text-accent-teal" />
@@ -330,7 +330,7 @@ function AnnouncementCompose({ teamId }: { teamId: string }) {
           </button>
         </div>
       </form>
-    </GlassCard>
+    </Card>
   );
 }
 
@@ -347,19 +347,19 @@ function AnnouncementsSidebar({
 }) {
   if (pinned.length === 0 && recent.length === 0) {
     return (
-      <GlassCard padding="md" as="section">
+      <Card padding="md" as="section">
         <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-text-faint">
           Announcements
         </h3>
         <p className="text-sm text-text-faint">No announcements yet.</p>
-      </GlassCard>
+      </Card>
     );
   }
 
   return (
     <div className="space-y-4">
       {pinned.length > 0 && (
-        <GlassCard padding="md" as="section">
+        <Card padding="md" as="section">
           <h3 className="mb-3 flex items-center gap-1.5 text-sm font-medium uppercase tracking-wider text-text-faint">
             <Pin size={14} />
             Pinned
@@ -369,10 +369,10 @@ function AnnouncementsSidebar({
               <AnnouncementCard key={a.id} announcement={a} />
             ))}
           </div>
-        </GlassCard>
+        </Card>
       )}
       {recent.length > 0 && (
-        <GlassCard padding="md" as="section">
+        <Card padding="md" as="section">
           <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-text-faint">
             Recent
           </h3>
@@ -381,7 +381,7 @@ function AnnouncementsSidebar({
               <AnnouncementCard key={a.id} announcement={a} />
             ))}
           </div>
-        </GlassCard>
+        </Card>
       )}
     </div>
   );
@@ -410,7 +410,7 @@ function AnnouncementCard({ announcement }: { announcement: Announcement }) {
 
 function UpcomingEventsPlaceholder() {
   return (
-    <GlassCard padding="md" as="section">
+    <Card padding="md" as="section">
       <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-text-faint">
         Upcoming Team Events
       </h3>
@@ -423,6 +423,6 @@ function UpcomingEventsPlaceholder() {
           </p>
         </div>
       </div>
-    </GlassCard>
+    </Card>
   );
 }

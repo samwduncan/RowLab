@@ -10,7 +10,7 @@ import { motion } from 'motion/react';
 import { Users, Search, User } from 'lucide-react';
 import { api } from '@/lib/api';
 import { useAuth } from '@/features/auth/useAuth';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
 import { listContainerVariants, listItemVariants, SPRING_SMOOTH } from '@/lib/animations';
@@ -85,9 +85,9 @@ function AthletesPage() {
   if (error) {
     return (
       <div className="p-4 md:p-6">
-        <GlassCard padding="lg">
+        <Card padding="lg">
           <p className="text-data-poor text-sm">Failed to load athletes. Please try again.</p>
-        </GlassCard>
+        </Card>
       </div>
     );
   }

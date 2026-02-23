@@ -1,12 +1,12 @@
 /**
  * Roster member card with avatar, name, prominent role badge, and activity summary.
  *
- * GlassCard with interactive hover lift.
+ * Card with interactive hover lift.
  * Role badges: Owner=copper with crown, Admin=copper, Coach=blue, Athlete=subtle.
  * Last-active indicator: green dot if active in last 24h.
  */
 import { Crown, Shield } from 'lucide-react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { formatRelativeDate } from '@/lib/format';
 import { ROLE_DISPLAY } from '../types';
 import type { RosterMember } from '../types';
@@ -42,8 +42,7 @@ const ROLE_BADGE_CONFIG: Record<string, RoleBadgeConfig> = {
 };
 
 const DEFAULT_BADGE: RoleBadgeConfig = {
-  classes:
-    'bg-text-dim/10 text-text-dim border border-text-dim/20 px-2.5 py-1 rounded-lg text-xs',
+  classes: 'bg-text-dim/10 text-text-dim border border-text-dim/20 px-2.5 py-1 rounded-lg text-xs',
 };
 
 function getInitials(name: string): string {
@@ -96,7 +95,7 @@ export function MemberCard({ member }: MemberCardProps) {
     : '\u2014';
 
   return (
-    <GlassCard hover interactive padding="md" as="article">
+    <Card variant="interactive" padding="md" as="article">
       <div className="flex items-start gap-3">
         {/* Avatar with optional active indicator */}
         <div className="relative shrink-0">
@@ -146,6 +145,6 @@ export function MemberCard({ member }: MemberCardProps) {
           <span className="text-[11px] font-medium text-data-good">Active today</span>
         )}
       </div>
-    </GlassCard>
+    </Card>
   );
 }

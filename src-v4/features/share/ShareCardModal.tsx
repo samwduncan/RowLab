@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, Download, Copy, Share2, Check, Loader2, Square, Smartphone } from 'lucide-react';
 import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { scaleIn } from '@/lib/animations';
 import { useGenerateShareCard } from './api';
 import { CARD_TEMPLATES, type CardType, type CardFormat, type ShareCard } from './types';
@@ -190,7 +190,7 @@ export function ShareCardModal({ workoutId, workoutLabel, open, onClose }: Share
   return (
     <Dialog open={open} onClose={handleClose}>
       <motion.div {...scaleIn} className="w-full max-w-md">
-        <GlassCard variant="elevated" padding="lg">
+        <Card variant="elevated" padding="lg">
           {/* Header */}
           <div className="flex items-center justify-between mb-5">
             <div>
@@ -308,7 +308,7 @@ export function ShareCardModal({ workoutId, workoutLabel, open, onClose }: Share
               </motion.div>
             )}
           </AnimatePresence>
-        </GlassCard>
+        </Card>
       </motion.div>
     </Dialog>
   );

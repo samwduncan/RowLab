@@ -55,7 +55,7 @@ export function Sidebar() {
   // Tablet: collapsed rail
   if (isTablet) {
     return (
-      <aside className="relative z-10 flex h-screen w-(--spacing-sidebar-sm) shrink-0 flex-col border-r border-edge-default bg-void-surface/80 backdrop-blur-xl">
+      <aside className="relative z-10 flex h-screen w-(--spacing-sidebar-sm) shrink-0 flex-col border-r border-edge-default bg-void-surface">
         {/* App wordmark */}
         <div className="flex h-14 items-center justify-center">
           <span className="text-base font-bold text-accent-teal">R</span>
@@ -83,7 +83,7 @@ export function Sidebar() {
   // Desktop: full sidebar
   if (isDesktop) {
     return (
-      <aside className="relative z-10 flex h-screen w-(--spacing-sidebar) shrink-0 flex-col border-r border-edge-default bg-void-surface/80 backdrop-blur-xl">
+      <aside className="relative z-10 flex h-screen w-(--spacing-sidebar) shrink-0 flex-col border-r border-edge-default bg-void-surface">
         {/* App wordmark */}
         <div className="flex h-14 items-center px-5">
           <span className="font-display text-lg font-bold tracking-tight text-text-bright">

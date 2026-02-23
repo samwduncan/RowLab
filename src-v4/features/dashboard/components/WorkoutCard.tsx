@@ -8,7 +8,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import { PenLine, Dumbbell, Bike, Watch } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { formatDistance, formatDuration, formatPace, formatRelativeDate } from '@/lib/format';
 import { SPORT_CONFIG } from '@/features/workouts/constants';
 import { getSportFromWorkout, parseIntervalPattern } from '@/features/workouts/utils';
@@ -101,7 +101,7 @@ export function WorkoutCard({ workout, className = '' }: WorkoutCardProps) {
   };
 
   return (
-    <GlassCard
+    <Card
       padding="sm"
       hover
       interactive
@@ -163,6 +163,6 @@ export function WorkoutCard({ workout, className = '' }: WorkoutCardProps) {
           </div>
         </div>
       </button>
-    </GlassCard>
+    </Card>
   );
 }

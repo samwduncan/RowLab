@@ -373,7 +373,7 @@ export function LineupWorkspace({ teamId, lineupId, readOnly = false }: LineupWo
               className="
                 sticky bottom-0 w-full py-3 px-4 text-center
                 text-sm font-medium text-accent-teal
-                bg-void-surface/80 backdrop-blur-sm
+                bg-void-surface
                 border-t border-edge-default/30
               "
             >

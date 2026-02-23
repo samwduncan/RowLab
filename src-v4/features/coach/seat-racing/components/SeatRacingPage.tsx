@@ -13,7 +13,7 @@ import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'motion/react';
 import { Plus, Keyboard, X, Trophy } from 'lucide-react';
 
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { ReadOnlyBadge } from '@/components/ui/ReadOnlyBadge';
 import { SectionHeader } from '@/components/ui/SectionHeader';
@@ -208,14 +208,14 @@ export function SeatRacingPage({ teamId, readOnly }: SeatRacingPageProps) {
           </motion.div>
         ) : (
           <motion.div key="sessions" {...fadeIn}>
-            <GlassCard padding="md">
+            <Card padding="md">
               <SessionList
                 sessions={sessions}
                 isLoading={sessionsLoading}
                 selectedId={selectedSessionId}
                 onSelect={setSelectedSessionId}
               />
-            </GlassCard>
+            </Card>
           </motion.div>
         )}
       </AnimatePresence>

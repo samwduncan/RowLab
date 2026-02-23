@@ -14,7 +14,7 @@ import { Trophy, Target, Flame, Hash, Sparkles } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { motion } from 'motion/react';
 
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { formatRelativeDate } from '@/lib/format';
 import { listItemVariants } from '@/lib/animations';
 import type { Achievement } from '../types';
@@ -77,7 +77,7 @@ export function AchievementCard({ achievement, compact = false }: AchievementCar
     const glowClass = RARITY_GLOW[rarity];
 
     const card = (
-      <GlassCard
+      <Card
         padding={compact ? 'sm' : 'md'}
         className={`relative overflow-hidden ${glowClass}`}
         glow={isLegendary}
@@ -119,7 +119,7 @@ export function AchievementCard({ achievement, compact = false }: AchievementCar
             )}
           </div>
         </div>
-      </GlassCard>
+      </Card>
     );
 
     // Legendary: wrap with animated glow ring overlay
@@ -143,7 +143,7 @@ export function AchievementCard({ achievement, compact = false }: AchievementCar
   // Locked variant
   return (
     <motion.div variants={listItemVariants}>
-      <GlassCard padding={compact ? 'sm' : 'md'} className="opacity-60">
+      <Card padding={compact ? 'sm' : 'md'} className="opacity-60">
         <div className="flex items-start gap-3">
           {/* Dimmed grayscale icon */}
           <div
@@ -175,7 +175,7 @@ export function AchievementCard({ achievement, compact = false }: AchievementCar
             </div>
           </div>
         </div>
-      </GlassCard>
+      </Card>
     </motion.div>
   );
 }

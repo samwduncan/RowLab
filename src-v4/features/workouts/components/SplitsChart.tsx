@@ -143,7 +143,7 @@ function ChartTooltip({ active, payload }: TooltipProps<number, string>) {
   const zoneColor = ZONE_COLORS[data.zone];
 
   return (
-    <div className="backdrop-blur-xl bg-void-raised/90 border border-edge-default rounded-xl shadow-md px-3 py-2 min-w-[130px]">
+    <div className="bg-void-raised border border-edge-default rounded-xl shadow-md px-3 py-2 min-w-[130px]">
       <div className="flex items-center justify-between gap-3 mb-1">
         <p className="text-text-faint text-[10px] uppercase tracking-wider">Split {data.split}</p>
         {!data.isRest && (
@@ -162,9 +162,7 @@ function ChartTooltip({ active, payload }: TooltipProps<number, string>) {
         <p className="font-mono text-sm font-semibold text-text-bright">{data.watts}w</p>
       )}
       {data.pace != null && (
-        <p className="font-mono text-xs text-text-dim">
-          {formatPace(Math.round(data.pace * 10))}
-        </p>
+        <p className="font-mono text-xs text-text-dim">{formatPace(Math.round(data.pace * 10))}</p>
       )}
       {data.spm != null && (
         <p className="font-mono text-xs text-text-faint">

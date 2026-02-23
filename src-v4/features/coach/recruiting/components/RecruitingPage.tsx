@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { UserPlus, GraduationCap, X } from 'lucide-react';
 import { fadeIn, scaleIn, listContainerVariants } from '@/lib/animations';
 import { Button } from '@/components/ui/Button';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ReadOnlyBadge } from '@/components/ui/ReadOnlyBadge';
 import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
@@ -171,9 +171,9 @@ export function RecruitingPage() {
           ))}
         </SkeletonGroup>
       ) : error ? (
-        <GlassCard padding="lg">
+        <Card padding="lg">
           <p className="text-data-poor text-sm">Failed to load visits. Please try again.</p>
-        </GlassCard>
+        </Card>
       ) : filteredVisits.length === 0 ? (
         <div className="py-16">
           <EmptyState
@@ -210,7 +210,7 @@ export function RecruitingPage() {
           <motion.div
             key="detail"
             {...scaleIn}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
           >
             <div className="panel rounded-2xl shadow-lg w-full max-w-lg max-h-[80vh] overflow-y-auto">
               <div className="p-5 space-y-4">
@@ -311,7 +311,7 @@ export function RecruitingPage() {
           <motion.div
             key="form-modal"
             {...scaleIn}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
           >
             <div className="panel rounded-2xl shadow-lg w-full max-w-lg max-h-[85vh] overflow-y-auto">
               <div className="p-5 space-y-4">

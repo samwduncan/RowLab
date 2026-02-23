@@ -6,7 +6,7 @@ import { useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Shield, Eye, Trophy } from 'lucide-react';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { settingsQueryOptions, useUpdateSettings, type PrivacyPrefs } from '../api';
 
 /* ------------------------------------------------------------------ */
@@ -145,7 +145,7 @@ export function PrivacySection() {
       />
 
       {/* Profile Visibility */}
-      <GlassCard>
+      <Card>
         <div className="flex items-center gap-2 mb-4">
           <Eye className="w-4 h-4 text-accent-teal" />
           <h3 className="text-sm font-semibold text-text-bright">Profile Visibility</h3>
@@ -173,10 +173,10 @@ export function PrivacySection() {
             description="Only you can see your full profile"
           />
         </div>
-      </GlassCard>
+      </Card>
 
       {/* Workout Visibility */}
-      <GlassCard>
+      <Card>
         <div className="flex items-center gap-2 mb-4">
           <Eye className="w-4 h-4 text-accent-teal" />
           <h3 className="text-sm font-semibold text-text-bright">Workout Visibility</h3>
@@ -204,10 +204,10 @@ export function PrivacySection() {
             description="Keep all workout data private"
           />
         </div>
-      </GlassCard>
+      </Card>
 
       {/* Leaderboard Toggle */}
-      <GlassCard>
+      <Card>
         <div className="flex items-center gap-2 mb-3">
           <Trophy className="w-4 h-4 text-accent-teal" />
           <h3 className="text-sm font-semibold text-text-bright">Leaderboards</h3>
@@ -219,7 +219,7 @@ export function PrivacySection() {
           onChange={(v) => updatePref('showInLeaderboards', v)}
           disabled={isPending}
         />
-      </GlassCard>
+      </Card>
     </div>
   );
 }

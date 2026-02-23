@@ -6,7 +6,7 @@
  */
 
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { formatErgTime, formatRelativeDate } from '@/lib/format';
 import type { PRRecord } from '../types';
 
@@ -38,7 +38,7 @@ export function PRCard({ record, isRecent = false, className = '' }: PRCardProps
   const showGlow = isRecent && isSignificantImprovement(record);
 
   return (
-    <GlassCard padding="sm" className={`relative ${className}`} as="article" glow={showGlow}>
+    <Card padding="sm" className={`relative ${className}`} as="article">
       {/* Copper pulse overlay for recent significant PRs */}
       {showGlow && (
         <div className="absolute inset-0 rounded-xl animate-pulse-slow bg-accent-teal/5 pointer-events-none z-0" />
@@ -66,9 +66,7 @@ export function PRCard({ record, isRecent = false, className = '' }: PRCardProps
 
             {/* Date + improvement + New badge */}
             <div className="flex items-center justify-between gap-2">
-              <span className="text-xs text-text-faint">
-                {formatRelativeDate(record.bestDate)}
-              </span>
+              <span className="text-xs text-text-faint">{formatRelativeDate(record.bestDate)}</span>
               <div className="flex items-center gap-1.5">
                 <ImprovementIndicator improvement={record.improvement} />
                 {isRecent && (
@@ -88,7 +86,7 @@ export function PRCard({ record, isRecent = false, className = '' }: PRCardProps
           </div>
         )}
       </div>
-    </GlassCard>
+    </Card>
   );
 }
 

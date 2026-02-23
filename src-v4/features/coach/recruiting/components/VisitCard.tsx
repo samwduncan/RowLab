@@ -9,7 +9,7 @@ import { Calendar, MapPin, FileText } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { motion } from 'motion/react';
 import { listItemVariants } from '@/lib/animations';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import type { RecruitVisit, VisitStatus } from '../types';
 
 interface VisitCardProps {
@@ -36,7 +36,7 @@ export function VisitCard({ visit, onClick }: VisitCardProps) {
 
   return (
     <motion.div variants={listItemVariants}>
-      <GlassCard hover padding="md" className="cursor-pointer" as="article">
+      <Card padding="md" className="cursor-pointer" as="article">
         <button
           type="button"
           onClick={onClick}
@@ -76,7 +76,7 @@ export function VisitCard({ visit, onClick }: VisitCardProps) {
             </div>
           )}
         </button>
-      </GlassCard>
+      </Card>
     </motion.div>
   );
 }

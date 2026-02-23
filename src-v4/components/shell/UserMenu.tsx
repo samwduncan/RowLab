@@ -109,7 +109,7 @@ export function UserMenu() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
             transition={SPRING_SNAPPY}
-            className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-xl border border-edge-default bg-void-overlay/95 shadow-md backdrop-blur-xl"
+            className="absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden rounded-xl border border-edge-default bg-void-overlay shadow-md"
             role="menu"
           >
             {/* User info */}

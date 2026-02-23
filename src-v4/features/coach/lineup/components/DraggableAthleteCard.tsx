@@ -5,7 +5,7 @@
  * The `draggable()` call returns a cleanup function that runs on unmount.
  *
  * Visual states:
- * - idle: GlassCard styling with grab cursor and interactive hover lift
+ * - idle: Card styling with grab cursor and interactive hover lift
  * - dragging: reduced opacity + scale on source card
  * - selected: copper accent border highlight (mobile tap-select mode)
  *

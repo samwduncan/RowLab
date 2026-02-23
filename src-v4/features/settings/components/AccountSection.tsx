@@ -7,7 +7,7 @@
 import { useState, useCallback } from 'react';
 import { Settings, Mail, Lock, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useAuth } from '@/features/auth/useAuth';
@@ -145,7 +145,7 @@ export function AccountSection() {
       />
 
       {/* Email Display */}
-      <GlassCard>
+      <Card>
         <div className="flex items-center gap-2 mb-3">
           <Mail className="w-4 h-4 text-accent-teal" />
           <h3 className="text-sm font-semibold text-text-bright">Email Address</h3>
@@ -166,19 +166,19 @@ export function AccountSection() {
             Verified
           </span>
         </div>
-      </GlassCard>
+      </Card>
 
       {/* Password Change */}
-      <GlassCard>
+      <Card>
         <div className="flex items-center gap-2 mb-4">
           <Lock className="w-4 h-4 text-accent-teal" />
           <h3 className="text-sm font-semibold text-text-bright">Change Password</h3>
         </div>
         <PasswordChangeForm />
-      </GlassCard>
+      </Card>
 
       {/* Danger Zone */}
-      <GlassCard className="border border-data-poor/20">
+      <Card className="border border-data-poor/20">
         <div className="flex items-center gap-2 mb-3">
           <AlertTriangle className="w-4 h-4 text-data-poor" />
           <h3 className="text-sm font-semibold text-data-poor">Danger Zone</h3>
@@ -207,7 +207,7 @@ export function AccountSection() {
           confirmLabel="Delete My Account"
           variant="danger"
         />
-      </GlassCard>
+      </Card>
     </div>
   );
 }

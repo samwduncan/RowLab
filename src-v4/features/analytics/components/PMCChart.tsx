@@ -178,7 +178,7 @@ function PMCTooltip({ active, payload, label }: TooltipProps<number, string>) {
   const tsbColor = data.tsb >= 0 ? 'text-data-good' : 'text-data-poor';
 
   return (
-    <div className="backdrop-blur-xl bg-void-raised/95 border border-edge-default rounded-xl px-4 py-3 shadow-md min-w-[180px]">
+    <div className="bg-void-raised border border-edge-default rounded-xl px-4 py-3 shadow-md min-w-[180px]">
       <p className="text-[10px] uppercase tracking-wider text-text-faint font-medium mb-2">
         {dateLabel}
       </p>

@@ -163,7 +163,7 @@ function VolumeTooltip({ active, payload, label, metric, granularity }: VolumeTo
   const total = sportEntries.reduce((sum, entry) => sum + ((entry.value as number) ?? 0), 0);
 
   return (
-    <div className="backdrop-blur-xl bg-void-raised/95 border border-edge-default rounded-xl px-4 py-3 shadow-md min-w-[180px]">
+    <div className="bg-void-raised border border-edge-default rounded-xl px-4 py-3 shadow-md min-w-[180px]">
       <p className="text-[10px] uppercase tracking-wider text-text-faint font-medium mb-2">
         {periodLabel}
       </p>

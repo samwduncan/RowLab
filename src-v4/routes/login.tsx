@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { createFileRoute, redirect, Link } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { LoginForm } from '@/features/auth/LoginForm';
 import { GoogleAuthButton } from '@/features/auth/GoogleAuthButton';
 import { ForgotPassword } from '@/features/auth/ForgotPassword';
@@ -37,7 +37,7 @@ function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-void-deep p-4">
       <div className="w-full max-w-md">
-        <GlassCard padding="lg" className="rounded-2xl">
+        <Card padding="lg" className="rounded-2xl">
           {/* App wordmark */}
           <div className="mb-8 text-center">
             <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
@@ -76,7 +76,7 @@ function LoginPage() {
               </Link>
             </p>
           </div>
-        </GlassCard>
+        </Card>
       </div>
     </div>
   );

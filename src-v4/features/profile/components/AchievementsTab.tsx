@@ -10,7 +10,7 @@ import { Trophy } from 'lucide-react';
 
 import { profileAchievementsQueryOptions } from '../api';
 import { AchievementCard } from './AchievementCard';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { slideUp, listContainerVariants } from '@/lib/animations';
@@ -60,7 +60,7 @@ export function AchievementsTab() {
   return (
     <motion.div className="space-y-6" {...slideUp}>
       {/* Summary header */}
-      <GlassCard padding="sm">
+      <Card padding="sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Trophy size={18} className="text-accent-teal" />
@@ -73,7 +73,7 @@ export function AchievementsTab() {
             {Math.round((summary.unlocked / Math.max(summary.total, 1)) * 100)}% complete
           </div>
         </div>
-      </GlassCard>
+      </Card>
 
       {/* Unlocked section */}
       {unlocked.length > 0 && (

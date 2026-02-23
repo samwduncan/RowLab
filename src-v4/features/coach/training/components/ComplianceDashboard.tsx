@@ -10,7 +10,7 @@ import { Shield, AlertTriangle, Users, Clock } from 'lucide-react';
 import { motion } from 'motion/react';
 import { complianceReportOptions, weeklyComplianceOptions } from '../api';
 
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
 import { fadeIn } from '@/lib/animations';
@@ -249,7 +249,7 @@ function StatCard({
   highlight?: boolean;
 }) {
   return (
-    <GlassCard padding="sm">
+    <Card padding="sm">
       <div className="flex items-center gap-2">
         <Icon
           className={`h-4 w-4 ${
@@ -267,7 +267,7 @@ function StatCard({
       >
         {value}
       </p>
-    </GlassCard>
+    </Card>
   );
 }
 

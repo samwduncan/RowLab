@@ -8,7 +8,7 @@
 import { motion } from 'motion/react';
 import { Users, CalendarDays, MessageCircle } from 'lucide-react';
 import { slideUp } from '@/lib/animations';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { formatRelativeDate } from '@/lib/format';
 import type { TeamContextData } from '../types';
 
@@ -27,7 +27,7 @@ export function TeamContext({ teamContext, className = '' }: TeamContextProps) {
 
   return (
     <motion.section {...slideUp} className={className} aria-label={`${teamContext.teamName} team`}>
-      <GlassCard padding="md" className="border-t-2 border-accent-teal/30">
+      <Card padding="md" className="border-t-2 border-accent-teal/30">
         {/* Team header */}
         <div className="flex items-center gap-2 mb-4">
           <Users size={18} className="text-accent-teal" aria-hidden="true" />
@@ -79,7 +79,7 @@ export function TeamContext({ teamContext, className = '' }: TeamContextProps) {
             </div>
           )}
         </div>
-      </GlassCard>
+      </Card>
     </motion.section>
   );
 }

@@ -6,7 +6,7 @@
  */
 import { useState } from 'react';
 import { Bold, Italic, List, Heading2, Save, X } from 'lucide-react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 
 interface WhiteboardEditorProps {
@@ -79,7 +79,7 @@ export function WhiteboardEditor({
   ];
 
   return (
-    <GlassCard padding="none">
+    <Card padding="none">
       {/* Header */}
       <div className="px-6 py-4 border-b border-edge-default">
         <h2 className="text-base font-semibold text-text-bright">Edit Whiteboard</h2>
@@ -143,6 +143,6 @@ export function WhiteboardEditor({
           Save Whiteboard
         </Button>
       </div>
-    </GlassCard>
+    </Card>
   );
 }

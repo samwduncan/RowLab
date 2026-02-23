@@ -11,7 +11,7 @@ import { Activity, Clock, Flame, Waves } from 'lucide-react';
 
 import { profileStatsQueryOptions, profileTrendsQueryOptions } from '../api';
 import { TrendChart } from './TrendChart';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { Sparkline } from '@/components/ui/Sparkline';
 import { formatNumber, formatDuration } from '@/lib/format';
 import { listContainerVariants, listItemVariants, SPRING_SMOOTH } from '@/lib/animations';
@@ -98,7 +98,7 @@ interface OverviewStatProps {
 
 function OverviewStat({ icon: Icon, label, value, footnote, sparklineData }: OverviewStatProps) {
   return (
-    <GlassCard padding="md" as="article">
+    <Card padding="md" as="article">
       <div className="flex flex-col gap-2" aria-label={`${label}: ${value}`} role="group">
         <div className="flex items-center justify-between">
           <div
@@ -122,7 +122,7 @@ function OverviewStat({ icon: Icon, label, value, footnote, sparklineData }: Ove
         <span className="text-xl lg:text-2xl font-bold text-text-bright tabular-nums">{value}</span>
         {footnote && <span className="text-[10px] text-text-faint">{footnote}</span>}
       </div>
-    </GlassCard>
+    </Card>
   );
 }
 

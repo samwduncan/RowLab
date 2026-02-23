@@ -6,7 +6,7 @@
 
 import { motion } from 'motion/react';
 import { Flame, TrendingUp, Calendar, Award } from 'lucide-react';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { slideUpDramatic } from '@/lib/animations';
 import { formatNumber } from '@/lib/format';
 import type { StatsData } from '../types';
@@ -85,7 +85,7 @@ export function ProfileCard({ userName, avatar, teamName, stats }: ProfileCardPr
 
   return (
     <motion.div {...slideUpDramatic}>
-      <GlassCard variant="elevated" padding="md">
+      <Card variant="elevated" padding="md">
         <div className="flex items-center gap-4 sm:gap-6">
           {/* Avatar */}
           <div className="shrink-0">
@@ -143,7 +143,7 @@ export function ProfileCard({ userName, avatar, teamName, stats }: ProfileCardPr
             </div>
           )}
         </div>
-      </GlassCard>
+      </Card>
     </motion.div>
   );
 }

@@ -2,11 +2,11 @@
  * AnalyticsSummaryStats -- summary stat cards row above the volume chart.
  *
  * Displays total distance, total hours, total sessions, and average per
- * period (week or month) in a responsive 4-column grid of GlassCard-wrapped
+ * period (week or month) in a responsive 4-column grid of Card-wrapped
  * cards with color-coded left borders, sparklines, and trend arrows.
  */
 
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { Sparkline } from '@/components/ui/Sparkline';
 import { formatHours } from '@/lib/format';
 import type { VolumeSummary, VolumeMetric, VolumeGranularity, VolumeBucket } from '../types';
@@ -85,7 +85,7 @@ function StatCard({
   trend,
 }: StatCardProps) {
   return (
-    <GlassCard interactive padding="none" className={`border-l-[3px] ${borderColorClass}`}>
+    <Card variant="interactive" padding="none" className={`border-l-[3px] ${borderColorClass}`}>
       <div className="px-4 py-3">
         <p className="text-[10px] uppercase tracking-wider text-text-faint font-medium mb-1">
           {label}
@@ -106,7 +106,7 @@ function StatCard({
           )}
         </div>
       </div>
-    </GlassCard>
+    </Card>
   );
 }
 

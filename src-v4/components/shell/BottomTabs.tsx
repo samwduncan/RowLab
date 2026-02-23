@@ -34,7 +34,7 @@ export function BottomTabs() {
   return (
     <>
       <nav
-        className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center justify-around border-t border-edge-default bg-void-surface/95 backdrop-blur-xl"
+        className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center justify-around border-t border-edge-default bg-void-surface"
         style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
         aria-label="Bottom navigation"
       >
@@ -89,7 +89,7 @@ export function BottomTabs() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm"
+              className="fixed inset-0 z-30 bg-black/60"
               onClick={() => setMoreOpen(false)}
             />
             {/* Sheet */}
@@ -98,7 +98,7 @@ export function BottomTabs() {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="fixed bottom-16 left-0 right-0 z-35 rounded-t-2xl border-t border-edge-default bg-void-surface/98 backdrop-blur-xl"
+              className="fixed bottom-16 left-0 right-0 z-35 rounded-t-2xl border-t border-edge-default bg-void-surface"
               style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
             >
               <div className="p-4">

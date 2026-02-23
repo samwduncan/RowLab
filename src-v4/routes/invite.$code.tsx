@@ -21,7 +21,7 @@ import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { z } from 'zod';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/useAuth';
 import { api } from '@/lib/api';
@@ -148,9 +148,9 @@ function InviteClaimPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-void-deep p-4">
         <div className="w-full max-w-md">
-          <GlassCard padding="lg" className="rounded-2xl">
+          <Card padding="lg" className="rounded-2xl">
             <InviteSkeleton />
-          </GlassCard>
+          </Card>
         </div>
       </div>
     );
@@ -161,7 +161,7 @@ function InviteClaimPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-void-deep p-4">
         <div className="w-full max-w-md">
-          <GlassCard padding="lg" className="rounded-2xl text-center">
+          <Card padding="lg" className="rounded-2xl text-center">
             <div className="mb-6">
               <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
                 oar<span className="text-accent-teal">bit</span>
@@ -179,7 +179,7 @@ function InviteClaimPage() {
                 Go to login
               </Link>
             </div>
-          </GlassCard>
+          </Card>
         </div>
       </div>
     );
@@ -197,9 +197,9 @@ function InviteClaimPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-void-deep p-4">
       <div className="w-full max-w-md">
-        <GlassCard padding="lg" className="rounded-2xl text-center">
+        <Card padding="lg" className="rounded-2xl text-center">
           <p className="text-sm text-text-dim">Redirecting to registration...</p>
-        </GlassCard>
+        </Card>
       </div>
     </div>
   );
@@ -246,7 +246,7 @@ function NewInviteClaimCard({
   return (
     <div className="flex min-h-screen items-center justify-center bg-void-deep p-4">
       <div className="w-full max-w-md">
-        <GlassCard padding="lg" className="rounded-2xl text-center">
+        <Card padding="lg" className="rounded-2xl text-center">
           <div className="mb-6">
             <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
               oar<span className="text-accent-teal">bit</span>
@@ -278,7 +278,7 @@ function NewInviteClaimCard({
               </Button>
             </div>
           </div>
-        </GlassCard>
+        </Card>
       </div>
     </div>
   );
@@ -320,7 +320,7 @@ function LegacyInviteClaimCard({
   return (
     <div className="flex min-h-screen items-center justify-center bg-void-deep p-4">
       <div className="w-full max-w-md">
-        <GlassCard padding="lg" className="rounded-2xl text-center">
+        <Card padding="lg" className="rounded-2xl text-center">
           <div className="mb-6">
             <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
               oar<span className="text-accent-teal">bit</span>
@@ -360,7 +360,7 @@ function LegacyInviteClaimCard({
               </Button>
             </div>
           </div>
-        </GlassCard>
+        </Card>
       </div>
     </div>
   );

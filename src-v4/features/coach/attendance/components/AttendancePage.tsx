@@ -19,7 +19,7 @@ import {
   ClipboardList,
 } from 'lucide-react';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { formatLongDate } from '@/lib/format';
 import { teamRosterOptions } from '@/features/team/api';
 import type { RosterMember } from '@/features/team/types';
@@ -471,7 +471,7 @@ function SummaryTab({ teamId }: SummaryTabProps) {
           <p className="text-sm font-medium text-text-faint">No attendance data for this period</p>
         </div>
       ) : (
-        <GlassCard padding="none">
+        <Card padding="none">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -503,7 +503,7 @@ function SummaryTab({ teamId }: SummaryTabProps) {
               </tbody>
             </table>
           </div>
-        </GlassCard>
+        </Card>
       )}
     </div>
   );

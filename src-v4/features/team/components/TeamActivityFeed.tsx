@@ -7,7 +7,7 @@
  */
 import { motion } from 'motion/react';
 import { listContainerVariants, listItemVariants, SPRING_SMOOTH } from '@/lib/animations';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { useTeamActivity } from '../hooks/useTeamActivity';
 import { ActivityItem } from './ActivityItem';
 import type { ActivityEvent } from '../types';
@@ -91,7 +91,7 @@ export function TeamActivityFeed({ teamId, compact }: TeamActivityFeedProps) {
 
   if (displayEvents.length === 0) {
     return (
-      <GlassCard padding="md">
+      <Card padding="md">
         <div className="flex flex-col items-center gap-2 py-8 text-center">
           <svg
             className="h-10 w-10 text-text-faint"
@@ -111,7 +111,7 @@ export function TeamActivityFeed({ teamId, compact }: TeamActivityFeedProps) {
             Activity will appear here as team members train and interact.
           </p>
         </div>
-      </GlassCard>
+      </Card>
     );
   }
 

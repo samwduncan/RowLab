@@ -84,7 +84,7 @@ function ChartTooltip({ active, payload, label }: TooltipProps<number, string>) 
   if (!active || !payload || payload.length === 0) return null;
 
   return (
-    <div className="backdrop-blur-xl bg-void-raised/90 border border-edge-default rounded-xl px-3 py-2 shadow-md min-w-[120px]">
+    <div className="bg-void-raised border border-edge-default rounded-xl px-3 py-2 shadow-md min-w-[120px]">
       <p className="text-text-faint text-[10px] uppercase tracking-wider mb-1.5">{label}</p>
       {payload.map((entry) => (
         <div key={entry.name} className="flex items-center gap-2 py-0.5">

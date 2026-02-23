@@ -7,7 +7,7 @@ import { useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Bell, Mail, Smartphone } from 'lucide-react';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { settingsQueryOptions, useUpdateSettings, type NotificationPrefs } from '../api';
 
 /* ------------------------------------------------------------------ */
@@ -116,7 +116,7 @@ export function NotificationsSection() {
       />
 
       {/* Email Notifications */}
-      <GlassCard>
+      <Card>
         <div className="flex items-center gap-2 mb-4">
           <Mail className="w-4 h-4 text-accent-teal" />
           <h3 className="text-sm font-semibold text-text-bright">Email Notifications</h3>
@@ -151,10 +151,10 @@ export function NotificationsSection() {
             disabled={isPending}
           />
         </div>
-      </GlassCard>
+      </Card>
 
       {/* Push Notifications */}
-      <GlassCard>
+      <Card>
         <div className="flex items-center gap-2 mb-4">
           <Smartphone className="w-4 h-4 text-accent-teal" />
           <h3 className="text-sm font-semibold text-text-bright">Push Notifications</h3>
@@ -175,7 +175,7 @@ export function NotificationsSection() {
             disabled={isPending}
           />
         </div>
-      </GlassCard>
+      </Card>
     </div>
   );
 }

@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Anchor, Plus, Pencil, Trash2, SailboatIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { TabToggle } from '@/components/ui/TabToggle';
 import { Button } from '@/components/ui/Button';
@@ -96,7 +96,7 @@ function DialogOverlay({
         // Close on backdrop click
         if (e.target === dialogRef.current) onClose();
       }}
-      className="backdrop:bg-black/60 backdrop:backdrop-blur-sm bg-transparent p-0 m-auto max-w-lg w-full rounded-xl open:flex open:flex-col"
+      className="backdrop:bg-black/60 bg-transparent p-0 m-auto max-w-lg w-full rounded-xl open:flex open:flex-col"
     >
       <AnimatePresence>
         {open && (
@@ -504,7 +504,7 @@ export function FleetPage({ teamId, readOnly }: FleetPageProps) {
       {isLoading ? (
         <FleetSkeleton />
       ) : (
-        <GlassCard padding="none">
+        <Card padding="none">
           <AnimatePresence mode="wait">
             {activeTab === 'shells' ? (
               <motion.div key="shells" {...fadeIn}>
@@ -560,7 +560,7 @@ export function FleetPage({ teamId, readOnly }: FleetPageProps) {
               </motion.div>
             )}
           </AnimatePresence>
-        </GlassCard>
+        </Card>
       )}
 
       {/* Shell form dialog */}

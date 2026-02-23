@@ -60,7 +60,7 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -4, scale: 0.96 }}
           transition={SPRING_SNAPPY}
-          className="absolute right-0 top-full z-40 mt-2 w-80 overflow-hidden rounded-2xl border border-edge-default bg-void-overlay/95 shadow-md backdrop-blur-xl"
+          className="absolute right-0 top-full z-40 mt-2 w-80 overflow-hidden rounded-2xl border border-edge-default bg-void-overlay shadow-md"
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-edge-default/50 px-4 py-3">

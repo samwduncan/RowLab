@@ -214,7 +214,7 @@ export function CommandPalette() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-50 bg-black/60"
             onClick={() => setOpen(false)}
             aria-hidden="true"
           />
@@ -229,7 +229,7 @@ export function CommandPalette() {
             onKeyDown={handleKeyDown}
           >
             <Command
-              className="command-palette overflow-hidden rounded-2xl border border-edge-default bg-void-overlay/95 shadow-2xl backdrop-blur-xl"
+              className="command-palette overflow-hidden rounded-2xl border border-edge-default bg-void-overlay shadow-2xl"
               shouldFilter={true}
               loop
             >

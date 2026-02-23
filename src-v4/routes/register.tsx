@@ -7,7 +7,7 @@ import { createFileRoute, redirect, Link } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 import { useQuery } from '@tanstack/react-query';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { RegisterForm } from '@/features/auth/RegisterForm';
 import { api } from '@/lib/api';
 
@@ -49,7 +49,7 @@ function RegisterPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-void-deep p-4">
         <div className="w-full max-w-md">
-          <GlassCard padding="lg" className="rounded-2xl text-center">
+          <Card padding="lg" className="rounded-2xl text-center">
             <div className="mb-6">
               <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
                 oar<span className="text-accent-teal">bit</span>
@@ -67,7 +67,7 @@ function RegisterPage() {
                 Back to login
               </Link>
             </div>
-          </GlassCard>
+          </Card>
         </div>
       </div>
     );
@@ -91,7 +91,7 @@ function InviteGatedRegister({ inviteToken }: { inviteToken: string }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-void-deep p-4">
       <div className="w-full max-w-md">
-        <GlassCard padding="lg" className="rounded-2xl">
+        <Card padding="lg" className="rounded-2xl">
           <div className="mb-8 text-center">
             <h1 className="text-3xl font-bold tracking-tight text-text-bright font-display">
               oar<span className="text-accent-teal">bit</span>
@@ -146,7 +146,7 @@ function InviteGatedRegister({ inviteToken }: { inviteToken: string }) {
               </Link>
             </p>
           </div>
-        </GlassCard>
+        </Card>
       </div>
     </div>
   );

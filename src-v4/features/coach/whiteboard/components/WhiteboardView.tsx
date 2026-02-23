@@ -6,7 +6,7 @@
  */
 import { ClipboardList, Pencil } from 'lucide-react';
 import MDEditor from '@uiw/react-md-editor';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { formatLongDate } from '@/lib/format';
 import type { WhiteboardEntry } from '../types';
@@ -21,7 +21,7 @@ export function WhiteboardView({ whiteboard, canEdit, onEdit }: WhiteboardViewPr
   // Empty state
   if (!whiteboard) {
     return (
-      <GlassCard className="text-center">
+      <Card className="text-center">
         <ClipboardList className="mx-auto mb-4 h-12 w-12 text-text-faint" />
         <p className="text-sm text-text-faint mb-5">No whiteboard posted yet.</p>
         {canEdit && (
@@ -30,12 +30,12 @@ export function WhiteboardView({ whiteboard, canEdit, onEdit }: WhiteboardViewPr
             Create Today&apos;s Whiteboard
           </Button>
         )}
-      </GlassCard>
+      </Card>
     );
   }
 
   return (
-    <GlassCard padding="none">
+    <Card padding="none">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-edge-default">
         <div>
@@ -65,6 +65,6 @@ export function WhiteboardView({ whiteboard, canEdit, onEdit }: WhiteboardViewPr
           Last updated {new Date(whiteboard.updatedAt).toLocaleString()}
         </p>
       </div>
-    </GlassCard>
+    </Card>
   );
 }
