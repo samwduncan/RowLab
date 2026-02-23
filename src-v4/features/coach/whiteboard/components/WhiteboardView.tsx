@@ -8,21 +8,13 @@ import { ClipboardList, Pencil } from 'lucide-react';
 import MDEditor from '@uiw/react-md-editor';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Button } from '@/components/ui/Button';
+import { formatLongDate } from '@/lib/format';
 import type { WhiteboardEntry } from '../types';
 
 interface WhiteboardViewProps {
   whiteboard: WhiteboardEntry | null;
   canEdit: boolean;
   onEdit: () => void;
-}
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
 }
 
 export function WhiteboardView({ whiteboard, canEdit, onEdit }: WhiteboardViewProps) {
@@ -48,7 +40,7 @@ export function WhiteboardView({ whiteboard, canEdit, onEdit }: WhiteboardViewPr
       <div className="flex items-center justify-between px-6 py-4 border-b border-edge-default">
         <div>
           <h2 className="text-base font-semibold text-text-bright">
-            {formatDate(whiteboard.date)}
+            {formatLongDate(whiteboard.date)}
           </h2>
           <p className="text-xs text-text-faint mt-0.5">Posted by {whiteboard.author.name}</p>
         </div>

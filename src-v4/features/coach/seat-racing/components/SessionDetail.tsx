@@ -15,6 +15,7 @@ import { X, Trash2, MapPin } from 'lucide-react';
 import { SPRING_GENTLE } from '@/lib/animations';
 import { useIsMobile } from '@/hooks/useBreakpoint';
 import { Button } from '@/components/ui/Button';
+import { formatLongDate } from '@/lib/format';
 import { sessionDetailOptions, useDeleteSession } from '../api';
 import type { Conditions, Side } from '../types';
 
@@ -33,15 +34,8 @@ interface SessionDetailProps {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function formatLongDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-}
-
+// Local: seat racing times need sub-second precision ("1:54.3") which differs
+// from @/lib/format formatDuration (whole seconds only "1:54").
 function formatTime(seconds: number | null): string {
   if (seconds == null) return '--:--';
   const mins = Math.floor(seconds / 60);

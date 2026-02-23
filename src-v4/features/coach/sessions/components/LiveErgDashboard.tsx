@@ -7,21 +7,12 @@
  */
 import { useMemo } from 'react';
 import { Activity, Heart, Gauge, Waves, Ruler } from 'lucide-react';
+import { formatPace } from '@/lib/format';
 import type { ErgData } from '../hooks/useSocket';
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-/**
- * Format pace in seconds to mm:ss.t/500m display.
- */
-function formatPace(seconds: number): string {
-  if (!seconds || seconds <= 0) return '--:--';
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${secs.toString().padStart(2, '0')}`;
-}
 
 /**
  * Determine pace color relative to target.
@@ -67,7 +58,7 @@ function ErgCard({ data, targetPace }: ErgCardProps) {
       {/* Primary metric: pace */}
       <div className="text-center">
         <span className={`text-2xl font-mono font-bold ${paceClass}`}>
-          {formatPace(data.currentPace)}
+          {formatPace(data.currentPace * 10)}
         </span>
         <span className="text-xs text-text-faint ml-1">/500m</span>
       </div>
@@ -169,7 +160,7 @@ export function LiveErgDashboard({
           <span>
             Target:{' '}
             <span className="font-mono font-bold text-text-bright">
-              {formatPace(targetPace)}/500m
+              {formatPace(targetPace * 10)}/500m
             </span>
           </span>
           <span className="text-edge-default">|</span>

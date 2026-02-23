@@ -8,22 +8,20 @@
 
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Sparkline } from '@/components/ui/Sparkline';
+import { formatHours } from '@/lib/format';
 import type { VolumeSummary, VolumeMetric, VolumeGranularity, VolumeBucket } from '../types';
 
 /* ------------------------------------------------------------------ */
 /* Formatters                                                          */
 /* ------------------------------------------------------------------ */
 
+// Local: analytics distance uses "X km" / "X m" with locale formatting,
+// differs from @/lib/format which uses compact "Xk" / "Xm" form.
 function formatDistance(meters: number): string {
   if (meters >= 1_000_000)
     return `${(meters / 1_000).toLocaleString('en-US', { maximumFractionDigits: 0 })} km`;
   if (meters >= 10_000) return `${(meters / 1_000).toFixed(1)} km`;
   return `${meters.toLocaleString('en-US', { maximumFractionDigits: 0 })} m`;
-}
-
-function formatHours(seconds: number): string {
-  const hours = seconds / 3600;
-  return `${hours.toFixed(1)} hrs`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -174,8 +172,7 @@ export function AnalyticsSummaryStats({
   const greenColor = style.getPropertyValue('--color-data-good').trim() || 'oklch(0.62 0.17 255)';
   const blueColor =
     style.getPropertyValue('--color-accent-primary').trim() || 'oklch(0.55 0.18 255)';
-  const copperColor =
-    style.getPropertyValue('--color-accent').trim() || 'oklch(0.62 0.12 55)';
+  const copperColor = style.getPropertyValue('--color-accent').trim() || 'oklch(0.62 0.12 55)';
   const amberColor = style.getPropertyValue('--color-data-warning').trim() || 'oklch(0.75 0.14 75)';
 
   return (

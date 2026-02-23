@@ -3,15 +3,11 @@
  */
 import { Card } from '@/components/ui/Card';
 import { SectionHeader } from '@/components/ui/SectionHeader';
+import { formatDistance } from '@/lib/format';
 import type { StatsData } from '../types';
 
 interface ThisWeekStatsProps {
   stats: StatsData;
-}
-
-function formatDistance(meters: number): string {
-  if (meters >= 1000) return `${(meters / 1000).toFixed(1)}k`;
-  return `${meters}m`;
 }
 
 export function ThisWeekStats({ stats }: ThisWeekStatsProps) {

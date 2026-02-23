@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { addWorkoutToPlan, trainingKeys } from '../api';
 import type { WorkoutType, Intensity, CreatePlannedWorkoutInput } from '../types';
 import { Button } from '@/components/ui/Button';
+import { formatDateForInput } from '@/lib/format';
 import { SPRING_GENTLE } from '@/lib/animations';
 
 // ---------------------------------------------------------------------------
@@ -41,10 +42,6 @@ const INTENSITIES: { value: Intensity; label: string }[] = [
   { value: 'hard', label: 'Hard' },
   { value: 'max', label: 'Max' },
 ];
-
-function formatDateForInput(date: Date): string {
-  return date.toISOString().slice(0, 10);
-}
 
 // ---------------------------------------------------------------------------
 // WorkoutFormModal

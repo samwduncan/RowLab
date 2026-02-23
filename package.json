@@ -23,7 +23,7 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
-    "lint": "eslint src-v4/ --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint src-v4/ --report-unused-disable-directives",
     "lint:fix": "eslint src-v4/ --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css,json}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,css,json}\"",

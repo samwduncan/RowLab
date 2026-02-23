@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 
 import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
+import { formatDuration } from '@/lib/format';
 import {
   sessionDetailOptions,
   useStartSession,
@@ -36,16 +37,6 @@ import {
   SEGMENT_LABELS,
   type UpdateSessionInput,
 } from '../types';
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-function formatTime(seconds: number): string {
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${secs.toString().padStart(2, '0')}`;
-}
 
 // ---------------------------------------------------------------------------
 // Skeleton
@@ -332,8 +323,10 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
                       <span className="text-sm font-medium text-text-bright">{piece.name}</span>
                       <div className="flex items-center gap-3 text-xs text-text-dim font-mono flex-shrink-0">
                         {piece.distance && <span>{piece.distance}m</span>}
-                        {piece.duration && <span>{formatTime(piece.duration)}</span>}
-                        {piece.targetSplit && <span>@{formatTime(piece.targetSplit)}/500m</span>}
+                        {piece.duration && <span>{formatDuration(piece.duration)}</span>}
+                        {piece.targetSplit && (
+                          <span>@{formatDuration(piece.targetSplit)}/500m</span>
+                        )}
                         {piece.targetRate && <span>{piece.targetRate}spm</span>}
                       </div>
                     </div>

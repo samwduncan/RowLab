@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { GlassCard } from '@/components/ui/GlassCard';
+import { formatLongDate } from '@/lib/format';
 import { teamRosterOptions } from '@/features/team/api';
 import type { RosterMember } from '@/features/team/types';
 import {
@@ -49,15 +50,6 @@ type Tab = 'daily' | 'summary';
 
 function todayISO(): string {
   return new Date().toISOString().split('T')[0]!;
-}
-
-function formatDateDisplay(iso: string): string {
-  return new Date(iso + 'T00:00:00').toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
 }
 
 function getInitials(name: string): string {
@@ -251,7 +243,7 @@ function DailyTab({ teamId, date, setDate, readOnly }: DailyTabProps) {
           </button>
         </div>
 
-        <span className="text-sm text-text-dim">{formatDateDisplay(date)}</span>
+        <span className="text-sm text-text-dim">{formatLongDate(date)}</span>
       </div>
 
       {/* Stats console + bulk action */}

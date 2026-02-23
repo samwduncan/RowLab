@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Calendar, MapPin } from 'lucide-react';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ClipboardList } from 'lucide-react';
+import { formatRelativeDate } from '@/lib/format';
 import { listContainerVariants, listItemVariants, SPRING_SMOOTH } from '@/lib/animations';
 import type { SeatRaceSession, Conditions } from '../types';
 
@@ -22,27 +23,6 @@ interface SessionListProps {
   isLoading: boolean;
   selectedId?: string | null;
   onSelect: (id: string) => void;
-}
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-  if (diffDays === 0) return 'Today';
-  if (diffDays === 1) return 'Yesterday';
-  if (diffDays < 7) return `${diffDays} days ago`;
-
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
 }
 
 const CONDITIONS_COLOR: Record<Conditions, string> = {
@@ -135,7 +115,7 @@ export function SessionList({ sessions, isLoading, selectedId, onSelect }: Sessi
                 <div className="flex items-center gap-2">
                   <Calendar size={14} className="text-text-faint shrink-0" />
                   <span className="text-sm font-medium text-text-bright">
-                    {formatDate(session.date)}
+                    {formatRelativeDate(session.date)}
                   </span>
                 </div>
                 <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-data-good/10 text-data-good">

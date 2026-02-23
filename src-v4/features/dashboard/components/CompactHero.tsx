@@ -3,6 +3,7 @@
  * Leads with metrics, not a greeting. Space Mono stat pills.
  */
 import { Card } from '@/components/ui/Card';
+import { formatDistance } from '@/lib/format';
 import type { StatsData } from '../types';
 
 interface CompactHeroProps {
@@ -10,11 +11,8 @@ interface CompactHeroProps {
   stats: StatsData;
 }
 
-function formatDistance(meters: number): string {
-  if (meters >= 1000) return `${(meters / 1000).toFixed(1)}k`;
-  return `${meters}m`;
-}
-
+// Local: compact human-readable duration ("2h 15m") differs from @/lib/format
+// which uses clock format ("2:15:00"). This compact form is better for stat pills.
 function formatDuration(seconds: number): string {
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);

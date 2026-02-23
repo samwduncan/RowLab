@@ -155,3 +155,59 @@ export function formatNumber(value: number | null | undefined): string {
   if (value == null) return DASH;
   return new Intl.NumberFormat('en-US').format(value);
 }
+
+/**
+ * Format seconds to human-readable hours.
+ * @example formatHours(7200) → "2.0 hrs"
+ * @example formatHours(5400) → "1.5 hrs"
+ */
+export function formatHours(seconds: number | null | undefined): string {
+  if (seconds == null) return DASH;
+  const hours = seconds / 3600;
+  return `${hours.toFixed(1)} hrs`;
+}
+
+/**
+ * Format ISO date as short absolute date: "Feb 23, 2026".
+ * @example formatDate('2026-02-23T10:00:00Z') → "Feb 23, 2026"
+ */
+export function formatDate(isoDate: string | null | undefined): string {
+  if (!isoDate) return DASH;
+  const date = new Date(isoDate);
+  if (isNaN(date.getTime())) return DASH;
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+}
+
+/**
+ * Format ISO date as long date with weekday: "Monday, February 23, 2026".
+ * @example formatLongDate('2026-02-23') → "Monday, February 23, 2026"
+ */
+export function formatLongDate(isoDate: string | null | undefined): string {
+  if (!isoDate) return DASH;
+  // Append T00:00:00 for date-only strings to avoid timezone shift
+  const normalized = isoDate.includes('T') ? isoDate : `${isoDate}T00:00:00`;
+  const date = new Date(normalized);
+  if (isNaN(date.getTime())) return DASH;
+  return date.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
+/**
+ * Format date for HTML date input value: "YYYY-MM-DD".
+ * @example formatDateForInput(new Date('2026-02-23')) → "2026-02-23"
+ * @example formatDateForInput('2026-02-23T10:00:00Z') → "2026-02-23"
+ */
+export function formatDateForInput(date: Date | string | null | undefined): string {
+  if (date == null) return '';
+  const d = typeof date === 'string' ? new Date(date) : date;
+  if (isNaN(d.getTime())) return '';
+  return d.toISOString().slice(0, 10);
+}
