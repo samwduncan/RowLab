@@ -8,6 +8,7 @@
 import { useCallback, useMemo } from 'react';
 import { Link, useRouterState } from '@tanstack/react-router';
 import { IconStar } from '@/components/icons';
+import { DiamondMarker } from '@/components/ui/DiamondMarker';
 import { useIsDesktop, useIsTablet } from '@/hooks/useBreakpoint';
 import { useAuth } from '@/features/auth/useAuth';
 import { getNavConfig, sidebarFooterItems } from '@/config/navigation';
@@ -112,9 +113,14 @@ export function Sidebar() {
               </div>
             )}
 
-            {/* Nav sections */}
-            {navConfig.sections.map((section) => (
+            {/* Nav sections with diamond separators */}
+            {navConfig.sections.map((section, index) => (
               <div key={section.id}>
+                {(index > 0 || favoriteItems.length > 0) && (
+                  <div className="flex justify-center py-1.5" aria-hidden="true">
+                    <DiamondMarker size="sm" />
+                  </div>
+                )}
                 <SectionHeader label={section.label} />
                 <div className="space-y-0.5">
                   {section.items.map((item) => (
