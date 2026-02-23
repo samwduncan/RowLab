@@ -120,7 +120,7 @@ function OverviewStat({ icon: Icon, label, value, footnote, sparklineData }: Ove
           {label}
         </span>
         <span className="text-xl lg:text-2xl font-bold text-text-bright tabular-nums">{value}</span>
-        {footnote && <span className="text-[10px] text-text-faint">{footnote}</span>}
+        {footnote && <span className="text-[10px] text-accent-ivory">{footnote}</span>}
       </div>
     </Card>
   );

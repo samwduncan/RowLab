@@ -113,7 +113,7 @@ export function AchievementCard({ achievement, compact = false }: AchievementCar
             </div>
             <p className="text-text-dim text-xs mt-0.5 line-clamp-2">{description}</p>
             {unlockedAt && (
-              <p className="text-text-faint text-[11px] mt-1.5">
+              <p className="text-accent-ivory text-[11px] mt-1.5">
                 Unlocked {formatRelativeDate(unlockedAt)}
               </p>
             )}

@@ -107,7 +107,7 @@ export const SocialFeedCard = memo(function SocialFeedCard({ item }: SocialFeedC
               )}
             </div>
           </div>
-          <span className="text-xs text-text-faint">{timeString}</span>
+          <span className="text-xs text-accent-ivory">{timeString}</span>
         </div>
 
         {/* Machine type tag */}

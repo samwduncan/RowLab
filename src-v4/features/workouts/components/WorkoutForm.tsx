@@ -306,7 +306,7 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
             );
           })}
         </div>
-        {errors.sport && <p className="text-data-poor text-xs mt-1">{errors.sport.message}</p>}
+        {errors.sport && <p className="text-accent-coral text-xs mt-1">{errors.sport.message}</p>}
       </div>
 
       {/* Date */}
@@ -323,7 +323,7 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
           {...register('date')}
           className="w-full bg-void-deep border border-edge-default rounded-md text-text-bright text-sm px-3 py-2 focus:ring-2 focus:ring-accent focus:border-accent-teal outline-none"
         />
-        {errors.date && <p className="text-data-poor text-xs mt-1">{errors.date.message}</p>}
+        {errors.date && <p className="text-accent-coral text-xs mt-1">{errors.date.message}</p>}
       </div>
 
       {/* Distance */}
@@ -458,7 +458,9 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
 
       {/* Error message */}
       {submitError && (
-        <p className="text-data-poor text-sm">{submitError.message ?? 'Failed to save workout'}</p>
+        <p className="text-accent-coral text-sm">
+          {submitError.message ?? 'Failed to save workout'}
+        </p>
       )}
 
       {/* Submit */}

@@ -20,7 +20,7 @@ interface VisitCardProps {
 const statusStyles: Record<VisitStatus, { bg: string; text: string; label: string }> = {
   scheduled: { bg: 'bg-data-good/15', text: 'text-data-good', label: 'Scheduled' },
   completed: { bg: 'bg-accent-teal/15', text: 'text-accent-teal', label: 'Completed' },
-  cancelled: { bg: 'bg-data-poor/15', text: 'text-data-poor', label: 'Cancelled' },
+  cancelled: { bg: 'bg-accent-coral/15', text: 'text-accent-coral', label: 'Cancelled' },
 };
 
 export function VisitCard({ visit, onClick }: VisitCardProps) {

@@ -51,9 +51,9 @@ const STATUS_STYLES: Record<ComplianceStatus, { bar: string; badge: string; text
     text: 'text-data-warning',
   },
   over: {
-    bar: 'bg-data-poor',
-    badge: 'bg-data-poor/15 text-data-poor',
-    text: 'text-data-poor',
+    bar: 'bg-accent-coral',
+    badge: 'bg-accent-coral/15 text-accent-coral',
+    text: 'text-accent-coral',
   },
 };
 

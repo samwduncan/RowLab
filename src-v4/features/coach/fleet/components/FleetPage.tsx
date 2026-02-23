@@ -132,7 +132,7 @@ function DeleteConfirm({
       <Button
         variant="ghost"
         size="sm"
-        className="!text-data-poor !h-7 !px-2 !text-xs"
+        className="!text-accent-coral !h-7 !px-2 !text-xs"
         onClick={onConfirm}
         loading={isPending}
       >
@@ -246,7 +246,7 @@ function ShellsTable({
                       </button>
                       <button
                         onClick={() => onDelete(shell.id)}
-                        className="p-1.5 rounded-lg text-text-faint hover:text-data-poor hover:bg-data-poor/10 transition-colors"
+                        className="p-1.5 rounded-lg text-text-faint hover:text-accent-coral hover:bg-accent-coral/10 transition-colors"
                         aria-label={`Delete ${shell.name}`}
                       >
                         <Trash2 size={14} />
@@ -352,7 +352,7 @@ function OarSetsTable({
                       </button>
                       <button
                         onClick={() => onDelete(oarSet.id)}
-                        className="p-1.5 rounded-lg text-text-faint hover:text-data-poor hover:bg-data-poor/10 transition-colors"
+                        className="p-1.5 rounded-lg text-text-faint hover:text-accent-coral hover:bg-accent-coral/10 transition-colors"
                         aria-label={`Delete ${oarSet.name}`}
                       >
                         <Trash2 size={14} />

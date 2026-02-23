@@ -177,7 +177,7 @@ function StatCardShell({
         )}
 
         {/* Footnote */}
-        {footnote && <span className="text-xs text-text-faint">{footnote}</span>}
+        {footnote && <span className="text-xs text-accent-ivory">{footnote}</span>}
       </div>
     </Card>
   );

@@ -104,7 +104,7 @@ function PasswordChangeForm() {
         </div>
       )}
       {status === 'error' && errorMessage && (
-        <div className="flex items-center gap-2 text-sm text-data-poor">
+        <div className="flex items-center gap-2 text-sm text-accent-coral">
           <XCircle className="w-4 h-4" />
           {errorMessage}
         </div>
@@ -178,10 +178,10 @@ export function AccountSection() {
       </Card>
 
       {/* Danger Zone */}
-      <Card className="border border-data-poor/20">
+      <Card className="border border-accent-coral/30">
         <div className="flex items-center gap-2 mb-3">
-          <AlertTriangle className="w-4 h-4 text-data-poor" />
-          <h3 className="text-sm font-semibold text-data-poor">Danger Zone</h3>
+          <AlertTriangle className="w-4 h-4 text-accent-coral" />
+          <h3 className="text-sm font-semibold text-accent-coral">Danger Zone</h3>
         </div>
         <p className="text-sm text-text-dim mb-4">
           Permanently delete your account and all associated data. This action cannot be undone.
@@ -191,8 +191,8 @@ export function AccountSection() {
           onClick={() => setDeleteOpen(true)}
           className="
             inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium
-            bg-data-poor/10 border border-data-poor/20 text-data-poor
-            hover:bg-data-poor/20 transition-colors cursor-pointer
+            bg-accent-coral/10 border border-accent-coral/30 text-accent-coral
+            hover:bg-accent-coral/20 transition-colors cursor-pointer
           "
         >
           Delete Account

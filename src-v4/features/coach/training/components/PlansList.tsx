@@ -326,7 +326,7 @@ function CreatePlanForm({ onCreated, onCancel }: { onCreated: () => void; onCanc
         </div>
 
         {mutation.isError && (
-          <p className="text-xs text-data-poor">Failed to create plan. Please try again.</p>
+          <p className="text-xs text-accent-coral">Failed to create plan. Please try again.</p>
         )}
       </form>
     </Card>

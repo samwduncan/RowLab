@@ -308,7 +308,7 @@ export function WorkoutDetail() {
         {workout.notes && workout.notes.trim() ? (
           <p className="text-text-default text-sm leading-relaxed">{workout.notes}</p>
         ) : (
-          <p className="text-text-faint italic text-sm">No notes</p>
+          <p className="text-accent-coral/70 italic text-sm">No notes</p>
         )}
       </div>
 
@@ -368,7 +368,7 @@ function SourceBadge({ source, createdAt }: { source: SourceType; createdAt?: st
         {cfg.label}
       </div>
       {createdAt && (
-        <span className="text-text-faint text-xs">{formatRelativeDate(createdAt)}</span>
+        <span className="text-accent-ivory text-xs">{formatRelativeDate(createdAt)}</span>
       )}
     </div>
   );

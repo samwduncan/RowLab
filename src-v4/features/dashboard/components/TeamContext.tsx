@@ -49,7 +49,7 @@ export function TeamContext({ teamContext, className = '' }: TeamContextProps) {
                     <div className="w-1.5 h-1.5 rounded-full bg-accent-teal mt-1.5 shrink-0" />
                     <div className="min-w-0">
                       <span className="text-sm text-text-bright block truncate">{event.title}</span>
-                      <span className="text-xs text-text-faint">
+                      <span className="text-xs text-accent-ivory">
                         {formatRelativeDate(event.date)}
                       </span>
                     </div>
@@ -70,7 +70,7 @@ export function TeamContext({ teamContext, className = '' }: TeamContextProps) {
                 {teamContext.notices.map((notice) => (
                   <li key={notice.id} className="text-sm">
                     <p className="text-text-bright">{notice.message}</p>
-                    <span className="text-xs text-text-faint">
+                    <span className="text-xs text-accent-ivory">
                       {notice.author} {'\u00b7'} {formatRelativeDate(notice.createdAt)}
                     </span>
                   </li>

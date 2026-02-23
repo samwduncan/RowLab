@@ -135,12 +135,12 @@ export function MemberCard({ member }: MemberCardProps) {
       {/* Activity summary */}
       <div className="mt-3 flex items-center justify-between border-t border-edge-default/40 pt-3">
         <span className="text-xs text-text-dim">{activityText}</span>
-        <span className="text-xs text-text-faint">Last: {lastWorkout}</span>
+        <span className="text-xs text-accent-ivory">Last: {lastWorkout}</span>
       </div>
 
       {/* Joined + active status */}
       <div className="mt-2 flex items-center justify-between">
-        <p className="text-[11px] text-text-faint">{getJoinedRelative(member.joinedAt)}</p>
+        <p className="text-[11px] text-accent-ivory">{getJoinedRelative(member.joinedAt)}</p>
         {recentlyActive && (
           <span className="text-[11px] font-medium text-data-good">Active today</span>
         )}
