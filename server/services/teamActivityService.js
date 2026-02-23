@@ -87,14 +87,21 @@ export async function getActivityFeed(teamId, { cursor, limit = 20 } = {}) {
     );
   }
 
-  const enrichedEvents = events.map((event) => ({
-    id: event.id,
-    type: event.type,
-    title: event.title,
-    data: event.data,
-    createdAt: event.createdAt.toISOString(),
-    actor: event.userId ? actorMap[event.userId] || { name: 'Unknown', avatarUrl: null } : null,
-  }));
+  const enrichedEvents = events.map((event) => {
+    const actor = event.userId
+      ? actorMap[event.userId] || { name: 'Unknown', avatarUrl: null }
+      : null;
+    return {
+      id: event.id,
+      type: event.type,
+      actorId: event.userId || null,
+      actorName: actor?.name || null,
+      actorAvatarUrl: actor?.avatarUrl || null,
+      title: event.title,
+      data: event.data,
+      createdAt: event.createdAt.toISOString(),
+    };
+  });
 
   return {
     events: enrichedEvents,
