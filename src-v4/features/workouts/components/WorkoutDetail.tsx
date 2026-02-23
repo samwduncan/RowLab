@@ -32,7 +32,7 @@ import { WorkoutPageContext } from '../WorkoutPageContext';
 import { SPORT_CONFIG, SOURCE_CONFIG, type SportType, type SourceType } from '../constants';
 import { getSportFromWorkout, parseIntervalPattern } from '../utils';
 import { formatDistance, formatDuration, formatPace, formatRelativeDate } from '@/lib/format';
-import { GradientBorder } from '@/components/ui/GradientBorder';
+import { Card } from '@/components/ui/Card';
 import { SplitsTable } from './SplitsTable';
 import { SplitsChart } from './SplitsChart';
 import { ShareCardModal } from '@/features/share';
@@ -184,11 +184,10 @@ export function WorkoutDetail() {
           </button>
         </div>
 
-        {/* Hero card with gradient border and sport-colored glow */}
-        <GradientBorder
-          className="flex-1"
-          innerBg="bg-void-raised"
-          radius="rounded-xl"
+        {/* Hero card with sport-colored glow */}
+        <Card
+          padding="none"
+          className="flex-1 !bg-void-raised"
           style={{
             boxShadow: `0 0 40px -10px color-mix(in oklch, ${sportColorVar(sport)}, transparent 70%)`,
           }}
@@ -251,7 +250,7 @@ export function WorkoutDetail() {
               background: `linear-gradient(to right, transparent, color-mix(in oklch, ${sportColorVar(sport)}, transparent 70%), transparent)`,
             }}
           />
-        </GradientBorder>
+        </Card>
 
         {/* Next arrow */}
         <div className="flex items-center">
@@ -368,7 +367,9 @@ function SourceBadge({ source, createdAt }: { source: SourceType; createdAt?: st
         <SourceIcon size={12} />
         {cfg.label}
       </div>
-      {createdAt && <span className="text-text-faint text-xs">{formatRelativeDate(createdAt)}</span>}
+      {createdAt && (
+        <span className="text-text-faint text-xs">{formatRelativeDate(createdAt)}</span>
+      )}
     </div>
   );
 }

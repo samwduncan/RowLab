@@ -100,11 +100,10 @@ function DialogOverlay({
     >
       <AnimatePresence>
         {open && (
-          <motion.div
-            {...slideUp}
-            className="bg-void-surface border border-edge-default rounded-xl p-6 shadow-md"
-          >
-            {children}
+          <motion.div {...slideUp}>
+            <Card padding="lg" variant="elevated">
+              {children}
+            </Card>
           </motion.div>
         )}
       </AnimatePresence>

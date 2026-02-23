@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 
 import { SPRING_SMOOTH, SPRING_GENTLE } from '@/lib/animations';
+import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useCreateSession } from '../api';
@@ -196,134 +197,136 @@ export function SessionWizard({ isOpen, onClose, onSuccess, teamId }: SessionWiz
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-void-surface border border-edge-default rounded-xl shadow-md w-full max-w-xl max-h-[85vh] flex flex-col"
+              className="w-full max-w-xl max-h-[85vh]"
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               transition={SPRING_GENTLE}
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Header */}
-              <div className="flex items-center justify-between px-5 py-4 border-b border-edge-default shrink-0">
-                <h2 className="text-lg font-display font-semibold text-text-bright">
-                  New Seat Race Session
-                </h2>
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="p-1.5 rounded-md hover:bg-void-overlay transition-colors"
-                  aria-label="Close"
-                >
-                  <X size={18} className="text-text-faint" />
-                </button>
-              </div>
+              <Card padding="none" variant="elevated" className="flex flex-col max-h-[85vh]">
+                {/* Header */}
+                <div className="flex items-center justify-between px-5 py-4 border-b border-edge-default shrink-0">
+                  <h2 className="text-lg font-display font-semibold text-text-bright">
+                    New Seat Race Session
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="p-1.5 rounded-md hover:bg-void-overlay transition-colors"
+                    aria-label="Close"
+                  >
+                    <X size={18} className="text-text-faint" />
+                  </button>
+                </div>
 
-              {/* Step indicator */}
-              <div className="px-5 py-3 border-b border-edge-default/50 shrink-0">
-                <div className="flex items-center gap-1">
-                  {STEPS.map((s, idx) => {
-                    const StepIcon = s.icon;
-                    const isActive = idx === step;
-                    const isDone = idx < step;
-                    return (
-                      <div key={s.label} className="flex items-center">
-                        <div
-                          className={`
+                {/* Step indicator */}
+                <div className="px-5 py-3 border-b border-edge-default/50 shrink-0">
+                  <div className="flex items-center gap-1">
+                    {STEPS.map((s, idx) => {
+                      const StepIcon = s.icon;
+                      const isActive = idx === step;
+                      const isDone = idx < step;
+                      return (
+                        <div key={s.label} className="flex items-center">
+                          <div
+                            className={`
                             flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium transition-colors
                             ${isActive ? 'bg-accent-teal/10 text-accent-teal' : ''}
                             ${isDone ? 'text-data-excellent' : ''}
                             ${!isActive && !isDone ? 'text-text-faint' : ''}
                           `.trim()}
-                        >
-                          <StepIcon size={13} />
-                          <span className="hidden sm:inline">{s.label}</span>
+                          >
+                            <StepIcon size={13} />
+                            <span className="hidden sm:inline">{s.label}</span>
+                          </div>
+                          {idx < STEPS.length - 1 && (
+                            <div
+                              className={`w-4 h-px mx-0.5 ${
+                                idx < step ? 'bg-data-excellent' : 'bg-edge-default'
+                              }`}
+                            />
+                          )}
                         </div>
-                        {idx < STEPS.length - 1 && (
-                          <div
-                            className={`w-4 h-px mx-0.5 ${
-                              idx < step ? 'bg-data-excellent' : 'bg-edge-default'
-                            }`}
-                          />
-                        )}
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
 
-              {/* Step content */}
-              <div className="flex-1 overflow-y-auto px-5 py-5 relative min-h-[260px]">
-                <AnimatePresence initial={false} mode="wait" custom={direction}>
-                  <motion.div
-                    key={step}
-                    custom={direction}
-                    variants={slideVariants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={SPRING_SMOOTH}
-                  >
-                    {step === 0 && <Step1SessionInfo form={form} />}
-                    {step === 1 && (
-                      <Step2Athletes selected={selectedAthletes} onChange={setSelectedAthletes} />
-                    )}
-                    {step === 2 && (
-                      <Step3Boats
-                        boatCount={boatCount}
-                        seatsPerBoat={seatsPerBoat}
-                        onBoatCountChange={setBoatCount}
-                        onSeatsChange={setSeatsPerBoat}
-                      />
-                    )}
-                    {step === 3 && (
-                      <Step4Assignments
-                        athletes={selectedAthletes}
-                        boatCount={boatCount}
-                        seatsPerBoat={seatsPerBoat}
-                      />
-                    )}
-                    {step === 4 && <Step5Times boatCount={boatCount} />}
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+                {/* Step content */}
+                <div className="flex-1 overflow-y-auto px-5 py-5 relative min-h-[260px]">
+                  <AnimatePresence initial={false} mode="wait" custom={direction}>
+                    <motion.div
+                      key={step}
+                      custom={direction}
+                      variants={slideVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={SPRING_SMOOTH}
+                    >
+                      {step === 0 && <Step1SessionInfo form={form} />}
+                      {step === 1 && (
+                        <Step2Athletes selected={selectedAthletes} onChange={setSelectedAthletes} />
+                      )}
+                      {step === 2 && (
+                        <Step3Boats
+                          boatCount={boatCount}
+                          seatsPerBoat={seatsPerBoat}
+                          onBoatCountChange={setBoatCount}
+                          onSeatsChange={setSeatsPerBoat}
+                        />
+                      )}
+                      {step === 3 && (
+                        <Step4Assignments
+                          athletes={selectedAthletes}
+                          boatCount={boatCount}
+                          seatsPerBoat={seatsPerBoat}
+                        />
+                      )}
+                      {step === 4 && <Step5Times boatCount={boatCount} />}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
 
-              {/* Footer navigation */}
-              <div className="flex items-center justify-between px-5 py-3 border-t border-edge-default shrink-0">
-                <div>
-                  {!isFirstStep && (
+                {/* Footer navigation */}
+                <div className="flex items-center justify-between px-5 py-3 border-t border-edge-default shrink-0">
+                  <div>
+                    {!isFirstStep && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={goBack}
+                        disabled={createSession.isPending}
+                      >
+                        <ChevronLeft size={16} />
+                        Back
+                      </Button>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={goBack}
+                      onClick={onClose}
                       disabled={createSession.isPending}
                     >
-                      <ChevronLeft size={16} />
-                      Back
+                      Cancel
                     </Button>
-                  )}
+                    {isLastStep ? (
+                      <Button size="sm" onClick={handleCreate} loading={createSession.isPending}>
+                        <Check size={16} />
+                        Create Session
+                      </Button>
+                    ) : (
+                      <Button size="sm" onClick={goNext}>
+                        Next
+                        <ChevronRight size={16} />
+                      </Button>
+                    )}
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={onClose}
-                    disabled={createSession.isPending}
-                  >
-                    Cancel
-                  </Button>
-                  {isLastStep ? (
-                    <Button size="sm" onClick={handleCreate} loading={createSession.isPending}>
-                      <Check size={16} />
-                      Create Session
-                    </Button>
-                  ) : (
-                    <Button size="sm" onClick={goNext}>
-                      Next
-                      <ChevronRight size={16} />
-                    </Button>
-                  )}
-                </div>
-              </div>
+              </Card>
             </motion.div>
           </motion.div>
         </>

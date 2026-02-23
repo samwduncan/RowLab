@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { Plus, Play, Calendar, Clock } from 'lucide-react';
 
+import { Card } from '@/components/ui/Card';
 import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
 import { sessionsOptions, activeSessionOptions, useCreateSession } from '../api';
 import { SessionForm, type SessionFormData } from './SessionForm';
@@ -208,8 +209,10 @@ export function SessionsPage() {
           <div className="fixed inset-0 bg-black/50 z-50" onClick={() => setShowForm(false)} />
           <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh] px-4">
             {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- stopPropagation prevents backdrop dismiss on content click */}
-            <div
-              className="bg-void-surface border border-edge-default rounded-xl shadow-md p-5 max-w-lg w-full max-h-[80vh] overflow-y-auto"
+            <Card
+              padding="lg"
+              variant="elevated"
+              className="max-w-lg w-full max-h-[80vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <h2 className="text-lg font-semibold text-text-bright mb-4">New Session</h2>
@@ -218,7 +221,7 @@ export function SessionsPage() {
                 onCancel={() => setShowForm(false)}
                 isSubmitting={createMutation.isPending}
               />
-            </div>
+            </Card>
           </div>
         </>
       )}

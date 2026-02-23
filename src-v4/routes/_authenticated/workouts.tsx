@@ -17,6 +17,7 @@ import { z } from 'zod';
 import { Filter, Plus } from 'lucide-react';
 import { motion, useMotionValueEvent, useScroll } from 'motion/react';
 
+import { Card } from '@/components/ui/Card';
 import { TabToggle } from '@/components/ui/TabToggle';
 import { useIsMobile } from '@/hooks/useBreakpoint';
 import {
@@ -279,8 +280,10 @@ function DeleteConfirmDialog({
       {/* Dialog */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- stopPropagation prevents backdrop dismiss on content click */}
-        <div
-          className="bg-void-surface border border-edge-default rounded-xl shadow-md p-5 max-w-sm w-full"
+        <Card
+          padding="lg"
+          variant="elevated"
+          className="max-w-sm w-full"
           onClick={(e) => e.stopPropagation()}
         >
           <h3 className="text-text-bright text-base font-semibold mb-2">Delete workout?</h3>
@@ -304,7 +307,7 @@ function DeleteConfirmDialog({
               {deleteWorkout.isPending ? 'Deleting...' : 'Delete'}
             </button>
           </div>
-        </div>
+        </Card>
       </div>
     </>
   );

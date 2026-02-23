@@ -67,36 +67,38 @@ function ShortcutsHelp({ onClose }: { onClose: () => void }) {
       onClick={onClose}
     >
       <motion.div
-        className="bg-void-surface border border-edge-default rounded-xl shadow-md p-5 w-full max-w-xs"
+        className="w-full max-w-xs"
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-text-bright flex items-center gap-2">
-            <Keyboard size={16} className="text-text-faint" />
-            Keyboard Shortcuts
-          </h3>
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-1 rounded hover:bg-void-overlay transition-colors"
-            aria-label="Close"
-          >
-            <X size={16} className="text-text-faint" />
-          </button>
-        </div>
-        <div className="space-y-2.5">
-          {shortcuts.map((s) => (
-            <div key={s.key} className="flex items-center justify-between">
-              <span className="text-sm text-text-dim">{s.description}</span>
-              <kbd className="px-2 py-0.5 rounded bg-void-deep text-xs font-mono text-text-bright border border-edge-default/50">
-                {s.key}
-              </kbd>
-            </div>
-          ))}
-        </div>
+        <Card padding="lg" variant="elevated">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-semibold text-text-bright flex items-center gap-2">
+              <Keyboard size={16} className="text-text-faint" />
+              Keyboard Shortcuts
+            </h3>
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-1 rounded hover:bg-void-overlay transition-colors"
+              aria-label="Close"
+            >
+              <X size={16} className="text-text-faint" />
+            </button>
+          </div>
+          <div className="space-y-2.5">
+            {shortcuts.map((s) => (
+              <div key={s.key} className="flex items-center justify-between">
+                <span className="text-sm text-text-dim">{s.description}</span>
+                <kbd className="px-2 py-0.5 rounded bg-void-deep text-xs font-mono text-text-bright border border-edge-default/50">
+                  {s.key}
+                </kbd>
+              </div>
+            ))}
+          </div>
+        </Card>
       </motion.div>
     </motion.div>
   );

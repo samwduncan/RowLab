@@ -13,13 +13,11 @@
  * Padding: none | sm (12px) | md (16px) | lg (24px)
  * Radius: radius-lg (6px)
  *
- * Backward-compatible: also exported as GlassCard for migration.
+ * Accepts all standard HTML div attributes (onClick, role, aria-*, etc.).
  */
 
-interface CardProps {
+interface CardProps extends Omit<React.HTMLAttributes<HTMLElement>, 'children'> {
   children: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
   padding?: 'none' | 'sm' | 'md' | 'lg';
   as?: 'div' | 'section' | 'article';
   variant?: 'default' | 'interactive' | 'elevated' | 'inset';
@@ -56,17 +54,21 @@ export function Card({
   as: Component = 'div',
   variant = 'default',
   interactive = false,
+  hover: _hover,
+  glow: _glow,
+  ...rest
 }: CardProps) {
   // Support legacy interactive prop
   const resolvedVariant = interactive && variant === 'default' ? 'interactive' : variant;
   const base = variantClasses[resolvedVariant];
 
   return (
-    <Component className={`${base} ${paddingMap[padding]} ${className}`.trim()} style={style}>
+    <Component
+      className={`${base} ${paddingMap[padding]} ${className}`.trim()}
+      style={style}
+      {...rest}
+    >
       {children}
     </Component>
   );
 }
-
-/** @deprecated Use Card instead. This alias exists for backward compatibility. */
-export const GlassCard = Card;

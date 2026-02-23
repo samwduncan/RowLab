@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 
 import { SPORT_CONFIG, SPORT_LIST, type SportType } from '../constants';
+import { Card } from '@/components/ui/Card';
 import { scaleIn } from '@/lib/animations';
 
 /* ------------------------------------------------------------------ */
@@ -95,115 +96,117 @@ export function FilterPopover({
           {/* Popover */}
           <motion.div
             {...scaleIn}
-            className="absolute right-0 top-full mt-2 z-50 w-80 bg-void-surface border border-edge-default rounded-xl shadow-md p-4 space-y-4 origin-top-right"
+            className="absolute right-0 top-full mt-2 z-50 w-80 origin-top-right"
           >
-            {/* Header */}
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium text-text-bright">Filters</h3>
-              <button
-                type="button"
-                onClick={onClose}
-                className="p-1 rounded-md hover:bg-void-overlay transition-colors"
-                aria-label="Close filters"
-              >
-                <X size={14} className="text-text-faint" />
-              </button>
-            </div>
-
-            {/* Sport type filter */}
-            <div>
-              <label className="text-xs font-medium text-text-dim uppercase tracking-wider mb-2 block">
-                Type
-              </label>
-              <div className="grid grid-cols-3 gap-1.5">
-                {SPORT_LIST.map((sport: SportType) => {
-                  const config = SPORT_CONFIG[sport];
-                  const Icon = ICON_MAP[config.icon] ?? Activity;
-                  const filterValue =
-                    config.type + (config.machineType ? ':' + config.machineType : '');
-                  const isActive = activeType === filterValue;
-
-                  return (
-                    <button
-                      key={sport}
-                      type="button"
-                      onClick={() => onFilterChange('type', isActive ? undefined : filterValue)}
-                      className={`flex flex-col items-center gap-1 py-2 px-1 rounded-lg text-xs transition-all ${
-                        isActive
-                          ? 'bg-void-raised ring-2 ring-accent text-text-bright'
-                          : 'bg-void-deep text-text-dim hover:bg-void-overlay hover:text-text-default'
-                      }`}
-                    >
-                      <Icon size={16} className={isActive ? `text-${config.color}` : ''} />
-                      <span className="truncate max-w-full">{config.label}</span>
-                    </button>
-                  );
-                })}
+            <Card padding="md" variant="elevated" className="space-y-4">
+              {/* Header */}
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-medium text-text-bright">Filters</h3>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="p-1 rounded-md hover:bg-void-overlay transition-colors"
+                  aria-label="Close filters"
+                >
+                  <X size={14} className="text-text-faint" />
+                </button>
               </div>
-            </div>
 
-            {/* Source filter */}
-            <div>
-              <label className="text-xs font-medium text-text-dim uppercase tracking-wider mb-2 block">
-                Source
-              </label>
-              <div className="flex gap-1.5 flex-wrap">
-                {SOURCE_OPTIONS.map((opt) => {
-                  const isActive = activeSource === opt.key;
+              {/* Sport type filter */}
+              <div>
+                <label className="text-xs font-medium text-text-dim uppercase tracking-wider mb-2 block">
+                  Type
+                </label>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {SPORT_LIST.map((sport: SportType) => {
+                    const config = SPORT_CONFIG[sport];
+                    const Icon = ICON_MAP[config.icon] ?? Activity;
+                    const filterValue =
+                      config.type + (config.machineType ? ':' + config.machineType : '');
+                    const isActive = activeType === filterValue;
 
-                  return (
-                    <button
-                      key={opt.label}
-                      type="button"
-                      onClick={() => onFilterChange('source', isActive ? undefined : opt.key)}
-                      className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                        isActive
-                          ? 'bg-void-raised ring-2 ring-accent text-text-bright'
-                          : 'bg-void-deep text-text-dim hover:bg-void-overlay hover:text-text-default'
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  );
-                })}
+                    return (
+                      <button
+                        key={sport}
+                        type="button"
+                        onClick={() => onFilterChange('type', isActive ? undefined : filterValue)}
+                        className={`flex flex-col items-center gap-1 py-2 px-1 rounded-lg text-xs transition-all ${
+                          isActive
+                            ? 'bg-void-raised ring-2 ring-accent text-text-bright'
+                            : 'bg-void-deep text-text-dim hover:bg-void-overlay hover:text-text-default'
+                        }`}
+                      >
+                        <Icon size={16} className={isActive ? `text-${config.color}` : ''} />
+                        <span className="truncate max-w-full">{config.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
 
-            {/* Date range */}
-            <div>
-              <label className="text-xs font-medium text-text-dim uppercase tracking-wider mb-2 block">
-                Date Range
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="date"
-                  value={activeDateFrom ?? ''}
-                  onChange={(e) => onFilterChange('dateFrom', e.target.value || undefined)}
-                  className="flex-1 bg-void-deep border border-edge-default rounded-md text-text-bright text-sm px-2.5 py-1.5 focus:ring-2 focus:ring-accent focus:border-accent-teal outline-none"
-                />
-                <span className="text-text-faint text-xs">to</span>
-                <input
-                  type="date"
-                  value={activeDateTo ?? ''}
-                  onChange={(e) => onFilterChange('dateTo', e.target.value || undefined)}
-                  className="flex-1 bg-void-deep border border-edge-default rounded-md text-text-bright text-sm px-2.5 py-1.5 focus:ring-2 focus:ring-accent focus:border-accent-teal outline-none"
-                />
+              {/* Source filter */}
+              <div>
+                <label className="text-xs font-medium text-text-dim uppercase tracking-wider mb-2 block">
+                  Source
+                </label>
+                <div className="flex gap-1.5 flex-wrap">
+                  {SOURCE_OPTIONS.map((opt) => {
+                    const isActive = activeSource === opt.key;
+
+                    return (
+                      <button
+                        key={opt.label}
+                        type="button"
+                        onClick={() => onFilterChange('source', isActive ? undefined : opt.key)}
+                        className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                          isActive
+                            ? 'bg-void-raised ring-2 ring-accent text-text-bright'
+                            : 'bg-void-deep text-text-dim hover:bg-void-overlay hover:text-text-default'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
 
-            {/* Clear all */}
-            {hasActiveFilters && (
-              <button
-                type="button"
-                onClick={() => {
-                  onClearAll();
-                  onClose();
-                }}
-                className="text-xs text-accent-teal hover:text-accent-teal-hover transition-colors font-medium"
-              >
-                Clear all filters
-              </button>
-            )}
+              {/* Date range */}
+              <div>
+                <label className="text-xs font-medium text-text-dim uppercase tracking-wider mb-2 block">
+                  Date Range
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="date"
+                    value={activeDateFrom ?? ''}
+                    onChange={(e) => onFilterChange('dateFrom', e.target.value || undefined)}
+                    className="flex-1 bg-void-deep border border-edge-default rounded-md text-text-bright text-sm px-2.5 py-1.5 focus:ring-2 focus:ring-accent focus:border-accent-teal outline-none"
+                  />
+                  <span className="text-text-faint text-xs">to</span>
+                  <input
+                    type="date"
+                    value={activeDateTo ?? ''}
+                    onChange={(e) => onFilterChange('dateTo', e.target.value || undefined)}
+                    className="flex-1 bg-void-deep border border-edge-default rounded-md text-text-bright text-sm px-2.5 py-1.5 focus:ring-2 focus:ring-accent focus:border-accent-teal outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Clear all */}
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClearAll();
+                    onClose();
+                  }}
+                  className="text-xs text-accent-teal hover:text-accent-teal-hover transition-colors font-medium"
+                >
+                  Clear all filters
+                </button>
+              )}
+            </Card>
           </motion.div>
         </>
       )}
