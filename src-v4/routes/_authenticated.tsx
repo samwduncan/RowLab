@@ -13,9 +13,11 @@ import { BottomTabs } from '@/components/shell/BottomTabs';
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: ({ context, location }) => {
-    // Wait for auth initialization before making redirect decisions
+    // Auth not yet initialized -- keep route in pending state.
+    // InnerRoot shows AuthSkeleton and calls router.update() when auth resolves,
+    // which re-triggers this beforeLoad with isInitialized: true.
     if (!context.auth?.isInitialized) {
-      return;
+      throw new Promise<void>(() => {});
     }
 
     if (!context.auth?.isAuthenticated) {
