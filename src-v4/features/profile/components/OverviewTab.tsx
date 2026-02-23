@@ -7,8 +7,9 @@
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
-import { IconActivity, IconClock, IconFlame, IconWaves } from '@/components/icons';
+import { IconActivity, IconBarChart, IconClock, IconFlame, IconWaves } from '@/components/icons';
 import type { IconComponent } from '@/types/icons';
+import { FancySectionHeader } from '@/components/ui/FancySectionHeader';
 
 import { profileStatsQueryOptions, profileTrendsQueryOptions } from '../api';
 import { TrendChart } from './TrendChart';
@@ -194,6 +195,12 @@ export function OverviewTab({ profile }: OverviewTabProps) {
       animate="visible"
     >
       {/* Stat cards */}
+      <FancySectionHeader
+        label="Lifetime Stats"
+        icon={IconActivity}
+        accentColor="sand"
+        className="mb-1"
+      />
       <motion.div
         className="grid grid-cols-2 lg:grid-cols-4 gap-3"
         variants={listItemVariants}
@@ -257,6 +264,12 @@ export function OverviewTab({ profile }: OverviewTabProps) {
       </motion.div>
 
       {/* Trend charts */}
+      <FancySectionHeader
+        label="Training Trends"
+        icon={IconBarChart}
+        accentColor="teal"
+        className="mb-1"
+      />
       <motion.div
         className="grid grid-cols-1 lg:grid-cols-2 gap-4"
         variants={listItemVariants}

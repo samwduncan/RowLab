@@ -6,8 +6,9 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
-import { IconTrophy } from '@/components/icons';
+import { IconTrophy, IconLock } from '@/components/icons';
 
+import { FancySectionHeader } from '@/components/ui/FancySectionHeader';
 import { profileAchievementsQueryOptions } from '../api';
 import { AchievementCard } from './AchievementCard';
 import { Card } from '@/components/ui/Card';
@@ -78,9 +79,12 @@ export function AchievementsTab() {
       {/* Unlocked section */}
       {unlocked.length > 0 && (
         <section>
-          <h3 className="text-sm font-display font-medium text-text-dim uppercase tracking-wider mb-3">
-            Unlocked
-          </h3>
+          <FancySectionHeader
+            label="Unlocked"
+            icon={IconTrophy}
+            accentColor="teal"
+            className="mb-3"
+          />
           <motion.div
             variants={listContainerVariants}
             initial="hidden"
@@ -97,9 +101,7 @@ export function AchievementsTab() {
       {/* Locked section */}
       {locked.length > 0 && (
         <section>
-          <h3 className="text-sm font-display font-medium text-text-faint uppercase tracking-wider mb-3">
-            Locked
-          </h3>
+          <FancySectionHeader label="Locked" icon={IconLock} accentColor="sand" className="mb-3" />
           <motion.div
             variants={listContainerVariants}
             initial="hidden"

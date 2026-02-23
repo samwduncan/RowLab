@@ -8,10 +8,12 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 
+import { IconTrophy } from '@/components/icons';
 import { profilePRsQueryOptions } from '../api';
 import { MachineTabs, type MachineType } from './MachineTabs';
 import { PRTable } from './PRTable';
 import { Card } from '@/components/ui/Card';
+import { FancySectionHeader } from '@/components/ui/FancySectionHeader';
 import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
 import { slideUp } from '@/lib/animations';
 
@@ -28,7 +30,7 @@ export function PRsTab() {
   return (
     <motion.div className="space-y-4" {...slideUp}>
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-display font-semibold text-text-bright">Personal Records</h2>
+        <FancySectionHeader label="Personal Records" icon={IconTrophy} accentColor="teal" />
         <MachineTabs activeMachine={activeMachine} onMachineChange={setActiveMachine} />
       </div>
 

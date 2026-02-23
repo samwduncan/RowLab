@@ -16,6 +16,7 @@ import type { IconComponent } from '@/types/icons';
 
 import { slideUp } from '@/lib/animations';
 import { formatNumber } from '@/lib/format';
+import { CornerBrackets } from '@/components/ui/CornerBrackets';
 import { useUpdateProfile, useUploadAvatar, useUploadBanner } from '../api';
 import { InlineEdit } from './InlineEdit';
 import type { ProfileData, StatsData } from '../types';
@@ -57,132 +58,138 @@ export function ProfileHero({ profile, stats }: ProfileHeroProps) {
 
   return (
     <motion.div {...slideUp}>
-      {/* Banner */}
-      <div className="relative h-48 w-full sm:rounded-t-xl overflow-hidden group">
-        {profile.bannerUrl ? (
-          <img
-            src={profile.bannerUrl}
-            alt="Profile banner"
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <DefaultBanner />
-        )}
-
-        {/* Banner upload overlay */}
-        <button
-          type="button"
-          onClick={() => bannerInputRef.current?.click()}
-          className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors cursor-pointer"
-          aria-label="Upload banner image"
-        >
-          <IconCamera
-            width={24}
-            height={24}
-            className="text-white opacity-0 group-hover:opacity-80 transition-opacity"
-          />
-        </button>
-        <input
-          ref={bannerInputRef}
-          type="file"
-          accept="image/*"
-          onChange={handleBannerUpload}
-          className="hidden"
-          aria-hidden="true"
-        />
-      </div>
-
-      {/* Avatar + info section */}
-      <div className="px-4 pb-4">
-        {/* Avatar */}
-        <div className="relative -mt-12 inline-block group/avatar">
-          {profile.avatarUrl ? (
+      <CornerBrackets>
+        {/* Banner */}
+        <div className="relative h-48 w-full sm:rounded-t-xl overflow-hidden group">
+          {profile.bannerUrl ? (
             <img
-              src={profile.avatarUrl}
-              alt={profile.name}
-              className="w-24 h-24 rounded-full object-cover border-4 border-void-deep"
+              src={profile.bannerUrl}
+              alt="Profile banner"
+              className="w-full h-full object-cover"
             />
           ) : (
-            <AvatarInitials name={profile.name} size={96} />
+            <DefaultBanner />
           )}
 
-          {/* Avatar upload overlay */}
+          {/* Banner upload overlay */}
           <button
             type="button"
-            onClick={() => avatarInputRef.current?.click()}
-            className="absolute inset-0 flex items-center justify-center rounded-full bg-black/0 group-hover/avatar:bg-black/30 transition-colors cursor-pointer"
-            aria-label="Upload avatar"
+            onClick={() => bannerInputRef.current?.click()}
+            className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors cursor-pointer"
+            aria-label="Upload banner image"
           >
             <IconCamera
-              width={16}
-              height={16}
-              className="text-white opacity-0 group-hover/avatar:opacity-80 transition-opacity"
+              width={24}
+              height={24}
+              className="text-white opacity-0 group-hover:opacity-80 transition-opacity"
             />
           </button>
           <input
-            ref={avatarInputRef}
+            ref={bannerInputRef}
             type="file"
             accept="image/*"
-            onChange={handleAvatarUpload}
+            onChange={handleBannerUpload}
             className="hidden"
             aria-hidden="true"
           />
         </div>
 
-        {/* Name and bio */}
-        <div className="mt-2">
-          <InlineEdit
-            value={profile.name}
-            onSave={handleNameSave}
-            placeholder="Your name"
-            as="h1"
-            className="text-2xl font-display font-semibold text-text-bright"
-            maxLength={100}
-          />
-          <div className="mt-1">
-            <InlineEdit
-              value={profile.bio ?? ''}
-              onSave={handleBioSave}
-              placeholder="Add a bio"
-              as="p"
-              className="text-sm text-text-dim"
-              maxLength={300}
+        {/* Avatar + info section */}
+        <div className="px-4 pb-4">
+          {/* Avatar */}
+          <div className="relative -mt-12 inline-block group/avatar">
+            {profile.avatarUrl ? (
+              <img
+                src={profile.avatarUrl}
+                alt={profile.name}
+                className="w-24 h-24 rounded-full object-cover border-4 border-void-deep"
+              />
+            ) : (
+              <AvatarInitials name={profile.name} size={96} />
+            )}
+
+            {/* Avatar upload overlay */}
+            <button
+              type="button"
+              onClick={() => avatarInputRef.current?.click()}
+              className="absolute inset-0 flex items-center justify-center rounded-full bg-black/0 group-hover/avatar:bg-black/30 transition-colors cursor-pointer"
+              aria-label="Upload avatar"
+            >
+              <IconCamera
+                width={16}
+                height={16}
+                className="text-white opacity-0 group-hover/avatar:opacity-80 transition-opacity"
+              />
+            </button>
+            <input
+              ref={avatarInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarUpload}
+              className="hidden"
+              aria-hidden="true"
             />
           </div>
-        </div>
 
-        {/* Headline stats */}
-        <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <HeadlineStat
-            icon={IconWaves}
-            label="Total Meters"
-            value={formatNumber(stats.allTime.totalMeters)}
-          />
-          <HeadlineStat
-            icon={IconDumbbell}
-            label="Workouts"
-            value={formatNumber(stats.allTime.workoutCount)}
-          />
-          <HeadlineStat icon={IconClock} label="Hours" value={formatNumber(totalHours)} />
-          <HeadlineStat icon={IconFlame} label="Day Streak" value={String(stats.streak.current)} />
-        </div>
-
-        {/* Team badges */}
-        {profile.teams.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {profile.teams.map((team) => (
-              <span
-                key={team.teamId}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-void-deep text-text-dim border border-edge-default"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-accent-teal" />
-                {team.teamName}
-                <span className="text-text-faint capitalize">({team.role})</span>
-              </span>
-            ))}
+          {/* Name and bio */}
+          <div className="mt-2">
+            <InlineEdit
+              value={profile.name}
+              onSave={handleNameSave}
+              placeholder="Your name"
+              as="h1"
+              className="text-2xl font-display font-semibold text-text-bright"
+              maxLength={100}
+            />
+            <div className="mt-1">
+              <InlineEdit
+                value={profile.bio ?? ''}
+                onSave={handleBioSave}
+                placeholder="Add a bio"
+                as="p"
+                className="text-sm text-text-dim"
+                maxLength={300}
+              />
+            </div>
           </div>
-        )}
-      </div>
+
+          {/* Headline stats */}
+          <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <HeadlineStat
+              icon={IconWaves}
+              label="Total Meters"
+              value={formatNumber(stats.allTime.totalMeters)}
+            />
+            <HeadlineStat
+              icon={IconDumbbell}
+              label="Workouts"
+              value={formatNumber(stats.allTime.workoutCount)}
+            />
+            <HeadlineStat icon={IconClock} label="Hours" value={formatNumber(totalHours)} />
+            <HeadlineStat
+              icon={IconFlame}
+              label="Day Streak"
+              value={String(stats.streak.current)}
+            />
+          </div>
+
+          {/* Team badges */}
+          {profile.teams.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {profile.teams.map((team) => (
+                <span
+                  key={team.teamId}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-void-deep text-text-dim border border-edge-default"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-teal" />
+                  {team.teamName}
+                  <span className="text-text-faint capitalize">({team.role})</span>
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </CornerBrackets>
     </motion.div>
   );
 }
