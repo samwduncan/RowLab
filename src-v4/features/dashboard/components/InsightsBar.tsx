@@ -93,12 +93,12 @@ function computeInsights(stats: StatsData, prs: PRRecord[]): Insight[] {
   const recentPRs = prs.filter(
     (pr) => pr.bestDate && new Date(pr.bestDate).getTime() > sevenDaysAgo
   );
-  if (recentPRs.length > 0) {
-    const pr = recentPRs[0];
+  const topPR = recentPRs[0];
+  if (topPR) {
     insights.push({
       id: 'recent-pr',
       icon: Zap,
-      message: `New ${pr.testType} PR! ${pr.improvement ? `${(pr.improvement / 10).toFixed(1)}s improvement.` : 'Congratulations!'}`,
+      message: `New ${topPR.testType} PR! ${topPR.improvement ? `${(topPR.improvement / 10).toFixed(1)}s improvement.` : 'Congratulations!'}`,
       tone: 'success',
     });
   }

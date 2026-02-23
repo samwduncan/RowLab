@@ -49,7 +49,7 @@ export function ProfileSection() {
 
   const handleSaveBio = useCallback(() => {
     updateProfile.mutate(
-      { bio: bio.trim() || null },
+      { bio: bio.trim() || undefined },
       {
         onSuccess: () => {
           setBioSaved(true);

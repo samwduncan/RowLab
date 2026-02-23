@@ -30,7 +30,7 @@ export function Tooltip({
   className = '',
 }: TooltipProps) {
   const [visible, setVisible] = useState(false);
-  const showTimer = useRef<ReturnType<typeof setTimeout>>();
+  const showTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const triggerRef = useRef<HTMLDivElement>(null);
 
   const show = useCallback(() => {

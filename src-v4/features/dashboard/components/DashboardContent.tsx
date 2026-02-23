@@ -55,13 +55,13 @@ export function DashboardContent({
 
           {data.stats.streak.current > 0 && <StreakDisplay streak={data.stats.streak} />}
 
-          <SectionDivider spacing="my-1" />
+          <SectionDivider className="my-1" />
 
           <PRHighlights records={data.prs.records} />
 
           {teamContext && (
             <>
-              <SectionDivider spacing="my-1" />
+              <SectionDivider className="my-1" />
               <TeamContext teamContext={teamContext} />
             </>
           )}

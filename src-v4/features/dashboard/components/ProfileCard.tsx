@@ -85,7 +85,7 @@ export function ProfileCard({ userName, avatar, teamName, stats }: ProfileCardPr
 
   return (
     <motion.div {...slideUpDramatic}>
-      <GlassCard variant="hero" padding="md">
+      <GlassCard variant="elevated" padding="md">
         <div className="flex items-center gap-4 sm:gap-6">
           {/* Avatar */}
           <div className="shrink-0">
@@ -97,9 +97,7 @@ export function ProfileCard({ userName, avatar, teamName, stats }: ProfileCardPr
               />
             ) : (
               <div className="w-14 h-14 rounded-xl bg-accent-teal/15 flex items-center justify-center ring-2 ring-accent/20">
-                <span className="text-lg font-display font-bold text-accent-teal">
-                  {initials}
-                </span>
+                <span className="text-lg font-display font-bold text-accent-teal">{initials}</span>
               </div>
             )}
           </div>

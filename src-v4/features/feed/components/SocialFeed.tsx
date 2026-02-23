@@ -89,7 +89,7 @@ function FeedContent({ filter }: { filter: FeedFilter }) {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasNextPageRef.current && !isFetchingRef.current) {
+        if (entries[0]?.isIntersecting && hasNextPageRef.current && !isFetchingRef.current) {
           fetchNextPage();
         }
       },

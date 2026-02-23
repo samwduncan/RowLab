@@ -114,7 +114,7 @@ export function IntegrationsSection() {
   // ---------------------------------------------------------------------------
 
   const handleGarminImport = useCallback(() => {
-    navigate({ to: '/workouts' });
+    navigate({ to: '/workouts', search: { view: 'feed', calendarMode: 'monthly' } });
   }, [navigate]);
 
   // ---------------------------------------------------------------------------

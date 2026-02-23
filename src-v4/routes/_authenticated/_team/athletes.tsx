@@ -52,7 +52,7 @@ const SIDE_TABS: { value: SideFilter; label: string }[] = [
 ];
 
 function AthletesPage() {
-  const { activeTeamRole } = useAuth();
+  const { activeTeamRole: _activeTeamRole } = useAuth();
   const { data: athletes = [], isLoading, error } = useAthletes();
   const [search, setSearch] = useState('');
   const [sideFilter, setSideFilter] = useState<SideFilter>('all');
@@ -104,7 +104,9 @@ function AthletesPage() {
           <h1 className="text-2xl font-bold text-heading-gradient tracking-tight">
             Athletes
             {athletes.length > 0 && (
-              <span className="ml-2 text-base font-normal text-text-faint">({athletes.length})</span>
+              <span className="ml-2 text-base font-normal text-text-faint">
+                ({athletes.length})
+              </span>
             )}
           </h1>
         </motion.div>

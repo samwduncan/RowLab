@@ -56,6 +56,7 @@ export function MiniProfileCard({ userName, username, avatar }: MiniProfileCardP
 
         <Link
           to="/profile"
+          search={{ tab: 'overview' }}
           className="mt-3 text-xs text-accent-teal hover:underline transition-colors"
         >
           View Profile

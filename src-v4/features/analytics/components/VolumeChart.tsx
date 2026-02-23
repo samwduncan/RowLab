@@ -34,10 +34,7 @@ const GRID_COLOR = 'var(--color-edge-default)';
 const TICK_COLOR = 'var(--color-text-faint)';
 const ROLLING_AVG_COLOR = 'var(--color-accent)';
 
-/** Map SPORT_CONFIG color tokens to CSS variable references */
-const SPORT_COLORS: Record<string, string> = Object.fromEntries(
-  Object.entries(SPORT_CONFIG).map(([key, cfg]) => [key, `var(--color-${cfg.color})`])
-);
+// SPORT_COLORS removed: was unused (resolveSportColors() used instead for SVG gradients)
 
 /** Resolve sport colors at runtime for SVG gradient stopColor */
 function resolveSportColors(): Record<string, string> {
@@ -117,7 +114,11 @@ function ToggleGroup<T extends string>({
   ariaLabel,
 }: ToggleGroupProps<T>) {
   return (
-    <div className="flex gap-1 rounded-lg bg-void-surface/50 p-0.5" role="group" aria-label={ariaLabel}>
+    <div
+      className="flex gap-1 rounded-lg bg-void-surface/50 p-0.5"
+      role="group"
+      aria-label={ariaLabel}
+    >
       {options.map((opt) => {
         const isActive = value === opt.value;
         return (

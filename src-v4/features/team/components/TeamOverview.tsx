@@ -60,7 +60,7 @@ export function TeamOverview({ team }: TeamOverviewProps) {
           className="w-72 shrink-0 space-y-4"
         >
           <StatsPanel overview={overview} memberCount={team.memberCount} />
-          <SectionDivider spacing="my-4" />
+          <SectionDivider className="my-4" />
           {isCoach && <CoachTools teamIdentifier={team.slug || team.generatedId} />}
         </motion.div>
 
@@ -72,7 +72,7 @@ export function TeamOverview({ team }: TeamOverviewProps) {
         >
           {isCoach && <AnnouncementCompose teamId={team.id} />}
           {!isCoach && <UpcomingEventsPlaceholder />}
-          <SectionDivider spacing="my-4" />
+          <SectionDivider className="my-4" />
           <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-text-faint">
             Recent Activity
           </h3>
@@ -119,7 +119,7 @@ export function TeamOverview({ team }: TeamOverviewProps) {
         </motion.div>
       )}
 
-      <SectionDivider spacing="my-2" />
+      <SectionDivider className="my-2" />
 
       <motion.div variants={listItemVariants} transition={SPRING_SMOOTH}>
         <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-text-faint">

@@ -175,6 +175,7 @@ export const SocialFeedCard = memo(function SocialFeedCard({ item }: SocialFeedC
           <Link
             to="/workouts/$workoutId"
             params={{ workoutId: item.id }}
+            search={{ view: 'feed', calendarMode: 'monthly' }}
             className="text-xs text-accent-teal hover:underline transition-colors"
           >
             View details
