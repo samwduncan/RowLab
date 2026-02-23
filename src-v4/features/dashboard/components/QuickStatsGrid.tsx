@@ -7,7 +7,7 @@
 import { useMemo } from 'react';
 import { motion } from 'motion/react';
 import type { Variant } from 'motion/react';
-import { Waves, Dumbbell, CalendarDays, Flame } from 'lucide-react';
+import { IconWaves, IconDumbbell, IconCalendarDays, IconFlame } from '@/components/icons';
 import { StatCard } from './StatCard';
 import type { StatsData } from '../types';
 import { formatNumber } from '@/lib/format';
@@ -65,7 +65,7 @@ export function QuickStatsGrid({ stats, className = '' }: QuickStatsGridProps) {
     >
       <motion.div variants={itemVariants}>
         <StatCard
-          icon={Waves}
+          icon={IconWaves}
           label="Total Meters"
           value={allTime.totalMeters}
           formattedValue={formatNumber(allTime.totalMeters)}
@@ -75,7 +75,7 @@ export function QuickStatsGrid({ stats, className = '' }: QuickStatsGridProps) {
       </motion.div>
       <motion.div variants={itemVariants}>
         <StatCard
-          icon={Dumbbell}
+          icon={IconDumbbell}
           label="Workouts"
           value={allTime.workoutCount}
           footnote="All time"
@@ -85,7 +85,7 @@ export function QuickStatsGrid({ stats, className = '' }: QuickStatsGridProps) {
       </motion.div>
       <motion.div variants={itemVariants}>
         <StatCard
-          icon={CalendarDays}
+          icon={IconCalendarDays}
           label="Active Days"
           value={allTime.activeDays}
           footnote="All time"
@@ -95,7 +95,7 @@ export function QuickStatsGrid({ stats, className = '' }: QuickStatsGridProps) {
       </motion.div>
       <motion.div variants={itemVariants}>
         <StatCard
-          icon={Flame}
+          icon={IconFlame}
           label="Current Streak"
           value={streak.current}
           footnote={streak.longest > 0 ? `Best: ${streak.longest} days` : undefined}

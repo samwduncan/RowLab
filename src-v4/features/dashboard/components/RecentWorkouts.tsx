@@ -6,7 +6,7 @@
 
 import { useNavigate } from '@tanstack/react-router';
 import { motion } from 'motion/react';
-import { Dumbbell } from 'lucide-react';
+import { IconDumbbell } from '@/components/icons';
 import { listContainerVariants, listItemVariants, SPRING_SMOOTH } from '@/lib/animations';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { WorkoutCard } from './WorkoutCard';
@@ -26,7 +26,7 @@ export function RecentWorkouts({ workouts, totalCount, className = '' }: RecentW
       <section className={className} aria-label="Recent Workouts">
         <h2 className="text-lg font-semibold text-text-bright mb-4">Recent Workouts</h2>
         <EmptyState
-          icon={Dumbbell}
+          icon={IconDumbbell}
           title="No workouts yet"
           description="Log your first workout to start tracking your progress."
           action={{

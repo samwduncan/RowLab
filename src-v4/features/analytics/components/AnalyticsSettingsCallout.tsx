@@ -7,7 +7,7 @@
  */
 
 import { useState, useCallback } from 'react';
-import { Settings, X } from 'lucide-react';
+import { IconSettings, IconX } from '@/components/icons';
 import { Link } from '@tanstack/react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import { SPRING_SMOOTH } from '@/lib/animations';
@@ -49,7 +49,7 @@ export function AnalyticsSettingsCallout({ hasCustomSettings }: AnalyticsSetting
           className="overflow-hidden"
         >
           <div className="rounded-xl border border-edge-default bg-void-raised px-4 py-3 flex items-center gap-3 mb-4">
-            <Settings className="w-4 h-4 text-accent-teal shrink-0" />
+            <IconSettings className="w-4 h-4 text-accent-teal shrink-0" />
             <p className="text-sm text-text-dim flex-1">
               Set your max heart rate, lactate threshold, and FTP in{' '}
               <Link
@@ -66,7 +66,7 @@ export function AnalyticsSettingsCallout({ hasCustomSettings }: AnalyticsSetting
               className="p-1 rounded-md text-text-faint hover:text-text-dim hover:bg-edge-default/50 transition-colors shrink-0"
               aria-label="Dismiss analytics settings callout"
             >
-              <X className="w-3.5 h-3.5" />
+              <IconX className="w-3.5 h-3.5" />
             </button>
           </div>
         </motion.div>

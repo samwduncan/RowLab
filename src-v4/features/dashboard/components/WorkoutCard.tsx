@@ -6,8 +6,8 @@
  */
 
 import { useNavigate } from '@tanstack/react-router';
-import { PenLine, Dumbbell, Bike, Watch } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import { IconPencil, IconDumbbell, IconBike, IconWatch } from '@/components/icons';
+import type { IconComponent } from '@/types/icons';
 import { Card } from '@/components/ui/Card';
 import { formatDistance, formatDuration, formatPace, formatRelativeDate } from '@/lib/format';
 import { SPORT_CONFIG } from '@/features/workouts/constants';
@@ -50,11 +50,11 @@ interface WorkoutCardProps {
   className?: string;
 }
 
-const sourceConfig: Record<Workout['source'], { icon: LucideIcon; colorClass: string }> = {
-  manual: { icon: PenLine, colorClass: 'text-text-dim' },
-  concept2: { icon: Dumbbell, colorClass: 'text-accent-teal' },
-  strava: { icon: Bike, colorClass: 'text-data-warning' },
-  garmin: { icon: Watch, colorClass: 'text-data-good' },
+const sourceConfig: Record<Workout['source'], { icon: IconComponent; colorClass: string }> = {
+  manual: { icon: IconPencil, colorClass: 'text-text-dim' },
+  concept2: { icon: IconDumbbell, colorClass: 'text-accent-teal' },
+  strava: { icon: IconBike, colorClass: 'text-data-warning' },
+  garmin: { icon: IconWatch, colorClass: 'text-data-good' },
 };
 
 const machineDisplayMap: Record<string, string> = {
@@ -120,7 +120,7 @@ export function WorkoutCard({ workout, className = '' }: WorkoutCardProps) {
           className="w-8 h-8 rounded-full bg-void-deep flex items-center justify-center shrink-0"
           aria-hidden="true"
         >
-          <SourceIcon size={16} className={colorClass} />
+          <SourceIcon width={16} height={16} className={colorClass} />
         </div>
 
         {/* Center info */}

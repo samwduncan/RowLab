@@ -7,7 +7,7 @@
 import { useState } from 'react';
 import { Link, useRouterState, useNavigate } from '@tanstack/react-router';
 import { AnimatePresence, motion } from 'motion/react';
-import { X } from 'lucide-react';
+import { IconX } from '@/components/icons';
 import { useIsMobile } from '@/hooks/useBreakpoint';
 import { useAuth } from '@/features/auth/useAuth';
 import { getBottomTabItems, getCoachToolItems } from '@/config/navigation';
@@ -57,7 +57,7 @@ export function BottomTabs() {
                   active ? 'text-accent-teal' : 'text-text-faint'
                 }`}
               >
-                <Icon size={20} />
+                <Icon width={20} height={20} />
                 <span className="text-[10px] font-medium">{item.label}</span>
               </button>
             );
@@ -73,7 +73,7 @@ export function BottomTabs() {
               }`}
               aria-current={active ? 'page' : undefined}
             >
-              <Icon size={20} />
+              <Icon width={20} height={20} />
               <span className="text-[10px] font-medium">{item.label}</span>
             </Link>
           );
@@ -110,7 +110,7 @@ export function BottomTabs() {
                     className="p-1 rounded-md hover:bg-void-overlay transition-colors"
                     aria-label="Close"
                   >
-                    <X size={16} className="text-text-faint" />
+                    <IconX width={16} height={16} className="text-text-faint" />
                   </button>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
@@ -133,7 +133,7 @@ export function BottomTabs() {
                             : 'text-text-dim hover:bg-void-overlay'
                         }`}
                       >
-                        <ToolIcon size={20} />
+                        <ToolIcon width={20} height={20} />
                         <span className="text-[11px] font-medium leading-tight text-center">
                           {tool.label}
                         </span>

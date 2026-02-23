@@ -3,7 +3,7 @@
  * Clicking the bell toggles the NotificationPanel dropdown.
  */
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Bell } from 'lucide-react';
+import { IconBell } from '@/components/icons';
 import { useUnreadCount, useNotificationSocket } from '@/features/notifications/useNotifications';
 import { NotificationPanel } from './NotificationPanel';
 
@@ -49,7 +49,7 @@ export function NotificationBell() {
         className="relative rounded-lg p-2 text-text-faint transition-colors hover:bg-void-overlay hover:text-text-bright"
         aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} unread)` : ''}`}
       >
-        <Bell size={18} />
+        <IconBell width={18} height={18} />
         {unreadCount > 0 && (
           <span className="absolute -top-0.5 -right-0.5 flex min-w-[18px] items-center justify-center rounded-full bg-accent-teal px-1 text-[11px] font-semibold leading-[18px] text-void-deep">
             {unreadCount > 99 ? '99+' : unreadCount}

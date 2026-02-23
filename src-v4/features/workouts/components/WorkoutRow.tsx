@@ -7,20 +7,20 @@
 import { useState, useRef, useEffect, type MouseEvent } from 'react';
 import { motion } from 'motion/react';
 import {
-  Waves,
-  Mountain,
-  Bike,
-  Footprints,
-  Dumbbell,
-  Heart,
-  Activity,
-  Zap,
-  Pencil,
-  Watch,
-  MoreHorizontal,
-  ChevronRight,
-  type LucideIcon,
-} from 'lucide-react';
+  IconWaves,
+  IconMountain,
+  IconBike,
+  IconFootprints,
+  IconDumbbell,
+  IconHeart,
+  IconActivity,
+  IconZap,
+  IconPencil,
+  IconWatch,
+  IconMoreHorizontal,
+  IconChevronRight,
+} from '@/components/icons';
+import type { IconComponent } from '@/types/icons';
 
 import { SPORT_CONFIG, SOURCE_CONFIG, type SportType, type SourceType } from '../constants';
 import { getSportFromWorkout, parseIntervalPattern } from '../utils';
@@ -32,25 +32,25 @@ import type { Workout } from '../types';
 /* Icon lookups                                                        */
 /* ------------------------------------------------------------------ */
 
-const ICON_MAP: Record<string, LucideIcon> = {
-  Waves,
-  Mountain,
-  Bike,
-  Footprints,
-  Dumbbell,
-  Heart,
-  Activity,
-  Zap,
-  Pencil,
-  Watch,
+const ICON_MAP: Record<string, IconComponent> = {
+  Waves: IconWaves,
+  Mountain: IconMountain,
+  Bike: IconBike,
+  Footprints: IconFootprints,
+  Dumbbell: IconDumbbell,
+  Heart: IconHeart,
+  Activity: IconActivity,
+  Zap: IconZap,
+  Pencil: IconPencil,
+  Watch: IconWatch,
 };
 
-function resolveSportIcon(sport: SportType): LucideIcon {
-  return ICON_MAP[SPORT_CONFIG[sport].icon] ?? Activity;
+function resolveSportIcon(sport: SportType): IconComponent {
+  return ICON_MAP[SPORT_CONFIG[sport].icon] ?? IconActivity;
 }
 
-function resolveSourceIcon(source: SourceType): LucideIcon {
-  return ICON_MAP[SOURCE_CONFIG[source].icon] ?? Activity;
+function resolveSourceIcon(source: SourceType): IconComponent {
+  return ICON_MAP[SOURCE_CONFIG[source].icon] ?? IconActivity;
 }
 
 /* ------------------------------------------------------------------ */
@@ -118,7 +118,7 @@ function RowMenu({
         className="p-1.5 rounded-md hover:bg-void-overlay transition-colors"
         aria-label="Workout actions"
       >
-        <MoreHorizontal size={16} className="text-text-faint" />
+        <IconMoreHorizontal width={16} height={16} className="text-text-faint" />
       </button>
 
       {open && (
@@ -230,7 +230,7 @@ export function WorkoutRow({ workout, isExpanded, onToggle, onEdit, onDelete }: 
           className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
           style={{ backgroundColor: `var(--color-${config.color}, oklch(0.62 0.12 55)) / 0.12)` }}
         >
-          <SportIcon size={18} className={`text-${config.color}`} />
+          <SportIcon width={18} height={18} className={`text-${config.color}`} />
         </div>
 
         {/* Sport label — interval-first when applicable */}
@@ -261,14 +261,14 @@ export function WorkoutRow({ workout, isExpanded, onToggle, onEdit, onDelete }: 
 
         {/* Source badge + menu + chevron */}
         <div className="flex items-center gap-1.5 shrink-0 ml-2">
-          <SourceIcon size={14} className={`text-${sourceColor}`} />
+          <SourceIcon width={14} height={14} className={`text-${sourceColor}`} />
 
           <div className="opacity-0 group-hover:opacity-100 transition-opacity">
             <RowMenu workout={workout} onEdit={onEdit} onDelete={onDelete} />
           </div>
 
-          <ChevronRight
-            size={14}
+          <IconChevronRight
+            width={14} height={14}
             className={`text-text-faint transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}
           />
         </div>

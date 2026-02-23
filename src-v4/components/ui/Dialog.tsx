@@ -10,7 +10,7 @@
 
 import { useEffect, useRef, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X } from 'lucide-react';
+import { IconX } from '@/components/icons';
 import { motion as motionTokens } from '@/design-system';
 
 const SPRING_FLOW = {
@@ -116,7 +116,7 @@ export function Dialog({
                       className="p-1.5 rounded-[var(--radius-sm)] text-text-faint hover:text-text-dim hover:bg-void-raised transition-colors duration-150 cursor-pointer"
                       aria-label="Close dialog"
                     >
-                      <X className="w-4 h-4" />
+                      <IconX className="w-4 h-4" />
                     </button>
                   )}
                 </div>

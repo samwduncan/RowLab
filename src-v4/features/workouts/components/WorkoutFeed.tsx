@@ -7,7 +7,7 @@
 import { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { motion, AnimatePresence } from 'motion/react';
-import { RefreshCw } from 'lucide-react';
+import { IconRefresh } from '@/components/icons';
 
 import { useWorkoutFeed } from '../hooks/useWorkoutFeed';
 import { groupWorkoutsByDay, detectWorkoutSessions } from '../utils';
@@ -76,7 +76,7 @@ export function WorkoutFeed({ filters, onEdit, onDelete, onCreateNew }: WorkoutF
           onClick={() => refetch()}
           className="inline-flex items-center gap-1.5 text-sm text-text-bright hover:text-accent-teal transition-colors"
         >
-          <RefreshCw size={14} />
+          <IconRefresh width={14} height={14} />
           Retry
         </button>
       </div>

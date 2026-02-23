@@ -5,7 +5,7 @@
  * Glass card with amber tint and progress indicator.
  */
 
-import { Info } from 'lucide-react';
+import { IconInfo } from '@/components/icons';
 
 interface DataSufficiencyBannerProps {
   message?: string;
@@ -24,7 +24,7 @@ export function DataSufficiencyBanner({
 
   return (
     <div className="rounded-xl border border-data-warning/20 bg-data-warning/5 px-4 py-3 flex items-start gap-3">
-      <Info className="w-4 h-4 text-data-warning mt-0.5 shrink-0" />
+      <IconInfo className="w-4 h-4 text-data-warning mt-0.5 shrink-0" />
       <div className="flex-1 min-w-0">
         <p className="text-sm text-text-dim">
           {message ??

@@ -12,15 +12,15 @@ import { useForm, type UseFormSetValue } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import {
-  Waves,
-  Mountain,
-  Bike,
-  Footprints,
-  Dumbbell,
-  Heart,
-  Activity,
-  type LucideIcon,
-} from 'lucide-react';
+  IconWaves,
+  IconMountain,
+  IconBike,
+  IconFootprints,
+  IconDumbbell,
+  IconHeart,
+  IconActivity,
+} from '@/components/icons';
+import type { IconComponent } from '@/types/icons';
 
 import { SPORT_CONFIG, SPORT_LIST, type SportType } from '../constants';
 import { autoCalculate, getSportFromWorkout } from '../utils';
@@ -31,14 +31,14 @@ import type { Workout, CreateWorkoutInput, UpdateWorkoutInput } from '../types';
 /* Icon map                                                            */
 /* ------------------------------------------------------------------ */
 
-const ICON_MAP: Record<string, LucideIcon> = {
-  Waves,
-  Mountain,
-  Bike,
-  Footprints,
-  Dumbbell,
-  Heart,
-  Activity,
+const ICON_MAP: Record<string, IconComponent> = {
+  Waves: IconWaves,
+  Mountain: IconMountain,
+  Bike: IconBike,
+  Footprints: IconFootprints,
+  Dumbbell: IconDumbbell,
+  Heart: IconHeart,
+  Activity: IconActivity,
 };
 
 /* ------------------------------------------------------------------ */
@@ -286,7 +286,7 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
         <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-none">
           {SPORT_LIST.map((sport: SportType) => {
             const config = SPORT_CONFIG[sport];
-            const Icon = ICON_MAP[config.icon] ?? Activity;
+            const Icon = ICON_MAP[config.icon] ?? IconActivity;
             const isActive = watchedSport === sport;
 
             return (
@@ -300,7 +300,7 @@ export function WorkoutForm({ editingWorkout, onSuccess }: WorkoutFormProps) {
                     : 'bg-void-deep text-text-dim hover:bg-void-overlay hover:text-text-default'
                 }`}
               >
-                <Icon size={18} className={isActive ? `text-${config.color}` : ''} />
+                <Icon width={18} height={18} className={isActive ? `text-${config.color}` : ''} />
                 <span className="truncate">{config.label}</span>
               </button>
             );

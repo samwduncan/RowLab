@@ -5,7 +5,7 @@
  */
 
 import { motion } from 'motion/react';
-import { Flame, TrendingUp, Calendar, Award } from 'lucide-react';
+import { IconFlame, IconTrendingUp, IconCalendar, IconAward } from '@/components/icons';
 import { Card } from '@/components/ui/Card';
 import { slideUpDramatic } from '@/lib/animations';
 import { formatNumber } from '@/lib/format';
@@ -114,7 +114,7 @@ export function ProfileCard({ userName, avatar, teamName, stats }: ProfileCardPr
           {/* Streak indicator */}
           {streak.current > 0 && (
             <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-data-warning/10 shrink-0">
-              <Flame size={16} className="text-data-warning streak-flame" />
+              <IconFlame width={16} height={16} className="text-data-warning streak-flame" />
               <div className="flex flex-col">
                 <span className="text-sm font-mono font-bold text-data-warning tabular-nums">
                   {streak.current}
@@ -130,16 +130,16 @@ export function ProfileCard({ userName, avatar, teamName, stats }: ProfileCardPr
         {/* Quick stats row */}
         <div className="flex items-center gap-5 sm:gap-8 mt-4 pt-3 border-t border-edge-default/30">
           <MiniStat
-            icon={TrendingUp}
+            icon={IconTrendingUp}
             label="This period"
             value={formatNumber(range.meters)}
             accent
           />
-          <MiniStat icon={Calendar} label="Active days" value={String(range.activeDays)} />
-          <MiniStat icon={Award} label="Workouts" value={String(range.workouts)} />
+          <MiniStat icon={IconCalendar} label="Active days" value={String(range.activeDays)} />
+          <MiniStat icon={IconAward} label="Workouts" value={String(range.workouts)} />
           {streak.current > 0 && (
             <div className="sm:hidden">
-              <MiniStat icon={Flame} label="Streak" value={`${streak.current}d`} />
+              <MiniStat icon={IconFlame} label="Streak" value={`${streak.current}d`} />
             </div>
           )}
         </div>

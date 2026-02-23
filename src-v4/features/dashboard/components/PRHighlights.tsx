@@ -6,7 +6,7 @@
  */
 
 import { motion } from 'motion/react';
-import { Trophy } from 'lucide-react';
+import { IconTrophy } from '@/components/icons';
 import { listContainerVariants, listItemVariants, SPRING_SMOOTH } from '@/lib/animations';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { PRCard } from './PRCard';
@@ -55,7 +55,7 @@ export function PRHighlights({ records, className = '' }: PRHighlightsProps) {
       <section className={className} aria-label="Personal Records">
         <h2 className="text-lg font-semibold text-text-bright mb-4">Personal Records</h2>
         <EmptyState
-          icon={Trophy}
+          icon={IconTrophy}
           title="No personal records yet"
           description="Complete an erg test to start tracking your PRs."
           size="sm"

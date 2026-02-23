@@ -11,7 +11,7 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { X } from 'lucide-react';
+import { IconX } from '@/components/icons';
 
 import { SPRING_GENTLE } from '@/lib/animations';
 import { useIsMobile } from '@/hooks/useBreakpoint';
@@ -130,7 +130,7 @@ function SlideOverHeader({ title, onClose }: { title: string; onClose: () => voi
         className="p-1.5 rounded-md hover:bg-void-overlay transition-colors"
         aria-label="Close"
       >
-        <X size={18} className="text-text-faint" />
+        <IconX width={18} height={18} className="text-text-faint" />
       </button>
     </div>
   );

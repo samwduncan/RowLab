@@ -8,7 +8,7 @@
  */
 
 import { motion } from 'motion/react';
-import { TrendingUp, AlertTriangle, AlertOctagon, Info } from 'lucide-react';
+import { IconTrendingUp, IconAlertTriangle, IconAlertOctagon, IconInfo } from '@/components/icons';
 import { listContainerVariants, listItemVariants, SPRING_SMOOTH } from '@/lib/animations';
 import type { InsightItem } from '../types';
 
@@ -23,9 +23,9 @@ interface TrainingInsightsProps {
 /* ------------------------------------------------------------------ */
 
 const INSIGHT_ICONS: Record<InsightItem['type'], React.ComponentType<{ className?: string }>> = {
-  positive: TrendingUp,
-  caution: AlertTriangle,
-  warning: AlertOctagon,
+  positive: IconTrendingUp,
+  caution: IconAlertTriangle,
+  warning: IconAlertOctagon,
 };
 
 const INSIGHT_STYLES: Record<InsightItem['type'], { border: string; icon: string; bg: string }> = {
@@ -81,7 +81,7 @@ function InsightsPlaceholder({ daysWithData }: { daysWithData: number }) {
       transition={SPRING_SMOOTH}
       className="rounded-xl border border-edge-default bg-void-raised px-4 py-4 flex items-start gap-3"
     >
-      <Info className="w-4 h-4 text-text-faint mt-0.5 shrink-0" />
+      <IconInfo className="w-4 h-4 text-text-faint mt-0.5 shrink-0" />
       <div>
         <p className="text-sm text-text-dim">
           Analytics insights need ~6 weeks of training data to provide meaningful recommendations.
@@ -118,7 +118,7 @@ export function TrainingInsights({ insights, daysWithData, isReliable }: Trainin
           transition={SPRING_SMOOTH}
           className="rounded-xl border border-edge-default bg-void-raised px-4 py-3 flex items-start gap-3"
         >
-          <Info className="w-4 h-4 text-text-faint mt-0.5 shrink-0" />
+          <IconInfo className="w-4 h-4 text-text-faint mt-0.5 shrink-0" />
           <p className="text-sm text-text-dim">
             No notable training patterns detected. Keep training consistently!
           </p>

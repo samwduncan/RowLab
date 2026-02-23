@@ -5,7 +5,7 @@
  * Ref: DASH-04 (PR highlights).
  */
 
-import { ArrowDown, ArrowUp } from 'lucide-react';
+import { IconArrowDown, IconArrowUp } from '@/components/icons';
 import { Card } from '@/components/ui/Card';
 import { formatErgTime, formatRelativeDate } from '@/lib/format';
 import type { PRRecord } from '../types';
@@ -106,13 +106,13 @@ function ImprovementIndicator({ improvement }: { improvement: number | null }) {
     >
       {isImproved ? (
         <>
-          <ArrowDown size={12} aria-hidden="true" />
+          <IconArrowDown width={12} height={12} aria-hidden="true" />
           <span>{seconds}s</span>
           <span className="sr-only">improved by {seconds} seconds</span>
         </>
       ) : (
         <>
-          <ArrowUp size={12} aria-hidden="true" />
+          <IconArrowUp width={12} height={12} aria-hidden="true" />
           <span>{seconds}s</span>
           <span className="sr-only">slower by {seconds} seconds</span>
         </>

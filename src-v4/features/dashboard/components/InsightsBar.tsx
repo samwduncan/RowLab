@@ -6,7 +6,7 @@
 
 import { useMemo } from 'react';
 import { motion } from 'motion/react';
-import { AlertTriangle, Target, TrendingUp, Flame, Zap } from 'lucide-react';
+import { IconAlertTriangle, IconTarget, IconTrendingUp, IconFlame, IconZap } from '@/components/icons';
 import { slideUp } from '@/lib/animations';
 import { formatNumber } from '@/lib/format';
 import type { StatsData, PRRecord } from '../types';
@@ -53,14 +53,14 @@ function computeInsights(stats: StatsData, prs: PRRecord[]): Insight[] {
     // If they have a good streak going, encourage them
     insights.push({
       id: 'streak-going',
-      icon: Flame,
+      icon: IconFlame,
       message: `${streak.current}-day streak going strong! Keep it up.`,
       tone: 'success',
     });
   } else if (streak.current === 0 && streak.longest > 3) {
     insights.push({
       id: 'streak-lost',
-      icon: AlertTriangle,
+      icon: IconAlertTriangle,
       message: `Streak ended. Your best was ${streak.longest} days — time to start a new one.`,
       tone: 'warning',
     });
@@ -74,14 +74,14 @@ function computeInsights(stats: StatsData, prs: PRRecord[]): Insight[] {
       const remaining = weeklyGoal - range.meters;
       insights.push({
         id: 'weekly-goal',
-        icon: Target,
+        icon: IconTarget,
         message: `${formatNumber(remaining)}m from weekly target. You've got this.`,
         tone: 'warning',
       });
     } else if (pct >= 1.0) {
       insights.push({
         id: 'weekly-goal-met',
-        icon: Target,
+        icon: IconTarget,
         message: `Weekly target exceeded — ${formatNumber(range.meters)}m logged.`,
         tone: 'success',
       });
@@ -97,7 +97,7 @@ function computeInsights(stats: StatsData, prs: PRRecord[]): Insight[] {
   if (topPR) {
     insights.push({
       id: 'recent-pr',
-      icon: Zap,
+      icon: IconZap,
       message: `New ${topPR.testType} PR! ${topPR.improvement ? `${(topPR.improvement / 10).toFixed(1)}s improvement.` : 'Congratulations!'}`,
       tone: 'success',
     });
@@ -107,7 +107,7 @@ function computeInsights(stats: StatsData, prs: PRRecord[]): Insight[] {
   if (range.workouts >= 3 && insights.length < 2) {
     insights.push({
       id: 'volume',
-      icon: TrendingUp,
+      icon: IconTrendingUp,
       message: `${range.workouts} workouts this period — ${formatNumber(range.meters)}m total.`,
       tone: 'info',
     });
@@ -140,7 +140,7 @@ export function InsightsBar({ stats, prs }: InsightsBarProps) {
             key={insight.id}
             className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg ${style.bg}`}
           >
-            <Icon size={16} className={style.icon} />
+            <Icon width={16} height={16} className={style.icon} />
             <span className={`text-sm ${style.text}`}>{insight.message}</span>
           </div>
         );

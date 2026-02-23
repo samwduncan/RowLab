@@ -14,7 +14,7 @@
  * On personal pages, stays in place.
  */
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { ChevronsUpDown, Check, Plus, Users } from 'lucide-react';
+import { IconChevronsUpDown, IconCheck, IconPlus, IconUsers } from '@/components/icons';
 import { motion, AnimatePresence } from 'motion/react';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { useAuth } from '@/features/auth/useAuth';
@@ -152,7 +152,7 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
           onClick={() => void navigate({ to: '/create-team' as string })}
           className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm text-text-dim transition-colors hover:bg-void-overlay hover:text-text-bright"
         >
-          <Users size={16} className="text-text-faint" />
+          <IconUsers width={16} height={16} className="text-text-faint" />
           <span>Join or create a team</span>
         </button>
       </div>
@@ -194,7 +194,7 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
           )}
         </div>
 
-        <ChevronsUpDown size={14} className="shrink-0 text-text-faint" />
+        <IconChevronsUpDown width={14} height={14} className="shrink-0 text-text-faint" />
       </motion.button>
 
       {/* Dropdown */}
@@ -254,7 +254,9 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
                     </div>
 
                     {/* Active checkmark */}
-                    {isActive && <Check size={16} className="shrink-0 text-accent-teal" />}
+                    {isActive && (
+                      <IconCheck width={16} height={16} className="shrink-0 text-accent-teal" />
+                    )}
                   </button>
                 );
               })}
@@ -273,7 +275,7 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
               className="flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm text-text-dim transition-colors hover:bg-void-overlay hover:text-text-bright"
             >
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-dashed border-edge-default text-text-faint">
-                <Plus size={16} />
+                <IconPlus width={16} height={16} />
               </div>
               <span>Create team</span>
             </button>

@@ -14,7 +14,7 @@ import { useState, useCallback, useEffect, useMemo } from 'react';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
-import { Filter, Plus } from 'lucide-react';
+import { IconFilter, IconPlus } from '@/components/icons';
 import { motion, useMotionValueEvent, useScroll } from 'motion/react';
 
 import { Card } from '@/components/ui/Card';
@@ -188,7 +188,7 @@ function WorkoutsLayout() {
                   : 'text-text-dim hover:text-text-default hover:bg-void-overlay'
               }`}
             >
-              <Filter size={14} />
+              <IconFilter width={14} height={14} />
               <span className="hidden sm:inline">Filters</span>
               {activeFilterCount > 0 && (
                 <span className="ml-0.5 inline-flex items-center justify-center w-5 h-5 rounded-full bg-accent-teal text-void-deep text-xs font-semibold">
@@ -229,7 +229,7 @@ function WorkoutsLayout() {
         }`}
         aria-label="Log new workout"
       >
-        <Plus size={20} />
+        <IconPlus width={20} height={20} />
       </motion.button>
 
       {/* Slide-over */}

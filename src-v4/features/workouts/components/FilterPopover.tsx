@@ -6,16 +6,16 @@
 
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  Waves,
-  Mountain,
-  Bike,
-  Footprints,
-  Dumbbell,
-  Heart,
-  Activity,
-  X,
-  type LucideIcon,
-} from 'lucide-react';
+  IconWaves,
+  IconMountain,
+  IconBike,
+  IconFootprints,
+  IconDumbbell,
+  IconHeart,
+  IconActivity,
+  IconX,
+} from '@/components/icons';
+import type { IconComponent } from '@/types/icons';
 
 import { SPORT_CONFIG, SPORT_LIST, type SportType } from '../constants';
 import { Card } from '@/components/ui/Card';
@@ -25,14 +25,14 @@ import { scaleIn } from '@/lib/animations';
 /* Icon map                                                            */
 /* ------------------------------------------------------------------ */
 
-const ICON_MAP: Record<string, LucideIcon> = {
-  Waves,
-  Mountain,
-  Bike,
-  Footprints,
-  Dumbbell,
-  Heart,
-  Activity,
+const ICON_MAP: Record<string, IconComponent> = {
+  Waves: IconWaves,
+  Mountain: IconMountain,
+  Bike: IconBike,
+  Footprints: IconFootprints,
+  Dumbbell: IconDumbbell,
+  Heart: IconHeart,
+  Activity: IconActivity,
 };
 
 /* ------------------------------------------------------------------ */
@@ -108,7 +108,7 @@ export function FilterPopover({
                   className="p-1 rounded-md hover:bg-void-overlay transition-colors"
                   aria-label="Close filters"
                 >
-                  <X size={14} className="text-text-faint" />
+                  <IconX width={14} height={14} className="text-text-faint" />
                 </button>
               </div>
 
@@ -120,7 +120,7 @@ export function FilterPopover({
                 <div className="grid grid-cols-3 gap-1.5">
                   {SPORT_LIST.map((sport: SportType) => {
                     const config = SPORT_CONFIG[sport];
-                    const Icon = ICON_MAP[config.icon] ?? Activity;
+                    const Icon = ICON_MAP[config.icon] ?? IconActivity;
                     const filterValue =
                       config.type + (config.machineType ? ':' + config.machineType : '');
                     const isActive = activeType === filterValue;
@@ -136,7 +136,7 @@ export function FilterPopover({
                             : 'bg-void-deep text-text-dim hover:bg-void-overlay hover:text-text-default'
                         }`}
                       >
-                        <Icon size={16} className={isActive ? `text-${config.color}` : ''} />
+                        <Icon width={16} height={16} className={isActive ? `text-${config.color}` : ''} />
                         <span className="truncate max-w-full">{config.label}</span>
                       </button>
                     );

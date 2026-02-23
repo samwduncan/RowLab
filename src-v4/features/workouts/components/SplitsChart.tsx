@@ -20,7 +20,7 @@ import {
   Cell,
   type TooltipProps,
 } from 'recharts';
-import { BarChart3, TrendingUp } from 'lucide-react';
+import { IconBarChart, IconTrendingUp } from '@/components/icons';
 
 import { formatPace } from '@/lib/format';
 import type { WorkoutSplit } from '../types';
@@ -245,13 +245,13 @@ export function SplitsChart({ splits, machineType }: SplitsChartProps) {
         <ToggleButton
           active={mode === 'bar'}
           onClick={() => setMode('bar')}
-          icon={<BarChart3 size={14} />}
+          icon={<IconBarChart width={14} height={14} />}
           label="Bar chart"
         />
         <ToggleButton
           active={mode === 'line'}
           onClick={() => setMode('line')}
-          icon={<TrendingUp size={14} />}
+          icon={<IconTrendingUp width={14} height={14} />}
           label="Line chart"
         />
       </div>

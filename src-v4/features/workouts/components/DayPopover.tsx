@@ -8,16 +8,16 @@ import { useEffect, useRef, useMemo, useCallback } from 'react';
 import { motion } from 'motion/react';
 import { format, isSameDay } from 'date-fns';
 import {
-  Waves,
-  Mountain,
-  Bike,
-  Footprints,
-  Dumbbell,
-  Heart,
-  Activity,
-  X,
-  type LucideIcon,
-} from 'lucide-react';
+  IconWaves,
+  IconMountain,
+  IconBike,
+  IconFootprints,
+  IconDumbbell,
+  IconHeart,
+  IconActivity,
+  IconX,
+} from '@/components/icons';
+import type { IconComponent } from '@/types/icons';
 
 import { getSportFromWorkout, getWorkoutVolume, parseIntervalPattern } from '../utils';
 import { SPORT_CONFIG } from '../constants';
@@ -40,14 +40,14 @@ interface DayPopoverProps {
 /* Icon lookup                                                         */
 /* ------------------------------------------------------------------ */
 
-const ICON_MAP: Record<string, LucideIcon> = {
-  Waves,
-  Mountain,
-  Bike,
-  Footprints,
-  Dumbbell,
-  Heart,
-  Activity,
+const ICON_MAP: Record<string, IconComponent> = {
+  Waves: IconWaves,
+  Mountain: IconMountain,
+  Bike: IconBike,
+  Footprints: IconFootprints,
+  Dumbbell: IconDumbbell,
+  Heart: IconHeart,
+  Activity: IconActivity,
 };
 
 /* ------------------------------------------------------------------ */
@@ -143,7 +143,7 @@ export function DayPopover({ day, workouts, onClose, anchorRect }: DayPopoverPro
             className="p-1 rounded-md hover:bg-void-overlay transition-colors"
             aria-label="Close"
           >
-            <X size={14} className="text-text-faint" />
+            <IconX width={14} height={14} className="text-text-faint" />
           </button>
         </div>
 
@@ -183,7 +183,7 @@ export function DayPopover({ day, workouts, onClose, anchorRect }: DayPopoverPro
             {dayWorkouts.map((w) => {
               const sport = getSportFromWorkout(w);
               const config = SPORT_CONFIG[sport];
-              const Icon = ICON_MAP[config.icon] ?? Activity;
+              const Icon = ICON_MAP[config.icon] ?? IconActivity;
               const interval = parseIntervalPattern(w.splits, w.workoutType);
 
               return (
@@ -197,7 +197,7 @@ export function DayPopover({ day, workouts, onClose, anchorRect }: DayPopoverPro
                       backgroundColor: `color-mix(in oklch, var(--color-${config.color}) 15%, transparent)`,
                     }}
                   >
-                    <Icon size={14} className={`text-${config.color}`} />
+                    <Icon width={14} height={14} className={`text-${config.color}`} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">

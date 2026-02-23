@@ -3,7 +3,7 @@
  * Shows consecutive training day count, or "No active streak" when zero.
  */
 
-import { Flame } from 'lucide-react';
+import { IconFlame } from '@/components/icons';
 
 interface StreakIndicatorProps {
   current: number;
@@ -15,7 +15,7 @@ export function StreakIndicator({ current, longest, className = '' }: StreakIndi
   if (current === 0) {
     return (
       <div className={`flex items-center gap-2 ${className}`}>
-        <Flame size={16} className="text-text-faint" aria-hidden="true" />
+        <IconFlame width={16} height={16} className="text-text-faint" aria-hidden="true" />
         <span className="text-sm text-text-faint">No active streak</span>
       </div>
     );
@@ -25,7 +25,7 @@ export function StreakIndicator({ current, longest, className = '' }: StreakIndi
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <Flame size={16} className="text-data-warning streak-flame" aria-hidden="true" />
+      <IconFlame width={16} height={16} className="text-data-warning streak-flame" aria-hidden="true" />
       <span className="text-sm font-medium text-text-dim">{current} day streak</span>
       {isPersonalBest && (
         <span className="text-xs font-medium text-data-warning bg-data-warning/10 px-2 py-0.5 rounded-full">

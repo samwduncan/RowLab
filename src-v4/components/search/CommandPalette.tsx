@@ -17,7 +17,7 @@ import { Command } from 'cmdk';
 import { useNavigate } from '@tanstack/react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import { useQuery } from '@tanstack/react-query';
-import { Search } from 'lucide-react';
+import { IconSearch } from '@/components/icons';
 import { api } from '@/lib/api';
 import { queryKeys } from '@/lib/queryKeys';
 import { useAuth } from '@/features/auth/useAuth';
@@ -235,7 +235,7 @@ export function CommandPalette() {
             >
               {/* Search input */}
               <div className="flex items-center gap-2 border-b border-edge-default/50 px-4">
-                <Search size={16} className="shrink-0 text-text-faint" />
+                <IconSearch width={16} height={16} className="shrink-0 text-text-faint" />
                 <Command.Input
                   ref={inputRef}
                   value={search}

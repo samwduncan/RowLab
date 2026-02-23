@@ -9,7 +9,7 @@
  * - Animation: fade + slide down + scale via motion/react
  */
 import { motion, AnimatePresence } from 'motion/react';
-import { Bell } from 'lucide-react';
+import { IconBell } from '@/components/icons';
 import { useNavigate } from '@tanstack/react-router';
 import {
   useNotificationList,
@@ -97,7 +97,7 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
               /* Empty state */
               <div className="flex flex-col items-center gap-3 px-4 py-10 text-center">
                 <div className="rounded-xl bg-void-raised p-3">
-                  <Bell size={24} className="text-text-faint" />
+                  <IconBell width={24} height={24} className="text-text-faint" />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-text-dim">No notifications yet</p>

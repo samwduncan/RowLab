@@ -16,7 +16,7 @@ import {
   addMonths,
   subMonths,
 } from 'date-fns';
-import { ChevronLeft, ChevronRight, Grid3X3, BarChart3 } from 'lucide-react';
+import { IconChevronLeft, IconChevronRight, IconGrid, IconBarChart } from '@/components/icons';
 
 import { TabToggle } from '@/components/ui/TabToggle';
 import { useAuth } from '@/features/auth/useAuth';
@@ -122,7 +122,7 @@ export function CalendarView({ filters, calendarMode }: CalendarViewProps) {
             className="p-1.5 rounded-md hover:bg-void-overlay transition-colors"
             aria-label="Previous month"
           >
-            <ChevronLeft size={18} className="text-text-dim" />
+            <IconChevronLeft width={18} height={18} className="text-text-dim" />
           </button>
           <h2 className="text-text-bright font-medium text-sm min-w-[140px] text-center">
             {format(currentMonth, 'MMMM yyyy')}
@@ -133,7 +133,7 @@ export function CalendarView({ filters, calendarMode }: CalendarViewProps) {
             className="p-1.5 rounded-md hover:bg-void-overlay transition-colors"
             aria-label="Next month"
           >
-            <ChevronRight size={18} className="text-text-dim" />
+            <IconChevronRight width={18} height={18} className="text-text-dim" />
           </button>
         </div>
 
@@ -141,8 +141,8 @@ export function CalendarView({ filters, calendarMode }: CalendarViewProps) {
         {calendarMode === 'monthly' && (
           <TabToggle
             tabs={[
-              { id: 'grid', label: 'Grid', icon: <Grid3X3 size={13} /> },
-              { id: 'heatmap', label: 'Heatmap', icon: <BarChart3 size={13} /> },
+              { id: 'grid', label: 'Grid', icon: <IconGrid width={13} height={13} /> },
+              { id: 'heatmap', label: 'Heatmap', icon: <IconBarChart width={13} height={13} /> },
             ]}
             activeTab={monthlyDisplayMode}
             onTabChange={(id) => setMonthlyDisplayMode(id as 'grid' | 'heatmap')}

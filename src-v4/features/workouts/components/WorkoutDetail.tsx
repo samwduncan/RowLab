@@ -9,23 +9,23 @@ import { useContext, useState } from 'react';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import { format } from 'date-fns';
 import {
-  Waves,
-  Mountain,
-  Bike,
-  Footprints,
-  Dumbbell,
-  Heart,
-  Activity,
-  Zap,
-  Pencil,
-  Watch,
-  ChevronLeft,
-  ChevronRight,
-  ExternalLink,
-  ArrowLeft,
-  Share2,
-  type LucideIcon,
-} from 'lucide-react';
+  IconWaves,
+  IconMountain,
+  IconBike,
+  IconFootprints,
+  IconDumbbell,
+  IconHeart,
+  IconActivity,
+  IconZap,
+  IconPencil,
+  IconWatch,
+  IconChevronLeft,
+  IconChevronRight,
+  IconExternalLink,
+  IconArrowLeft,
+  IconShare,
+} from '@/components/icons';
+import type { IconComponent } from '@/types/icons';
 
 import { useWorkoutDetail } from '../hooks/useWorkoutDetail';
 import { WorkoutPageContext } from '../WorkoutPageContext';
@@ -55,21 +55,21 @@ function sportColorVar(sport: SportType): string {
 /* Icon map                                                            */
 /* ------------------------------------------------------------------ */
 
-const ICON_MAP: Record<string, LucideIcon> = {
-  Waves,
-  Mountain,
-  Bike,
-  Footprints,
-  Dumbbell,
-  Heart,
-  Activity,
-  Zap,
-  Pencil,
-  Watch,
+const ICON_MAP: Record<string, IconComponent> = {
+  Waves: IconWaves,
+  Mountain: IconMountain,
+  Bike: IconBike,
+  Footprints: IconFootprints,
+  Dumbbell: IconDumbbell,
+  Heart: IconHeart,
+  Activity: IconActivity,
+  Zap: IconZap,
+  Pencil: IconPencil,
+  Watch: IconWatch,
 };
 
-function resolveSportIcon(sport: SportType): LucideIcon {
-  return ICON_MAP[SPORT_CONFIG[sport].icon] ?? Activity;
+function resolveSportIcon(sport: SportType): IconComponent {
+  return ICON_MAP[SPORT_CONFIG[sport].icon] ?? IconActivity;
 }
 
 /* ------------------------------------------------------------------ */
@@ -139,7 +139,7 @@ export function WorkoutDetail() {
           onClick={nav.toList}
           className="inline-flex items-center gap-1.5 text-sm text-text-dim hover:text-text-bright transition-colors"
         >
-          <ArrowLeft size={16} />
+          <IconArrowLeft width={16} height={16} />
           <span>Back to workouts</span>
         </button>
 
@@ -149,7 +149,7 @@ export function WorkoutDetail() {
             onClick={() => setShareOpen(true)}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-text-dim hover:text-text-bright hover:bg-void-overlay rounded-lg transition-colors"
           >
-            <Share2 size={14} />
+            <IconShare width={14} height={14} />
             <span>Share</span>
           </button>
           {onEdit && (
@@ -158,7 +158,7 @@ export function WorkoutDetail() {
               onClick={() => onEdit!(workout as Workout)}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-text-dim hover:text-text-bright hover:bg-void-overlay rounded-lg transition-colors"
             >
-              <Pencil size={14} />
+              <IconPencil width={14} height={14} />
               <span>Edit</span>
             </button>
           )}
@@ -180,7 +180,7 @@ export function WorkoutDetail() {
             }`}
             aria-label="Previous workout"
           >
-            <ChevronLeft size={20} />
+            <IconChevronLeft width={20} height={20} />
           </button>
         </div>
 
@@ -199,7 +199,7 @@ export function WorkoutDetail() {
                 <div
                   className={`w-12 h-12 rounded-xl flex items-center justify-center bg-${config.color}/12`}
                 >
-                  <SportIcon size={24} className={`text-${config.color}`} />
+                  <SportIcon width={24} height={24} className={`text-${config.color}`} />
                 </div>
                 <div>
                   {intervalInfo.isInterval ? (
@@ -265,7 +265,7 @@ export function WorkoutDetail() {
             }`}
             aria-label="Next workout"
           >
-            <ChevronRight size={20} />
+            <IconChevronRight width={20} height={20} />
           </button>
         </div>
       </div>
@@ -301,7 +301,7 @@ export function WorkoutDetail() {
               className="p-1 rounded-md text-text-faint hover:text-text-dim hover:bg-void-overlay transition-colors"
               aria-label="Edit notes"
             >
-              <Pencil size={14} />
+              <IconPencil width={14} height={14} />
             </button>
           )}
         </div>
@@ -320,7 +320,7 @@ export function WorkoutDetail() {
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 text-accent-teal hover:underline text-sm transition-colors"
         >
-          <ExternalLink size={14} />
+          <IconExternalLink width={14} height={14} />
           View on Concept2 Logbook
         </a>
       )}
@@ -357,14 +357,14 @@ function HeroMetric({ label, value }: { label: string; value: string }) {
 
 function SourceBadge({ source, createdAt }: { source: SourceType; createdAt?: string }) {
   const cfg = SOURCE_CONFIG[source];
-  const SourceIcon = ICON_MAP[cfg.icon] ?? Activity;
+  const SourceIcon = ICON_MAP[cfg.icon] ?? IconActivity;
 
   return (
     <div className="flex items-center gap-1.5 shrink-0">
       <div
         className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-${cfg.color}/12 text-${cfg.color}`}
       >
-        <SourceIcon size={12} />
+        <SourceIcon width={12} height={12} />
         {cfg.label}
       </div>
       {createdAt && (

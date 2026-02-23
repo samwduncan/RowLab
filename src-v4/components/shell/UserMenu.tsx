@@ -6,7 +6,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { motion, AnimatePresence } from 'motion/react';
-import { User, Settings, LogOut, Check } from 'lucide-react';
+import { IconUser, IconSettings, IconLogOut, IconCheck } from '@/components/icons';
 import { useAuth } from '@/features/auth/useAuth';
 import { SPRING_SNAPPY } from '@/lib/animations';
 
@@ -122,13 +122,13 @@ export function UserMenu() {
             <div className="border-b border-edge-default py-1">
               <MenuLink
                 to="/profile"
-                icon={User}
+                icon={IconUser}
                 label="Profile"
                 onClick={() => setIsOpen(false)}
               />
               <MenuLink
                 to="/settings"
-                icon={Settings}
+                icon={IconSettings}
                 label="Settings"
                 onClick={() => setIsOpen(false)}
               />
@@ -153,7 +153,7 @@ export function UserMenu() {
                     </span>
                     <span className="flex-1 truncate">{team.name}</span>
                     {team.id === activeTeamId && (
-                      <Check size={14} className="shrink-0 text-accent-teal" />
+                      <IconCheck width={14} height={14} className="shrink-0 text-accent-teal" />
                     )}
                   </button>
                 ))}
@@ -168,7 +168,7 @@ export function UserMenu() {
                 onClick={() => void handleLogout()}
                 className="flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-data-poor transition-colors hover:bg-void-overlay"
               >
-                <LogOut size={16} />
+                <IconLogOut width={16} height={16} />
                 <span>Log out</span>
               </button>
             </div>
@@ -183,7 +183,7 @@ export function UserMenu() {
 
 interface MenuLinkProps {
   to: string;
-  icon: React.ComponentType<{ size: number }>;
+  icon: React.ComponentType<{ width: number; height: number }>;
   label: string;
   onClick?: () => void;
 }
@@ -196,7 +196,7 @@ function MenuLink({ to, icon: Icon, label, onClick }: MenuLinkProps) {
       className="flex items-center gap-3 px-4 py-2 text-sm text-text-dim transition-colors hover:bg-void-overlay hover:text-text-bright"
       role="menuitem"
     >
-      <Icon size={16} />
+      <Icon width={16} height={16} />
       <span>{label}</span>
     </Link>
   );

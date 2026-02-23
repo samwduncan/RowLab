@@ -7,7 +7,7 @@
  */
 import { useCallback, useMemo } from 'react';
 import { Link, useRouterState } from '@tanstack/react-router';
-import { Star } from 'lucide-react';
+import { IconStar } from '@/components/icons';
 import { useIsDesktop, useIsTablet } from '@/hooks/useBreakpoint';
 import { useAuth } from '@/features/auth/useAuth';
 import { getNavConfig, sidebarFooterItems } from '@/config/navigation';
@@ -187,7 +187,7 @@ function FullNavItem({ item, active, isFavorite: pinned, onToggleFavorite }: Ful
         <span className="absolute left-0 top-1/2 h-4 w-0.5 -translate-y-1/2 rounded-full bg-accent-teal" />
       )}
 
-      <Icon size={18} className={active ? 'text-accent-teal' : 'text-text-faint'} />
+      <Icon width={18} height={18} className={active ? 'text-accent-teal' : 'text-text-faint'} />
       <span className="flex-1 truncate">{item.label}</span>
 
       {/* Badge */}
@@ -212,7 +212,7 @@ function FullNavItem({ item, active, isFavorite: pinned, onToggleFavorite }: Ful
         }`}
         aria-label={pinned ? `Unpin ${item.label}` : `Pin ${item.label}`}
       >
-        <Star size={12} fill={pinned ? 'currentColor' : 'none'} />
+        <IconStar width={12} height={12} fill={pinned ? 'currentColor' : 'none'} />
       </button>
     </Link>
   );
@@ -241,7 +241,7 @@ function RailNavItem({ item, active }: RailNavItemProps) {
       {active && (
         <span className="absolute left-0 top-1/2 h-4 w-0.5 -translate-y-1/2 rounded-full bg-accent-teal" />
       )}
-      <Icon size={20} />
+      <Icon width={20} height={20} />
 
       {/* Badge for rail */}
       {item.badge != null && item.badge > 0 && (

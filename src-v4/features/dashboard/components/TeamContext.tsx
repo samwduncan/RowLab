@@ -6,7 +6,7 @@
  */
 
 import { motion } from 'motion/react';
-import { Users, CalendarDays, MessageCircle } from 'lucide-react';
+import { IconUsers, IconCalendarDays, IconMessageCircle } from '@/components/icons';
 import { slideUp } from '@/lib/animations';
 import { Card } from '@/components/ui/Card';
 import { formatRelativeDate } from '@/lib/format';
@@ -30,7 +30,7 @@ export function TeamContext({ teamContext, className = '' }: TeamContextProps) {
       <Card padding="md" className="border-t-2 border-accent-teal/30">
         {/* Team header */}
         <div className="flex items-center gap-2 mb-4">
-          <Users size={18} className="text-accent-teal" aria-hidden="true" />
+          <IconUsers width={18} height={18} className="text-accent-teal" aria-hidden="true" />
           <h2 className="text-lg font-semibold text-text-bright">{teamContext.teamName}</h2>
         </div>
 
@@ -40,7 +40,7 @@ export function TeamContext({ teamContext, className = '' }: TeamContextProps) {
           {hasEvents && (
             <div>
               <h3 className="text-sm font-medium text-text-dim mb-3 flex items-center gap-1.5">
-                <CalendarDays size={14} aria-hidden="true" />
+                <IconCalendarDays width={14} height={14} aria-hidden="true" />
                 Upcoming Events
               </h3>
               <ul className="space-y-2">
@@ -63,7 +63,7 @@ export function TeamContext({ teamContext, className = '' }: TeamContextProps) {
           {hasNotices && (
             <div>
               <h3 className="text-sm font-medium text-text-dim mb-3 flex items-center gap-1.5">
-                <MessageCircle size={14} aria-hidden="true" />
+                <IconMessageCircle width={14} height={14} aria-hidden="true" />
                 Notices
               </h3>
               <ul className="space-y-2">

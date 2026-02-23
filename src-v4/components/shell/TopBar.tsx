@@ -5,7 +5,7 @@
  *
  * Renders the CommandPalette (Cmd+K search) and NotificationBell with dropdown panel.
  */
-import { Search } from 'lucide-react';
+import { IconSearch } from '@/components/icons';
 import { useIsMobile } from '@/hooks/useBreakpoint';
 import { Breadcrumbs } from './Breadcrumbs';
 import { TeamSwitcher } from './TeamSwitcher';
@@ -57,7 +57,7 @@ export function TopBar() {
             className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm text-text-faint transition-colors hover:bg-void-overlay hover:text-text-bright"
             aria-label="Search"
           >
-            <Search size={16} />
+            <IconSearch width={16} height={16} />
             {!isMobile && (
               <>
                 <span className="text-text-faint">Search...</span>

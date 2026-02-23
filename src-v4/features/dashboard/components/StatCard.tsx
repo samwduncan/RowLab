@@ -6,13 +6,13 @@
 
 import { useEffect, useState } from 'react';
 import { useMotionValue, useTransform, animate } from 'motion/react';
-import type { LucideIcon } from 'lucide-react';
+import type { IconComponent } from '@/types/icons';
 import { Card } from '@/components/ui/Card';
 import { Sparkline } from '@/components/ui/Sparkline';
 import { formatNumber } from '@/lib/format';
 
 interface StatCardProps {
-  icon: LucideIcon;
+  icon: IconComponent;
   label: string;
   value: number;
   formattedValue?: string;
@@ -75,7 +75,7 @@ function AnimatedStatCard({
   sparklineColor,
   className = '',
 }: {
-  icon: LucideIcon;
+  icon: IconComponent;
   label: string;
   value: number;
   footnote?: string;
@@ -134,7 +134,7 @@ function StatCardShell({
   sparklineColor,
   className = '',
 }: {
-  icon: LucideIcon;
+  icon: IconComponent;
   label: string;
   displayValue: string;
   footnote?: string;
@@ -150,7 +150,7 @@ function StatCardShell({
           className="w-10 h-10 rounded-lg bg-void-deep flex items-center justify-center"
           aria-hidden="true"
         >
-          <Icon size={20} className="text-accent-teal" />
+          <Icon width={20} height={20} className="text-accent-teal" />
         </div>
 
         {/* Label */}

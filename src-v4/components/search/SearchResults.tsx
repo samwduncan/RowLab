@@ -6,7 +6,7 @@
 import { Command } from 'cmdk';
 import type { SearchEntry } from './searchRegistry';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { User } from 'lucide-react';
+import { IconUser } from '@/components/icons';
 
 interface Athlete {
   id: string;
@@ -49,7 +49,7 @@ export function SearchResults({
               onSelect={() => entry.path && onSelectPage(entry.path)}
               className="search-item"
             >
-              <entry.icon size={16} className="shrink-0 text-text-faint" />
+              <entry.icon width={16} height={16} className="shrink-0 text-text-faint" />
               <div className="min-w-0 flex-1">
                 <span className="text-text-bright">{entry.label}</span>
                 {entry.description && (
@@ -71,7 +71,7 @@ export function SearchResults({
               onSelect={() => onSelectCommand(entry)}
               className="search-item"
             >
-              <entry.icon size={16} className="shrink-0 text-accent-teal" />
+              <entry.icon width={16} height={16} className="shrink-0 text-accent-teal" />
               <div className="min-w-0 flex-1">
                 <span className="text-text-bright">{entry.label}</span>
                 {entry.description && (
@@ -109,7 +109,7 @@ export function SearchResults({
                 onSelect={() => onSelectAthlete(athlete)}
                 className="search-item"
               >
-                <User size={16} className="shrink-0 text-text-faint" />
+                <IconUser width={16} height={16} className="shrink-0 text-text-faint" />
                 <div className="min-w-0 flex-1">
                   <span className="text-text-bright">{athlete.name}</span>
                   {athlete.email && (

@@ -8,7 +8,7 @@
  * No oversized illustrations, no patronizing copy, no animated elements.
  */
 
-import type { LucideIcon } from 'lucide-react';
+import type { IconComponent } from '@/types/icons';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@/components/ui/Button';
 
@@ -19,7 +19,7 @@ interface EmptyStateAction {
 }
 
 interface EmptyStateProps {
-  icon: LucideIcon;
+  icon: IconComponent;
   title: string;
   description: string;
   action?: EmptyStateAction;
@@ -58,7 +58,7 @@ export function EmptyState({
 
   return (
     <div role="status" className={`flex flex-col items-center text-center gap-3 ${className}`}>
-      <Icon size={iconSize} className="text-text-faint" aria-hidden="true" />
+      <Icon width={iconSize} height={iconSize} className="text-text-faint" aria-hidden="true" />
 
       <div className="space-y-1">
         <h3 className="text-[0.9375rem] font-semibold text-text-bright">{title}</h3>

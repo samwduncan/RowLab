@@ -6,7 +6,7 @@
 
 import { useMemo, useState } from 'react';
 import { format, isToday } from 'date-fns';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { IconChevronLeft, IconChevronRight } from '@/components/icons';
 
 import { getCalendarDays, getSportFromWorkout, getWorkoutVolume } from '../utils';
 import { SPORT_CONFIG, type SportType } from '../constants';
@@ -152,7 +152,7 @@ export function WeeklyTimeline({ month, workouts }: WeeklyTimelineProps) {
           className="p-1.5 rounded-md hover:bg-void-overlay transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           aria-label="Previous week"
         >
-          <ChevronLeft size={16} className="text-text-dim" />
+          <IconChevronLeft width={16} height={16} className="text-text-dim" />
         </button>
         <span className="text-text-dim text-xs font-medium">{weekLabel}</span>
         <button
@@ -162,7 +162,7 @@ export function WeeklyTimeline({ month, workouts }: WeeklyTimelineProps) {
           className="p-1.5 rounded-md hover:bg-void-overlay transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           aria-label="Next week"
         >
-          <ChevronRight size={16} className="text-text-dim" />
+          <IconChevronRight width={16} height={16} className="text-text-dim" />
         </button>
       </div>
 

@@ -7,20 +7,20 @@
  * - coach: visible when activeTeamRole is COACH, ADMIN, or OWNER (uppercase from backend)
  */
 import {
-  LayoutDashboard,
-  Dumbbell,
-  Users,
-  Rows3,
-  Sailboat,
-  Warehouse,
-  Settings,
-  User,
-  CalendarDays,
-  ClipboardCheck,
-  NotebookPen,
-  UserPlus,
-  MoreHorizontal,
-} from 'lucide-react';
+  IconLayout,
+  IconDumbbell,
+  IconUsers,
+  IconRows,
+  IconSailboat,
+  IconWarehouse,
+  IconSettings,
+  IconUser,
+  IconCalendarDays,
+  IconClipboardCheck,
+  IconNotebook,
+  IconUserPlus,
+  IconMoreHorizontal,
+} from '@/components/icons';
 import { isCoachOrAbove } from '@/features/team/types';
 import type { NavConfig, NavItem, NavSection } from '@/types/navigation';
 
@@ -30,8 +30,8 @@ const trainingSection: NavSection = {
   id: 'training',
   label: 'Training',
   items: [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/', zone: 'personal' },
-    { id: 'workouts', label: 'Workouts', icon: Dumbbell, path: '/workouts', zone: 'personal' },
+    { id: 'dashboard', label: 'Dashboard', icon: IconLayout, path: '/', zone: 'personal' },
+    { id: 'workouts', label: 'Workouts', icon: IconDumbbell, path: '/workouts', zone: 'personal' },
     // Calendar nav item deferred to Phase 66 (CAL-01)
   ],
 };
@@ -39,7 +39,7 @@ const trainingSection: NavSection = {
 const profileSection: NavSection = {
   id: 'profile',
   label: 'You',
-  items: [{ id: 'profile', label: 'Profile', icon: User, path: '/profile', zone: 'personal' }],
+  items: [{ id: 'profile', label: 'Profile', icon: IconUser, path: '/profile', zone: 'personal' }],
 };
 
 /* === TEAM ZONE (visible with active team) === */
@@ -47,7 +47,7 @@ const profileSection: NavSection = {
 const teamSection: NavSection = {
   id: 'team',
   label: 'Team',
-  items: [{ id: 'team-dashboard', label: 'Team', icon: Users, path: '/team', zone: 'team' }],
+  items: [{ id: 'team-dashboard', label: 'Team', icon: IconUsers, path: '/team', zone: 'team' }],
 };
 
 /* === COACH ZONE (visible when coach or admin) === */
@@ -59,43 +59,43 @@ const coachSection: NavSection = {
     {
       id: 'lineup-builder',
       label: 'Lineup Builder',
-      icon: Rows3,
+      icon: IconRows,
       path: '/lineup-builder',
       zone: 'coach',
     },
     {
       id: 'seat-racing',
       label: 'Seat Racing',
-      icon: Sailboat,
+      icon: IconSailboat,
       path: '/seat-racing',
       zone: 'coach',
     },
-    { id: 'fleet', label: 'Fleet', icon: Warehouse, path: '/fleet', zone: 'coach' },
+    { id: 'fleet', label: 'Fleet', icon: IconWarehouse, path: '/fleet', zone: 'coach' },
     {
       id: 'training',
       label: 'Training',
-      icon: CalendarDays,
+      icon: IconCalendarDays,
       path: '/training',
       zone: 'coach',
     },
     {
       id: 'attendance',
       label: 'Attendance',
-      icon: ClipboardCheck,
+      icon: IconClipboardCheck,
       path: '/attendance',
       zone: 'coach',
     },
     {
       id: 'whiteboard',
       label: 'Whiteboard',
-      icon: NotebookPen,
+      icon: IconNotebook,
       path: '/whiteboard',
       zone: 'coach',
     },
     {
       id: 'recruiting',
       label: 'Recruiting',
-      icon: UserPlus,
+      icon: IconUserPlus,
       path: '/recruiting',
       zone: 'coach',
     },
@@ -109,14 +109,14 @@ const allSections: NavSection[] = [trainingSection, profileSection, teamSection,
 /* === BOTTOM TAB ITEMS (mobile, max 5) === */
 
 const personalBottomTabs: NavItem[] = [
-  { id: 'dashboard', label: 'Home', icon: LayoutDashboard, path: '/', zone: 'personal' },
-  { id: 'workouts', label: 'Workouts', icon: Dumbbell, path: '/workouts', zone: 'personal' },
+  { id: 'dashboard', label: 'Home', icon: IconLayout, path: '/', zone: 'personal' },
+  { id: 'workouts', label: 'Workouts', icon: IconDumbbell, path: '/workouts', zone: 'personal' },
 ];
 
 const teamBottomTab: NavItem = {
   id: 'team-dashboard',
   label: 'Team',
-  icon: Users,
+  icon: IconUsers,
   path: '/team',
   zone: 'team',
 };
@@ -124,7 +124,7 @@ const teamBottomTab: NavItem = {
 const profileBottomTab: NavItem = {
   id: 'profile',
   label: 'Profile',
-  icon: User,
+  icon: IconUser,
   path: '/profile',
   zone: 'personal',
 };
@@ -132,8 +132,8 @@ const profileBottomTab: NavItem = {
 /* === SIDEBAR FOOTER ITEMS === */
 
 export const sidebarFooterItems: NavItem[] = [
-  { id: 'settings', label: 'Settings', icon: Settings, path: '/settings', zone: 'personal' },
-  { id: 'profile', label: 'Profile', icon: User, path: '/profile', zone: 'personal' },
+  { id: 'settings', label: 'Settings', icon: IconSettings, path: '/settings', zone: 'personal' },
+  { id: 'profile', label: 'Profile', icon: IconUser, path: '/profile', zone: 'personal' },
 ];
 
 /* === EXPORTS === */
@@ -179,7 +179,7 @@ export function getBottomTabItems(role: string | null, hasTeam: boolean): NavIte
     items.push({
       id: 'more',
       label: 'More',
-      icon: MoreHorizontal,
+      icon: IconMoreHorizontal,
       path: '/__more__',
       zone: 'coach',
     });
