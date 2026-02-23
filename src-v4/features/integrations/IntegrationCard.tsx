@@ -69,7 +69,7 @@ export function IntegrationCard({
 
         {/* Title and Status */}
         <div className="min-w-0">
-          <h4 className="font-medium text-text-bright">{title}</h4>
+          <h4 className="font-display font-medium text-text-bright">{title}</h4>
           {connected ? (
             <div className="mt-1 space-y-1">
               <div className="flex items-center gap-2">

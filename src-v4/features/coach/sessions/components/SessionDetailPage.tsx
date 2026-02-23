@@ -178,7 +178,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
           <IconChevronLeft width={16} height={16} />
           Cancel Edit
         </button>
-        <h2 className="text-lg font-semibold text-text-bright mb-4">Edit Session</h2>
+        <h2 className="text-lg font-display font-semibold text-text-bright mb-4">Edit Session</h2>
         <SessionForm
           session={session}
           onSubmit={handleUpdate}
@@ -314,7 +314,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
         <div className="space-y-5">
           {piecesBySegment.map((group) => (
             <div key={group.segment}>
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-text-faint mb-2">
+              <h3 className="text-xs font-display font-semibold uppercase tracking-wider text-text-faint mb-2">
                 {group.label}
               </h3>
               <div className="space-y-1.5">

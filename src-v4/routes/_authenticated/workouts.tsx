@@ -286,7 +286,9 @@ function DeleteConfirmDialog({
           className="max-w-sm w-full"
           onClick={(e) => e.stopPropagation()}
         >
-          <h3 className="text-text-bright text-base font-semibold mb-2">Delete workout?</h3>
+          <h3 className="text-text-bright text-base font-display font-semibold mb-2">
+            Delete workout?
+          </h3>
           <p className="text-text-dim text-sm mb-5">
             This cannot be undone. This workout will be permanently removed from your log.
           </p>

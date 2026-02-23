@@ -112,7 +112,9 @@ function AnalyticsSettingsSection() {
     <div>
       <div className="flex items-center gap-2 mb-1">
         <IconActivity className="w-4 h-4 text-accent-teal" />
-        <h2 className="text-lg font-semibold text-text-bright">Analytics Thresholds</h2>
+        <h2 className="text-lg font-display font-semibold text-text-bright">
+          Analytics Thresholds
+        </h2>
       </div>
       <p className="text-sm text-text-dim mb-4">
         Configure your training zones for more accurate performance analytics. Leave blank to use
@@ -390,7 +392,7 @@ function SettingsPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-heading-gradient mb-6">Settings</h1>
+      <h1 className="text-2xl font-display font-bold text-heading-gradient mb-6">Settings</h1>
 
       {/* Mobile tab bar */}
       <MobileTabBar activeSection={activeSection} onSelect={setActiveSection} />

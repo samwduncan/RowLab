@@ -119,7 +119,9 @@ export function NotificationsSection() {
       <Card>
         <div className="flex items-center gap-2 mb-4">
           <IconMail className="w-4 h-4 text-accent-teal" />
-          <h3 className="text-sm font-semibold text-text-bright">Email Notifications</h3>
+          <h3 className="text-sm font-display font-semibold text-text-bright">
+            Email Notifications
+          </h3>
         </div>
         <div className="divide-y divide-edge-default/50">
           <ToggleSwitch
@@ -157,7 +159,9 @@ export function NotificationsSection() {
       <Card>
         <div className="flex items-center gap-2 mb-4">
           <IconSmartphone className="w-4 h-4 text-accent-teal" />
-          <h3 className="text-sm font-semibold text-text-bright">Push Notifications</h3>
+          <h3 className="text-sm font-display font-semibold text-text-bright">
+            Push Notifications
+          </h3>
         </div>
         <div className="divide-y divide-edge-default/50">
           <ToggleSwitch

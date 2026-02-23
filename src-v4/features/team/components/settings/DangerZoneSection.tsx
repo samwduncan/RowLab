@@ -56,7 +56,7 @@ export function DangerZoneSection({ team, isOwner }: DangerZoneSectionProps) {
         <div className="flex items-start gap-3">
           <IconLogOut width={18} height={18} className="text-data-poor mt-0.5 shrink-0" />
           <div className="flex-1">
-            <h3 className="text-sm font-semibold text-text-bright">Leave team</h3>
+            <h3 className="text-sm font-display font-semibold text-text-bright">Leave team</h3>
             <p className="text-xs text-text-dim mt-0.5">
               Your personal workouts and data will be preserved. You can rejoin later with a new
               invite code.
@@ -116,7 +116,7 @@ export function DangerZoneSection({ team, isOwner }: DangerZoneSectionProps) {
           <div className="flex items-start gap-3">
             <IconTrash width={18} height={18} className="text-data-poor mt-0.5 shrink-0" />
             <div className="flex-1">
-              <h3 className="text-sm font-semibold text-text-bright">Delete team</h3>
+              <h3 className="text-sm font-display font-semibold text-text-bright">Delete team</h3>
               <p className="text-xs text-text-dim mt-0.5">
                 This action cannot be undone. All team data will be permanently deleted. Member
                 personal data is preserved.

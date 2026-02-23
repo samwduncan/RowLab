@@ -39,7 +39,7 @@ export function WhiteboardView({ whiteboard, canEdit, onEdit }: WhiteboardViewPr
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-edge-default">
         <div>
-          <h2 className="text-base font-semibold text-text-bright">
+          <h2 className="text-base font-display font-semibold text-text-bright">
             {formatLongDate(whiteboard.date)}
           </h2>
           <p className="text-xs text-text-faint mt-0.5">Posted by {whiteboard.author.name}</p>

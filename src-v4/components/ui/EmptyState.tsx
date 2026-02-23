@@ -61,7 +61,7 @@ export function EmptyState({
       <Icon width={iconSize} height={iconSize} className="text-text-faint" aria-hidden="true" />
 
       <div className="space-y-1">
-        <h3 className="text-[0.9375rem] font-semibold text-text-bright">{title}</h3>
+        <h3 className="text-[0.9375rem] font-display font-semibold text-text-bright">{title}</h3>
         <p className="text-sm text-text-dim max-w-[280px]">{description}</p>
       </div>
 

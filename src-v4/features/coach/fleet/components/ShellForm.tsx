@@ -133,7 +133,7 @@ export function ShellForm({ shell, onSubmit, onCancel, isPending }: ShellFormPro
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <h2 className="text-lg font-semibold text-text-bright">
+      <h2 className="text-lg font-display font-semibold text-text-bright">
         {isEdit ? 'Edit Shell' : 'Add Shell'}
       </h2>
 

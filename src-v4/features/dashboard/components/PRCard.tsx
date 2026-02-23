@@ -60,7 +60,7 @@ export function PRCard({ record, isRecent = false, className = '' }: PRCardProps
         {/* Best time or no data */}
         {hasBest ? (
           <>
-            <span className="text-xl font-bold text-text-bright tabular-nums">
+            <span className="text-xl font-mono font-bold text-text-bright tabular-nums">
               {formatErgTime(record.bestTime)}
             </span>
 
@@ -79,7 +79,10 @@ export function PRCard({ record, isRecent = false, className = '' }: PRCardProps
           </>
         ) : (
           <div className="flex flex-col items-center py-2">
-            <span className="text-xl font-bold text-text-faint tabular-nums" aria-label="No data">
+            <span
+              className="text-xl font-mono font-bold text-text-faint tabular-nums"
+              aria-label="No data"
+            >
               {'\u2014'}
             </span>
             <span className="text-xs text-text-faint mt-1">No data</span>

@@ -120,7 +120,7 @@ export function SaveLineupDialog({
             <div className="panel rounded-2xl shadow-xl w-full max-w-md pointer-events-auto">
               {/* Header */}
               <div className="flex items-center justify-between px-5 pt-5 pb-3">
-                <h2 className="text-lg font-semibold text-text-bright">
+                <h2 className="text-lg font-display font-semibold text-text-bright">
                   {isUpdate ? 'Update Lineup' : 'Save Lineup'}
                 </h2>
                 <button

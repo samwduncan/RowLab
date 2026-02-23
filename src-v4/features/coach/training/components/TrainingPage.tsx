@@ -118,7 +118,7 @@ export function TrainingPage({ teamId, readOnly }: TrainingPageProps) {
           COACH
         </p>
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-semibold text-text-bright tracking-tight lg:text-3xl">
+          <h1 className="text-2xl font-display font-semibold text-text-bright tracking-tight lg:text-3xl">
             Training
           </h1>
           {readOnly && <ReadOnlyBadge />}

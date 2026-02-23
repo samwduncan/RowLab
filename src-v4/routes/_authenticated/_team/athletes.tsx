@@ -101,7 +101,7 @@ function AthletesPage() {
             <IconUsers className="h-5 w-5 text-text-faint" />
             <p className="text-xs font-medium uppercase tracking-wider text-text-faint">Team</p>
           </div>
-          <h1 className="text-2xl font-bold text-heading-gradient tracking-tight">
+          <h1 className="text-2xl font-display font-bold text-heading-gradient tracking-tight">
             Athletes
             {athletes.length > 0 && (
               <span className="ml-2 text-base font-normal text-text-faint">

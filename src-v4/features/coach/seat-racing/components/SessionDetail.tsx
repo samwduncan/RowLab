@@ -324,7 +324,7 @@ function PanelContent({
                   >
                     {/* Piece header */}
                     <div className="px-4 py-2.5 bg-void-deep/40 border-b border-edge-default/30">
-                      <h3 className="text-sm font-semibold text-text-bright">
+                      <h3 className="text-sm font-display font-semibold text-text-bright">
                         Piece {piece.sequenceOrder}
                       </h3>
                       {piece.distanceMeters && (

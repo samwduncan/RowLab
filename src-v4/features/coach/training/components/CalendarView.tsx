@@ -154,7 +154,7 @@ function Toolbar({ label, view, onNavigate, onView }: ToolbarProps) {
             />
           </svg>
         </button>
-        <h2 className="text-sm font-semibold text-text-bright ml-1">{label}</h2>
+        <h2 className="text-sm font-display font-semibold text-text-bright ml-1">{label}</h2>
       </div>
 
       <div className="flex rounded-lg border border-edge-default overflow-hidden">

@@ -124,7 +124,7 @@ export function IntegrationsSection() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-semibold text-text-bright mb-1">Integrations</h2>
+        <h2 className="text-lg font-display font-semibold text-text-bright mb-1">Integrations</h2>
         <p className="text-sm text-text-dim">
           Connect your accounts to automatically sync workouts and training data.
         </p>

@@ -64,7 +64,7 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-edge-default/50 px-4 py-3">
-            <h3 className="text-sm font-semibold text-text-bright">Notifications</h3>
+            <h3 className="text-sm font-display font-semibold text-text-bright">Notifications</h3>
             {unreadCount > 0 && (
               <button
                 type="button"

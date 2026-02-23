@@ -14,7 +14,9 @@ export function IntegrationsSection() {
       <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-void-deep">
         <IconCable width={24} height={24} className="text-text-faint" />
       </div>
-      <h3 className="text-sm font-semibold text-text-bright mb-1">Team Integrations</h3>
+      <h3 className="text-sm font-display font-semibold text-text-bright mb-1">
+        Team Integrations
+      </h3>
       <p className="text-sm text-text-dim max-w-sm">
         Team-level integrations with Concept2 and other services are coming in a future update.
         Individual athletes can connect their Concept2 accounts from their personal settings.

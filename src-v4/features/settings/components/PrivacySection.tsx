@@ -148,7 +148,9 @@ export function PrivacySection() {
       <Card>
         <div className="flex items-center gap-2 mb-4">
           <IconEye className="w-4 h-4 text-accent-teal" />
-          <h3 className="text-sm font-semibold text-text-bright">Profile Visibility</h3>
+          <h3 className="text-sm font-display font-semibold text-text-bright">
+            Profile Visibility
+          </h3>
         </div>
         <div className="space-y-2" role="radiogroup" aria-label="Profile visibility">
           <RadioOption
@@ -179,7 +181,9 @@ export function PrivacySection() {
       <Card>
         <div className="flex items-center gap-2 mb-4">
           <IconEye className="w-4 h-4 text-accent-teal" />
-          <h3 className="text-sm font-semibold text-text-bright">Workout Visibility</h3>
+          <h3 className="text-sm font-display font-semibold text-text-bright">
+            Workout Visibility
+          </h3>
         </div>
         <div className="space-y-2" role="radiogroup" aria-label="Workout visibility">
           <RadioOption
@@ -210,7 +214,7 @@ export function PrivacySection() {
       <Card>
         <div className="flex items-center gap-2 mb-3">
           <IconTrophy className="w-4 h-4 text-accent-teal" />
-          <h3 className="text-sm font-semibold text-text-bright">Leaderboards</h3>
+          <h3 className="text-sm font-display font-semibold text-text-bright">Leaderboards</h3>
         </div>
         <ToggleSwitch
           label="Show in Team Leaderboards"

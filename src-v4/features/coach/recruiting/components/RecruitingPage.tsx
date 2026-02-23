@@ -121,7 +121,7 @@ export function RecruitingPage() {
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-semibold text-text-bright">Recruiting</h1>
+          <h1 className="text-xl font-display font-semibold text-text-bright">Recruiting</h1>
           <p className="text-sm text-text-dim mt-0.5">
             Track recruit visits and schedule campus tours
           </p>
@@ -217,7 +217,7 @@ export function RecruitingPage() {
                 {/* Header */}
                 <div className="flex items-start justify-between">
                   <div>
-                    <h2 className="text-lg font-semibold text-text-bright">
+                    <h2 className="text-lg font-display font-semibold text-text-bright">
                       {selectedVisit.recruitName}
                     </h2>
                     <p className="text-sm text-text-dim">
@@ -271,7 +271,7 @@ export function RecruitingPage() {
                 {/* Notes */}
                 {selectedVisit.notes && (
                   <div>
-                    <h4 className="text-xs text-text-faint mb-1">Notes</h4>
+                    <h4 className="text-xs font-display text-text-faint mb-1">Notes</h4>
                     <p className="text-sm text-text-default whitespace-pre-wrap">
                       {selectedVisit.notes}
                     </p>
@@ -316,7 +316,7 @@ export function RecruitingPage() {
             <div className="panel rounded-2xl shadow-lg w-full max-w-lg max-h-[85vh] overflow-y-auto">
               <div className="p-5 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-text-bright">
+                  <h2 className="text-lg font-display font-semibold text-text-bright">
                     {modal.type === 'create' ? 'New Recruit Visit' : 'Edit Visit'}
                   </h2>
                   <button

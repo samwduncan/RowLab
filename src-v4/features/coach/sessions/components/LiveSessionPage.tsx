@@ -29,7 +29,10 @@ function LiveSkeleton() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="bg-void-raised border border-edge-default rounded-lg p-4 space-y-3">
+          <div
+            key={i}
+            className="bg-void-raised border border-edge-default rounded-lg p-4 space-y-3"
+          >
             <Skeleton height="0.875rem" width="8rem" rounded="sm" />
             <Skeleton height="2rem" width="5rem" rounded="sm" className="mx-auto" />
             <div className="grid grid-cols-2 gap-2">
@@ -179,7 +182,7 @@ export function LiveSessionPage({ sessionId }: LiveSessionPageProps) {
               <div className="hidden sm:block h-5 w-px bg-edge-default/30" />
 
               {/* Session name */}
-              <h1 className="text-lg sm:text-xl font-semibold text-text-bright truncate">
+              <h1 className="text-lg sm:text-xl font-display font-semibold text-text-bright truncate">
                 {session.name}
               </h1>
             </div>

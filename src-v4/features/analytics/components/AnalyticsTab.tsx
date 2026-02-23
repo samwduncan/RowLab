@@ -182,7 +182,9 @@ export function AnalyticsTab() {
 
       {/* Header row */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <h3 className="text-sm font-semibold text-text-bright">Performance Management Chart</h3>
+        <h3 className="text-sm font-display font-semibold text-text-bright">
+          Performance Management Chart
+        </h3>
         <div className="flex items-center gap-2">
           <RangeSelector value={range} onChange={setRange} />
           <SportFilter value={sport} onChange={setSport} />

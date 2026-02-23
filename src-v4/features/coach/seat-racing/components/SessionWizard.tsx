@@ -535,7 +535,7 @@ function Step4Assignments({
       <div className="space-y-3">
         {Array.from({ length: boatCount }, (_, i) => (
           <div key={i} className="rounded-lg border border-edge-default/50 p-4">
-            <h4 className="text-sm font-medium text-text-bright mb-2">Boat {i + 1}</h4>
+            <h4 className="text-sm font-display font-medium text-text-bright mb-2">Boat {i + 1}</h4>
             <div className="grid grid-cols-4 gap-2">
               {Array.from({ length: seatsPerBoat }, (_, s) => (
                 <div

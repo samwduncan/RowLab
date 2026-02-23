@@ -78,7 +78,7 @@ export function AchievementsTab() {
       {/* Unlocked section */}
       {unlocked.length > 0 && (
         <section>
-          <h3 className="text-sm font-medium text-text-dim uppercase tracking-wider mb-3">
+          <h3 className="text-sm font-display font-medium text-text-dim uppercase tracking-wider mb-3">
             Unlocked
           </h3>
           <motion.div
@@ -97,7 +97,7 @@ export function AchievementsTab() {
       {/* Locked section */}
       {locked.length > 0 && (
         <section>
-          <h3 className="text-sm font-medium text-text-faint uppercase tracking-wider mb-3">
+          <h3 className="text-sm font-display font-medium text-text-faint uppercase tracking-wider mb-3">
             Locked
           </h3>
           <motion.div

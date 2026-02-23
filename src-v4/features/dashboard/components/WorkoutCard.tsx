@@ -75,7 +75,9 @@ function getWorkoutLabel(workout: Workout): string {
 
 function MetricChip({ children }: { children: React.ReactNode }) {
   return (
-    <span className="text-xs bg-void-deep px-2 py-0.5 rounded-md text-text-dim">{children}</span>
+    <span className="text-xs font-mono tabular-nums bg-void-deep px-2 py-0.5 rounded-md text-text-dim">
+      {children}
+    </span>
   );
 }
 

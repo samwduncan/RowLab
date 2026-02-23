@@ -122,7 +122,7 @@ export function OarSetForm({ oarSet, onSubmit, onCancel, isPending }: OarSetForm
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <h2 className="text-lg font-semibold text-text-bright">
+      <h2 className="text-lg font-display font-semibold text-text-bright">
         {isEdit ? 'Edit Oar Set' : 'Add Oar Set'}
       </h2>
 

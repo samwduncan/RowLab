@@ -156,7 +156,7 @@ export function Sidebar() {
 
 function SectionHeader({ label }: { label: string }) {
   return (
-    <h3 className="mb-1 px-2 text-[11px] font-semibold uppercase tracking-wider text-text-faint">
+    <h3 className="mb-1 px-2 text-[11px] font-display font-semibold uppercase tracking-wider text-text-faint">
       {label}
     </h3>
   );

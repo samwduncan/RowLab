@@ -124,7 +124,7 @@ export function CalendarView({ filters, calendarMode }: CalendarViewProps) {
           >
             <IconChevronLeft width={18} height={18} className="text-text-dim" />
           </button>
-          <h2 className="text-text-bright font-medium text-sm min-w-[140px] text-center">
+          <h2 className="text-text-bright font-display font-medium text-sm min-w-[140px] text-center">
             {format(currentMonth, 'MMMM yyyy')}
           </h2>
           <button

@@ -103,7 +103,7 @@ export function WorkoutFeed({ filters, onEdit, onDelete, onCreateNew }: WorkoutF
         <motion.div key={group.dateKey} variants={listItemVariants} transition={SPRING_SMOOTH}>
           {/* Date header */}
           <div className="flex items-center gap-3 px-3 pt-4 pb-2">
-            <h3 className="text-text-dim text-sm font-medium uppercase tracking-wider shrink-0">
+            <h3 className="text-text-dim text-sm font-display font-medium uppercase tracking-wider shrink-0">
               {group.label}
             </h3>
             <div className="flex-1 h-px bg-edge-default" />

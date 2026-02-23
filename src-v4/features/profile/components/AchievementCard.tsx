@@ -104,7 +104,7 @@ export function AchievementCard({ achievement, compact = false }: AchievementCar
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <h3
-                className={`font-semibold text-text-bright truncate ${compact ? 'text-sm' : 'text-base'}`}
+                className={`font-display font-semibold text-text-bright truncate ${compact ? 'text-sm' : 'text-base'}`}
               >
                 {name}
               </h3>
@@ -165,7 +165,7 @@ export function AchievementCard({ achievement, compact = false }: AchievementCar
           {/* Content */}
           <div className="flex-1 min-w-0">
             <h3
-              className={`font-medium text-text-dim truncate ${compact ? 'text-sm' : 'text-base'}`}
+              className={`font-display font-medium text-text-dim truncate ${compact ? 'text-sm' : 'text-base'}`}
             >
               {name}
             </h3>

@@ -80,7 +80,7 @@ function SessionCard({ session, onNavigate }: SessionCardProps) {
               {statusConfig.label}
             </span>
           </div>
-          <h3 className="mt-1 text-sm font-medium text-text-bright group-hover:text-text-bright truncate">
+          <h3 className="mt-1 text-sm font-display font-medium text-text-bright group-hover:text-text-bright truncate">
             {session.name}
           </h3>
           <div className="mt-1 flex items-center gap-3 text-xs text-text-dim">
@@ -215,7 +215,9 @@ export function SessionsPage() {
               className="max-w-lg w-full max-h-[80vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2 className="text-lg font-semibold text-text-bright mb-4">New Session</h2>
+              <h2 className="text-lg font-display font-semibold text-text-bright mb-4">
+                New Session
+              </h2>
               <SessionForm
                 onSubmit={handleCreate}
                 onCancel={() => setShowForm(false)}

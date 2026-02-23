@@ -45,7 +45,7 @@ export function LineupToolbar({
     <div className="flex items-center justify-between gap-3 px-4 py-2.5 panel rounded-xl">
       {/* Left: lineup name + dirty indicator */}
       <div className="flex items-center gap-2 min-w-0">
-        <h2 className="text-sm font-semibold text-text-bright truncate">
+        <h2 className="text-sm font-display font-semibold text-text-bright truncate">
           {lineupName || 'New Lineup'}
         </h2>
         {isDirty && (

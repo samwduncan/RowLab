@@ -56,7 +56,9 @@ function RegisterPage() {
               </h1>
             </div>
             <div className="flex flex-col gap-3">
-              <h2 className="text-lg font-semibold text-text-bright">Invitation required</h2>
+              <h2 className="text-lg font-display font-semibold text-text-bright">
+                Invitation required
+              </h2>
               <p className="text-sm text-text-dim">
                 Registration requires an invitation. Ask your team admin for an invite link.
               </p>

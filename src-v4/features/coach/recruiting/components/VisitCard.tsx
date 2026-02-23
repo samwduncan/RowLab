@@ -45,7 +45,9 @@ export function VisitCard({ visit, onClick }: VisitCardProps) {
         >
           {/* Header: name + status */}
           <div className="flex items-start justify-between gap-3">
-            <h3 className="text-text-bright font-medium text-sm truncate">{visit.recruitName}</h3>
+            <h3 className="text-text-bright font-display font-medium text-sm truncate">
+              {visit.recruitName}
+            </h3>
             <span
               className={`inline-flex items-center rounded-lg px-2 py-0.5 text-xs font-medium ${status.bg} ${status.text}`}
             >

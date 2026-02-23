@@ -46,7 +46,7 @@ export function TeamDashboardContent() {
     <div className="mx-auto max-w-6xl p-4 md:p-6 pb-20 md:pb-6">
       {/* Team header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-text-bright">{team.name}</h1>
+        <h1 className="text-2xl font-display font-bold text-text-bright">{team.name}</h1>
         {team.description && <p className="mt-1 text-sm text-text-dim">{team.description}</p>}
       </div>
 

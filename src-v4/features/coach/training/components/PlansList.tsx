@@ -206,7 +206,9 @@ function PlanCard({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 mb-1">
-            <h3 className="text-sm font-semibold text-text-bright truncate">{plan.name}</h3>
+            <h3 className="text-sm font-display font-semibold text-text-bright truncate">
+              {plan.name}
+            </h3>
             {plan.phase && <PhaseBadge phase={plan.phase} />}
             {plan.isTemplate && (
               <span className="inline-flex items-center rounded-md bg-void-deep/50 px-1.5 py-0.5 text-[10px] font-medium text-text-faint uppercase tracking-wider">
@@ -276,7 +278,7 @@ function CreatePlanForm({ onCreated, onCancel }: { onCreated: () => void; onCanc
   return (
     <Card padding="md">
       <form onSubmit={handleSubmit} className="space-y-3">
-        <h3 className="text-sm font-semibold text-text-bright">New Training Plan</h3>
+        <h3 className="text-sm font-display font-semibold text-text-bright">New Training Plan</h3>
 
         <input
           type="text"

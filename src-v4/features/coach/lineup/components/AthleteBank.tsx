@@ -134,7 +134,7 @@ export function AthleteBank({
       {/* Header */}
       <div className="px-4 py-3 border-b border-edge-default/30">
         <div className="flex items-center justify-between mb-2.5">
-          <h3 className="text-sm font-semibold text-text-bright">Athletes</h3>
+          <h3 className="text-sm font-display font-semibold text-text-bright">Athletes</h3>
           <span className="text-xs font-medium text-text-faint bg-void-raised px-2 py-0.5 rounded-md">
             {unassignedIds.length}
           </span>

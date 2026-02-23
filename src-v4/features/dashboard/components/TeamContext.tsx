@@ -31,7 +31,9 @@ export function TeamContext({ teamContext, className = '' }: TeamContextProps) {
         {/* Team header */}
         <div className="flex items-center gap-2 mb-4">
           <IconUsers width={18} height={18} className="text-accent-teal" aria-hidden="true" />
-          <h2 className="text-lg font-semibold text-text-bright">{teamContext.teamName}</h2>
+          <h2 className="text-lg font-display font-semibold text-text-bright">
+            {teamContext.teamName}
+          </h2>
         </div>
 
         {/* Two-column grid */}
@@ -39,7 +41,7 @@ export function TeamContext({ teamContext, className = '' }: TeamContextProps) {
           {/* Upcoming Events */}
           {hasEvents && (
             <div>
-              <h3 className="text-sm font-medium text-text-dim mb-3 flex items-center gap-1.5">
+              <h3 className="text-sm font-display font-medium text-text-dim mb-3 flex items-center gap-1.5">
                 <IconCalendarDays width={14} height={14} aria-hidden="true" />
                 Upcoming Events
               </h3>
@@ -62,7 +64,7 @@ export function TeamContext({ teamContext, className = '' }: TeamContextProps) {
           {/* Team Notices */}
           {hasNotices && (
             <div>
-              <h3 className="text-sm font-medium text-text-dim mb-3 flex items-center gap-1.5">
+              <h3 className="text-sm font-display font-medium text-text-dim mb-3 flex items-center gap-1.5">
                 <IconMessageCircle width={14} height={14} aria-hidden="true" />
                 Notices
               </h3>

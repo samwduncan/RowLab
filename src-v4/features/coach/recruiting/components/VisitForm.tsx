@@ -95,7 +95,7 @@ export function VisitForm({ visit, onSubmit, onCancel, isPending = false }: Visi
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-5">
       {/* Recruit info */}
       <div className="space-y-3">
-        <h4 className="text-sm font-medium text-text-dim uppercase tracking-wider">
+        <h4 className="text-sm font-display font-medium text-text-dim uppercase tracking-wider">
           Recruit Info
         </h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -126,7 +126,7 @@ export function VisitForm({ visit, onSubmit, onCancel, isPending = false }: Visi
 
       {/* Visit schedule */}
       <div className="space-y-3">
-        <h4 className="text-sm font-medium text-text-dim uppercase tracking-wider">
+        <h4 className="text-sm font-display font-medium text-text-dim uppercase tracking-wider">
           Visit Schedule
         </h4>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -149,7 +149,7 @@ export function VisitForm({ visit, onSubmit, onCancel, isPending = false }: Visi
       {/* Status (edit only) */}
       {isEditing && (
         <div className="space-y-3">
-          <h4 className="text-sm font-medium text-text-dim uppercase tracking-wider">
+          <h4 className="text-sm font-display font-medium text-text-dim uppercase tracking-wider">
             Status
           </h4>
           <select
@@ -167,7 +167,9 @@ export function VisitForm({ visit, onSubmit, onCancel, isPending = false }: Visi
 
       {/* Notes */}
       <div className="space-y-3">
-        <h4 className="text-sm font-medium text-text-dim uppercase tracking-wider">Notes</h4>
+        <h4 className="text-sm font-display font-medium text-text-dim uppercase tracking-wider">
+          Notes
+        </h4>
         <textarea
           {...register('notes')}
           rows={3}

@@ -136,7 +136,9 @@ export function DayPopover({ day, workouts, onClose, anchorRect }: DayPopoverPro
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-text-bright font-medium text-sm">{format(day, 'EEEE, MMM d')}</h3>
+          <h3 className="text-text-bright font-display font-medium text-sm">
+            {format(day, 'EEEE, MMM d')}
+          </h3>
           <button
             type="button"
             onClick={onClose}

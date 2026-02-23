@@ -141,7 +141,9 @@ export function MobileAthleteSelector({
         {/* Header */}
         <div className="flex items-center justify-between px-4 pb-3 border-b border-edge-default/30">
           <div>
-            <h2 className="text-base font-semibold text-text-bright">Select Athlete</h2>
+            <h2 className="text-base font-display font-semibold text-text-bright">
+              Select Athlete
+            </h2>
             {seatLabel && <p className="text-xs text-text-faint mt-0.5">{seatLabel}</p>}
           </div>
           <button

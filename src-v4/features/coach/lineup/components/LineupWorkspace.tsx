@@ -526,7 +526,7 @@ function LoadLineupModal({
         <div className="panel rounded-2xl shadow-xl w-full max-w-lg max-h-[70vh] flex flex-col pointer-events-auto">
           {/* Header */}
           <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-edge-default/30">
-            <h2 className="text-lg font-semibold text-text-bright">Load Lineup</h2>
+            <h2 className="text-lg font-display font-semibold text-text-bright">Load Lineup</h2>
             <button
               onClick={onClose}
               className="p-1.5 rounded-lg text-text-faint hover:text-text-bright hover:bg-void-overlay transition-colors"

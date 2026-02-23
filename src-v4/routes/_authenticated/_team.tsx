@@ -45,7 +45,7 @@ function TeamlessFallback() {
           </svg>
         </div>
 
-        <h2 className="text-xl font-semibold text-text-bright">Join a Team</h2>
+        <h2 className="text-xl font-display font-semibold text-text-bright">Join a Team</h2>
         <p className="mt-2 text-sm text-text-dim">
           Team features require an active team. Ask your coach for an invite link, or create your
           own team to get started.

@@ -103,7 +103,9 @@ export function BottomTabs() {
             >
               <div className="p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-semibold text-text-bright">Coach Tools</h3>
+                  <h3 className="text-sm font-display font-semibold text-text-bright">
+                    Coach Tools
+                  </h3>
                   <button
                     type="button"
                     onClick={() => setMoreOpen(false)}

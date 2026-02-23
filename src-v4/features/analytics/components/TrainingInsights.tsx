@@ -101,7 +101,9 @@ export function TrainingInsights({ insights, daysWithData, isReliable }: Trainin
   if (!isReliable) {
     return (
       <div>
-        <h3 className="text-sm font-semibold text-text-bright mb-3">Training Insights</h3>
+        <h3 className="text-sm font-display font-semibold text-text-bright mb-3">
+          Training Insights
+        </h3>
         <InsightsPlaceholder daysWithData={daysWithData} />
       </div>
     );
@@ -109,7 +111,9 @@ export function TrainingInsights({ insights, daysWithData, isReliable }: Trainin
 
   return (
     <div>
-      <h3 className="text-sm font-semibold text-text-bright mb-3">Training Insights</h3>
+      <h3 className="text-sm font-display font-semibold text-text-bright mb-3">
+        Training Insights
+      </h3>
 
       {insights.length === 0 ? (
         <motion.div

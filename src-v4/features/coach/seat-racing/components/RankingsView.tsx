@@ -89,7 +89,7 @@ export function RankingsView({ teamId }: RankingsViewProps) {
     <div className="space-y-6">
       {/* Header row: title + side filter + recalculate */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <h2 className="text-lg font-semibold text-text-bright">Rankings</h2>
+        <h2 className="text-lg font-display font-semibold text-text-bright">Rankings</h2>
         <div className="flex items-center gap-3">
           <SideFilterBar value={sideFilter} onChange={setSideFilter} />
           <Button
@@ -106,7 +106,7 @@ export function RankingsView({ teamId }: RankingsViewProps) {
 
       {/* ELO Distribution chart */}
       <Card padding="md">
-        <h3 className="text-sm font-medium text-text-dim uppercase tracking-wider mb-4">
+        <h3 className="text-sm font-display font-medium text-text-dim uppercase tracking-wider mb-4">
           ELO Distribution
         </h3>
         {isLoading ? (

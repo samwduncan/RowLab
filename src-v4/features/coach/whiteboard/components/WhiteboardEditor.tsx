@@ -82,7 +82,7 @@ export function WhiteboardEditor({
     <Card padding="none">
       {/* Header */}
       <div className="px-6 py-4 border-b border-edge-default">
-        <h2 className="text-base font-semibold text-text-bright">Edit Whiteboard</h2>
+        <h2 className="text-base font-display font-semibold text-text-bright">Edit Whiteboard</h2>
         <p className="text-xs text-text-faint mt-0.5">
           {new Date().toLocaleDateString('en-US', {
             weekday: 'long',

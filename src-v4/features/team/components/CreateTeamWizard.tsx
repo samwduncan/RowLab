@@ -303,7 +303,7 @@ function Step1TeamInfo({
   return (
     <form onSubmit={handleSubmit(onNext)} className="flex flex-col gap-5" noValidate>
       <div>
-        <h2 className="text-lg font-semibold text-text-bright">Team Information</h2>
+        <h2 className="text-lg font-display font-semibold text-text-bright">Team Information</h2>
         <p className="mt-1 text-sm text-text-dim">
           Give your team a name and pick a sport to get started.
         </p>
@@ -393,7 +393,7 @@ function Step2Configure({
   return (
     <div className="flex flex-col gap-5">
       <div>
-        <h2 className="text-lg font-semibold text-text-bright">Review & Configure</h2>
+        <h2 className="text-lg font-display font-semibold text-text-bright">Review & Configure</h2>
         <p className="mt-1 text-sm text-text-dim">Confirm your team details before creating.</p>
       </div>
 
@@ -478,7 +478,7 @@ function Step3Invite({ team, onFinish }: { team: TeamDetail; onFinish: () => voi
             <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
           </svg>
         </div>
-        <h2 className="text-lg font-semibold text-text-bright">Team created!</h2>
+        <h2 className="text-lg font-display font-semibold text-text-bright">Team created!</h2>
         <p className="mt-1 text-sm text-text-dim">
           <span className="font-medium text-text-bright">{team.name}</span> is ready. Invite your
           teammates to get started.

@@ -268,7 +268,7 @@ export function VolumeChart({
       <div className="rounded-xl border border-edge-default bg-void-raised p-8">
         {/* Header row */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
-          <h3 className="text-sm font-semibold text-text-bright">Volume Trends</h3>
+          <h3 className="text-sm font-display font-semibold text-text-bright">Volume Trends</h3>
           <div className="flex items-center gap-2">
             <ToggleGroup
               options={METRIC_OPTIONS}
@@ -296,7 +296,7 @@ export function VolumeChart({
     <div className="rounded-xl border border-edge-default bg-void-raised p-4">
       {/* Header row */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-        <h3 className="text-sm font-semibold text-text-bright">Volume Trends</h3>
+        <h3 className="text-sm font-display font-semibold text-text-bright">Volume Trends</h3>
         <div className="flex items-center gap-2">
           <ToggleGroup
             options={METRIC_OPTIONS}

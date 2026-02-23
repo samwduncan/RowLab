@@ -159,7 +159,7 @@ function StatCardShell({
         </span>
 
         {/* Value */}
-        <span className="text-2xl lg:text-3xl font-bold text-text-bright tabular-nums">
+        <span className="text-2xl lg:text-3xl font-mono font-bold text-text-bright tabular-nums">
           {displayValue}
         </span>
 

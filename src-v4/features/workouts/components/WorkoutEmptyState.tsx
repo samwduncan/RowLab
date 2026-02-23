@@ -15,7 +15,7 @@ export function WorkoutEmptyState({ onCreateNew }: WorkoutEmptyStateProps) {
       <div className="w-14 h-14 rounded-2xl bg-void-raised flex items-center justify-center mb-4">
         <IconDumbbell width={24} height={24} className="text-text-faint" />
       </div>
-      <h3 className="text-text-bright text-base font-medium mb-1">No workouts yet</h3>
+      <h3 className="text-text-bright text-base font-display font-medium mb-1">No workouts yet</h3>
       <p className="text-text-dim text-sm text-center max-w-xs mb-6">
         Log your first workout manually or connect a device to start syncing automatically.
       </p>

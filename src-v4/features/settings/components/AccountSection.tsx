@@ -5,7 +5,14 @@
  * // TODO(phase-53): Wire to account deletion endpoint
  */
 import { useState, useCallback } from 'react';
-import { IconSettings, IconMail, IconLock, IconAlertTriangle, IconCheckCircle, IconXCircle } from '@/components/icons';
+import {
+  IconSettings,
+  IconMail,
+  IconLock,
+  IconAlertTriangle,
+  IconCheckCircle,
+  IconXCircle,
+} from '@/components/icons';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -148,7 +155,7 @@ export function AccountSection() {
       <Card>
         <div className="flex items-center gap-2 mb-3">
           <IconMail className="w-4 h-4 text-accent-teal" />
-          <h3 className="text-sm font-semibold text-text-bright">Email Address</h3>
+          <h3 className="text-sm font-display font-semibold text-text-bright">Email Address</h3>
         </div>
         <div className="flex items-center gap-3">
           <input
@@ -172,7 +179,7 @@ export function AccountSection() {
       <Card>
         <div className="flex items-center gap-2 mb-4">
           <IconLock className="w-4 h-4 text-accent-teal" />
-          <h3 className="text-sm font-semibold text-text-bright">Change Password</h3>
+          <h3 className="text-sm font-display font-semibold text-text-bright">Change Password</h3>
         </div>
         <PasswordChangeForm />
       </Card>
@@ -181,7 +188,7 @@ export function AccountSection() {
       <Card className="border border-accent-coral/30">
         <div className="flex items-center gap-2 mb-3">
           <IconAlertTriangle className="w-4 h-4 text-accent-coral" />
-          <h3 className="text-sm font-semibold text-accent-coral">Danger Zone</h3>
+          <h3 className="text-sm font-display font-semibold text-accent-coral">Danger Zone</h3>
         </div>
         <p className="text-sm text-text-dim mb-4">
           Permanently delete your account and all associated data. This action cannot be undone.

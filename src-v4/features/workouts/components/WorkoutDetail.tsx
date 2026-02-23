@@ -274,7 +274,7 @@ export function WorkoutDetail() {
       {hasSplits && (
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <h3 className="text-text-bright text-lg font-medium">Splits</h3>
+            <h3 className="text-text-bright text-lg font-display font-medium">Splits</h3>
             {intervalInfo.isInterval && (
               <span className="text-xs text-text-faint font-mono">
                 {intervalInfo.workCount} work intervals
@@ -293,7 +293,7 @@ export function WorkoutDetail() {
       {/* Notes section */}
       <div className="bg-void-raised rounded-xl border border-edge-default p-4">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-text-bright text-sm font-medium">Notes</h3>
+          <h3 className="text-text-bright text-sm font-display font-medium">Notes</h3>
           {onEdit && (
             <button
               type="button"

@@ -174,7 +174,7 @@ export function DashboardEmptyState() {
 
       {/* Welcome copy */}
       <motion.div variants={itemVariants} className="mb-8 space-y-3">
-        <h1 className="text-2xl font-semibold text-text-bright">Welcome to oarbit</h1>
+        <h1 className="text-2xl font-display font-semibold text-text-bright">Welcome to oarbit</h1>
         <p className="text-text-dim text-base leading-relaxed max-w-sm mx-auto">
           Your personal training hub starts here. Log your first workout to see your stats come to
           life.

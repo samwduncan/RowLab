@@ -10,7 +10,14 @@
  */
 import { useState, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { IconCopy, IconCheck, IconLink, IconTrash, IconShield, IconUsers } from '@/components/icons';
+import {
+  IconCopy,
+  IconCheck,
+  IconLink,
+  IconTrash,
+  IconShield,
+  IconUsers,
+} from '@/components/icons';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/Button';
 import { useGenerateInviteCode, useRevokeInviteCode } from '../hooks/useTeamMutations';
@@ -238,7 +245,9 @@ export function InviteCodeGenerator({ teamId, compact = false }: InviteCodeGener
       {/* Existing codes list (full mode only) */}
       {!compact && existingCodes && existingCodes.length > 0 && (
         <div className="flex flex-col gap-2">
-          <h4 className="text-sm font-medium text-text-default">Active invite codes</h4>
+          <h4 className="text-sm font-display font-medium text-text-default">
+            Active invite codes
+          </h4>
           <div className="flex flex-col gap-1.5">
             {existingCodes.map((code) => (
               <InviteCodeRow

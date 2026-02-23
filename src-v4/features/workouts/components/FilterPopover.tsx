@@ -101,7 +101,7 @@ export function FilterPopover({
             <Card padding="md" variant="elevated" className="space-y-4">
               {/* Header */}
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium text-text-bright">Filters</h3>
+                <h3 className="text-sm font-display font-medium text-text-bright">Filters</h3>
                 <button
                   type="button"
                   onClick={onClose}
@@ -136,7 +136,11 @@ export function FilterPopover({
                             : 'bg-void-deep text-text-dim hover:bg-void-overlay hover:text-text-default'
                         }`}
                       >
-                        <Icon width={16} height={16} className={isActive ? `text-${config.color}` : ''} />
+                        <Icon
+                          width={16}
+                          height={16}
+                          className={isActive ? `text-${config.color}` : ''}
+                        />
                         <span className="truncate max-w-full">{config.label}</span>
                       </button>
                     );

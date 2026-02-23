@@ -75,7 +75,7 @@ function ShortcutsHelp({ onClose }: { onClose: () => void }) {
       >
         <Card padding="lg" variant="elevated">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-text-bright flex items-center gap-2">
+            <h3 className="text-sm font-display font-semibold text-text-bright flex items-center gap-2">
               <IconKeyboard width={16} height={16} className="text-text-faint" />
               Keyboard Shortcuts
             </h3>

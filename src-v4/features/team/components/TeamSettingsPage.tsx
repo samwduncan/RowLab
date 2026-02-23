@@ -35,7 +35,7 @@ export function TeamSettingsPage() {
           <IconSettings width={20} height={20} className="text-text-faint" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-text-bright">Team Settings</h1>
+          <h1 className="text-2xl font-display font-bold text-text-bright">Team Settings</h1>
           <p className="text-sm text-text-dim">{team.name}</p>
         </div>
       </div>
@@ -96,7 +96,9 @@ export function TeamSettingsPage() {
 
 function SectionHeading({ title, danger = false }: { title: string; danger?: boolean }) {
   return (
-    <h2 className={`mb-3 text-lg font-semibold ${danger ? 'text-data-poor' : 'text-text-bright'}`}>
+    <h2
+      className={`mb-3 text-lg font-display font-semibold ${danger ? 'text-data-poor' : 'text-text-bright'}`}
+    >
       {title}
     </h2>
   );

@@ -201,7 +201,7 @@ function WorkoutForm({
     <div className="rounded-xl border border-edge-default bg-void-surface shadow-2xl">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-edge-default px-5 py-4">
-        <h2 className="text-base font-semibold text-text-bright">New Workout</h2>
+        <h2 className="text-base font-display font-semibold text-text-bright">New Workout</h2>
         <button
           type="button"
           onClick={onClose}

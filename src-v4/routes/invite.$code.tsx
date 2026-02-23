@@ -254,7 +254,7 @@ function NewInviteClaimCard({
           </div>
 
           <div className="flex flex-col gap-4">
-            <h2 className="text-lg font-semibold text-text-bright">Team invitation</h2>
+            <h2 className="text-lg font-display font-semibold text-text-bright">Team invitation</h2>
 
             <p className="text-sm text-text-default">
               You&apos;ve been invited to join{' '}
@@ -328,7 +328,7 @@ function LegacyInviteClaimCard({
           </div>
 
           <div className="flex flex-col gap-4">
-            <h2 className="text-lg font-semibold text-text-bright">Team invitation</h2>
+            <h2 className="text-lg font-display font-semibold text-text-bright">Team invitation</h2>
 
             <p className="text-sm text-text-default">
               You&apos;ve been invited to join{' '}

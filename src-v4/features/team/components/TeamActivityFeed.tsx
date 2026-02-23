@@ -127,7 +127,7 @@ export function TeamActivityFeed({ teamId, compact }: TeamActivityFeedProps) {
       {grouped.map((group) => (
         <motion.div key={group.label} variants={listItemVariants} transition={SPRING_SMOOTH}>
           <div className="mb-2 flex items-center gap-3">
-            <h4 className="text-xs font-medium uppercase tracking-wider text-accent-ivory">
+            <h4 className="text-xs font-display font-medium uppercase tracking-wider text-accent-ivory">
               {group.label}
             </h4>
             {group.label === 'Today' && (

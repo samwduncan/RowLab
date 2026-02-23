@@ -106,7 +106,11 @@ export function Dialog({
               {(title || showClose) && (
                 <div className="flex items-start justify-between gap-3 mb-4">
                   <div className="flex-1 min-w-0">
-                    {title && <h2 className="text-lg font-semibold text-text-bright">{title}</h2>}
+                    {title && (
+                      <h2 className="text-lg font-display font-semibold text-text-bright">
+                        {title}
+                      </h2>
+                    )}
                     {description && <p className="text-sm text-text-dim mt-1">{description}</p>}
                   </div>
                   {showClose && (
