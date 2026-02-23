@@ -61,7 +61,7 @@
   --color-zone-tr: oklch(0.6 0.16 28);
 
   /* === FONTS === */
-  --font-display: 'Space Grotesk', sans-serif;
+  --font-display: 'Syne', sans-serif;
   --font-body: 'Inter', sans-serif;
   --font-mono: 'Space Mono', monospace;
 
@@ -656,7 +656,7 @@
 }
 
 .section-label-fancy {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Syne', sans-serif;
   font-weight: 600;
   font-size: 13px;
   color: oklch(0.92 0.005 80);
