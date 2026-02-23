@@ -616,19 +616,44 @@
   pointer-events: none;
 }
 
+/* Corner bracket hover glow */
+.panel-bracketed::before,
+.panel-bracketed::after {
+  transition: border-color 200ms ease-out;
+}
+.panel-bracketed:hover::before {
+  border-top-color: oklch(0.68 0.1 75 / 0.8);
+  border-left-color: oklch(0.68 0.1 75 / 0.8);
+}
+.panel-bracketed:hover::after {
+  border-bottom-color: oklch(0.68 0.1 75 / 0.8);
+  border-right-color: oklch(0.68 0.1 75 / 0.8);
+}
+
+/* Mobile responsive brackets */
+@media (max-width: 639px) {
+  .panel-bracketed::before,
+  .panel-bracketed::after {
+    width: 10px;
+    height: 10px;
+  }
+}
+
 /* --- Diamond Markers --- */
 .diamond-marker {
+  --diamond-color: oklch(0.68 0.1 75 / 0.6);
   width: 6px;
   height: 6px;
-  background: oklch(0.68 0.1 75 / 0.6);
+  background: var(--diamond-color);
   transform: rotate(45deg);
   flex-shrink: 0;
 }
 
 .diamond-marker-sm {
+  --diamond-color: oklch(0.68 0.1 75 / 0.4);
   width: 4px;
   height: 4px;
-  background: oklch(0.68 0.1 75 / 0.4);
+  background: var(--diamond-color);
   transform: rotate(45deg);
   flex-shrink: 0;
 }
