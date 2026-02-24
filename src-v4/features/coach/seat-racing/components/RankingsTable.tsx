@@ -6,7 +6,7 @@
  *   #2 Silver -- text-dim accent
  *   #3 Bronze -- accent-sand
  *
- * Features: panel-styled headers, staggered list animation, sparkline ELO
+ * Features: panel-styled headers, entrance animation, sparkline ELO
  * trends, confidence badges, side badges. Skeleton loading state.
  */
 
