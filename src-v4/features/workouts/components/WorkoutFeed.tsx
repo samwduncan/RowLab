@@ -7,7 +7,7 @@
 import { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { motion, AnimatePresence } from 'motion/react';
-import { IconRefresh } from '@/components/icons';
+import { ErrorState } from '@/components/ui/ErrorState';
 
 import { useWorkoutFeed } from '../hooks/useWorkoutFeed';
 import { groupWorkoutsByDay, detectWorkoutSessions } from '../utils';
@@ -33,16 +33,8 @@ interface WorkoutFeedProps {
 /* ------------------------------------------------------------------ */
 
 export function WorkoutFeed({ filters, onEdit, onDelete, onCreateNew }: WorkoutFeedProps) {
-  const {
-    workouts,
-    sentinelRef,
-    isLoading,
-    isFetchingNextPage,
-    hasNextPage,
-    isError,
-    error,
-    refetch,
-  } = useWorkoutFeed(filters);
+  const { workouts, sentinelRef, isLoading, isFetchingNextPage, hasNextPage, isError, refetch } =
+    useWorkoutFeed(filters);
 
   const navigate = useNavigate();
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -65,19 +57,12 @@ export function WorkoutFeed({ filters, onEdit, onDelete, onCreateNew }: WorkoutF
   // Error state
   if (isError) {
     return (
-      <div className="bg-data-poor/10 border border-data-poor/30 rounded-lg p-4">
-        <p className="text-data-poor text-sm font-medium mb-1">Failed to load workouts</p>
-        <p className="text-text-dim text-sm mb-3">
-          {error?.message ?? 'An unexpected error occurred.'}
-        </p>
-        <button
-          type="button"
-          onClick={() => refetch()}
-          className="inline-flex items-center gap-1.5 text-sm text-text-bright hover:text-accent-teal transition-colors"
-        >
-          <IconRefresh width={14} height={14} />
-          Retry
-        </button>
+      <div className="flex justify-center py-12">
+        <ErrorState
+          title="Failed to load workouts"
+          message="Could not fetch your workout feed. Please try again."
+          onRetry={() => refetch()}
+        />
       </div>
     );
   }

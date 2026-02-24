@@ -11,8 +11,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'motion/react';
 import { fadeIn, scaleIn } from '@/lib/animations';
 import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { ErrorState } from '@/components/ui/ErrorState';
 import { ReadOnlyBadge } from '@/components/ui/ReadOnlyBadge';
 import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
 import { usePermissions } from '@/features/permissions';
@@ -57,7 +57,7 @@ export function RecruitingPage() {
   const queryClient = useQueryClient();
 
   // Fetch all visits (filter client-side for simplicity)
-  const { data, isLoading, error } = useQuery(recruitVisitsOptions());
+  const { data, isLoading, error, refetch } = useQuery(recruitVisitsOptions());
 
   const visits = data?.visits ?? [];
   const filteredVisits =
@@ -171,9 +171,13 @@ export function RecruitingPage() {
           ))}
         </SkeletonGroup>
       ) : error ? (
-        <Card padding="lg">
-          <p className="text-data-poor text-sm">Failed to load visits. Please try again.</p>
-        </Card>
+        <div className="flex justify-center py-12">
+          <ErrorState
+            title="Failed to load recruits"
+            message="Could not fetch recruiting data. Please try again."
+            onRetry={() => refetch()}
+          />
+        </div>
       ) : filteredVisits.length === 0 ? (
         <div className="py-16">
           <EmptyState

@@ -9,6 +9,7 @@
 
 import { useState, useCallback } from 'react';
 import { useNavigate } from '@tanstack/react-router';
+import { ErrorState } from '@/components/ui/ErrorState';
 
 import { useAnalyticsPMC, useAnalyticsVolume } from '../api';
 import { PMCChart } from './PMCChart';
@@ -44,25 +45,6 @@ function PMCChartSkeleton() {
           <div key={i} className="h-16 rounded-xl bg-edge-default/30" />
         ))}
       </div>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Error state                                                         */
-/* ------------------------------------------------------------------ */
-
-function PMCChartError({ message, onRetry }: { message: string; onRetry: () => void }) {
-  return (
-    <div className="rounded-xl border border-edge-default bg-void-raised p-8 text-center">
-      <p className="text-sm text-text-dim mb-3">{message}</p>
-      <button
-        type="button"
-        onClick={onRetry}
-        className="text-sm font-medium text-accent-teal hover:text-accent-teal/80 transition-colors"
-      >
-        Try again
-      </button>
     </div>
   );
 }
@@ -138,7 +120,7 @@ export function AnalyticsTab() {
   const [volumeGranularity, setVolumeGranularity] = useState<VolumeGranularity>('weekly');
   const [volumeMetric, setVolumeMetric] = useState<VolumeMetric>('distance');
 
-  const { data, isLoading, isError, error, refetch } = useAnalyticsPMC(range, sport);
+  const { data, isLoading, isError, refetch } = useAnalyticsPMC(range, sport);
   const { data: volumeData, isLoading: volumeLoading } = useAnalyticsVolume(
     volumeRange,
     volumeGranularity,
@@ -171,10 +153,13 @@ export function AnalyticsTab() {
 
   if (isError) {
     return (
-      <PMCChartError
-        message={error?.message ?? 'Failed to load analytics data'}
-        onRetry={() => void refetch()}
-      />
+      <div className="flex justify-center py-12">
+        <ErrorState
+          title="Failed to load analytics"
+          message="Could not fetch performance data. Please try again."
+          onRetry={() => void refetch()}
+        />
+      </div>
     );
   }
 

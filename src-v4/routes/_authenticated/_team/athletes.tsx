@@ -11,7 +11,7 @@ import { motion } from 'motion/react';
 import { IconUsers, IconSearch, IconUser } from '@/components/icons';
 import { api } from '@/lib/api';
 import { useAuth } from '@/features/auth/useAuth';
-import { Card } from '@/components/ui/Card';
+import { ErrorState } from '@/components/ui/ErrorState';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
 
@@ -54,7 +54,7 @@ const SIDE_TABS: { value: SideFilter; label: string }[] = [
 
 function AthletesPage() {
   const { activeTeamRole: _activeTeamRole } = useAuth();
-  const { data: athletes = [], isLoading, error } = useAthletes();
+  const { data: athletes = [], isLoading, error, refetch } = useAthletes();
   const [search, setSearch] = useState('');
   const [sideFilter, setSideFilter] = useState<SideFilter>('all');
 
@@ -85,10 +85,12 @@ function AthletesPage() {
 
   if (error) {
     return (
-      <div className="p-4 md:p-6">
-        <Card padding="lg">
-          <p className="text-data-poor text-sm">Failed to load athletes. Please try again.</p>
-        </Card>
+      <div className="flex justify-center py-12">
+        <ErrorState
+          title="Failed to load athletes"
+          message="Could not fetch the team roster. Please try again."
+          onRetry={() => refetch()}
+        />
       </div>
     );
   }
