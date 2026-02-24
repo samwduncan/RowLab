@@ -5,11 +5,13 @@
  * Only redirects after auth initialization is complete (prevents flash).
  * Component: responsive shell with sidebar/top bar/bottom tabs.
  */
-import { createFileRoute, redirect, Outlet } from '@tanstack/react-router';
+import { createFileRoute, redirect, useMatches, useMatch } from '@tanstack/react-router';
+import { AnimatePresence } from 'motion/react';
 import { useIsMobile } from '@/hooks/useBreakpoint';
 import { Sidebar } from '@/components/shell/Sidebar';
 import { TopBar } from '@/components/shell/TopBar';
 import { BottomTabs } from '@/components/shell/BottomTabs';
+import { AnimatedOutlet } from '@/components/shell/AnimatedOutlet';
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: ({ context, location }) => {
@@ -34,6 +36,10 @@ export const Route = createFileRoute('/_authenticated')({
 
 function AuthenticatedLayout() {
   const isMobile = useIsMobile();
+  const matches = useMatches();
+  const match = useMatch({ strict: false });
+  const nextMatchIndex = matches.findIndex((d) => d.id === match.id) + 1;
+  const nextMatch = matches[nextMatchIndex];
 
   return (
     <div className="flex h-screen bg-void-deep">
@@ -46,7 +52,9 @@ function AuthenticatedLayout() {
         <main
           className={`flex flex-1 flex-col overflow-auto [&>*]:w-full ${isMobile ? 'pb-16' : ''}`}
         >
-          <Outlet />
+          <AnimatePresence mode="wait" initial={false}>
+            <AnimatedOutlet key={nextMatch?.id} />
+          </AnimatePresence>
         </main>
       </div>
 
