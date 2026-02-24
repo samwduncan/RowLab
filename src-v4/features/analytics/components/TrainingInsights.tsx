@@ -4,7 +4,7 @@
  * Data-gated: requires 42+ days of training data to show real insights.
  * Shows a placeholder message when insufficient data is available.
  * Each insight renders as a colored banner (positive/caution/warning)
- * with staggered entry animation.
+ * with uniform entrance animation.
  */
 
 import { motion } from 'motion/react';
