@@ -37,6 +37,7 @@ function RowingIllustration() {
           values="M 10 110 Q 50 95 100 110 Q 150 125 190 110;M 10 110 Q 50 120 100 110 Q 150 100 190 110;M 10 110 Q 50 95 100 110 Q 150 125 190 110"
           dur="4s"
           repeatCount="indefinite"
+          media="(prefers-reduced-motion: no-preference)"
         />
       </path>
       <path
@@ -51,6 +52,7 @@ function RowingIllustration() {
           values="M 20 125 Q 60 113 110 125 Q 160 137 195 125;M 20 125 Q 60 132 110 125 Q 160 118 195 125;M 20 125 Q 60 113 110 125 Q 160 137 195 125"
           dur="5s"
           repeatCount="indefinite"
+          media="(prefers-reduced-motion: no-preference)"
         />
       </path>
 
@@ -89,7 +91,13 @@ function RowingIllustration() {
         className="fill-void-raised stroke-accent-teal"
         strokeWidth="1.5"
       >
-        <animate attributeName="cy" values="62;60;62" dur="3s" repeatCount="indefinite" />
+        <animate
+          attributeName="cy"
+          values="62;60;62"
+          dur="3s"
+          repeatCount="indefinite"
+          media="(prefers-reduced-motion: no-preference)"
+        />
       </circle>
       <path
         d="M 92 72 L 100 90 L 108 72"
@@ -102,6 +110,7 @@ function RowingIllustration() {
           values="M 92 72 L 100 90 L 108 72;M 93 71 L 100 88 L 107 71;M 92 72 L 100 90 L 108 72"
           dur="3s"
           repeatCount="indefinite"
+          media="(prefers-reduced-motion: no-preference)"
         />
       </path>
 
@@ -116,7 +125,13 @@ function RowingIllustration() {
         opacity="0.4"
         strokeLinecap="round"
       >
-        <animate attributeName="opacity" values="0.4;0.1;0.4" dur="2s" repeatCount="indefinite" />
+        <animate
+          attributeName="opacity"
+          values="0.4;0.1;0.4"
+          dur="2s"
+          repeatCount="indefinite"
+          media="(prefers-reduced-motion: no-preference)"
+        />
       </line>
       <line
         x1="5"
@@ -128,7 +143,13 @@ function RowingIllustration() {
         opacity="0.3"
         strokeLinecap="round"
       >
-        <animate attributeName="opacity" values="0.3;0.1;0.3" dur="2.5s" repeatCount="indefinite" />
+        <animate
+          attributeName="opacity"
+          values="0.3;0.1;0.3"
+          dur="2.5s"
+          repeatCount="indefinite"
+          media="(prefers-reduced-motion: no-preference)"
+        />
       </line>
     </svg>
   );
@@ -144,8 +165,8 @@ export function DashboardEmptyState() {
       transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
       className="flex flex-col items-center justify-center text-center px-4 py-16 md:py-24 max-w-lg mx-auto"
     >
-      {/* Illustration */}
-      <div className="mb-8">
+      {/* Illustration — wrapper class for CSS reduced-motion targeting */}
+      <div className="mb-8 dashboard-rowing-illustration">
         <RowingIllustration />
       </div>
 

@@ -7,6 +7,7 @@
  */
 import { createRootRouteWithContext, Outlet, useRouter } from '@tanstack/react-router';
 import { Toaster } from 'sonner';
+import { MotionConfig } from 'motion/react';
 import { AuthProvider } from '@/features/auth/AuthProvider';
 import { useAuth } from '@/features/auth/useAuth';
 import { CosmicAtmosphere } from '@/components/ui/CosmicAtmosphere';
@@ -63,7 +64,7 @@ function InnerRoot() {
   }
 
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <CosmicAtmosphere />
       <Outlet />
       <Toaster
@@ -72,7 +73,7 @@ function InnerRoot() {
           className: 'bg-void-overlay text-text-bright border-edge-default',
         }}
       />
-    </>
+    </MotionConfig>
   );
 }
 

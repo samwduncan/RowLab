@@ -840,6 +840,7 @@ html {
    ================================================================ */
 
 @media (prefers-reduced-motion: reduce) {
+  /* Cosmic atmosphere: hide completely */
   .nebula-1,
   .nebula-2,
   .twinkle-star,
@@ -848,15 +849,45 @@ html {
     display: none;
   }
 
-  .nebula-1,
-  .nebula-2 {
-    opacity: 0.5;
-  }
-
+  /* Warm rule: show fully drawn, no transition */
   .warm-rule-animated {
     transform: scaleX(1);
     opacity: 1;
     transition: none;
+  }
+
+  /* Keyframe-based utility animations: stop completely */
+  .animate-shimmer,
+  .animate-glow-pulse,
+  .animate-pulse-subtle,
+  .animate-pulse-slow {
+    animation: none;
+  }
+
+  /* Shimmer: remove gradient background (show solid skeleton shape) */
+  .animate-shimmer {
+    background-image: none;
+  }
+
+  /* Hover lift: disable transition */
+  .hover-lift {
+    transition: none;
+  }
+
+  /* SVG SMIL animations in DashboardEmptyState */
+  .dashboard-rowing-illustration animate,
+  .dashboard-rowing-illustration animateTransform {
+    animation-play-state: paused;
+  }
+
+  /* Global: disable all CSS animations and transitions.
+     Use 0.001ms (not 0ms) so transitionend events still fire. */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }
 
