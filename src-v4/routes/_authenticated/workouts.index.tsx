@@ -7,6 +7,7 @@
  */
 
 import { createFileRoute } from '@tanstack/react-router';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 
 import { CalendarView } from '@/features/workouts/components/CalendarView';
 import { useWorkoutPageContext } from '@/features/workouts/WorkoutPageContext';
@@ -19,6 +20,7 @@ import type { WorkoutSearch } from './workouts';
 /* ------------------------------------------------------------------ */
 
 export const Route = createFileRoute('/_authenticated/workouts/')({
+  errorComponent: RouteErrorFallback,
   component: WorkoutsIndex,
 });
 

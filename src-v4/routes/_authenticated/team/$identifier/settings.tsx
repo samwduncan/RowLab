@@ -6,6 +6,7 @@
  */
 import { Suspense } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 import { queryClient } from '@/lib/queryClient';
 import {
   teamByIdentifierOptions,
@@ -15,6 +16,7 @@ import {
 import { TeamSettingsPage } from '@/features/team/components/TeamSettingsPage';
 
 export const Route = createFileRoute('/_authenticated/team/$identifier/settings')({
+  errorComponent: RouteErrorFallback,
   loader: async ({ params }) => {
     const team = queryClient.getQueryData(teamByIdentifierOptions(params.identifier).queryKey);
     if (team) {

@@ -12,8 +12,10 @@ import { Sidebar } from '@/components/shell/Sidebar';
 import { TopBar } from '@/components/shell/TopBar';
 import { BottomTabs } from '@/components/shell/BottomTabs';
 import { AnimatedOutlet } from '@/components/shell/AnimatedOutlet';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 
 export const Route = createFileRoute('/_authenticated')({
+  errorComponent: RouteErrorFallback,
   beforeLoad: ({ context, location }) => {
     // Auth not yet initialized -- keep route in pending state.
     // InnerRoot shows AuthSkeleton and calls router.update() when auth resolves,

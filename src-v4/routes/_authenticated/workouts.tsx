@@ -13,6 +13,7 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-adapter';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 import { z } from 'zod';
 import { IconFilter, IconPlus } from '@/components/icons';
 import { motion, useMotionValueEvent, useScroll } from 'motion/react';
@@ -51,6 +52,7 @@ export type WorkoutSearch = z.infer<typeof workoutSearchSchema>;
 
 export const Route = createFileRoute('/_authenticated/workouts')({
   validateSearch: zodValidator(workoutSearchSchema),
+  errorComponent: RouteErrorFallback,
   staticData: {
     breadcrumb: 'Workouts',
   },

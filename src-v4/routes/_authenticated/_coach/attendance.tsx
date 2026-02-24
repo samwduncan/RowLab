@@ -6,11 +6,13 @@
  */
 import { createFileRoute } from '@tanstack/react-router';
 import { Suspense } from 'react';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 import { useAuth } from '@/features/auth/useAuth';
 import { AttendancePage } from '@/features/coach/attendance/components/AttendancePage';
 import { AttendanceSkeleton } from '@/features/coach/attendance/components/AttendanceSkeleton';
 
 export const Route = createFileRoute('/_authenticated/_coach/attendance')({
+  errorComponent: RouteErrorFallback,
   staticData: { breadcrumb: 'Attendance' },
   component: AttendanceRoute,
 });

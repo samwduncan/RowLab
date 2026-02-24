@@ -6,6 +6,7 @@
 import { useState } from 'react';
 import { createFileRoute, redirect, Link } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-adapter';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 import { z } from 'zod';
 import { Card } from '@/components/ui/Card';
 import { LoginForm } from '@/features/auth/LoginForm';
@@ -18,6 +19,7 @@ const loginSearchSchema = z.object({
 
 export const Route = createFileRoute('/login')({
   validateSearch: zodValidator(loginSearchSchema),
+  errorComponent: RouteErrorFallback,
   beforeLoad: ({ context }) => {
     // If already authenticated, redirect away from login
     if (context.auth?.isInitialized && context.auth?.isAuthenticated) {

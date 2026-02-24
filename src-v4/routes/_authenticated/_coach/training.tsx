@@ -5,11 +5,13 @@
  * Uses permission system for readOnly detection.
  */
 import { createFileRoute } from '@tanstack/react-router';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 import { useAuth } from '@/features/auth/useAuth';
 import { usePermissions } from '@/features/permissions';
 import { TrainingPage } from '@/features/coach/training/components/TrainingPage';
 
 export const Route = createFileRoute('/_authenticated/_coach/training')({
+  errorComponent: RouteErrorFallback,
   staticData: { breadcrumb: 'Training' },
   component: TrainingRoute,
 });

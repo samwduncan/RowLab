@@ -19,6 +19,7 @@
  */
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-adapter';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { z } from 'zod';
 import { Card } from '@/components/ui/Card';
@@ -43,6 +44,7 @@ const inviteSearchSchema = z.object({
 // ---------------------------------------------------------------------------
 
 export const Route = createFileRoute('/invite/$code')({
+  errorComponent: RouteErrorFallback,
   component: InviteClaimPage,
   validateSearch: zodValidator(inviteSearchSchema),
   staticData: {

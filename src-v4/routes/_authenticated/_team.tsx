@@ -6,8 +6,10 @@
  */
 import { createFileRoute, Outlet, Link } from '@tanstack/react-router';
 import { useAuth } from '@/features/auth/useAuth';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 
 export const Route = createFileRoute('/_authenticated/_team')({
+  errorComponent: RouteErrorFallback,
   component: TeamLayout,
 });
 

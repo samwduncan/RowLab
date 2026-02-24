@@ -5,11 +5,13 @@
  * Athletes with fleet read-only access see data but no CRUD controls.
  */
 import { createFileRoute } from '@tanstack/react-router';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 import { useAuth } from '@/features/auth/useAuth';
 import { usePermissions } from '@/features/permissions';
 import { FleetPage } from '@/features/coach/fleet/components/FleetPage';
 
 export const Route = createFileRoute('/_authenticated/_coach/fleet')({
+  errorComponent: RouteErrorFallback,
   component: FleetRoute,
 });
 

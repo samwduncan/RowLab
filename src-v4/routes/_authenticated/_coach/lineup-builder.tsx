@@ -6,6 +6,7 @@
  */
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 import { useAuth } from '@/features/auth/useAuth';
 import { usePermissions } from '@/features/permissions';
 import { LineupWorkspace } from '@/features/coach/lineup/components/LineupWorkspace';
@@ -15,6 +16,7 @@ const searchSchema = z.object({
 });
 
 export const Route = createFileRoute('/_authenticated/_coach/lineup-builder')({
+  errorComponent: RouteErrorFallback,
   component: LineupBuilderRoute,
   staticData: { breadcrumb: 'Lineup Builder' },
   validateSearch: (search) => searchSchema.parse(search),
@@ -27,9 +29,7 @@ function LineupBuilderRoute() {
 
   if (!activeTeamId) {
     return (
-      <div className="p-8 text-text-dim text-sm">
-        Select a team to access the lineup builder.
-      </div>
+      <div className="p-8 text-text-dim text-sm">Select a team to access the lineup builder.</div>
     );
   }
 

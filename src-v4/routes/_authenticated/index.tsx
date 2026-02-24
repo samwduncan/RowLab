@@ -8,6 +8,7 @@
  */
 import { Suspense, useMemo } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 import { useAuth } from '@/features/auth/useAuth';
 import { queryClient } from '@/lib/queryClient';
 import {
@@ -24,6 +25,7 @@ import type { TeamContextData } from '@/features/dashboard/types';
 
 export const Route = createFileRoute('/_authenticated/')({
   component: PersonalDashboard,
+  errorComponent: RouteErrorFallback,
   staticData: {
     breadcrumb: 'Home',
   },

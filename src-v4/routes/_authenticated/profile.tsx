@@ -7,6 +7,7 @@
 import { Suspense } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-adapter';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 import { z } from 'zod';
 import { queryClient } from '@/lib/queryClient';
 import {
@@ -33,6 +34,7 @@ export type ProfileSearch = z.infer<typeof profileSearchSchema>;
 
 export const Route = createFileRoute('/_authenticated/profile')({
   validateSearch: zodValidator(profileSearchSchema),
+  errorComponent: RouteErrorFallback,
   staticData: {
     breadcrumb: 'Profile',
   },

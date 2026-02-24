@@ -8,6 +8,7 @@
 import { Suspense } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-adapter';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 import { z } from 'zod';
 import { queryClient } from '@/lib/queryClient';
 import {
@@ -35,6 +36,7 @@ export type TeamDashboardSearch = z.infer<typeof dashboardSearchSchema>;
 
 export const Route = createFileRoute('/_authenticated/team/$identifier/dashboard')({
   validateSearch: zodValidator(dashboardSearchSchema),
+  errorComponent: RouteErrorFallback,
   staticData: {
     breadcrumb: 'Dashboard',
   },

@@ -8,8 +8,10 @@
  * Identifier preference: slug > generatedId > id (UUID)
  */
 import { createFileRoute, redirect } from '@tanstack/react-router';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 
 export const Route = createFileRoute('/_authenticated/team/')({
+  errorComponent: RouteErrorFallback,
   beforeLoad: ({ context }) => {
     const auth = context.auth;
     if (!auth?.isAuthenticated) {

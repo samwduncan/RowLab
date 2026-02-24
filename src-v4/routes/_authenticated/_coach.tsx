@@ -10,8 +10,10 @@ import { createFileRoute, redirect, Outlet, useNavigate } from '@tanstack/react-
 import { useAuth } from '@/features/auth/useAuth';
 import { getRoleLevel } from '@/features/permissions/types';
 import { useEffect } from 'react';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 
 export const Route = createFileRoute('/_authenticated/_coach')({
+  errorComponent: RouteErrorFallback,
   beforeLoad: ({ context }) => {
     // Wait for auth initialization before making role decisions
     if (!context.auth?.isInitialized) return;

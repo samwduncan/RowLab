@@ -7,6 +7,7 @@
 
 import { Suspense } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 
 import { queryClient } from '@/lib/queryClient';
 import { workoutDetailOptions } from '@/features/workouts/api';
@@ -14,6 +15,7 @@ import { WorkoutDetail } from '@/features/workouts/components/WorkoutDetail';
 import { DetailSkeleton } from '@/features/workouts/components/DetailSkeleton';
 
 export const Route = createFileRoute('/_authenticated/workouts/$workoutId')({
+  errorComponent: RouteErrorFallback,
   staticData: {
     breadcrumb: 'Workout Detail',
   },

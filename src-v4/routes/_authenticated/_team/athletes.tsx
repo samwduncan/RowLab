@@ -6,6 +6,7 @@
 import { useState, useMemo } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 import { motion } from 'motion/react';
 import { IconUsers, IconSearch, IconUser } from '@/components/icons';
 import { api } from '@/lib/api';
@@ -15,6 +16,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { Skeleton, SkeletonGroup } from '@/components/ui/Skeleton';
 
 export const Route = createFileRoute('/_authenticated/_team/athletes')({
+  errorComponent: RouteErrorFallback,
   component: AthletesPage,
   staticData: {
     breadcrumb: 'Athletes',

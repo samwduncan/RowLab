@@ -6,6 +6,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { motion } from 'motion/react';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 import {
   IconUser,
   IconBell,
@@ -26,6 +27,7 @@ import type { AnalyticsSettings } from '@/features/analytics/types';
 
 export const Route = createFileRoute('/_authenticated/settings')({
   component: SettingsPage,
+  errorComponent: RouteErrorFallback,
   staticData: {
     breadcrumb: 'Settings',
   },

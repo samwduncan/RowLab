@@ -5,6 +5,7 @@
  */
 import { createFileRoute, redirect, Link } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-adapter';
+import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
 import { z } from 'zod';
 import { useQuery } from '@tanstack/react-query';
 import { Card } from '@/components/ui/Card';
@@ -17,6 +18,7 @@ const registerSearchSchema = z.object({
 
 export const Route = createFileRoute('/register')({
   validateSearch: zodValidator(registerSearchSchema),
+  errorComponent: RouteErrorFallback,
   beforeLoad: ({ context }) => {
     if (context.auth?.isInitialized && context.auth?.isAuthenticated) {
       throw redirect({ to: '/' });
