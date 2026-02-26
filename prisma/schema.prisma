@@ -23,7 +23,8 @@ model User {
   bio          String?  @db.Text
   avatarUrl    String?
   bannerUrl    String?
-  status       String   @default("active") // active, suspended
+  status       String   @default("active") // active, suspended, deleted
+  deletedAt    DateTime?  // Soft delete timestamp; null = active account
   activeTeamId String? // Persisted active team preference
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -1165,6 +1166,8 @@ model UserSettings {
   darkMode           Boolean  @default(true)
   compactView        Boolean  @default(false)
   autoSave           Boolean  @default(true)
+  notificationPrefs  Json?    // Granular notification preferences (email/push/inApp/digest channels per event type)
+  privacyPrefs       Json?    // Privacy visibility preferences (profileVisibility, workoutVisibility, showInLeaderboards)
   firstName          String?
   lastName           String?
   role               String?
