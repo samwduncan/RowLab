@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as GoodbyeRouteImport } from './routes/goodbye'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as InviteCodeRouteImport } from './routes/invite.$code'
@@ -46,6 +47,11 @@ const RegisterRoute = RegisterRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GoodbyeRoute = GoodbyeRouteImport.update({
+  id: '/goodbye',
+  path: '/goodbye',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -193,6 +199,7 @@ const AuthenticatedCoachTrainingSessionsSessionIdLiveRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
+  '/goodbye': typeof GoodbyeRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/create-team': typeof AuthenticatedCreateTeamRoute
@@ -219,6 +226,7 @@ export interface FileRoutesByFullPath {
   '/training/sessions/$sessionId/live': typeof AuthenticatedCoachTrainingSessionsSessionIdLiveRoute
 }
 export interface FileRoutesByTo {
+  '/goodbye': typeof GoodbyeRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/': typeof AuthenticatedIndexRoute
@@ -247,6 +255,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/goodbye': typeof GoodbyeRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/_authenticated/_coach': typeof AuthenticatedCoachRouteWithChildren
@@ -279,6 +288,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/goodbye'
     | '/login'
     | '/register'
     | '/create-team'
@@ -305,6 +315,7 @@ export interface FileRouteTypes {
     | '/training/sessions/$sessionId/live'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/goodbye'
     | '/login'
     | '/register'
     | '/'
@@ -332,6 +343,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_authenticated'
+    | '/goodbye'
     | '/login'
     | '/register'
     | '/_authenticated/_coach'
@@ -363,6 +375,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  GoodbyeRoute: typeof GoodbyeRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
   InviteCodeRoute: typeof InviteCodeRoute
@@ -382,6 +395,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/goodbye': {
+      id: '/goodbye'
+      path: '/goodbye'
+      fullPath: '/goodbye'
+      preLoaderRoute: typeof GoodbyeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -700,6 +720,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  GoodbyeRoute: GoodbyeRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
   InviteCodeRoute: InviteCodeRoute,

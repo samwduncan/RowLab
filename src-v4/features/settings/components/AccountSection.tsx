@@ -1,24 +1,75 @@
 /**
- * Account settings section -- email display, password change, and danger zone.
- * Password change posts to /api/auth/change-password (or shows error if endpoint missing).
- * Account deletion deferred.
- * // TODO(phase-53): Wire to account deletion endpoint
+ * Account settings section -- email display, password change with strength meter,
+ * and enhanced account deletion with two-factor gate (text + password).
+ * // TODO(#28): When OAuth login is implemented, check if user.passwordHash is a real
+ * bcrypt hash vs placeholder. Show "Set a password" for OAuth-only users.
  */
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import {
   IconSettings,
   IconMail,
   IconLock,
   IconAlertTriangle,
   IconCheckCircle,
-  IconXCircle,
+  IconTrash,
 } from '@/components/icons';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Dialog } from '@/components/ui/Dialog';
 import { useAuth } from '@/features/auth/useAuth';
-import { api } from '@/lib/api';
+import { useChangePassword, useDeleteAccount } from '../api';
+import { SaveIndicator } from './SaveIndicator';
+
+/* ------------------------------------------------------------------ */
+/* Password Strength Meter                                              */
+/* ------------------------------------------------------------------ */
+
+interface StrengthResult {
+  score: number;
+  level: 'Too weak' | 'Weak' | 'Medium' | 'Strong';
+  color: string; // Tailwind bg class
+  textColor: string;
+}
+
+function getPasswordStrength(password: string): StrengthResult {
+  let score = 0;
+  if (password.length >= 8) score++;
+  if (password.length >= 12) score++;
+  if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
+  if (/\d/.test(password)) score++;
+  if (/[^a-zA-Z0-9]/.test(password)) score++;
+
+  if (score <= 1)
+    return { score, level: 'Too weak', color: 'bg-accent-coral', textColor: 'text-accent-coral' };
+  if (score === 2)
+    return { score, level: 'Weak', color: 'bg-accent-coral', textColor: 'text-accent-coral' };
+  if (score === 3)
+    return { score, level: 'Medium', color: 'bg-accent-sand', textColor: 'text-accent-sand' };
+  return { score, level: 'Strong', color: 'bg-accent-teal', textColor: 'text-accent-teal' };
+}
+
+function PasswordStrengthMeter({ password }: { password: string }) {
+  const strength = useMemo(() => getPasswordStrength(password), [password]);
+  const segments = 4;
+  const filled = strength.score <= 1 ? 1 : strength.score === 2 ? 2 : strength.score === 3 ? 3 : 4;
+
+  return (
+    <div className="space-y-1.5">
+      <div className="flex gap-1">
+        {Array.from({ length: segments }, (_, i) => (
+          <div
+            key={i}
+            className={`h-1 flex-1 rounded-full transition-colors duration-200 ${
+              i < filled ? strength.color : 'bg-void-deep'
+            }`}
+          />
+        ))}
+      </div>
+      <p className={`text-xs font-medium ${strength.textColor}`}>{strength.level}</p>
+    </div>
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /* Password Change Form                                                 */
@@ -27,40 +78,42 @@ import { api } from '@/lib/api';
 function PasswordChangeForm() {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saved' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+
+  const changePassword = useChangePassword();
+  const strength = useMemo(() => getPasswordStrength(newPassword), [newPassword]);
+  const canSubmit = currentPassword.length > 0 && newPassword.length >= 8 && strength.score >= 3;
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!currentPassword || !newPassword) return;
-      if (newPassword.length < 8) {
-        setStatus('error');
-        setErrorMessage('New password must be at least 8 characters');
-        return;
-      }
+      if (!canSubmit) return;
 
-      setStatus('loading');
+      setSaveStatus('idle');
       setErrorMessage('');
 
-      try {
-        await api.post('/api/v1/auth/change-password', {
-          currentPassword,
-          newPassword,
-        });
-        setStatus('success');
-        setCurrentPassword('');
-        setNewPassword('');
-        setTimeout(() => setStatus('idle'), 3000);
-      } catch (err: unknown) {
-        setStatus('error');
-        const axiosErr = err as { response?: { data?: { error?: { message?: string } } } };
-        setErrorMessage(
-          axiosErr.response?.data?.error?.message || 'Failed to change password. Please try again.'
-        );
-      }
+      changePassword.mutate(
+        { currentPassword, newPassword },
+        {
+          onSuccess: () => {
+            setSaveStatus('saved');
+            setCurrentPassword('');
+            setNewPassword('');
+            setTimeout(() => setSaveStatus('idle'), 3000);
+          },
+          onError: (err: unknown) => {
+            setSaveStatus('error');
+            const axiosErr = err as { response?: { data?: { error?: { message?: string } } } };
+            setErrorMessage(
+              axiosErr.response?.data?.error?.message ||
+                'Failed to change password. Please try again.'
+            );
+          },
+        }
+      );
     },
-    [currentPassword, newPassword]
+    [currentPassword, newPassword, canSubmit, changePassword]
   );
 
   return (
@@ -101,31 +154,154 @@ function PasswordChangeForm() {
           "
           placeholder="At least 8 characters"
         />
+        {newPassword.length > 0 && (
+          <div className="mt-2">
+            <PasswordStrengthMeter password={newPassword} />
+          </div>
+        )}
       </div>
 
       {/* Status feedback */}
-      {status === 'success' && (
-        <div className="flex items-center gap-2 text-sm text-data-good">
-          <IconCheckCircle className="w-4 h-4" />
-          Password changed successfully
-        </div>
-      )}
-      {status === 'error' && errorMessage && (
-        <div className="flex items-center gap-2 text-sm text-accent-coral">
-          <IconXCircle className="w-4 h-4" />
-          {errorMessage}
-        </div>
-      )}
+      <SaveIndicator status={saveStatus} errorMessage={errorMessage} />
 
-      <Button
-        type="submit"
-        size="sm"
-        loading={status === 'loading'}
-        disabled={!currentPassword || !newPassword}
-      >
+      <Button type="submit" size="sm" loading={changePassword.isPending} disabled={!canSubmit}>
         Change Password
       </Button>
     </form>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Delete Account Dialog                                                */
+/* ------------------------------------------------------------------ */
+
+function DeleteAccountDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [confirmText, setConfirmText] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const deleteAccount = useDeleteAccount();
+  const canDelete = confirmText === 'DELETE' && password.length > 0;
+
+  const handleDelete = useCallback(() => {
+    if (!canDelete) return;
+    setError('');
+
+    deleteAccount.mutate(
+      { password },
+      {
+        onError: (err: unknown) => {
+          const axiosErr = err as { response?: { data?: { error?: { message?: string } } } };
+          setError(
+            axiosErr.response?.data?.error?.message || 'Failed to delete account. Please try again.'
+          );
+        },
+      }
+    );
+  }, [canDelete, password, deleteAccount]);
+
+  // Reset form when dialog closes
+  const handleClose = useCallback(() => {
+    setConfirmText('');
+    setPassword('');
+    setError('');
+    onClose();
+  }, [onClose]);
+
+  return (
+    <Dialog open={open} onClose={handleClose} title="Delete Your Account" maxWidth="max-w-md">
+      <div className="space-y-4">
+        {/* What will be deleted */}
+        <div className="rounded-lg bg-accent-coral/5 border border-accent-coral/20 p-3">
+          <p className="text-sm font-medium text-accent-coral mb-2">
+            The following will be removed:
+          </p>
+          <ul className="text-xs text-text-dim space-y-1 list-disc pl-4">
+            <li>All workouts and training history</li>
+            <li>Team memberships and roles</li>
+            <li>Profile information and preferences</li>
+            <li>Connected integrations (Concept2, Strava)</li>
+          </ul>
+        </div>
+
+        {/* Grace period note */}
+        <div className="rounded-lg bg-accent-sand/10 border border-accent-sand/20 p-3">
+          <p className="text-xs text-text-dim leading-relaxed">
+            Your account will be deactivated for{' '}
+            <span className="font-medium text-accent-sand">30 days</span> before permanent deletion.
+            Contact <span className="text-accent-teal">support@oarbit.app</span> to recover during
+            this window.
+          </p>
+        </div>
+
+        {/* Confirmation text input */}
+        <div>
+          <label className="block text-sm font-medium text-text-bright mb-1.5">
+            Type <span className="font-mono text-accent-coral">DELETE</span> to confirm
+          </label>
+          <input
+            type="text"
+            value={confirmText}
+            onChange={(e) => setConfirmText(e.target.value)}
+            autoComplete="off"
+            className="
+              w-full px-3 py-2 rounded-lg text-sm
+              bg-void-surface border border-edge-default text-text-bright
+              placeholder:text-text-faint
+              focus:outline-none focus:ring-1 focus:ring-accent-coral/50 focus:border-accent-coral
+              transition-colors
+            "
+            placeholder="DELETE"
+          />
+        </div>
+
+        {/* Password input */}
+        <div>
+          <label className="block text-sm font-medium text-text-bright mb-1.5">
+            Enter your password
+          </label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            className="
+              w-full px-3 py-2 rounded-lg text-sm
+              bg-void-surface border border-edge-default text-text-bright
+              placeholder:text-text-faint
+              focus:outline-none focus:ring-1 focus:ring-accent-coral/50 focus:border-accent-coral
+              transition-colors
+            "
+            placeholder="Your password"
+          />
+        </div>
+
+        {/* Error message */}
+        {error && <p className="text-sm text-accent-coral">{error}</p>}
+
+        {/* Actions */}
+        <div className="flex items-center justify-end gap-3 pt-2">
+          <Button
+            variant="ghost"
+            size="md"
+            onClick={handleClose}
+            disabled={deleteAccount.isPending}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="destructive"
+            size="md"
+            onClick={handleDelete}
+            disabled={!canDelete || deleteAccount.isPending}
+            loading={deleteAccount.isPending}
+          >
+            <IconTrash className="w-4 h-4" />
+            Delete My Account
+          </Button>
+        </div>
+      </div>
+    </Dialog>
   );
 }
 
@@ -136,12 +312,6 @@ function PasswordChangeForm() {
 export function AccountSection() {
   const { user } = useAuth();
   const [deleteOpen, setDeleteOpen] = useState(false);
-
-  const handleDeleteAccount = useCallback(() => {
-    // TODO(phase-53): Wire to account deletion endpoint
-    setDeleteOpen(false);
-    alert('Account deletion is not yet implemented. Your account is safe.');
-  }, []);
 
   return (
     <div className="space-y-6">
@@ -191,7 +361,8 @@ export function AccountSection() {
           <h3 className="text-sm font-display font-semibold text-accent-coral">Danger Zone</h3>
         </div>
         <p className="text-sm text-text-dim mb-4">
-          Permanently delete your account and all associated data. This action cannot be undone.
+          Deactivate your account. Your data will be preserved for 30 days before permanent
+          deletion.
         </p>
         <button
           type="button"
@@ -205,15 +376,7 @@ export function AccountSection() {
           Delete Account
         </button>
 
-        <ConfirmDialog
-          open={deleteOpen}
-          onClose={() => setDeleteOpen(false)}
-          onConfirm={handleDeleteAccount}
-          title="Delete Account"
-          description="This action is permanent and cannot be undone. All your workouts, PRs, and team memberships will be deleted."
-          confirmLabel="Delete My Account"
-          variant="danger"
-        />
+        <DeleteAccountDialog open={deleteOpen} onClose={() => setDeleteOpen(false)} />
       </Card>
     </div>
   );
