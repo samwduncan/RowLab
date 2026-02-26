@@ -5,8 +5,7 @@
  * - URL search param validation via zodValidator (view, type, source, dates, calendarMode)
  * - Tab toggle (Feed | Calendar) that updates ?view= param
  * - Filter button with active filter count badge
- * - FAB (+) button that opens the workout slide-over
- * - WorkoutSlideOver for create/edit at the layout level (overlays all child views)
+ * - FAB (+) button that dispatches oarbit:open-log-workout event (global slide-over)
  * - WorkoutPageContext to pass onEdit/onDelete/onCreateNew to child routes
  */
 
@@ -26,7 +25,6 @@ import {
   type WorkoutPageContextValue,
 } from '@/features/workouts/WorkoutPageContext';
 import { FilterPopover, countActiveFilters } from '@/features/workouts/components/FilterPopover';
-import { WorkoutSlideOver } from '@/features/workouts/components/WorkoutSlideOver';
 import { useDeleteWorkout } from '@/features/workouts/hooks/useWorkoutMutations';
 import type { Workout } from '@/features/workouts/types';
 
@@ -68,10 +66,6 @@ function WorkoutsLayout() {
   const navigate = Route.useNavigate();
   const isMobile = useIsMobile();
 
-  // Slide-over state
-  const [slideOverOpen, setSlideOverOpen] = useState(false);
-  const [editingWorkout, setEditingWorkout] = useState<Workout | null>(null);
-
   // Filter popover state
   const [filterOpen, setFilterOpen] = useState(false);
 
@@ -87,8 +81,7 @@ function WorkoutsLayout() {
   const [deletingWorkout, setDeletingWorkout] = useState<Workout | null>(null);
 
   const handleCreateNew = useCallback(() => {
-    setEditingWorkout(null);
-    setSlideOverOpen(true);
+    window.dispatchEvent(new CustomEvent('oarbit:open-log-workout'));
   }, []);
 
   // Auto-open slide-over when navigated with ?action=new, then clear the param
@@ -100,22 +93,11 @@ function WorkoutsLayout() {
   }, [search.action, handleCreateNew, navigate]);
 
   const handleEdit = useCallback((workout: Workout) => {
-    setEditingWorkout(workout);
-    setSlideOverOpen(true);
+    window.dispatchEvent(new CustomEvent('oarbit:open-log-workout', { detail: { workout } }));
   }, []);
 
   const handleDelete = useCallback((workout: Workout) => {
     setDeletingWorkout(workout);
-  }, []);
-
-  const handleSlideOverClose = useCallback(() => {
-    setSlideOverOpen(false);
-    setEditingWorkout(null);
-  }, []);
-
-  const handleSlideOverSuccess = useCallback(() => {
-    setSlideOverOpen(false);
-    setEditingWorkout(null);
   }, []);
 
   const setView = useCallback(
@@ -233,14 +215,6 @@ function WorkoutsLayout() {
       >
         <IconPlus width={20} height={20} />
       </motion.button>
-
-      {/* Slide-over */}
-      <WorkoutSlideOver
-        isOpen={slideOverOpen}
-        onClose={handleSlideOverClose}
-        editingWorkout={editingWorkout}
-        onSuccess={handleSlideOverSuccess}
-      />
 
       {/* Delete confirmation dialog */}
       {deletingWorkout && (

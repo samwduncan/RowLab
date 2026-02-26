@@ -5,14 +5,24 @@
  * Only redirects after auth initialization is complete (prevents flash).
  * Component: responsive shell with sidebar/top bar/bottom tabs.
  */
-import { createFileRoute, redirect, useMatches, useMatch } from '@tanstack/react-router';
+import { useState, useEffect, useCallback } from 'react';
+import {
+  createFileRoute,
+  redirect,
+  useMatches,
+  useMatch,
+  useNavigate,
+} from '@tanstack/react-router';
 import { AnimatePresence } from 'motion/react';
+import { toast } from 'sonner';
 import { useIsMobile } from '@/hooks/useBreakpoint';
 import { Sidebar } from '@/components/shell/Sidebar';
 import { TopBar } from '@/components/shell/TopBar';
 import { BottomTabs } from '@/components/shell/BottomTabs';
 import { AnimatedOutlet } from '@/components/shell/AnimatedOutlet';
 import { RouteErrorFallback } from '@/components/error/RouteErrorFallback';
+import { WorkoutSlideOver } from '@/features/workouts/components/WorkoutSlideOver';
+import type { Workout } from '@/features/workouts/types';
 
 export const Route = createFileRoute('/_authenticated')({
   errorComponent: RouteErrorFallback,
@@ -42,6 +52,37 @@ function AuthenticatedLayout() {
   const match = useMatch({ strict: false });
   const nextMatchIndex = matches.findIndex((d) => d.id === match.id) + 1;
   const nextMatch = matches[nextMatchIndex];
+  const navigate = useNavigate();
+
+  // Global workout slide-over state
+  const [slideOverOpen, setSlideOverOpen] = useState(false);
+  const [editingWorkout, setEditingWorkout] = useState<Workout | null>(null);
+
+  // Listen for oarbit:open-log-workout events (from sidebar, Cmd+K, workouts page)
+  useEffect(() => {
+    function handleOpenLogWorkout(e: Event) {
+      const detail = (e as CustomEvent).detail;
+      setEditingWorkout(detail?.workout ?? null);
+      setSlideOverOpen(true);
+    }
+    window.addEventListener('oarbit:open-log-workout', handleOpenLogWorkout);
+    return () => window.removeEventListener('oarbit:open-log-workout', handleOpenLogWorkout);
+  }, []);
+
+  const handleSlideOverClose = useCallback(() => {
+    setSlideOverOpen(false);
+    setEditingWorkout(null);
+  }, []);
+
+  const handleSlideOverSuccess = useCallback(() => {
+    const wasEditing = editingWorkout !== null;
+    setSlideOverOpen(false);
+    setEditingWorkout(null);
+    toast.success(wasEditing ? 'Workout updated' : 'Workout logged', {
+      action: { label: 'View', onClick: () => navigate({ to: '/workouts' }) },
+      duration: 4000,
+    });
+  }, [editingWorkout, navigate]);
 
   return (
     <div className="flex h-screen bg-void-deep">
@@ -62,6 +103,14 @@ function AuthenticatedLayout() {
 
       {/* Bottom tabs: mobile only */}
       {isMobile && <BottomTabs />}
+
+      {/* Global workout slide-over (z-45, below command palette at z-50) */}
+      <WorkoutSlideOver
+        isOpen={slideOverOpen}
+        onClose={handleSlideOverClose}
+        editingWorkout={editingWorkout}
+        onSuccess={handleSlideOverSuccess}
+      />
     </div>
   );
 }

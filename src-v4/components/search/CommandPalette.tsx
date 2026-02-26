@@ -109,6 +109,9 @@ export function CommandPalette() {
         navigate({ to: path });
       },
       {
+        logWorkout: () => {
+          window.dispatchEvent(new CustomEvent('oarbit:open-log-workout'));
+        },
         switchTeam: () => {
           // Open team switcher -- dispatch event for UserMenu to handle
           window.dispatchEvent(new CustomEvent('oarbit:open-team-switcher'));

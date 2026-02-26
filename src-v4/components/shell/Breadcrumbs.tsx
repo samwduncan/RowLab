@@ -2,13 +2,18 @@
  * Breadcrumbs: clickable navigation trail built from TanStack Router matches.
  * Filters out layout routes and __root__.
  * On mobile, shows only the last 2 segments to save space.
+ * Supports dynamic labels from query cache (e.g. training session names).
  */
 import { useMatches, Link } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
 import { useIsMobile } from '@/hooks/useBreakpoint';
+
+const SESSION_UUID_RE = /\/training\/sessions\/([a-f0-9-]{36})$/i;
 
 export function Breadcrumbs() {
   const matches = useMatches();
   const isMobile = useIsMobile();
+  const queryClient = useQueryClient();
 
   // Build breadcrumb trail from route matches
   const breadcrumbs = matches
@@ -19,12 +24,36 @@ export function Breadcrumbs() {
       if (match.routeId === '__root__') return false;
       return true;
     })
-    .map((match) => ({
-      label:
-        ((match.staticData as Record<string, unknown> | undefined)?.breadcrumb as string) ??
-        formatPathSegment(match.pathname),
-      path: match.pathname,
-    }))
+    .map((match) => {
+      // Try staticData breadcrumb first
+      const staticLabel = (match.staticData as Record<string, unknown> | undefined)?.breadcrumb as
+        | string
+        | undefined;
+      if (staticLabel && staticLabel !== 'Session') {
+        return { label: staticLabel, path: match.pathname };
+      }
+
+      // Dynamic label: check query cache for session names
+      const sessionMatch = match.pathname.match(SESSION_UUID_RE);
+      if (sessionMatch) {
+        const sessionId = sessionMatch[1];
+        const cached = queryClient.getQueryData(['sessions', 'detail', sessionId]) as
+          | { name?: string }
+          | undefined;
+        if (cached?.name) {
+          return { label: cached.name, path: match.pathname };
+        }
+        // If staticData has 'Session' as fallback, use it
+        if (staticLabel) {
+          return { label: staticLabel, path: match.pathname };
+        }
+      }
+
+      return {
+        label: staticLabel ?? formatPathSegment(match.pathname),
+        path: match.pathname,
+      };
+    })
     // Deduplicate consecutive paths (happens with index routes)
     .filter((crumb, i, arr) => i === 0 || crumb.path !== arr[i - 1]!.path);
 

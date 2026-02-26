@@ -7,7 +7,7 @@
  */
 import { useCallback, useMemo } from 'react';
 import { Link, useRouterState } from '@tanstack/react-router';
-import { IconStar } from '@/components/icons';
+import { IconStar, IconPlus } from '@/components/icons';
 import { DiamondMarker } from '@/components/ui/DiamondMarker';
 import { useIsDesktop, useIsTablet } from '@/hooks/useBreakpoint';
 import { useAuth } from '@/features/auth/useAuth';
@@ -62,6 +62,18 @@ export function Sidebar() {
           <span className="text-base font-bold text-accent-teal">R</span>
         </div>
 
+        {/* Log Workout quick-action (rail) */}
+        <div className="flex justify-center pb-2">
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent('oarbit:open-log-workout'))}
+            className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent-teal text-void-deep transition-colors hover:bg-accent-teal-hover"
+            title="Log Workout"
+          >
+            <IconPlus width={20} height={20} />
+          </button>
+        </div>
+
         {/* Nav items (icon only) */}
         <nav className="flex-1 space-y-1 overflow-y-auto px-2 py-2">
           {navConfig.sections.flatMap((section) =>
@@ -90,6 +102,18 @@ export function Sidebar() {
           <span className="font-display text-lg font-bold tracking-tight text-text-bright">
             oar<span className="text-accent-teal">bit</span>
           </span>
+        </div>
+
+        {/* Log Workout quick-action */}
+        <div className="px-3 pb-2">
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent('oarbit:open-log-workout'))}
+            className="flex w-full items-center gap-2 rounded-lg bg-accent-teal px-3 py-1.5 text-sm font-medium text-void-deep transition-colors hover:bg-accent-teal-hover"
+          >
+            <IconPlus width={16} height={16} />
+            <span>Log Workout</span>
+          </button>
         </div>
 
         {/* Scrollable nav area — uses justify-between when few items to fill vertical space */}

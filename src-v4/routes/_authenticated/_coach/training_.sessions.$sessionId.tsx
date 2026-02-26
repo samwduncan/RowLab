@@ -10,6 +10,9 @@ import { SessionDetailPage } from '@/features/coach/sessions/components/SessionD
 
 export const Route = createFileRoute('/_authenticated/_coach/training_/sessions/$sessionId')({
   errorComponent: RouteErrorFallback,
+  staticData: {
+    breadcrumb: 'Session',
+  },
   component: SessionDetail,
 });
 
