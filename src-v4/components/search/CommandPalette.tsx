@@ -6,23 +6,31 @@
  * - Escape or click outside closes
  * - ">" prefix switches to command mode
  * - Arrow keys navigate, Enter selects
- * - Results: Pages, Commands, Athletes (debounced API search)
- * - Empty state: recent pages + suggested actions
+ * - Results: Workouts, Athletes, Teams, Sessions, Pages, Actions (grouped)
+ * - Desktop: two-panel layout with preview pane
+ * - Empty state: recent pages + quick actions
+ * - All filtering handled by fuse.js / backend APIs (shouldFilter=false)
  *
- * Uses cmdk library for keyboard navigation and filtering.
+ * Uses cmdk library for keyboard navigation.
  * Uses motion/react for open/close animation.
  */
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Command } from 'cmdk';
 import { useNavigate } from '@tanstack/react-router';
 import { motion, AnimatePresence } from 'motion/react';
-import { useQuery } from '@tanstack/react-query';
 import { IconSearch } from '@/components/icons';
-import { api } from '@/lib/api';
-import { queryKeys } from '@/lib/queryKeys';
 import { useAuth } from '@/features/auth/useAuth';
-import { getSearchRegistry, type SearchEntry } from './searchRegistry';
+import { useIsDesktop } from '@/hooks/useBreakpoint';
+import {
+  useSearchWorkouts,
+  useSearchAthletes,
+  useSearchTeams,
+  useSearchSessions,
+  useSearchPages,
+} from '@/hooks/useSearchData';
+import { getSearchRegistry, getPageEntries, type SearchEntry } from './searchRegistry';
 import { SearchResults, SearchEmptyState } from './SearchResults';
+import { SearchPreview, type PreviewItem } from './SearchPreview';
 import { SPRING_SNAPPY } from '@/lib/animations';
 
 /* === RECENTS (localStorage) === */
@@ -50,53 +58,16 @@ function addRecent(label: string, path: string): void {
   localStorage.setItem(RECENTS_KEY, JSON.stringify(recents.slice(0, MAX_RECENTS)));
 }
 
-/* === DEBOUNCE HOOK === */
-
-function useDebouncedValue<T>(value: T, delayMs: number): T {
-  const [debounced, setDebounced] = useState(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebounced(value), delayMs);
-    return () => clearTimeout(timer);
-  }, [value, delayMs]);
-
-  return debounced;
-}
-
-/* === ATHLETE SEARCH HOOK === */
-
-interface Athlete {
-  id: string;
-  name: string;
-  email?: string;
-}
-
-function useAthleteSearch(query: string) {
-  const debouncedQuery = useDebouncedValue(query, 400);
-
-  return useQuery({
-    queryKey: queryKeys.athletes.search(debouncedQuery),
-    queryFn: async (): Promise<Athlete[]> => {
-      const res = await api.get('/api/v1/athletes/search', {
-        params: { q: debouncedQuery },
-      });
-      // Handle both { data: [...] } and direct array response
-      const data = res.data?.data ?? res.data;
-      return Array.isArray(data) ? data : [];
-    },
-    enabled: debouncedQuery.length >= 2,
-    staleTime: 60_000,
-  });
-}
-
 /* === COMMAND PALETTE COMPONENT === */
 
 export function CommandPalette() {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [previewItem, setPreviewItem] = useState<PreviewItem>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const isDesktop = useIsDesktop();
 
   // Determine mode: command mode if starts with ">"
   const isCommandMode = search.startsWith('>');
@@ -113,7 +84,6 @@ export function CommandPalette() {
           window.dispatchEvent(new CustomEvent('oarbit:open-log-workout'));
         },
         switchTeam: () => {
-          // Open team switcher -- dispatch event for UserMenu to handle
           window.dispatchEvent(new CustomEvent('oarbit:open-team-switcher'));
         },
         logout: () => {
@@ -124,11 +94,26 @@ export function CommandPalette() {
   }, [navigate, logout]);
 
   // Split into pages and commands
-  const pageEntries = useMemo(() => registry.filter((e) => e.type === 'page'), [registry]);
+  const allPageEntries = useMemo(() => getPageEntries(), []);
   const commandEntries = useMemo(() => registry.filter((e) => e.type === 'command'), [registry]);
 
-  // Athlete search (only in non-command mode with 2+ chars)
-  const athleteSearch = useAthleteSearch(isCommandMode ? '' : searchQuery);
+  // Search hooks -- all run in parallel, only when not in command mode
+  const activeQuery = isCommandMode ? '' : searchQuery;
+  const workoutSearch = useSearchWorkouts(activeQuery);
+  const athleteSearch = useSearchAthletes(activeQuery);
+  const teamSearch = useSearchTeams(activeQuery);
+  const sessionSearch = useSearchSessions(activeQuery);
+  const pageSearch = useSearchPages(activeQuery, allPageEntries);
+
+  // Filter commands client-side too
+  const filteredCommands = useMemo(() => {
+    if (searchQuery.length < 1) return commandEntries;
+    const q = searchQuery.toLowerCase();
+    return commandEntries.filter(
+      (e) =>
+        e.label.toLowerCase().includes(q) || e.keywords.some((kw) => kw.toLowerCase().includes(q))
+    );
+  }, [commandEntries, searchQuery]);
 
   // Recents for empty state
   const [recents, setRecents] = useState<RecentPage[]>([]);
@@ -148,7 +133,7 @@ export function CommandPalette() {
     if (open) {
       setRecents(getRecents());
       setSearch('');
-      // Small delay to let animation start before focusing
+      setPreviewItem(null);
       requestAnimationFrame(() => {
         inputRef.current?.focus();
       });
@@ -165,12 +150,12 @@ export function CommandPalette() {
   // Handlers
   const handleSelectPage = useCallback(
     (path: string) => {
-      const entry = pageEntries.find((e) => e.path === path);
+      const entry = allPageEntries.find((e) => e.path === path);
       if (entry) addRecent(entry.label, path);
       navigate({ to: path });
       setOpen(false);
     },
-    [navigate, pageEntries]
+    [navigate, allPageEntries]
   );
 
   const handleSelectCommand = useCallback((entry: SearchEntry) => {
@@ -179,10 +164,39 @@ export function CommandPalette() {
   }, []);
 
   const handleSelectAthlete = useCallback(
-    (athlete: Athlete) => {
+    (athlete: { id: string; name: string }) => {
       const path = `/athletes/${athlete.id}`;
       addRecent(athlete.name, path);
-      // Navigate to athlete detail -- route may not exist yet, cast to satisfy type checker
+      navigate({ to: path as '/' });
+      setOpen(false);
+    },
+    [navigate]
+  );
+
+  const handleSelectWorkout = useCallback(
+    (workout: { id: string; composedTitle: string }) => {
+      const path = `/workouts/${workout.id}`;
+      addRecent(workout.composedTitle, path);
+      navigate({ to: path as '/' });
+      setOpen(false);
+    },
+    [navigate]
+  );
+
+  const handleSelectTeam = useCallback(
+    (team: { identifier: string; name: string }) => {
+      const path = `/team/${team.identifier}/dashboard`;
+      addRecent(team.name, path);
+      navigate({ to: path as '/' });
+      setOpen(false);
+    },
+    [navigate]
+  );
+
+  const handleSelectSession = useCallback(
+    (session: { id: string; name: string }) => {
+      const path = `/training/sessions/${session.id}`;
+      addRecent(session.name, path);
       navigate({ to: path as '/' });
       setOpen(false);
     },
@@ -204,6 +218,19 @@ export function CommandPalette() {
     },
     [navigate]
   );
+
+  const handleNavigate = useCallback(
+    (path: string) => {
+      navigate({ to: path as '/' });
+      setOpen(false);
+    },
+    [navigate]
+  );
+
+  const handleLogWorkout = useCallback(() => {
+    window.dispatchEvent(new CustomEvent('oarbit:open-log-workout'));
+    setOpen(false);
+  }, []);
 
   const isEmpty = search.length === 0;
 
@@ -228,12 +255,14 @@ export function CommandPalette() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -8 }}
             transition={SPRING_SNAPPY}
-            className="fixed inset-x-0 top-0 z-50 mx-auto mt-[18vh] max-w-xl px-4"
+            className={`fixed inset-x-0 top-0 z-50 mx-auto mt-[18vh] px-4 ${
+              isDesktop ? 'max-w-3xl' : 'max-w-xl'
+            }`}
             onKeyDown={handleKeyDown}
           >
             <Command
               className="command-palette overflow-hidden rounded-2xl border border-edge-default bg-void-overlay shadow-2xl"
-              shouldFilter={true}
+              shouldFilter={false}
               loop
             >
               {/* Search input */}
@@ -244,7 +273,7 @@ export function CommandPalette() {
                   value={search}
                   onValueChange={setSearch}
                   placeholder={
-                    isCommandMode ? 'Type a command...' : 'Search pages, commands, or athletes...'
+                    isCommandMode ? 'Type a command...' : 'Search workouts, athletes, teams...'
                   }
                   className="h-12 w-full bg-transparent text-sm text-text-bright placeholder-text-faint outline-none"
                 />
@@ -259,42 +288,83 @@ export function CommandPalette() {
                 )}
               </div>
 
-              {/* Results */}
-              <Command.List className="max-h-80 overflow-y-auto overscroll-contain px-2 py-2">
-                <Command.Empty className="py-8 text-center text-sm text-text-faint">
-                  No results found
-                </Command.Empty>
+              {/* Two-panel layout: results + preview */}
+              <div className={`flex ${isDesktop ? 'min-h-[320px]' : ''}`}>
+                {/* Left panel: results */}
+                <Command.List
+                  className={`max-h-80 overflow-y-auto overscroll-contain px-2 py-2 ${
+                    isDesktop ? 'w-[55%] border-r border-edge-default/50' : 'w-full'
+                  }`}
+                >
+                  {isEmpty ? (
+                    <SearchEmptyState
+                      recents={recents}
+                      onSelectRecent={handleSelectRecent}
+                      onSelectSuggestion={handleSelectSuggestion}
+                      onLogWorkout={handleLogWorkout}
+                    />
+                  ) : isCommandMode ? (
+                    <SearchResults
+                      query={searchQuery}
+                      workouts={[]}
+                      workoutsLoading={false}
+                      workoutsTotalCount={0}
+                      athletes={[]}
+                      athletesLoading={false}
+                      athletesTotalCount={0}
+                      teams={[]}
+                      teamsLoading={false}
+                      teamsTotalCount={0}
+                      sessions={[]}
+                      sessionsLoading={false}
+                      sessionsTotalCount={0}
+                      pages={[]}
+                      commands={filteredCommands}
+                      onSelectWorkout={handleSelectWorkout}
+                      onSelectAthlete={handleSelectAthlete}
+                      onSelectTeam={handleSelectTeam}
+                      onSelectSession={handleSelectSession}
+                      onSelectPage={handleSelectPage}
+                      onSelectCommand={handleSelectCommand}
+                      onHighlight={setPreviewItem}
+                      onNavigate={handleNavigate}
+                    />
+                  ) : (
+                    <SearchResults
+                      query={searchQuery}
+                      workouts={workoutSearch.data}
+                      workoutsLoading={workoutSearch.isLoading}
+                      workoutsTotalCount={workoutSearch.totalCount}
+                      athletes={athleteSearch.data}
+                      athletesLoading={athleteSearch.isLoading}
+                      athletesTotalCount={athleteSearch.totalCount}
+                      teams={teamSearch.data}
+                      teamsLoading={teamSearch.isLoading}
+                      teamsTotalCount={teamSearch.totalCount}
+                      sessions={sessionSearch.data}
+                      sessionsLoading={sessionSearch.isLoading}
+                      sessionsTotalCount={sessionSearch.totalCount}
+                      pages={pageSearch.data}
+                      commands={filteredCommands}
+                      onSelectWorkout={handleSelectWorkout}
+                      onSelectAthlete={handleSelectAthlete}
+                      onSelectTeam={handleSelectTeam}
+                      onSelectSession={handleSelectSession}
+                      onSelectPage={handleSelectPage}
+                      onSelectCommand={handleSelectCommand}
+                      onHighlight={setPreviewItem}
+                      onNavigate={handleNavigate}
+                    />
+                  )}
+                </Command.List>
 
-                {isEmpty ? (
-                  <SearchEmptyState
-                    recents={recents}
-                    onSelectRecent={handleSelectRecent}
-                    onSelectSuggestion={handleSelectSuggestion}
-                  />
-                ) : isCommandMode ? (
-                  <SearchResults
-                    pages={[]}
-                    commands={commandEntries}
-                    athletes={[]}
-                    athletesLoading={false}
-                    athleteQuery=""
-                    onSelectPage={handleSelectPage}
-                    onSelectCommand={handleSelectCommand}
-                    onSelectAthlete={handleSelectAthlete}
-                  />
-                ) : (
-                  <SearchResults
-                    pages={pageEntries}
-                    commands={commandEntries}
-                    athletes={athleteSearch.data ?? []}
-                    athletesLoading={athleteSearch.isLoading}
-                    athleteQuery={searchQuery}
-                    onSelectPage={handleSelectPage}
-                    onSelectCommand={handleSelectCommand}
-                    onSelectAthlete={handleSelectAthlete}
-                  />
+                {/* Right panel: preview (desktop only) */}
+                {isDesktop && (
+                  <div className="w-[45%] bg-void-surface">
+                    <SearchPreview item={previewItem} />
+                  </div>
                 )}
-              </Command.List>
+              </div>
 
               {/* Footer hints */}
               <div className="flex items-center gap-4 border-t border-edge-default/50 px-4 py-2 text-[11px] text-text-faint">
