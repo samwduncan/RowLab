@@ -133,9 +133,15 @@ interface EmptyStateProps {
   recents: { label: string; path: string }[];
   onSelectRecent: (path: string) => void;
   onSelectSuggestion: (path: string) => void;
+  onLogWorkout?: () => void;
 }
 
-export function SearchEmptyState({ recents, onSelectRecent, onSelectSuggestion }: EmptyStateProps) {
+export function SearchEmptyState({
+  recents,
+  onSelectRecent,
+  onSelectSuggestion,
+  onLogWorkout,
+}: EmptyStateProps) {
   return (
     <>
       {recents.length > 0 && (
@@ -156,17 +162,23 @@ export function SearchEmptyState({ recents, onSelectRecent, onSelectSuggestion }
       <Command.Group heading="Suggestions" className="search-group">
         <Command.Item
           value="suggestion-log-workout"
-          onSelect={() => onSelectSuggestion('/workouts/new')}
+          onSelect={() => {
+            if (onLogWorkout) {
+              onLogWorkout();
+            } else {
+              window.dispatchEvent(new CustomEvent('oarbit:open-log-workout'));
+            }
+          }}
           className="search-item"
         >
           <span className="text-text-bright">Log workout</span>
         </Command.Item>
         <Command.Item
-          value="suggestion-view-stats"
-          onSelect={() => onSelectSuggestion('/stats')}
+          value="suggestion-view-profile"
+          onSelect={() => onSelectSuggestion('/profile')}
           className="search-item"
         >
-          <span className="text-text-bright">View stats</span>
+          <span className="text-text-bright">View Profile & Stats</span>
         </Command.Item>
         <Command.Item
           value="suggestion-settings"
